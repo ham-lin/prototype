@@ -3766,6 +3766,45 @@
         line-height: 1.55;
       }
 
+      .demand-popover p.is-demand-exception {
+        color: #1f2d3d;
+        font-weight: 700;
+      }
+
+      .master-slave-exception-guide {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border: 1px solid #ffd8bf;
+        border-radius: 8px;
+        background: #fff7f0;
+        color: #4e5969;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      .master-slave-exception-guide-title {
+        margin-bottom: 8px;
+        color: #1d2129;
+        font-weight: 700;
+      }
+
+      .master-slave-exception-guide-note {
+        margin-bottom: 8px;
+        color: #86909c;
+      }
+
+      .master-slave-exception-guide ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px 18px;
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .master-slave-exception-guide strong {
+        color: #1d2129;
+      }
+
       .row-expand-toggle {
         display: inline-flex;
         align-items: center;
@@ -4387,6 +4426,10 @@
       .relation-modal-actions {
         display: inline-flex;
         gap: 8px;
+      }
+
+      .master-slave-result-footer {
+        justify-content: flex-end;
       }
 
       /* Arco Design inspired component polish for the HTML prototype. */
@@ -7686,6 +7729,16 @@
             this.emit();
           }
 
+          exportMasterSlaveImportErrors() {
+            const dialog = this.state.ui.masterSlaveImportResultDialog;
+            const failedRows = dialog?.failedRows || [];
+            if (failedRows.length === 0) {
+              this.pushToast("导出异常数据", "当前导入批次没有异常数据可导出。", "warning");
+              return;
+            }
+            this.pushToast("导出异常数据", "已触发异常数据导出，原型中以交互反馈模拟文件下载。", "success");
+          }
+
           handleMasterSlaveImportRecordAction(actionLabel, recordId = "") {
             if (actionLabel === "查看导入结果") {
               this.openMasterSlaveImportResultDialog(recordId);
@@ -8248,8 +8301,8 @@
               ["", ""],
               ["系统校验规则", ""],
               ["1", "设备编号不能为空，且必须能匹配到台账设备。"],
-              ["2", "从设备编号不能为空；填写多个编号时，系统会按“、”、\",\"或换行拆分后逐个校验。"],
-              ["3", "拆分后的每个从设备编号都必须能匹配到台账设备。"],
+              ["2", "从设备编号允许为空；为空表示当前主设备本次不建立主从关系。"],
+              ["3", "填写多个从设备编号时，系统会按“、”、\",\"或换行拆分；拆分后的每个非空编号都必须能匹配到台账设备。"],
               ["4", "设备编号和任一从设备编号不能相同。"],
               ["5", "同一个“从设备编号”单元格内不能重复填写同一从设备编号。"],
               ["6", "从设备只能关联一个主设备；若已存在主设备，导入时应提示冲突。"],
@@ -8740,23 +8793,23 @@
             const demandMap = {
               [VIEW_IDS.IT_FACILITY]: {
                 title: "主从设备台账展示路径",
-                text: "路径用途：进入 IT设施台账查看主从设备关系展示效果。||关联功能：支持展开主从关系、查看主/从设备、解绑关系，并通过更多操作进入关联设备流程。||测试关注：验证开启/关闭主从关系、全量展示和仅展示主设备模式下的列表差异。"
+                text: "路径用途：进入 IT设施台账查看主从设备关系展示效果。||关联功能：支持展开主从关系、查看主/从设备、解绑关系，并通过更多操作进入关联设备流程。||测试关注：验证开启/关闭主从关系、全量展示和仅展示主设备模式下的列表差异。||异常判断：主从关系关闭、当前行无关系、关联设备不存在、设备状态禁用或用户无查看权限时，应隐藏入口或提示不可操作。"
               },
               [VIEW_IDS.STATION_FACILITY]: {
                 title: "场地设施主从关系路径",
-                text: "路径用途：进入场地设施台账查看配电柜-电量仪、插接箱-开关量等主从关系样例。||关联功能：支持主从行展开、查看、解绑和关联设备。||测试关注：验证跨台账关系展示和设备状态限制。"
+                text: "路径用途：进入场地设施台账查看配电柜-电量仪、插接箱-开关量等主从关系样例。||关联功能：支持主从行展开、查看、解绑和关联设备。||测试关注：验证跨台账关系展示和设备状态限制。||异常判断：跨台账目标不存在、状态为报废/迁出/废弃、已形成冲突关系或超过两层关系时，应拦截新增或解绑操作。"
               },
               [VIEW_IDS.CABINET]: {
                 title: "机柜-PDU 主从关系路径",
-                text: "路径用途：进入机柜台账查看机柜与 PDU 的主从关系样例。||关联功能：支持机柜作为主设备展开下级 PDU，并参与模板自动填充规则。||测试关注：验证机柜-PDU 编号规则、展开展示和解绑交互。"
+                text: "路径用途：进入机柜台账查看机柜与 PDU 的主从关系样例。||关联功能：支持机柜作为主设备展开下级 PDU，并参与模板自动填充规则。||测试关注：验证机柜-PDU 编号规则、展开展示和解绑交互。||异常判断：机柜已作为从设备、PDU 已存在主设备、目标设备被删除或重复绑定同一关系时，应提示关系异常并阻止保存。"
               },
               [VIEW_IDS.SPARE_PART]: {
                 title: "备件台账主从关系路径",
-                text: "路径用途：进入备件台账查看主从关系能力对备件类台账的覆盖范围。||关联功能：支持作为模板导出范围和关系校验对象。||测试关注：验证部分台账导出时备件勾选、关系导入和状态限制。"
+                text: "路径用途：进入备件台账查看主从关系能力对备件类台账的覆盖范围。||关联功能：支持作为模板导出范围和关系校验对象。||测试关注：验证部分台账导出时备件勾选、关系导入和状态限制。||异常判断：库存/报废/待迁出等不允许建立关系的状态、备件未纳入模板范围或编号无法匹配时，应提示不可关联或导入失败。"
               },
               [VIEW_IDS.TEMPLATE_CONFIG]: {
                 title: "主从设备配置入口",
-                text: "路径用途：进入资产基础配置维护主从设备配置。||关联功能：包含开启/关闭、展示模式、表格导入更新、导入记录、下载模板和从设备自动填充规则配置。||测试关注：验证模板范围选择、多规则配置、导入校验和列表展示模式联动。"
+                text: "路径用途：进入资产基础配置维护主从设备配置。||关联功能：包含开启/关闭、展示模式、表格导入更新、导入记录、下载模板和从设备自动填充规则配置。||测试关注：验证模板范围选择、多规则配置、导入校验和列表展示模式联动。||异常判断：关闭主从关系、未选择模板范围、无可导出台账、导入文件格式错误或导入校验失败时，应给出明确阻断提示。"
               }
             };
             const config = demandMap[item.id || item.viewId];
@@ -8987,7 +9040,7 @@
           renderMasterSlaveImportRecordsPage() {
             const records = this.store.getMasterSlaveImportRecords();
             return `
-              <div class="page-surface operation-page" data-demand-title="导入记录页" data-demand-text="交互目的：集中查看主从关系表格导入的历史批次、进度和结果。||点击后行为：可查询记录、查看导入结果、下载原导入文件或删除记录。||状态限制：原型中记录为样例数据，真实系统应按导入任务状态刷新。">
+              <div class="page-surface operation-page" data-demand-title="导入记录页" data-demand-text="交互目的：集中查看主从关系表格导入的历史批次、进度和结果。||点击后行为：可查询记录、查看导入结果、下载原导入文件或删除记录。||状态限制：原型中记录为样例数据，真实系统应按导入任务状态刷新。||异常判断：导入中任务不可误删；导入失败需保留失败行、失败原因和原文件；原文件被清理或无权限时下载入口应提示不可下载。">
                 ${this.renderMasterSlaveVersionHeader()}
                 <div class="anno anno-data" data-version="v1.1">
                   <span class="anno-tag">数据逻辑</span>
@@ -9008,12 +9061,12 @@
                     </svg>
                     <span>导入记录</span>
                   </button>
-                  <div style="display:flex;align-items:center;gap:8px;" data-demand-title="导入记录查询" data-demand-text="交互目的：按文件名、导入人员或导入时间筛选导入批次。||点击后行为：输入关键字后点击查询刷新记录列表。||状态限制：原型中为查询反馈演示，未接入真实分页筛选。">
+                  <div style="display:flex;align-items:center;gap:8px;" data-demand-title="导入记录查询" data-demand-text="交互目的：按文件名、导入人员或导入时间筛选导入批次。||点击后行为：输入关键字后点击查询刷新记录列表。||状态限制：原型中为查询反馈演示，未接入真实分页筛选。||异常判断：查询条件为空时返回全部记录；无匹配记录时展示空态；日期格式非法或分页越界时应提示并保持当前列表。">
                     <input class="search-input" style="width:160px;height:30px;" placeholder="请输入" />
                     <button class="btn" type="button" data-action="master-slave-import-record-action" data-label="查询">查询</button>
                   </div>
                 </div>
-                <div class="table-scroll" style="border-top:1px solid #e5e6eb;" data-demand-title="导入记录表格" data-demand-text="交互目的：展示每次导入的文件、导入时间、导入人员和处理状态。||点击后行为：通过操作列进入结果、下载文件或删除记录。||状态限制：导入中可查看进度；已完成可查看成功/失败明细。">
+                <div class="table-scroll" style="border-top:1px solid #e5e6eb;" data-demand-title="导入记录表格" data-demand-text="交互目的：展示每次导入的文件、导入时间、导入人员和处理状态。||点击后行为：通过操作列进入结果、下载文件或删除记录。||状态限制：导入中可查看进度；已完成可查看成功/失败明细。||异常判断：导入记录缺失、任务状态异常、原始文件丢失、删除失败或结果明细为空时，均需给出明确提示。">
                   <table style="min-width:900px;">
                     <thead>
                       <tr>
@@ -9035,9 +9088,9 @@
                           <td><span class="status-text in-use">${escapeHtml(record.status)}</span></td>
                           <td style="text-align:right;">
                             <span style="display:inline-flex;align-items:center;gap:10px;">
-                              <button class="action-link" type="button" data-action="master-slave-import-record-action" data-label="查看导入结果" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="查看导入结果" data-demand-text="交互目的：查看该导入批次的成功数量、失败数量和异常明细。||点击后行为：打开导入结果弹窗，失败行展示数据位置和异常原因。||状态限制：导入中时展示当前进度或已产生的校验结果；原型统一展示一条失败示例。"' : ""}>查看导入结果</button>
-                              <button class="action-link" type="button" data-action="master-slave-import-record-action" data-label="下载导入文件" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="下载导入文件" data-demand-text="交互目的：下载该批次用户上传的原始导入文件，用于核对数据来源。||点击后行为：触发原文件下载入口。||状态限制：文件不存在或已清理时应提示不可下载，原型中为交互反馈。"' : ""}>下载导入文件</button>
-                              <button class="action-link" style="color:#f53f3f;" type="button" data-action="master-slave-import-record-action" data-label="删除" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="删除导入记录" data-demand-text="交互目的：清理不再需要的导入批次记录。||点击后行为：真实系统应二次确认后删除记录；原型中触发删除反馈。||状态限制：导入中任务不建议删除，避免丢失进度和结果。"' : ""}>删除</button>
+                              <button class="action-link" type="button" data-action="master-slave-import-record-action" data-label="查看导入结果" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="查看导入结果" data-demand-text="交互目的：查看该导入批次的成功数量、失败数量和异常明细。||点击后行为：打开导入结果弹窗，失败行展示数据位置和异常原因。||状态限制：导入中时展示当前进度或已产生的校验结果；原型统一展示一条失败示例。||异常判断：结果不存在、任务仍在排队、失败明细为空但失败数大于 0、异常文件生成失败时，应提示用户稍后重试或联系管理员。"' : ""}>查看导入结果</button>
+                              <button class="action-link" type="button" data-action="master-slave-import-record-action" data-label="下载导入文件" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="下载导入文件" data-demand-text="交互目的：下载该批次用户上传的原始导入文件，用于核对数据来源。||点击后行为：触发原文件下载入口。||状态限制：文件不存在或已清理时应提示不可下载，原型中为交互反馈。||异常判断：原文件被清理、存储地址失效、当前用户无下载权限或浏览器拒绝下载时，应展示不可下载原因。"' : ""}>下载导入文件</button>
+                              <button class="action-link" style="color:#f53f3f;" type="button" data-action="master-slave-import-record-action" data-label="删除" data-id="${escapeHtml(record.id)}"${index === 0 ? ' data-demand-title="删除导入记录" data-demand-text="交互目的：清理不再需要的导入批次记录。||点击后行为：真实系统应二次确认后删除记录；原型中触发删除反馈。||状态限制：导入中任务不建议删除，避免丢失进度和结果。||异常判断：导入中、结果导出中、无删除权限或服务端删除失败时，应阻止删除并保留记录。"' : ""}>删除</button>
                             </span>
                           </td>
                         </tr>
@@ -9068,7 +9121,7 @@
                 <div class="tabs">
                   ${detail.tabs.map((tab) => {
                     const demandAttrs = tab.id === "relation"
-                      ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。"'
+                      ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                       : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
@@ -9304,7 +9357,7 @@
                   <div
                     class="asset-topology-stage"
                     data-demand-title="主从设备关系拓扑"
-                    data-demand-text="交互目的：在资产详情的关系拓扑中表达当前设备与主设备或从设备之间的关系。||展示规则：使用带箭头的方向线从主设备指向从设备，并在箭头关系上标注“有一部分”。||测试关注：当前设备为主设备时应指向下级从设备；当前设备为从设备时应从所属主设备指向当前设备。"
+                    data-demand-text="交互目的：在资产详情的关系拓扑中表达当前设备与主设备或从设备之间的关系。||展示规则：使用带箭头的方向线从主设备指向从设备，并在箭头关系上标注“有一部分”。||测试关注：当前设备为主设备时应指向下级从设备；当前设备为从设备时应从所属主设备指向当前设备。||异常判断：主设备不存在、从设备不存在、关系方向缺失、同一设备既是主又是从且超过两层、或循环关系残留时，应提示数据异常并避免误导展示。"
                   >
                     <div class="topology-mini-tools">
                       <span class="topology-mini-tool" aria-hidden="true">
@@ -9673,8 +9726,8 @@
                     return `
                       <td class="sticky-right">
                         <div class="action-links">
-                          <button class="action-link" type="button" data-action="row-action" data-view="${escapeHtml(relation.parentViewId)}" data-id="${escapeHtml(relation.parentRowId)}" data-label="查看" data-demand-title="查看主设备" data-demand-text="交互目的：从当前从设备快速查看其所属主设备。||点击后行为：打开主设备详情或查看入口。||状态限制：主设备不存在或已删除时应提示关系异常，原型中按样例数据展示。">查看主设备</button>
-                          <button class="action-link is-warning" type="button" data-action="unbind-relation" data-parent-view="${escapeHtml(relation.parentViewId)}" data-parent-id="${escapeHtml(relation.parentRowId)}" data-child-view="${escapeHtml(currentViewId)}" data-child-id="${escapeHtml(currentRow.id)}" data-demand-title="解绑主从关系" data-demand-text="交互目的：解除当前从设备与主设备之间的绑定关系。||点击后行为：原型直接执行解绑反馈；真实系统应二次确认并记录解绑原因。||状态限制：流程中、报废迁出中或存在业务占用时应限制解绑。">解绑</button>
+                          <button class="action-link" type="button" data-action="row-action" data-view="${escapeHtml(relation.parentViewId)}" data-id="${escapeHtml(relation.parentRowId)}" data-label="查看" data-demand-title="查看主设备" data-demand-text="交互目的：从当前从设备快速查看其所属主设备。||点击后行为：打开主设备详情或查看入口。||状态限制：主设备不存在或已删除时应提示关系异常，原型中按样例数据展示。||异常判断：主设备记录不存在、已被删除、无查看权限或关系指向的台账类型不匹配时，应提示关系异常并保留当前行。">查看主设备</button>
+                          <button class="action-link is-warning" type="button" data-action="unbind-relation" data-parent-view="${escapeHtml(relation.parentViewId)}" data-parent-id="${escapeHtml(relation.parentRowId)}" data-child-view="${escapeHtml(currentViewId)}" data-child-id="${escapeHtml(currentRow.id)}" data-demand-title="解绑主从关系" data-demand-text="交互目的：解除当前从设备与主设备之间的绑定关系。||点击后行为：原型直接执行解绑反馈；真实系统应二次确认并记录解绑原因。||状态限制：流程中、报废迁出中或存在业务占用时应限制解绑。||异常判断：关系已被其他人解除、设备处于流程占用/报废迁出中、无解绑权限或服务端保存失败时，应阻止解绑并提示原因。">解绑</button>
                         </div>
                       </td>
                     `;
@@ -9705,10 +9758,10 @@
           renderChildRow(parentViewId, parentRow, relation, childRow, meta, isRepresentativeChild = false) {
             const sourceLabel = RELATION_VIEW_LABELS[relation.childViewId] || LIST_PAGE_META[relation.childViewId]?.title || "台账";
             const viewChildDemandAttrs = isRepresentativeChild
-              ? ' data-demand-title="查看从设备" data-demand-text="交互目的：从主设备展开行快速查看下级从设备详情。||点击后行为：打开从设备详情或查看入口。||状态限制：从设备不存在或已删除时应提示关系异常，原型中按样例数据展示。"'
+              ? ' data-demand-title="查看从设备" data-demand-text="交互目的：从主设备展开行快速查看下级从设备详情。||点击后行为：打开从设备详情或查看入口。||状态限制：从设备不存在或已删除时应提示关系异常，原型中按样例数据展示。||异常判断：从设备记录不存在、已被删除、无查看权限或台账来源异常时，应提示关系异常并避免跳转空详情。"'
               : "";
             const unbindChildDemandAttrs = isRepresentativeChild
-              ? ' data-demand-title="解绑从设备" data-demand-text="交互目的：解除主设备与该从设备之间的绑定关系。||点击后行为：原型直接执行解绑反馈；真实系统应二次确认并记录解绑原因。||状态限制：流程中、报废迁出中或存在业务占用时应限制解绑。"'
+              ? ' data-demand-title="解绑从设备" data-demand-text="交互目的：解除主设备与该从设备之间的绑定关系。||点击后行为：原型直接执行解绑反馈；真实系统应二次确认并记录解绑原因。||状态限制：流程中、报废迁出中或存在业务占用时应限制解绑。||异常判断：关系已不存在、从设备处于流程占用/报废迁出中、无解绑权限或服务端删除关系失败时，应提示失败原因并保留关系展示。"'
               : "";
             return `
               <tr class="row-child">
@@ -9764,7 +9817,7 @@
               const nameValue = row[key] || "-";
               const ariaLabel = options.expanded ? "收起关联设备" : "展开关联设备";
               const expandDemandAttrs = options.isRepresentativeRelation
-                ? ' data-demand-title="展开主从关系" data-demand-text="交互目的：在台账行内查看当前设备的上级主设备或下级从设备。||点击后行为：展开或收起主从关系行，展示查看和解绑入口。||状态限制：仅在开启主从设备关系且当前设备存在关系时展示。"'
+                ? ' data-demand-title="展开主从关系" data-demand-text="交互目的：在台账行内查看当前设备的上级主设备或下级从设备。||点击后行为：展开或收起主从关系行，展示查看和解绑入口。||状态限制：仅在开启主从设备关系且当前设备存在关系时展示。||异常判断：主从关系关闭、当前行关系为空、关联设备被删除或关系数据不完整时，不展示展开按钮或展示关系异常提示。"'
                 : "";
               const toggle = options.hasRelations
                 ? `<button
@@ -9793,7 +9846,7 @@
                 ${actions.map((action) => {
                   if (action === "更多") {
                     const moreDemandAttrs = options.isRepresentativeAction
-                      ? ' data-demand-title="更多操作与关联设备入口" data-demand-text="交互目的：承载当前资产的扩展操作，其中“关联设备”用于进入主从关系维护。||点击后行为：展开更多菜单，可选择关联设备、初始化等操作。||状态限制：关联设备需校验设备状态、一从一主、两层关系和循环关系。"'
+                      ? ' data-demand-title="更多操作与关联设备入口" data-demand-text="交互目的：承载当前资产的扩展操作，其中“关联设备”用于进入主从关系维护。||点击后行为：展开更多菜单，可选择关联设备、初始化等操作。||状态限制：关联设备需校验设备状态、一从一主、两层关系和循环关系。||异常判断：当前设备状态禁用、已存在冲突关系、用户无维护权限或菜单项不可用时，应禁用入口或提示不可操作。"'
                       : "";
                     return `
                     <div class="action-menu-wrap">
@@ -9805,7 +9858,7 @@
                   `;
                   }
                   const actionDemandAttrs = options.isRepresentativeAction && action === "查看"
-                    ? ' data-demand-title="查看资产详情" data-demand-text="交互目的：从台账列表查看当前资产详情。||点击后行为：打开资产详情或查看入口，结合主从关系可继续查看关联设备。||状态限制：原型中为查看入口演示，真实系统需按权限控制可见字段。"'
+                    ? ' data-demand-title="查看资产详情" data-demand-text="交互目的：从台账列表查看当前资产详情。||点击后行为：打开资产详情或查看入口，结合主从关系可继续查看关联设备。||状态限制：原型中为查看入口演示，真实系统需按权限控制可见字段。||异常判断：资产不存在、已被删除、无查看权限或详情配置缺失时，应提示无法查看并停留在列表。"' 
                     : "";
                   return `<button class="action-link" type="button" data-action="row-action" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(row.id)}" data-label="${escapeHtml(action)}"${actionDemandAttrs}>${escapeHtml(action)}</button>`;
                 }).join("")}
@@ -9818,7 +9871,7 @@
               <div class="action-more-menu" role="menu" aria-label="更多操作">
                 ${ROW_MORE_MENU_ITEMS.map((action) => {
                   const demandAttrs = options.isRepresentativeAction && action === "关联设备"
-                    ? ' data-demand-title="关联设备入口" data-demand-text="交互目的：从当前资产行进入主从关系维护流程。||点击后行为：打开关联设备弹窗，选择当前设备作为主设备或从设备并完成绑定。||状态限制：已存在冲突关系、超过两层关系或状态不可关联时会在弹窗内拦截。"'
+                    ? ' data-demand-title="关联设备入口" data-demand-text="交互目的：从当前资产行进入主从关系维护流程。||点击后行为：打开关联设备弹窗，选择当前设备作为主设备或从设备并完成绑定。||状态限制：已存在冲突关系、超过两层关系或状态不可关联时会在弹窗内拦截。||异常判断：当前设备已是从设备且继续关联从设备、当前设备已是主设备且再关联主设备、目标设备不存在、自关联、循环关系、重复关系或状态禁用时，必须阻止保存。"'
                     : "";
                   return `
                   <button class="action-menu-item" type="button" data-action="row-more-item" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(rowId)}" data-label="${escapeHtml(action)}"${demandAttrs}>
@@ -9916,10 +9969,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="config-section" data-demand-title="主从设备配置区" data-demand-text="交互目的：集中维护主从设备关系能力的开关、批量导入更新和列表展示策略。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：关闭主从关系后，列表展开、主从行展示和仅展示父设备+独立设备模式不生效。">
+                  <div class="config-section" data-demand-title="主从设备配置区" data-demand-text="交互目的：集中维护主从设备关系能力的开关、批量导入更新和列表展示策略。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：关闭主从关系后，列表展开、主从行展示和仅展示父设备+独立设备模式不生效。||异常判断：配置保存失败、主从关系关闭但仍有导入任务、展示模式与历史关系冲突或台账范围为空时，应提示配置不可用原因。">
                     <div class="config-section-title">主从设备配置</div>
                     <div class="config-form-grid single">
-                      <div class="field-block" data-demand-title="是否开启主从设备关系" data-demand-text="交互目的：控制系统是否启用主从关系能力。||点击后行为：选择开启后，台账列表展示展开按钮、主设备行、从设备行和关联设备入口；选择关闭后隐藏相关能力。||状态限制：关闭时展示模式配置置灰，不影响已有原型样例数据。">
+                      <div class="field-block" data-demand-title="是否开启主从设备关系" data-demand-text="交互目的：控制系统是否启用主从关系能力。||点击后行为：选择开启后，台账列表展示展开按钮、主设备行、从设备行和关联设备入口；选择关闭后隐藏相关能力。||状态限制：关闭时展示模式配置置灰，不影响已有原型样例数据。||异常判断：关闭前若存在未完成导入、正在维护的关系或依赖主从关系的展示配置，应提示影响范围并要求确认。">
                         <span>是否开启主从设备关系</span>
                         <div class="inline-radios">
                           <label class="inline-radio">
@@ -9936,13 +9989,13 @@
                       <div class="field-block">
                         <span>主从关系数据维护</span>
                         <div class="template-action-row">
-                          <button class="btn btn-primary" type="button" data-action="import-master-slave-relations" data-demand-title="导入主从关系文件" data-demand-text="交互目的：上传按模板填写的主从关系数据。||点击后行为：打开导入文件弹窗，选择 Excel 文件并提交导入任务。||状态限制：仅支持模板格式文件，业务校验结果在导入结果中查看。">表格导入更新</button>
-                          <button class="btn" type="button" data-action="open-master-slave-import-records" data-demand-title="查看导入记录" data-demand-text="交互目的：查看主从关系导入的历史批次、进度和结果。||点击后行为：进入导入记录页，可查看结果、下载原文件或删除记录。||状态限制：导入中任务应展示进度，失败任务应保留异常原因。">导入记录</button>
-                          <button class="btn btn-light" type="button" data-action="download-master-slave-template" data-demand-title="下载主从关系模板" data-demand-text="交互目的：导出可填写的主从设备关系模板。||点击后行为：打开模板下载弹窗，可选择全量台账或部分台账，并可配置从设备自动填充规则。||状态限制：部分台账至少选择一个范围；无可导出样例数据时提示下载失败。">下载模板</button>
+                          <button class="btn btn-primary" type="button" data-action="import-master-slave-relations" data-demand-title="导入主从关系文件" data-demand-text="交互目的：上传按模板填写的主从关系数据。||点击后行为：打开导入文件弹窗，选择 Excel 文件并提交导入任务。||状态限制：仅支持模板格式文件，业务校验结果在导入结果中查看；从设备编号允许为空，表示该设备本次不建立主从关系。||异常判断：未选择文件、文件非 xls/xlsx、模板列缺失、设备编号为空、编号不存在、自关联、一从多主、超过两层、循环关系、状态禁用或重复导入关系时，应进入失败明细。">表格导入更新</button>
+                          <button class="btn" type="button" data-action="open-master-slave-import-records" data-demand-title="查看导入记录" data-demand-text="交互目的：查看主从关系导入的历史批次、进度和结果。||点击后行为：进入导入记录页，可查看结果、下载原文件或删除记录。||状态限制：导入中任务应展示进度，失败任务应保留异常原因。||异常判断：记录不存在、任务中断、失败明细丢失、原文件不可下载或删除失败时，应展示明确原因并保留操作痕迹。">导入记录</button>
+                          <button class="btn btn-light" type="button" data-action="download-master-slave-template" data-demand-title="下载主从关系模板" data-demand-text="交互目的：导出可填写的主从设备关系模板。||点击后行为：打开模板下载弹窗，可选择全量台账或部分台账，并可配置从设备自动填充规则。||状态限制：部分台账至少选择一个范围；无可导出样例数据时提示下载失败。||异常判断：未选择台账、所选台账无样例数据、自动填充规则无效、浏览器拒绝下载或模板生成失败时，应阻止下载并提示原因。">下载模板</button>
                         </div>
                         <div class="field-hint">点击“下载模板”后，可选择导出全量台账数据或部分台账数据；模板以当前行设备编号作为主设备，仅需维护从设备编号。</div>
                       </div>
-                      <div class="field-block ${state.ui.templateConfig.masterSlaveEnabled === "no" ? "disabled" : ""}" data-demand-title="展示模式配置" data-demand-text="交互目的：控制台账列表是否展示所有设备或隐藏从设备。||点击后行为：全量设备展示保留父设备、从设备、独立设备；仅展示父设备+独立设备时隐藏从设备，保留父设备和独立设备。||状态限制：仅在开启主从设备关系后生效。">
+                      <div class="field-block ${state.ui.templateConfig.masterSlaveEnabled === "no" ? "disabled" : ""}" data-demand-title="展示模式配置" data-demand-text="交互目的：控制台账列表是否展示所有设备或隐藏从设备。||点击后行为：全量设备展示保留父设备、从设备、独立设备；仅展示父设备+独立设备时隐藏从设备，保留父设备和独立设备。||状态限制：仅在开启主从设备关系后生效。||异常判断：主从关系关闭、关系数据异常、父设备缺失或从设备没有上级主设备时，应回退全量展示或提示数据异常。">
                         <span>展示模式配置</span>
                         <div class="inline-radios">
                           <label class="inline-radio">
@@ -10855,9 +10908,22 @@
           renderMasterSlaveImportResultDialog(dialog) {
             const failedRows = dialog.failedRows || [];
             const failCount = failedRows.length;
+            const exceptionItems = [
+              "主设备编号为空：数据页设备编号未填写，无法识别主设备。",
+              "设备编号不存在：主设备或从设备编号无法匹配到台账资产。",
+              "台账类型不匹配：模板带出的台账类型与实际设备来源不一致。",
+              "自关联：主设备编号与从设备编号相同。",
+              "单元格内重复：同一从设备编号在同一单元格内重复填写。",
+              "一从多主：从设备已存在主设备，需先解绑原关系。",
+              "超过两层：已是从设备的资产不能再作为主设备。",
+              "循环关系：导入后会形成 A→B→A 等闭环关系。",
+              "状态禁用：报废、待报废、迁出、废弃等状态禁止建立关系。",
+              "重复关系：导入关系与系统已有主从关系完全重复。",
+              "文件异常：文件格式错误、模板列缺失、解析失败或浏览器拒绝下载异常文件。"
+            ];
             return `
               <div class="relation-modal-backdrop" data-action="close-master-slave-import-result-dialog"></div>
-              <section class="relation-modal master-slave-result-dialog" role="dialog" aria-modal="true" aria-labelledby="masterSlaveImportResultTitle" data-demand-title="导入结果弹窗" data-demand-text="交互目的：展示单次主从关系导入的处理结果。||点击后行为：用户可查看成功/失败统计、失败数据位置和异常原因，并可导出异常数据。||状态限制：失败数据需根据导入校验规则枚举，包括设备不存在、自关联、一从多主、超过两层、循环关系、状态禁用、重复关系等。">
+              <section class="relation-modal master-slave-result-dialog" role="dialog" aria-modal="true" aria-labelledby="masterSlaveImportResultTitle" data-demand-title="导入结果弹窗" data-demand-text="交互目的：展示单次主从关系导入的处理结果。||点击后行为：用户可查看成功/失败统计、失败数据位置和异常原因，并可导出异常数据。||状态限制：失败数据需根据导入校验规则枚举，包括设备不存在、自关联、一从多主、超过两层、循环关系、状态禁用、重复关系等；从设备编号可留空且不计入失败。||异常判断：主设备为空、编号不存在、台账类型不匹配、自关联、单元格内重复、一从多主、超过两层、循环关系、状态禁用、重复关系、模板列缺失或文件解析失败时，均需在结果中展示失败位置和原因。">
                 <div class="anno anno-state" data-version="v1.1" style="margin:14px 30px 0;">
                   <span class="anno-tag">状态说明</span>
                   <span class="anno-version">v1.1</span>
@@ -10872,6 +10938,7 @@
                 </div>
                 <header class="relation-modal-head master-slave-result-head">
                   <div class="relation-modal-title" id="masterSlaveImportResultTitle">导入结果</div>
+                  <button class="relation-modal-close" type="button" data-action="close-master-slave-import-result-dialog" aria-label="关闭">×</button>
                 </header>
                 <div class="relation-modal-body master-slave-result-body">
                   <div class="master-slave-result-summary">
@@ -10891,9 +10958,17 @@
                       `).join("")}
                     </tbody>
                   </table>
+                  <div class="master-slave-exception-guide">
+                    <div class="master-slave-exception-guide-title">异常信息说明</div>
+                    <div class="master-slave-exception-guide-note">说明：从设备编号允许为空，表示该主设备本次不建立主从关系，不计入异常。</div>
+                    <ul>
+                      ${exceptionItems.map((item) => `<li><strong>${escapeHtml(item.split("：")[0])}：</strong>${escapeHtml(item.split("：").slice(1).join("："))}</li>`).join("")}
+                    </ul>
+                  </div>
                 </div>
                 <footer class="relation-modal-footer master-slave-result-footer">
                   <div class="relation-modal-actions">
+                    <button class="btn" type="button" data-action="export-master-slave-import-errors">导出异常数据</button>
                     <button class="btn btn-primary" type="button" data-action="close-master-slave-import-result-dialog">确定</button>
                   </div>
                 </footer>
@@ -10907,7 +10982,7 @@
             const message = dialog.message || "支持导入 .xls / .xlsx 格式文件，请先下载模板并按要求填写。";
             return `
               <div class="relation-modal-backdrop" data-action="close-master-slave-import-dialog"></div>
-              <section class="relation-modal master-slave-import-dialog" role="dialog" aria-modal="true" aria-labelledby="masterSlaveImportDialogTitle">
+              <section class="relation-modal master-slave-import-dialog" role="dialog" aria-modal="true" aria-labelledby="masterSlaveImportDialogTitle" data-demand-title="导入文件弹窗" data-demand-text="交互目的：选择主从关系 Excel 文件并提交导入校验。||点击后行为：选择文件后点击导入，系统先做文件格式和模板结构校验，再允许确认保存。||异常判断：未选择文件、文件格式不是 xls/xlsx、模板列缺失、文件解析失败或未先点击导入即确认时，应在弹窗内提示并阻止提交。">
                 <header class="relation-modal-head master-slave-import-head">
                   <div class="relation-modal-title" id="masterSlaveImportDialogTitle">导入文件</div>
                   <button class="relation-modal-close" type="button" data-action="close-master-slave-import-dialog" aria-label="关闭">×</button>
@@ -10995,7 +11070,7 @@
             const autoFillSummary = this.store.getMasterSlaveTemplateAutoFillSummary(dialog);
             return `
               <div class="relation-modal-backdrop" data-action="close-master-slave-template-dialog"></div>
-              <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="masterSlaveTemplateDialogTitle">
+              <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="masterSlaveTemplateDialogTitle" data-demand-title="下载主从关系模板弹窗" data-demand-text="交互目的：选择导出范围并下载主从设备关系导入模板。||点击后行为：确认下载后按所选台账生成模板，可带出设备编号、名称、状态、位置和预填从设备编号。||异常判断：未选择任何台账、所选台账无样例数据、模板生成失败、浏览器拒绝下载或自动填充规则无效时，应阻止下载并提示原因。">
                 <header class="relation-modal-head">
                   <div>
                     <div class="relation-modal-title" id="masterSlaveTemplateDialogTitle">下载主从设备关系模板</div>
@@ -11004,7 +11079,7 @@
                   <button class="relation-modal-close" type="button" data-action="close-master-slave-template-dialog" aria-label="关闭">×</button>
                 </header>
                 <div class="relation-modal-body">
-                  <div class="field-block">
+                  <div class="field-block" data-demand-title="模板导出范围" data-demand-text="交互目的：控制模板下载时带出全量台账或部分台账数据。||点击后行为：选择部分台账后启用台账勾选项。||异常判断：部分导出但未勾选任何台账、勾选台账无数据或台账范围与用户权限不匹配时，应提示不可下载。">
                     <span>导出范围</span>
                     <div class="inline-radios">
                       <label class="inline-radio">
@@ -11017,7 +11092,7 @@
                       </label>
                     </div>
                   </div>
-                  <div class="field-block" style="margin-top:16px;">
+                  <div class="field-block" style="margin-top:16px;" data-demand-title="从设备自动填充规则" data-demand-text="交互目的：按编号规律预填模板中的从设备编号，减少人工填写。||点击后行为：进入规则配置，可新增、清空或加载推荐规则。||异常判断：规则未启用、规则字段为空、起始序号大于结束序号、后缀列表为空、生成编号不存在或生成结果重复时，应保留为空或提示用户修正规则。">
                     <span>选择台账</span>
                     <div class="inline-radios">
                       ${ledgerOptions.map((item) => `
@@ -11059,7 +11134,7 @@
               </section>
               ${dialog.ruleConfigOpen ? `
                 <div class="relation-modal-backdrop" data-action="close-master-slave-rule-config" style="z-index:60;"></div>
-                <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="masterSlaveRuleConfigTitle" style="z-index:61;width:min(1180px,calc(100vw - 48px));height:min(760px,calc(100vh - 48px));">
+                <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="masterSlaveRuleConfigTitle" style="z-index:61;width:min(1180px,calc(100vw - 48px));height:min(760px,calc(100vh - 48px));" data-demand-title="自动填充规则配置弹窗" data-demand-text="交互目的：配置从设备编号的自动生成规则。||点击后行为：按规则类型维护前缀、分隔符、序号、后缀等字段。||异常判断：未启用规则、规则类型为空、前缀/分隔符/序号/后缀字段非法、结束序号小于起始序号、生成编号不存在或重复时，应提示规则无效并避免写入错误模板。">
                   <header class="relation-modal-head">
                     <div>
                       <div class="relation-modal-title" id="masterSlaveRuleConfigTitle">配置从设备自动填充规则</div>
@@ -11197,7 +11272,7 @@
                 <header
                   class="relation-modal-head"
                   data-demand-title="新增：关联设备弹窗"
-                  data-demand-text="入口：行操作【更多】>【关联设备】。||交互：分两步——先选关联类型（主/从），再选目标设备。||校验：一主多从；一从一主；不能自关联；不能形成循环；报废/迁出态禁止。"
+                  data-demand-text="入口：行操作【更多】>【关联设备】。||交互：分两步——先选关联类型（主/从），再选目标设备。||校验：一主多从；一从一主；不能自关联；不能形成循环；报废/迁出态禁止。||异常判断：未选择关联类型、未选择目标设备、当前设备已存在冲突关系、目标设备不存在、自关联、一从多主、超过两层、循环关系、重复关系或状态禁用时，必须阻止保存并展示原因。"
                 >
                   <div>
                     <div class="relation-modal-title" id="relationDialogTitle">关联设备</div>
@@ -11256,7 +11331,7 @@
               <div
                 class="relation-type-grid"
                 data-demand-title="关联类型选择"
-                data-demand-text="主设备：当前设备作为从，绑定到一个主设备（一从一主）。||从设备：把其他设备作为从，绑定到当前设备（一主多从）。||两层关系限制：主设备不能再被绑主；从设备不能再绑从。"
+                data-demand-text="主设备：当前设备作为从，绑定到一个主设备（一从一主）。||从设备：把其他设备作为从，绑定到当前设备（一主多从）。||两层关系限制：主设备不能再被绑主；从设备不能再绑从。||异常判断：当前设备已是从设备时不可继续关联从设备；当前设备已是主设备时不可再关联主设备；未选择类型时下一步不可点击。"
               >
                 <div
                   class="relation-type-card ${dialog.relationType === "parent" ? "is-selected" : ""} ${parentDisabled ? "is-disabled" : ""}"
@@ -11321,7 +11396,7 @@
               <div
                 class="relation-source-tabs"
                 data-demand-title="设备来源切换"
-                data-demand-text="默认按当前设备所属台账高亮，可切换到其它台账或全部范围。"
+                data-demand-text="默认按当前设备所属台账高亮，可切换到其它台账或全部范围。||异常判断：目标台账无数据、筛选后无匹配设备、来源台账不可用或候选设备状态禁用时，应展示空态或禁用原因；已禁用候选不可勾选。"
               >
                 ${sources.map((source) => `
                   <button
@@ -11689,6 +11764,10 @@
               }
               if (action === "close-master-slave-import-result-dialog") {
                 this.store.closeMasterSlaveImportResultDialog();
+                return;
+              }
+              if (action === "export-master-slave-import-errors") {
+                this.store.exportMasterSlaveImportErrors();
                 return;
               }
               if (action === "download-master-slave-template") {
@@ -12217,8 +12296,12 @@
               '"': "&quot;",
               "'": "&#39;"
             }[ch]));
+            const renderPart = (part) => {
+              const isException = /^异常判断[：:]/.test(part);
+              return '<p class="' + (isException ? "is-demand-exception" : "") + '">' + escape(part) + "</p>";
+            };
             this.popover.innerHTML = "<strong>" + escape(title) + "</strong>"
-              + parts.map((part) => "<p>" + escape(part) + "</p>").join("");
+              + parts.map(renderPart).join("");
             this.popover.style.display = "block";
             this.position(trigger);
           }
