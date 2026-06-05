@@ -7891,6 +7891,21 @@
           sparePart: "sparePart"
         };
 
+        const ASSET_FLOW_STATUS_OPTIONS = {
+          [VIEW_IDS.IT_FACILITY]: ["已入库", "待上架", "已上架", "待变动", "待下架", "待迁出", "已迁出"],
+          [VIEW_IDS.STATION_FACILITY]: ["已入库", "待部署", "已部署", "待变动", "待回库", "待报废", "已报废"],
+          [VIEW_IDS.CABINET]: ["已入库", "待部署", "已部署", "待变动", "待回库", "待报废", "已报废"],
+          [VIEW_IDS.SPARE_PART]: ["已入库", "待出库", "待调拨", "待报废", "待回库", "已报废"]
+        };
+
+        const getAssetFlowStatus = (viewId, index = 0, fallback = "") => {
+          const options = ASSET_FLOW_STATUS_OPTIONS[viewId] || [];
+          if (!options.length) {
+            return fallback || "-";
+          }
+          return options[Math.abs(Number(index) || 0) % options.length];
+        };
+
         const RELATION_NON_BINDABLE_STATUS = ["已报废", "待报废", "已迁出", "待迁出", "已废弃"];
 
         const RELATION_PAGE_SIZE_OPTIONS = [10, 20, 50];
@@ -8204,7 +8219,7 @@
             version: "v1.1",
             type: "优化",
             title: "电子表格禁用规则",
-            description: "优化 台账电子表格禁用规则与上电时间选择",
+            description: "优化 台账电子表格禁用规则与时间选择",
             scope: "台账",
             targetView: VIEW_IDS.IT_FACILITY,
             targetAction: "批量入库",
@@ -8424,13 +8439,14 @@
           { key: "assetCode", letter: "A", label: "资产编号", width: 132 },
           { key: "name", letter: "B", label: "名称", width: 176 },
           { key: "assetStatus", letter: "C", label: "资产状态", width: 108 },
-          { key: "assetCategory", letter: "D", label: "资产分类", width: 150 },
-          { key: "assetLocation", letter: "E", label: "资产位置", width: 186 },
-          { key: "uHeight", letter: "F", label: "U高", width: 108 },
-          { key: "powerOnTime", letter: "G", label: "上电时间", width: 168 },
-          { key: "portCount", letter: "H", label: "端口数", width: 108 },
-          { key: "serialCode", letter: "I", label: "编号", width: 108 },
-          { key: "description", letter: "J", label: "描述", width: 198 }
+          { key: "assetSummary", letter: "D", label: "资产流程状态", width: 136 },
+          { key: "assetCategory", letter: "E", label: "资产分类", width: 150 },
+          { key: "assetLocation", letter: "F", label: "资产位置", width: 186 },
+          { key: "uHeight", letter: "G", label: "U高", width: 108 },
+          { key: "powerOnTime", letter: "H", label: "上电时间", width: 168 },
+          { key: "portCount", letter: "I", label: "端口数", width: 108 },
+          { key: "serialCode", letter: "J", label: "编号", width: 108 },
+          { key: "description", letter: "K", label: "描述", width: 198 }
         ];
 
         const OPERATION_SELECT_OPTIONS = {
@@ -8880,6 +8896,7 @@
                   }
                 ],
                 expandedRows: {},
+                collapsedRows: {},
                 autoExpandRows: {},
                 templateConfig: {
                   assetType: "IT设备",
@@ -8969,6 +8986,7 @@
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCategory: item[2],
               assetStatus: item[3],
+              assetSummary: getAssetFlowStatus(VIEW_IDS.SPARE_PART, index),
               assetLocation: item[4],
               vendor: ""
             }));
@@ -9006,6 +9024,7 @@
               id: "IT-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetStatus: statuses[index % statuses.length],
+              assetSummary: getAssetFlowStatus(VIEW_IDS.IT_FACILITY, index),
               assetLocation: locations[index % locations.length],
               ratedPower: item[3],
               uHeight: item[4],
@@ -9041,6 +9060,7 @@
               assetCategory: item[2],
               assetLocation: locations[index % locations.length],
               assetStatus: statuses[index % statuses.length],
+              assetSummary: getAssetFlowStatus(VIEW_IDS.STATION_FACILITY, index),
               vendor: ""
             }));
             return disambiguateNames(rows);
@@ -9098,6 +9118,8 @@
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCategory: "管理分类>弱电>电气系统>机柜系统>机柜主体>机柜",
+              assetStatus: index % 3 === 0 ? "空闲" : "在用",
+              assetSummary: getAssetFlowStatus(VIEW_IDS.CABINET, index),
               serialCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetLocation: locations[index % locations.length],
               cabinetHeight: "42"
@@ -10318,6 +10340,9 @@
           }
 
           isRowExpanded(viewId, rowId) {
+            if (this.isLedgerHierarchyEnabled() && this.findChildrenOf(viewId, rowId).length > 0) {
+              return this.state.ui.collapsedRows?.[viewId]?.[rowId] !== true;
+            }
             const map = this.state.ui.expandedRows?.[viewId];
             if (map && map[rowId]) return true;
             const auto = this.state.ui.autoExpandRows?.[viewId];
@@ -10325,6 +10350,20 @@
           }
 
           toggleRowExpansion(viewId, rowId) {
+            if (this.isLedgerHierarchyEnabled() && this.findChildrenOf(viewId, rowId).length > 0) {
+              if (!this.state.ui.collapsedRows) {
+                this.state.ui.collapsedRows = {};
+              }
+              const bucket = this.state.ui.collapsedRows[viewId] || {};
+              if (bucket[rowId]) {
+                delete bucket[rowId];
+              } else {
+                bucket[rowId] = true;
+              }
+              this.state.ui.collapsedRows[viewId] = bucket;
+              this.emit();
+              return;
+            }
             if (!this.state.ui.expandedRows) {
               this.state.ui.expandedRows = {};
             }
@@ -10782,13 +10821,21 @@
               return result;
             };
             const isHeaderBatchOperation = operationPage.source === "headerBatch";
-            const hiddenColumnKeys = new Set(
+            const hiddenColumnKeys = new Set();
+            if (operationPage.action === "入库") {
+              hiddenColumnKeys.add("assetStatus");
+              hiddenColumnKeys.add("assetSummary");
+              hiddenColumnKeys.add("assetLocation");
+            }
+            if (
               isHeaderBatchOperation
-                && operationPage.viewId === VIEW_IDS.IT_FACILITY
-                && ["入库", "上架"].includes(operationPage.action)
-                ? ["assetStatus", "assetLocation"]
-                : []
-            );
+              && operationPage.viewId === VIEW_IDS.IT_FACILITY
+              && operationPage.action === "上架"
+            ) {
+              hiddenColumnKeys.add("assetStatus");
+              hiddenColumnKeys.add("assetSummary");
+              hiddenColumnKeys.add("assetLocation");
+            }
             const baseRequiredActions = new Set(["入库", "上架", "部署", "编辑", "迁出", "变动", "下架"]);
             const baseRequiredColumnKeys = new Set(["assetCode", "name", "uHeight", "assetCategory"]);
             const baseColumns = OPERATION_SHEET_COLUMNS
@@ -10800,11 +10847,13 @@
                   : column.required
               }));
             const getExtraColumns = () => {
+              if (operationPage.action === "入库") {
+                return [
+                  { key: "warehouseLocation", label: "库房位置", width: 186, required: true }
+                ];
+              }
               if (isHeaderBatchOperation && operationPage.viewId === VIEW_IDS.IT_FACILITY) {
                 const headerBatchColumnsByAction = {
-                  "入库": [
-                    { key: "warehouseLocation", label: "库房位置", width: 186, required: true }
-                  ],
                   "上架": [
                     { key: "shelfLocation", label: "上架位置", width: 186, required: true },
                     { key: "operationStartU", label: "开始U位", width: 108, required: true }
@@ -10860,7 +10909,7 @@
             const baseColumnKeys = baseColumns.map((column) => column.key);
             const allColumnKeys = sheetColumns.map((column) => column.key);
             const getReadonlyColumnKeys = () => {
-              const editableDisabledKeys = ["assetStatus", "assetLocation", "assetCategory"];
+              const editableDisabledKeys = ["assetStatus", "assetSummary", "assetLocation", "assetCategory"];
               if (isHeaderBatchOperation && operationPage.viewId === VIEW_IDS.IT_FACILITY && ["入库", "上架"].includes(operationPage.action)) {
                 return [];
               }
@@ -10912,6 +10961,7 @@
                   assetCode: normalize(sourceRow.assetCode),
                   name: normalize(sourceRow.name),
                   assetStatus: normalize(sourceRow.assetStatus),
+                  assetSummary: normalize(sourceRow.assetSummary || sourceRow.processStatus || sourceRow.flowStatus || getAssetFlowStatus(operationPage.viewId, rowIndex, sourceRow.assetStatus)),
                   assetCategory: normalize(sourceRow.assetCategory),
                   assetLocation: normalize(sourceRow.assetLocation),
                   uHeight: normalize(sourceRow.uHeight || sourceRow.cabinetHeight || 2),
@@ -11105,11 +11155,11 @@
           }
 
           getMasterSlaveDisplayMode() {
-            return this.state.ui.templateConfig.masterSlaveDisplayMode || (this.isMasterSlaveEnabled() ? "masters" : "all");
+            return this.isMasterSlaveEnabled() ? "masters" : "all";
           }
 
           isLedgerHierarchyEnabled() {
-            return this.isMasterSlaveEnabled() && this.getMasterSlaveDisplayMode() === "masters";
+            return this.isMasterSlaveEnabled();
           }
 
           isLedgerHierarchyControlVisible() {
@@ -11155,7 +11205,7 @@
 
           setLedgerHierarchyDisplayMode(mode) {
             this.state.ui.templateConfig.masterSlaveEnabled = "yes";
-            this.state.ui.templateConfig.masterSlaveDisplayMode = mode === "masters" ? "masters" : "all";
+            this.state.ui.templateConfig.masterSlaveDisplayMode = "masters";
             this.emit();
           }
 
@@ -11164,7 +11214,7 @@
               return;
             }
             const bucket = {};
-            this.getFilteredRows(viewId).forEach((row) => {
+            this.getListRows(viewId).forEach((row) => {
               if (this.findChildrenOf(viewId, row.id).length > 0 || this.findParentOf(viewId, row.id)) {
                 bucket[row.id] = true;
               }
@@ -11173,6 +11223,10 @@
               this.state.ui.expandedRows = {};
             }
             this.state.ui.expandedRows[viewId] = bucket;
+            if (!this.state.ui.collapsedRows) {
+              this.state.ui.collapsedRows = {};
+            }
+            this.state.ui.collapsedRows[viewId] = {};
             this.emit();
           }
 
@@ -11184,6 +11238,16 @@
               this.state.ui.expandedRows = {};
             }
             this.state.ui.expandedRows[viewId] = {};
+            const bucket = {};
+            this.getListRows(viewId).forEach((row) => {
+              if (this.findChildrenOf(viewId, row.id).length > 0) {
+                bucket[row.id] = true;
+              }
+            });
+            if (!this.state.ui.collapsedRows) {
+              this.state.ui.collapsedRows = {};
+            }
+            this.state.ui.collapsedRows[viewId] = bucket;
             if (this.state.ui.autoExpandRows?.[viewId]) {
               this.state.ui.autoExpandRows[viewId] = {};
             }
@@ -13591,7 +13655,7 @@
                   <p><b>关联模块：</b>主从关系维护</p>
                   <ul>
                     <li><b>主从关系数据维护：</b>提供下载模板、导入文件和导入记录入口。</li>
-                    <li><b>台账页层级配置：</b>层级模式开启/关闭、展示方式和统一展开折叠已前移到台账页面。</li>
+                    <li><b>台账页层级配置：</b>层级模式开启/关闭已前移到台账页面，开启后固定树状结构并默认全部展开。</li>
                     <li><b>模板能力：</b>下载模板时仍支持全量台账或部分台账，并可配置从设备自动填充规则。</li>
                   </ul>
                 </div>
@@ -13998,7 +14062,7 @@
                     </div>
                   </div>
                   <div class="operation-sheet-shell">
-                    <div class="operation-sheet-wrap" data-demand-version="v1.1,v1.1,v1.2" data-demand-req-id="V3R5-4315,V3R5-4375,V3R5-4109" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。" data-demand-title-v12="电子表格时间组件选择" data-demand-text-v12="需求来源：V3R5-4109。||交互目的：电子表格中的时间字段支持直接点击单元格选择日期时间，减少手工输入时间格式错误。||展示规则：点击上电时间单元格时打开日期时间选择器，选择后将时间回填为YYYY-MM-DD HH:mm:ss格式；从需求索引进入时默认定位到该时间单元格。||状态限制：仅可编辑数据行或可编辑空白行允许打开时间选择器，字段标题行、占位行和只读列不触发时间选择。||异常判断：浏览器时间选择器不可用、用户取消选择或输入格式不完整时，应保留原单元格值或允许为空，不应弹出技术错误信息。">
+                    <div class="operation-sheet-wrap" data-demand-version="v1.1,v1.1,v1.2" data-demand-req-id="V3R5-4315,V3R5-4375,V3R5-4109" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：新增资产流程状态字段，行为与资产状态一致；流程状态按台账类型展示，IT设备为已入库、待上架、已上架、待变动、待下架、待迁出、已迁出，场地设施和机柜为已入库、待部署、已部署、待变动、待回库、待报废、已报废，备件为已入库、待出库、待调拨、待报废、待回库、已报废；入库动作下隐藏资产状态列、资产流程状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。" data-demand-title-v12="电子表格时间组件选择" data-demand-text-v12="需求来源：V3R5-4109。||交互目的：电子表格中的时间字段支持直接点击单元格选择日期时间，减少手工输入时间格式错误。||展示规则：点击上电时间单元格时打开日期时间选择器，选择后将时间回填为YYYY-MM-DD HH:mm:ss格式；从需求索引进入时默认定位到该时间单元格。||状态限制：仅可编辑数据行或可编辑空白行允许打开时间选择器，字段标题行、占位行和只读列不触发时间选择。||异常判断：浏览器时间选择器不可用、用户取消选择或输入格式不完整时，应保留原单元格值或允许为空，不应弹出技术错误信息。">
                       <div class="operation-vtable-container" data-role="operation-vtable"></div>
                     </div>
                     <div class="operation-sheet-footer">
@@ -14661,11 +14725,10 @@
               return "";
             }
             const enabled = this.store.isMasterSlaveEnabled();
-            const mode = this.store.getMasterSlaveDisplayMode();
             const menuOpen = !!state.ui.ledgerHierarchyMenuOpen;
             return `
               <div class="ledger-hierarchy-wrap">
-                <button class="ledger-hierarchy-btn ${enabled ? "is-active" : ""}" type="button" data-action="toggle-ledger-hierarchy-menu" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="台账层级配置入口" data-demand-text="交互目的：在台账列表页快速配置主从设备的列表展示方式。||点击后行为：展开或收起层级配置浮层，浮层内包含层级开关、展示方式和统一展开折叠操作。||默认规则：层级开启后默认展示方式为树状展示；当展示方式切换为平铺展示时，不显示展开折叠选项。||状态限制：仅影响当前台账列表的主从展示形态，不改变主从关系数据本身。||异常判断：当前台账无主从关系数据时，开启后仍应保留独立设备展示，并避免出现空白列表。">
+                <button class="ledger-hierarchy-btn ${enabled ? "is-active" : ""}" type="button" data-action="toggle-ledger-hierarchy-menu" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="台账层级配置入口" data-demand-text="交互目的：在台账列表页快速控制主从设备的层级展示。||点击后行为：展开或收起层级配置浮层，浮层内保留层级开关、全部展开和全部收起操作。||默认规则：层级开启后固定按树状结构展示，并默认全部展开主从行；不再提供形态切换。||状态限制：仅影响当前台账列表的主从展示形态，不改变主从关系数据本身。||异常判断：当前台账无主从关系数据时，开启后仍应保留独立设备展示，并避免出现空白列表。">
                   <span>层级</span>
                   <span>${enabled ? "已开启" : "未启用"}</span>
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -14676,25 +14739,16 @@
                   <div class="ledger-hierarchy-menu" role="menu">
                     <div class="ledger-hierarchy-head">
                       <div class="ledger-hierarchy-title">层级</div>
-                      <button class="ledger-hierarchy-switch ${enabled ? "is-on" : ""}" type="button" data-action="set-ledger-hierarchy-enabled" data-value="${enabled ? "no" : "yes"}" aria-label="层级模式${enabled ? "关闭" : "开启"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="层级模式开关" data-demand-text="交互目的：控制台账是否启用主从设备展示配置。||开启规则：开启后默认进入树状展示，列表仅展示主设备和独立设备，从设备通过展开主设备查看。||展示规则：展示方式为树状展示时显示展开折叠选项；切换为平铺展示时隐藏展开折叠选项。||关闭规则：关闭后隐藏展示方式和展开折叠配置，台账恢复普通平铺列表。||异常判断：若主从关系数据缺失、冲突或循环，应按普通资产行展示并在关系维护或导入结果中提示异常。"></button>
+                      <button class="ledger-hierarchy-switch ${enabled ? "is-on" : ""}" type="button" data-action="set-ledger-hierarchy-enabled" data-value="${enabled ? "no" : "yes"}" aria-label="层级模式${enabled ? "关闭" : "开启"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="层级模式开关" data-demand-text="交互目的：控制台账是否启用主从设备层级展示。||开启规则：开启后固定进入树状展示，列表展示主设备、独立设备及其展开的从设备，默认全部展开。||展示规则：浮层不再展示形态切换配置，仅保留全部展开和全部收起用于统一控制主从行展开状态。||关闭规则：关闭后隐藏展开状态操作，台账恢复普通列表。||异常判断：若主从关系数据缺失、冲突或循环，应按普通资产行展示并在关系维护或导入结果中提示异常。"></button>
                     </div>
                     ${enabled ? `
                       <div class="ledger-hierarchy-row">
-                        <span>展示方式</span>
-                        <div class="ledger-segment" aria-label="展示方式">
-                          <button type="button" class="${mode === "masters" ? "is-active" : ""}" data-action="set-ledger-hierarchy-display" data-value="masters">树状展示</button>
-                          <button type="button" class="${mode === "all" ? "is-active" : ""}" data-action="set-ledger-hierarchy-display" data-value="all">平铺展示</button>
+                        <span>展开状态</span>
+                        <div class="ledger-hierarchy-actions">
+                          <button class="ledger-hierarchy-action-btn" type="button" data-action="expand-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部展开主从行" data-demand-text="交互目的：一次性展开当前台账列表中所有存在从设备的主设备，便于快速查看完整主从关系。||点击后行为：清除手动收起状态，将当前台账所有可展开主设备恢复为展开，并在主设备下显示从设备行。||状态限制：层级开启后固定按树状结构展示且默认全部展开；本按钮用于恢复被用户手动收起的主从行。||异常判断：分页或筛选变化后，应按当前列表范围重新计算可展开行，避免展开已不在当前结果集中的资产。">全部展开</button>
+                          <button class="ledger-hierarchy-action-btn" type="button" data-action="collapse-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部收起主从行" data-demand-text="交互目的：一次性收起当前台账列表中所有已展开的主从设备明细。||点击后行为：将当前台账所有可展开主设备标记为收起，从设备行不再直接显示。||状态限制：层级开启后固定按树状结构展示；本按钮仅改变展开状态，不删除或修改任何主从关系。||异常判断：重复点击、当前无展开行或无从设备时，应保持页面稳定，不应出现报错或列表闪烁。">全部收起</button>
                         </div>
                       </div>
-                      ${mode === "masters" ? `
-                        <div class="ledger-hierarchy-row">
-                          <span>展开折叠</span>
-                          <div class="ledger-hierarchy-actions">
-                            <button class="ledger-hierarchy-action-btn" type="button" data-action="expand-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部展开主从行" data-demand-text="交互目的：一次性展开当前台账列表中所有存在从设备的主设备，便于快速查看完整主从关系。||点击后行为：将当前视图内可展开的主设备全部置为展开状态，并在主设备下显示从设备行。||状态限制：仅在树状展示模式下显示；展示方式为平铺展示时隐藏展开折叠选项。||异常判断：分页或筛选变化后，应按当前列表范围重新计算可展开行，避免展开已不在当前结果集中的资产。">全部展开</button>
-                            <button class="ledger-hierarchy-action-btn" type="button" data-action="collapse-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部折叠主从行" data-demand-text="交互目的：一次性收起当前台账列表中的从设备明细，恢复主设备和独立设备优先的列表视图。||点击后行为：将当前视图内已展开的主设备全部置为折叠状态，从设备行不再直接显示。||状态限制：仅在树状展示模式下显示；展示方式为平铺展示时隐藏展开折叠选项，不删除或修改任何主从关系。||异常判断：重复点击、当前无展开行或无从设备时，应保持页面稳定，不应出现报错或列表闪烁。">全部折叠</button>
-                          </div>
-                        </div>
-                      ` : ""}
                     ` : ""}
                   </div>
                 ` : ""}
@@ -14723,7 +14777,7 @@
               return "";
             }
             const actionLabel = escapeHtml(action);
-            return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、U高、资产分类按规则标识必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。"`
+            return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、U高、资产分类按规则标识必填；资产流程状态字段行为与资产状态一致，且按台账类型展示，IT设备为已入库、待上架、已上架、待变动、待下架、待迁出、已迁出，场地设施和机柜为已入库、待部署、已部署、待变动、待回库、待报废、已报废，备件为已入库、待出库、待调拨、待报废、待回库、已报废；入库动作下隐藏资产状态列、资产流程状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。"`
           }
 
           getCrossPageSelectionDemandAttrs(target = "selection") {
@@ -15183,7 +15237,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="config-section" data-demand-version="v1.1,v1.2" data-demand-title="主从关系维护区" data-demand-text="交互目的：集中维护主从设备关系数据，包含模板下载、表格导入更新和导入记录查询。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：支持在资产基础配置页维护主从关系数据和模板能力。||异常判断：导入文件格式错误、模板列缺失、设备编号不存在、自关联、一从多主、超过两层、循环关系、状态禁用或重复关系时，应进入失败明细。" data-demand-title-v12="主从关系维护区调整" data-demand-text-v12="交互目的：收敛资产基础配置页中的主从关系维护范围，只保留关系数据维护能力，并控制台账页层级入口是否展示。||调整内容：树状/平铺展示和统一展开折叠仍在台账页操作；本页新增层级开关显示/隐藏配置，用于控制台账页顶部“层级”入口是否出现。||状态限制：隐藏层级入口后，不修改已存在的主从关系数据和默认展示规则，仅隐藏台账页的层级配置按钮。||异常判断：若用户隐藏入口后需要调整展示方式，应回到本配置项切换为显示。">
+                  <div class="config-section" data-demand-version="v1.1,v1.2" data-demand-title="主从关系维护区" data-demand-text="交互目的：集中维护主从设备关系数据，包含模板下载、表格导入更新和导入记录查询。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：支持在资产基础配置页维护主从关系数据和模板能力。||异常判断：导入文件格式错误、模板列缺失、设备编号不存在、自关联、一从多主、超过两层、循环关系、状态禁用或重复关系时，应进入失败明细。" data-demand-title-v12="主从关系维护区调整" data-demand-text-v12="交互目的：收敛资产基础配置页中的主从关系维护范围，只保留关系数据维护能力，并控制台账页层级入口是否展示。||调整内容：层级开启后台账页固定树状结构并默认全部展开；本页仅新增层级开关显示/隐藏配置，用于控制台账页顶部“层级”入口是否出现。||状态限制：隐藏层级入口后，不修改已存在的主从关系数据和默认展示规则，仅隐藏台账页的层级配置按钮。||异常判断：若用户隐藏入口后需要重新展示入口，应回到本配置项切换为显示。">
                     <div class="config-section-title">主从关系维护</div>
                     <div class="config-form-grid single">
                       <div class="field-block">
@@ -15193,7 +15247,7 @@
                           <button class="btn" type="button" data-action="open-master-slave-import-records" data-demand-title="查看导入记录" data-demand-text="交互目的：查看主从关系导入的历史批次、进度和结果。||点击后行为：进入导入记录页，可查看结果、下载原文件或删除记录。||状态限制：导入中任务应展示进度，失败任务应保留异常原因。||异常判断：记录不存在、任务中断、失败明细丢失、原文件不可下载或删除失败时，应展示明确原因并保留操作痕迹。">导入记录</button>
                           <button class="btn btn-light" type="button" data-action="download-master-slave-template" data-demand-title="下载主从关系模板" data-demand-text="交互目的：导出可填写的主从设备关系模板。||点击后行为：打开模板下载弹窗，可选择全量台账或部分台账，并可配置从设备自动填充规则。||状态限制：部分台账至少选择一个范围；无可导出样例数据时提示下载失败。||异常判断：未选择台账、所选台账无样例数据、自动填充规则无效、浏览器拒绝下载或模板生成失败时，应阻止下载并提示原因。">下载模板</button>
                         </div>
-                        <div class="field-block" style="margin-top:12px;" data-demand-version="v1.2" data-demand-req-id="V3R5-4281" data-demand-title="层级开关入口显示配置" data-demand-text="交互目的：在主从关系维护配置中控制台账页顶部“层级”入口是否展示。||点击后行为：选择“显示”时台账页展示层级配置入口；选择“隐藏”时台账页不展示层级入口，并自动收起已打开的层级浮层。||状态限制：该配置只影响入口显示，不删除主从关系、不改变树状/平铺展示规则。||异常判断：切换隐藏后若当前台账无入口，应保持列表可正常查询、选择和执行批量操作。">
+                        <div class="field-block" style="margin-top:12px;" data-demand-version="v1.2" data-demand-req-id="V3R5-4281" data-demand-title="层级开关入口显示配置" data-demand-text="交互目的：在主从关系维护配置中控制台账页顶部“层级”入口是否展示。||点击后行为：选择“显示”时台账页展示层级配置入口；选择“隐藏”时台账页不展示层级入口，并自动收起已打开的层级浮层。||状态限制：该配置只影响入口显示，不删除主从关系；层级开启后固定树状结构并默认全部展开。||异常判断：切换隐藏后若当前台账无入口，应保持列表可正常查询、选择和执行批量操作。">
                           <div class="field-label-row">
                             <span>层级开关</span>
                             <div class="ledger-segment" aria-label="层级开关显示配置">
@@ -15203,7 +15257,7 @@
                           </div>
                           <div class="field-hint">控制台账列表顶部“层级”入口是否展示；隐藏后不影响已维护的主从关系数据。</div>
                         </div>
-                        <div class="field-hint">台账页负责层级展示方式和统一展开折叠；本页维护主从关系数据，并控制台账页层级入口显示。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
+                        <div class="field-hint">台账页负责层级开关，开启后固定树状结构并默认全部展开；本页维护主从关系数据，并控制台账页层级入口显示。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
                       </div>
                     </div>
                   </div>
@@ -17011,10 +17065,6 @@
               }
               if (action === "set-ledger-hierarchy-enabled") {
                 this.store.setLedgerHierarchyEnabled(actionTarget.getAttribute("data-value") === "yes");
-                return;
-              }
-              if (action === "set-ledger-hierarchy-display") {
-                this.store.setLedgerHierarchyDisplayMode(actionTarget.getAttribute("data-value"));
                 return;
               }
               if (action === "expand-all-master-slave") {
