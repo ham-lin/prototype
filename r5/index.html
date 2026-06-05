@@ -693,6 +693,42 @@
         font-size: 12px;
       }
 
+      .operation-fill-menu {
+        position: fixed;
+        z-index: 10000;
+        width: 148px;
+        padding: 6px 0;
+        border: 1px solid #d8e3f0;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(30, 55, 85, 0.18);
+      }
+
+      .operation-fill-menu button {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        align-items: center;
+        width: 100%;
+        height: 28px;
+        padding: 0 10px;
+        border: 0;
+        background: transparent;
+        color: #31485f;
+        font-size: 12px;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .operation-fill-menu button:hover {
+        background: #e8f3ff;
+        color: var(--primary-deep);
+      }
+
+      .operation-fill-menu .fill-menu-check {
+        color: #1d2129;
+        font-weight: 700;
+      }
+
       .operation-sheet-table {
         width: max-content;
         min-width: 100%;
@@ -1547,8 +1583,8 @@
         position: absolute;
         top: calc(100% + 6px);
         right: 0;
-        width: 280px;
-        padding: 12px;
+        width: 268px;
+        padding: 12px 12px 14px;
         border: 1px solid #e4ebf3;
         border-radius: 8px;
         background: #fff;
@@ -1578,7 +1614,7 @@
       }
 
       .ledger-hierarchy-head {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
 
       .ledger-hierarchy-title {
@@ -1588,13 +1624,13 @@
       }
 
       .ledger-hierarchy-row {
-        min-height: 32px;
+        min-height: 30px;
         color: #4f6076;
         font-size: 12px;
       }
 
       .ledger-hierarchy-row + .ledger-hierarchy-row {
-        margin-top: 6px;
+        margin-top: 8px;
       }
 
       .ledger-hierarchy-switch {
@@ -1630,15 +1666,15 @@
       .ledger-segment {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
-        padding: 3px;
+        gap: 4px;
+        padding: 2px;
         border-radius: 6px;
         background: #f2f5f8;
       }
 
       .ledger-segment button {
         min-width: 52px;
-        height: 24px;
+        height: 26px;
         padding: 0 8px;
         border-radius: 5px;
         color: #5f6f83;
@@ -1662,11 +1698,21 @@
         gap: 6px;
       }
 
-      .ledger-hierarchy-actions .btn {
-        height: 24px;
+      .ledger-hierarchy-action-btn {
+        height: 26px;
+        min-width: 58px;
         padding: 0 8px;
+        border: 1px solid #d7e1ec;
         border-radius: 5px;
+        background: #fff;
+        color: #506783;
         font-size: 12px;
+      }
+
+      .ledger-hierarchy-action-btn:hover {
+        border-color: #b8d4f3;
+        color: #1d6fbd;
+        background: #f7fbff;
       }
 
       .search-form {
@@ -1751,6 +1797,7 @@
         display: flex;
         flex-direction: column;
         flex: 1;
+        min-width: 0;
         min-height: 0;
       }
 
@@ -4229,7 +4276,7 @@
         display: flex;
         justify-content: flex-end;
         gap: 6px;
-        padding: 10px 18px 0;
+        padding: 14px 18px 10px;
       }
 
       .mini-filter-btn {
@@ -4250,6 +4297,102 @@
 
       .asset-history-stage {
         flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 14px 18px 28px;
+      }
+
+      .asset-history-timeline {
+        position: relative;
+        max-width: 760px;
+        padding-left: 28px;
+      }
+
+      .asset-history-timeline::before {
+        content: "";
+        position: absolute;
+        top: 24px;
+        bottom: 16px;
+        left: 6px;
+        width: 1px;
+        background: #d8e1eb;
+      }
+
+      .asset-history-item {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        padding: 0 0 20px;
+      }
+
+      .asset-history-marker {
+        position: absolute;
+        top: 6px;
+        left: -27px;
+        width: 10px;
+        height: 10px;
+        border: 2px solid #1683ff;
+        border-radius: 50%;
+        background: #fff;
+        z-index: 1;
+      }
+
+      .asset-history-time {
+        height: 20px;
+        color: #5f748a;
+        font-size: 12px;
+        line-height: 20px;
+      }
+
+      .asset-history-card {
+        min-height: 74px;
+        margin-top: 8px;
+        padding: 14px 18px;
+        border: 1px solid #dfe8f2;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(34, 61, 92, 0.05);
+      }
+
+      .asset-history-action-title {
+        margin-bottom: 6px;
+        color: #26394f;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .asset-history-operator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        color: #1f3349;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .asset-history-operator em {
+        font-style: italic;
+      }
+
+      .asset-history-change {
+        color: #24384f;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .asset-history-change strong {
+        margin: 0 4px;
+        color: #1d2f43;
+        font-weight: 700;
+      }
+
+      .asset-history-change em {
+        color: #6a7f95;
+        font-style: normal;
+      }
+
+      .asset-history-empty {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -7384,7 +7527,7 @@
 
         const SIDEBAR_MENU = [
           { type: "static", id: "deviceOverview", viewId: VIEW_IDS.ASSET_OVERVIEW, label: "资产概览" },
-          { type: "group", id: "it", label: "IT设施", children: [{ id: VIEW_IDS.IT_FACILITY, label: "台账" }] },
+          { type: "group", id: "it", label: "IT设备", children: [{ id: VIEW_IDS.IT_FACILITY, label: "台账" }] },
           {
             type: "group",
             id: "station",
@@ -7483,8 +7626,8 @@
             modeLabel: "标准视图",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "高级搜索",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: true,
             actions: ["导出资产", "批量更新", "批量入库", "批量上架"],
             rowActions: ["查看", "更多"],
@@ -7509,8 +7652,8 @@
             modeLabel: "标准视图",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "高级查询",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: true,
             actions: ["导出资产", "批量更新", "批量入库"],
             rowActions: ["查看", "更多"],
@@ -7530,8 +7673,8 @@
             modeLabel: "",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: false,
             actions: ["批量初始化"],
             rowActions: ["初始化"],
@@ -7557,8 +7700,8 @@
             modeLabel: "",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "高级查询",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: true,
             actions: ["导出资产", "批量更新", "批量入库"],
             rowActions: ["查看", "更多"],
@@ -7578,8 +7721,8 @@
             modeLabel: "",
             placeholder: "请输入资产编码/资产名称",
             secondaryLabel: "高级搜索",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: true,
             actions: ["导出资产", "批量更新", "批量入库"],
             rowActions: ["查看"],
@@ -7597,8 +7740,8 @@
             modeLabel: "",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "",
-            pageSize: 8,
-            pageSizeLabel: "8条/页",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
             showTools: false,
             actions: [],
             rowActions: ["查看"],
@@ -8058,10 +8201,10 @@
           {
             id: "V3R5-4375",
             ticketId: "V3R5-4375",
-            version: "v1.2",
+            version: "v1.1",
             type: "优化",
             title: "电子表格禁用规则",
-            description: "优化 台账电子表格禁用规则",
+            description: "优化 台账电子表格禁用规则与上电时间选择",
             scope: "台账",
             targetView: VIEW_IDS.IT_FACILITY,
             targetAction: "批量入库",
@@ -8077,8 +8220,8 @@
             description: "优化 资产台账，去除多选后的入库按钮",
             scope: "台账",
             targetView: VIEW_IDS.IT_FACILITY,
-            targetLabel: "资产台账",
-            status: "待确认索引"
+            targetLabel: "资产台账多选更多操作",
+            status: "已设计完成"
           },
           {
             id: "V3R5-4185",
@@ -8138,7 +8281,7 @@
             scope: "资产详情",
             targetView: VIEW_IDS.IT_FACILITY,
             targetLabel: "资产详情-履历",
-            status: "待确认索引"
+            status: "已设计完成"
           },
           {
             id: "V3R5-4111",
@@ -8149,8 +8292,8 @@
             description: "新增 资产台账支持跨页选择数据",
             scope: "台账",
             targetView: VIEW_IDS.IT_FACILITY,
-            targetLabel: "资产台账",
-            status: "待确认索引"
+            targetLabel: "资产台账跨页多选",
+            status: "已设计完成"
           },
           {
             id: "V3R5-4110",
@@ -8160,20 +8303,22 @@
             title: "空间视图设备展示规则",
             description: "优化 空间视图模式下不显示设备",
             scope: "空间视图",
+            targetView: VIEW_IDS.IT_FACILITY,
             targetLabel: "空间视图",
-            status: "待确认索引"
+            status: "已设计完成"
           },
           {
             id: "V3R5-4109",
             ticketId: "V3R5-4109",
             version: "v1.2",
             type: "优化",
-            title: "电子表格时间组件报错提示",
-            description: "优化 电子表格时间组件报错提示",
+            title: "电子表格时间组件选择",
+            description: "优化 电子表格时间组件选择",
             scope: "电子表格",
             targetView: VIEW_IDS.IT_FACILITY,
+            targetAction: "批量入库",
             targetLabel: "电子表格作业页",
-            status: "待确认索引"
+            status: "已设计完成"
           }
         ];
 
@@ -8282,9 +8427,10 @@
           { key: "assetCategory", letter: "D", label: "资产分类", width: 150 },
           { key: "assetLocation", letter: "E", label: "资产位置", width: 186 },
           { key: "uHeight", letter: "F", label: "U高", width: 108 },
-          { key: "portCount", letter: "G", label: "端口数", width: 108 },
-          { key: "serialCode", letter: "H", label: "编号", width: 108 },
-          { key: "description", letter: "I", label: "描述", width: 198 }
+          { key: "powerOnTime", letter: "G", label: "上电时间", width: 168 },
+          { key: "portCount", letter: "H", label: "端口数", width: 108 },
+          { key: "serialCode", letter: "I", label: "编号", width: 108 },
+          { key: "description", letter: "J", label: "描述", width: 198 }
         ];
 
         const OPERATION_SELECT_OPTIONS = {
@@ -8745,7 +8891,8 @@
                   locationDisplayRule: "",
                   ownerDisplayRule: "",
                   masterSlaveEnabled: "yes",
-                  masterSlaveDisplayMode: "all",
+                  masterSlaveHierarchyControlVisible: "show",
+                  masterSlaveDisplayMode: "masters",
                   masterSlaveTemplateScope: "all",
                   masterSlaveTemplateLedgers: {
                     [VIEW_IDS.IT_FACILITY]: true,
@@ -8816,7 +8963,7 @@
               ["电源模块-备用A", "PWR-R5-SP-01", "电源模块", "库存", "2号楼-B1层-备件库A区"],
               ["散热风扇-备用01", "FAN-R5-SP-01", "散热件", "库存", "2号楼-B1层-备件库B区"]
             ];
-            const rows = expandRows(list, 18, (item, index, round) => ({
+            const rows = expandRows(list, 220, (item, index, round) => ({
               id: "SP-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
@@ -8849,13 +8996,13 @@
               ["动环采集器", "空闲", "1号楼-3层-配电间", "1", "1", "博科", "DHC-M3T-01", "管理分类>弱电系统>动环系统>动环采集器", "8", "", "006"],
               ["机架式服务器", "在用", "1号楼-7层-D7机房", "6", "2", "浪潮", "SRV-R5-D7-01", "管理分类>IT设施>计算设备>机架式服务器", "4", "12", "007"],
               ["机架式服务器", "在用", "1号楼-7层-D7机房", "6", "2", "戴尔", "SRV-R5-D7-02", "管理分类>IT设施>计算设备>机架式服务器", "4", "14", "008"],
-              ["机架式服务器", "维修", "1号楼-7层-D7机房", "6", "2", "联想", "SRV-R5-D7-03", "管理分类>IT设施>计算设备>机架式服务器", "4", "16", "009"]
+              ["机架式服务器", "空闲", "1号楼-7层-D7机房", "6", "2", "联想", "SRV-R5-D7-03", "管理分类>IT设施>计算设备>机架式服务器", "4", "16", "009"]
             ];
 
             const locations = ["1号楼-2层-弱电间", "1号楼-2层-配电间", "1号楼-3层-配电间", "1号楼-7层-D7机房", "2号楼-4层-网络机房", "2号楼-5层-运维区"];
             const vendors = ["华三", "华为", "博科", "浪潮", "戴尔", "联想", "锐捷", "新华三"];
-            const statuses = ["在用", "在用", "空闲", "维修"];
-            const rows = expandRows(source, 24, (item, index, round) => ({
+            const statuses = ["在用", "在用", "空闲", "空闲"];
+            const rows = expandRows(source, 240, (item, index, round) => ({
               id: "IT-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetStatus: statuses[index % statuses.length],
@@ -8886,8 +9033,8 @@
               ["电量仪_ESE-LPB1-1F-06", "DB_ESE-LPB1-1F-06", "管理分类>电气系统>计量系统>电量仪", "1号楼-1层-低压配电室B区", "在用"]
             ];
             const locations = ["1号楼-1层-低压配电室A区", "1号楼-1层-中心机房", "1号楼-4层-强电井", "1号楼-1层-低压配电室B区", "2号楼-B1层-冷站配电室", "2号楼-3层-弱电间"];
-            const statuses = ["在用", "在用", "在用", "空闲", "维修"];
-            const rows = expandRows(source, 24, (item, index, round) => ({
+            const statuses = ["在用", "在用", "在用", "空闲", "空闲"];
+            const rows = expandRows(source, 240, (item, index, round) => ({
               id: "ST-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
@@ -8900,19 +9047,34 @@
           }
 
           static createPendingAssets() {
-            const names = ["共六_智慧屏", "通道尾01", "通道尾02", "共六_TH03", "TH03_通道...", "TH03_通道...", "共六_登记...", "共享流程...", "bbb", "aaa", "TH03_通道...", "电量仪_ES...", "UPS_P34...", "STS_B34-01"];
-            const rows = expandRows(names, 24, (name, index, round) => ({
+            const source = [
+              ["动环采集器_DHC-1F-A01", "管理分类>弱电系统>动环系统>动环采集器", "1号楼-1层-低压配电室A区", "DHC"],
+              ["温湿度传感器_TH-1F-A01", "管理分类>弱电系统>动环系统>温湿度传感器", "1号楼-1层-中心机房", "TH"],
+              ["漏水控制器_WL-1F-A01", "管理分类>弱电系统>动环系统>漏水控制器", "1号楼-1层-中心机房", "WL"],
+              ["智能电量仪_PM-1F-A01", "管理分类>电气系统>计量系统>电量仪", "1号楼-1层-低压配电室A区", "PM"],
+              ["UPS_UPS-B1-A01", "管理分类>电气系统>UPS系统>UPS", "2号楼-B1层-UPS室", "UPS"],
+              ["STS静态切换开关_STS-B1-A01", "管理分类>电气系统>末端配电系统>STS", "2号楼-B1层-UPS室", "STS"],
+              ["精密空调_AC-1F-A01", "管理分类>暖通系统>空调系统>精密空调", "1号楼-1层-中心机房", "AC"],
+              ["列间空调_AC-4F-A01", "管理分类>暖通系统>空调系统>列间空调", "2号楼-4层-网络机房", "AC"],
+              ["门禁控制器_ACS-2F-A01", "管理分类>安防系统>门禁系统>门禁控制器", "1号楼-2层-弱电间", "ACS"],
+              ["视频摄像机_CAM-2F-A01", "管理分类>安防系统>视频监控>摄像机", "1号楼-2层-走廊", "CAM"],
+              ["消防烟感探测器_FS-3F-A01", "管理分类>消防系统>火灾报警>烟感探测器", "1号楼-3层-配电间", "FS"],
+              ["PDU_PDU-NW31-A01", "管理分类>电气系统>末端配电系统>PDU", "2号楼-4层-网络机房", "PDU"],
+              ["蓄冷泵_CP-B1-A01", "管理分类>暖通系统>冷站系统>蓄冷泵", "2号楼-B1层-冷站", "CP"],
+              ["水浸传感器_WS-B1-A01", "管理分类>弱电系统>动环系统>水浸传感器", "2号楼-B1层-冷站配电室", "WS"]
+            ];
+            const rows = expandRows(source, 220, (item, index, round) => ({
               id: "PD-" + pad(index + 1, 3),
               assetStatus: "待初始化",
               assetCode: "20260401" + pad(110012 + index) + "-" + pad(108680 - index),
-              assetCategory: index % 3 === 0 ? "管理分类>弱电系统>弱电系统>动环系统" : "管理分类>强电系统>电气系统>其他电力",
-              serialCode: "2026041" + pad(70 + index) + "...",
+              assetCategory: item[1],
+              serialCode: "202604" + pad(index + 1, 5),
               assetSummary: "-",
-              name: String(name) + (round > 0 ? "-" + pad(round + 1) : ""),
+              name: item[0].replace(/A01$/, "A" + pad(round + 1)),
               description: "-",
               dataTag: "-",
               serialNumber: "",
-              assetLocation: index % 2 === 0 ? "1号楼-5层-待初始化区" : "2号楼-2层-待初始化区",
+              assetLocation: item[2],
               vendor: "",
               relatedAsset: ""
             }));
@@ -8931,7 +9093,7 @@
               ["机柜_ES-NW33-R-01-2", "ES-NW33-R-01-2", "1号楼-1层-中心机房"]
             ];
             const locations = ["1号楼-1层-中心机房", "1号楼-7层-D7机房", "2号楼-4层-网络机房"];
-            const rows = expandRows(source, 20, (item, index, round) => ({
+            const rows = expandRows(source, 220, (item, index, round) => ({
               id: "CB-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
@@ -8963,12 +9125,12 @@
               ["舱里计_D1T-EM-2F-10", "20250623163027-51578", "能量传感器"]
             ];
 
-            const rows = base.map((item, index) => ({
+            const rows = expandRows(base, 220, (item, index, round) => ({
               id: "RT-" + pad(index + 1, 3),
-              name: item[0],
-              assetCode: item[1],
-              serialNumber: item[1],
-              assetStatus: "报废",
+              name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
+              assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
+              serialNumber: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
+              assetStatus: index % 2 === 0 ? "迁出" : "报废",
               assetCategory: item[2]
             }));
             return disambiguateNames(rows);
@@ -9548,7 +9710,8 @@
               rowId,
               action,
               selectedRowIds: Array.isArray(selectedRowIds) ? selectedRowIds.slice() : [],
-              source: options.source || ""
+              source: options.source || "",
+              focusColumnKey: options.focusColumnKey || ""
             };
             this.state.ui.guidePage = null;
             this.state.ui.detailPage = null;
@@ -9645,6 +9808,10 @@
               this.emit();
               return;
             }
+            if (requirement.id === "V3R5-4109") {
+              this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "入库", [], { focusColumnKey: "powerOnTime" });
+              return;
+            }
             if (requirement.targetAction === "批量入库") {
               this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "入库");
               return;
@@ -9653,8 +9820,44 @@
               this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "上架");
               return;
             }
+            if (requirement.id === "V3R5-4112") {
+              const targetView = requirement.targetView || VIEW_IDS.IT_FACILITY;
+              const sampleRow = this.getFilteredRows(targetView)[0] || this.getListRows(targetView)[0];
+              if (sampleRow) {
+                this.openDetailPage(targetView, sampleRow.id);
+                this.state.ui.versionRequirementFilter = requirement.version || "all";
+                this.state.ui.focusedRequirementId = requirement.id;
+                this.state.ui.demandExplainEnabled = true;
+                this.state.ui.detailPage.activeTab = "history";
+                this.state.ui.detailPage.historyRange = "近7日";
+                this.pushToast("已定位需求范围", "已跳转到“" + requirement.targetLabel + "”。", "success");
+                this.emit();
+              }
+              return;
+            }
             this.state.ui.currentTopNav = INTEGRATION_VIEW_IDS.has(requirement.targetView) ? "集成系统" : "运营管理";
             this.state.ui.currentView = requirement.targetView || VIEW_IDS.IT_FACILITY;
+            if (requirement.id === "V3R5-4110") {
+              if (!this.state.ui.listViewModes) {
+                this.state.ui.listViewModes = {};
+              }
+              this.state.ui.listViewModes[requirement.targetView] = "space";
+            }
+            if (requirement.id === "V3R5-4111") {
+              if (!this.state.ui.listViewModes) {
+                this.state.ui.listViewModes = {};
+              }
+              this.state.ui.listViewModes[requirement.targetView] = "standard";
+            }
+            if (requirement.id === "V3R5-4186") {
+              if (!this.state.ui.listViewModes) {
+                this.state.ui.listViewModes = {};
+              }
+              this.state.ui.listViewModes[requirement.targetView] = "standard";
+              const sampleRows = this.getCurrentPageRows(requirement.targetView, this.getFilteredRows(requirement.targetView)).slice(0, 2);
+              this.state.ui.listSelections[requirement.targetView] = sampleRows.map((row) => row.id);
+              this.state.ui.batchSelectionMenuOpen = requirement.targetView;
+            }
             this.state.ui.guidePage = null;
             this.state.ui.operationPage = null;
             this.state.ui.detailPage = null;
@@ -10235,6 +10438,12 @@
             };
 
             const normalize = (value) => (value === undefined || value === null || value === "" ? "-" : String(value));
+            const historyFieldMap = {
+              "corc:Asset::manufacturedBy": "厂商",
+              "corc:Space::isLocationOf": "资产位置",
+              "ID": "资产ID"
+            };
+            const historyField = (value) => historyFieldMap[value] || value;
             const locationLabel = normalize(row.assetLocation);
             const startU = Math.max(1, Number(row.startU) || 1);
             const unitHeight = Math.max(1, Number(row.uHeight) || 2);
@@ -10322,6 +10531,60 @@
             const hasMasterSlaveRelation = Boolean(parentRow || childRow);
             const masterRow = parentRow || row;
             const slaveRow = parentRow ? row : childRow;
+            const assetName = normalize(row.name || row.assetCode);
+            const assetCode = normalize(row.assetCode || row.serialCode);
+            const today = "2026-06-04";
+            const historyEntries = [
+              {
+                time: today + " 15:09:02",
+                action: "编辑属性",
+                operator: "admin",
+                summary: "编辑属性",
+                changes: [
+                  { field: "资产流程状态", oldValue: "待上架", newValue: "空闲" }
+                ]
+              },
+              {
+                time: today + " 15:07:58",
+                action: "编辑属性",
+                operator: "admin",
+                summary: "编辑属性",
+                changes: [
+                  { field: "资产流程状态", oldValue: "空", newValue: "待上架" }
+                ]
+              },
+              {
+                time: "2026-06-03 17:01:10",
+                action: "编辑属性",
+                operator: "admin",
+                summary: "编辑属性",
+                changes: [
+                  { field: "资产编号", oldValue: "空", newValue: assetCode },
+                  { field: "资产状态", oldValue: "空", newValue: normalize(row.assetStatus) },
+                  { field: historyField("corc:Asset::manufacturedBy"), oldValue: "空", newValue: normalize(row.vendor) },
+                  { field: historyField("corc:Space::isLocationOf"), oldValue: "空", newValue: locationLabel },
+                  { field: "名称", oldValue: "空", newValue: assetName },
+                  { field: "U高", oldValue: "空", newValue: normalize(row.uHeight || row.cabinetHeight) },
+                  { field: "型号", oldValue: "空", newValue: normalize(row.assetCategory).split(">").slice(-1)[0] || "-" },
+                  { field: historyField("ID"), oldValue: "空", newValue: normalize(row.serialCode || row.id) },
+                  { field: "排序序号", oldValue: "空", newValue: normalize(row.serialCode) },
+                  { field: "数据来源", oldValue: "空", newValue: "资产管理" }
+                ]
+              },
+              {
+                time: "2026-06-03 17:01:10",
+                action: hasMasterSlaveRelation ? "删除关系" : "创建关系",
+                operator: "admin",
+                summary: hasMasterSlaveRelation ? "删除关系" : "创建关系",
+                changes: [
+                  {
+                    field: hasMasterSlaveRelation ? "主从设备关系" : "资产归属关系",
+                    oldValue: hasMasterSlaveRelation ? normalize((parentRow || row).name) + " -> " + normalize((childRow || row).name) : "空",
+                    newValue: hasMasterSlaveRelation ? "空" : locationLabel
+                  }
+                ]
+              }
+            ];
             const topologyNodes = hasMasterSlaveRelation
               ? [
                 { id: "master", title: "主设备", subtitle: normalize(masterRow.name || masterRow.assetCode), left: "30%", top: "158px", primary: !parentRow },
@@ -10336,6 +10599,7 @@
               tabs: ASSET_DETAIL_TABS,
               historyRange: detailPage.historyRange || "近7日",
               historyRanges: ["近7日", "近10日", "近15日"],
+              historyEntries,
               basicFields,
               breadcrumb,
               rackUnits,
@@ -10496,6 +10760,17 @@
             }
 
             const normalize = (value) => (value === undefined || value === null || value === "" ? "-" : String(value));
+            const getDefaultPowerOnTime = (sourceRow = {}, rowIndex = 0) => {
+              const existingValue = sourceRow.powerOnTime || sourceRow.onlineTime || sourceRow.startupTime;
+              if (existingValue) {
+                return normalize(existingValue);
+              }
+              const sequence = Number(String(sourceRow.serialCode || sourceRow.id || rowIndex + 1).replace(/\D/g, "")) || rowIndex + 1;
+              const day = 1 + (sequence % 4);
+              const hour = 8 + (sequence % 9);
+              const minute = (sequence % 4) * 15;
+              return "2026-06-" + pad(day) + " " + pad(hour) + ":" + pad(minute) + ":00";
+            };
             const toColumnLetter = (index) => {
               let number = index + 1;
               let result = "";
@@ -10628,7 +10903,7 @@
             }
             const sourceRows = selectedRows.length ? selectedRows : (row ? [row] : []);
             const emptySheetValues = Object.fromEntries(sheetColumns.map((column) => [column.key, ""]));
-            const buildSheetValues = (sourceRow) => {
+            const buildSheetValues = (sourceRow, rowIndex = 0) => {
               const description = sourceRow
                 ? normalize(sourceRow.description || sourceRow.assetSummary || [sourceRow.assetCategory, sourceRow.assetLocation].filter(Boolean).join(" / "))
                 : "";
@@ -10640,6 +10915,7 @@
                   assetCategory: normalize(sourceRow.assetCategory),
                   assetLocation: normalize(sourceRow.assetLocation),
                   uHeight: normalize(sourceRow.uHeight || sourceRow.cabinetHeight || 2),
+                  powerOnTime: getDefaultPowerOnTime(sourceRow, rowIndex),
                   portCount: normalize(sourceRow.portCount || 1),
                   serialCode: normalize(sourceRow.serialCode || sourceRow.serialNumber || sourceRow.id),
                   description,
@@ -10654,7 +10930,7 @@
                 : { ...emptySheetValues };
             };
             const sheetRows = sourceRows.length
-              ? sourceRows.map((sourceRow) => buildSheetValues(sourceRow))
+              ? sourceRows.map((sourceRow, index) => buildSheetValues(sourceRow, index))
               : [{ ...emptySheetValues }];
             const sheetValues = sheetRows[0] || { ...emptySheetValues };
             const editableBlankRows = Boolean(meta.editableBlankRows || (isHeaderBatchOperation && operationPage.viewId === VIEW_IDS.IT_FACILITY && operationPage.action === "上架"));
@@ -10676,6 +10952,7 @@
               sheetRows,
               readonlyColumnKeys,
               rowCount: editableBlankRows ? 20 : Math.max(21, sheetRows.length),
+              focusColumnKey: operationPage.focusColumnKey || "",
               labelCode: sourceRows[0] ? normalize(sourceRows[0].assetCode) : "",
               labelName: sourceRows[0] ? normalize(sourceRows[0].name) : ""
             };
@@ -10828,14 +11105,29 @@
           }
 
           getMasterSlaveDisplayMode() {
-            return this.state.ui.templateConfig.masterSlaveDisplayMode || "all";
+            return this.state.ui.templateConfig.masterSlaveDisplayMode || (this.isMasterSlaveEnabled() ? "masters" : "all");
           }
 
           isLedgerHierarchyEnabled() {
             return this.isMasterSlaveEnabled() && this.getMasterSlaveDisplayMode() === "masters";
           }
 
+          isLedgerHierarchyControlVisible() {
+            return this.state.ui.templateConfig.masterSlaveHierarchyControlVisible !== "hide";
+          }
+
+          setMasterSlaveHierarchyControlVisible(value) {
+            this.state.ui.templateConfig.masterSlaveHierarchyControlVisible = value === "hide" ? "hide" : "show";
+            if (value === "hide") {
+              this.state.ui.ledgerHierarchyMenuOpen = false;
+            }
+            this.emit();
+          }
+
           toggleLedgerHierarchyMenu() {
+            if (!this.isLedgerHierarchyControlVisible()) {
+              return;
+            }
             this.closeRowMoreMenu(false);
             this.closeGuideMenu(false);
             this.state.ui.ledgerHierarchyMenuOpen = !this.state.ui.ledgerHierarchyMenuOpen;
@@ -10855,7 +11147,7 @@
 
           setLedgerHierarchyEnabled(enabled) {
             this.state.ui.templateConfig.masterSlaveEnabled = enabled ? "yes" : "no";
-            if (enabled && this.getMasterSlaveDisplayMode() === "all") {
+            if (enabled) {
               this.state.ui.templateConfig.masterSlaveDisplayMode = "masters";
             }
             this.emit();
@@ -12004,12 +12296,131 @@
           }
         }
 
+        class DateTimePickerEditor {
+          constructor() {
+            this.editorType = "Input";
+            this.container = null;
+            this.input = null;
+            this.endEdit = null;
+          }
+
+          createElement() {
+            this.input = document.createElement("input");
+            this.input.type = "datetime-local";
+            this.input.step = "60";
+            this.input.style.position = "absolute";
+            this.input.style.padding = "4px 8px";
+            this.input.style.boxSizing = "border-box";
+            this.input.style.backgroundColor = "#fff";
+            this.input.style.borderRadius = "0";
+            this.input.style.border = "2px solid #4a90e2";
+            this.input.style.outline = "none";
+            this.input.style.fontSize = "12px";
+            this.input.addEventListener("change", () => this.finishEdit());
+            this.input.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === "Escape") {
+                event.preventDefault();
+                this.finishEdit();
+              }
+            });
+            this.input.addEventListener("blur", () => {
+              window.setTimeout(() => this.finishEdit(), 120);
+            });
+            this.container.appendChild(this.input);
+          }
+
+          onStart({ value, referencePosition, container, endEdit }) {
+            this.container = container;
+            this.endEdit = endEdit;
+            if (!this.input) {
+              this.createElement();
+            } else {
+              this.container.appendChild(this.input);
+            }
+            this.setValue(value);
+            if (referencePosition?.rect) {
+              this.adjustPosition(referencePosition.rect);
+            }
+            this.input.focus();
+            if (typeof this.input.showPicker === "function") {
+              try {
+                this.input.showPicker();
+              } catch (error) {
+                // Some browsers only allow the picker during a direct pointer gesture.
+              }
+            }
+          }
+
+          setValue(value) {
+            if (!this.input) {
+              return;
+            }
+            const text = value === undefined || value === null || value === "-" ? "" : String(value).trim();
+            const match = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?/);
+            this.input.value = match
+              ? match[1] + "-" + pad(match[2]) + "-" + pad(match[3]) + "T" + pad(match[4]) + ":" + pad(match[5])
+              : "";
+          }
+
+          getValue() {
+            if (!this.input?.value) {
+              return "";
+            }
+            const normalized = this.input.value.replace("T", " ");
+            return normalized.length === 16 ? normalized + ":00" : normalized;
+          }
+
+          adjustPosition(rect) {
+            const top = rect.top - 1;
+            const left = rect.left - 1;
+            const width = Math.max(168, rect.width + 2);
+            const height = rect.height + 2;
+            this.input.style.top = top + "px";
+            this.input.style.left = left + "px";
+            this.input.style.width = width + "px";
+            this.input.style.height = height + "px";
+          }
+
+          finishEdit() {
+            if (typeof this.endEdit === "function") {
+              this.endEdit();
+            }
+          }
+
+          onEnd() {
+            if (this.input?.parentNode) {
+              this.input.parentNode.removeChild(this.input);
+            }
+            this.input = null;
+            this.container = null;
+            this.endEdit = null;
+          }
+
+          isEditorElement(element) {
+            return Boolean(element && element === this.input);
+          }
+
+          validateValue() {
+            return true;
+          }
+        }
+
         class OperationVTableAdapter {
           constructor() {
             this.instance = null;
             this.editorRegistered = false;
             this.shiftWheelContainer = null;
             this.shiftWheelHandler = null;
+            this.container = null;
+            this.records = [];
+            this.columns = [];
+            this.activeFillRange = null;
+            this.pendingFillRange = null;
+            this.readonlyColumnKeys = new Set();
+            this.fillMenu = null;
+            this.boundFillMenuClick = null;
+            this.boundOutsideFillMenuClick = null;
+            this.dateTimeEditor = new DateTimePickerEditor();
             this.selectEditors = {
               assetCategory: new SearchableSelectEditor(),
               assetLocation: new SearchableSelectEditor(),
@@ -12019,6 +12430,7 @@
 
           destroy() {
             this.unbindShiftWheelScroll();
+            this.hideFillMenu();
             if (!this.instance) {
               return;
             }
@@ -12029,6 +12441,12 @@
               // VTable versions expose different destroy APIs; ignore prototype cleanup errors.
             }
             this.instance = null;
+            this.container = null;
+            this.records = [];
+            this.columns = [];
+            this.activeFillRange = null;
+            this.pendingFillRange = null;
+            this.readonlyColumnKeys = new Set();
           }
 
           mount(container, page) {
@@ -12044,6 +12462,10 @@
             this.registerEditor();
             const columns = this.buildColumns(page);
             const records = this.buildRecords(page);
+            this.container = container;
+            this.columns = columns;
+            this.records = records;
+            this.readonlyColumnKeys = new Set(page.readonlyColumnKeys || []);
             const option = {
               container,
               records,
@@ -12060,6 +12482,9 @@
               keyboardOptions: {
                 copySelected: true,
                 pasteValueToCell: false
+              },
+              excelOptions: {
+                fillHandle: true
               },
               theme: {
                 defaultStyle: {
@@ -12107,7 +12532,36 @@
             }
             if (this.instance) {
               this.bindShiftWheelScroll(container);
+              this.bindFillHandle();
+              this.focusInitialCell(page);
             }
+          }
+
+          focusInitialCell(page) {
+            if (!page?.focusColumnKey) {
+              return;
+            }
+            const col = this.columns.findIndex((column) => column.field === page.focusColumnKey);
+            if (col <= 0) {
+              return;
+            }
+            const row = this.records.findIndex((record) => record.__rowType === "data" || record.__rowType === "blankEditable") + 1;
+            if (row <= 0) {
+              return;
+            }
+            window.setTimeout(() => {
+              this.updateFillSelection({
+                startCol: col,
+                endCol: col,
+                startRow: row,
+                endRow: row
+              });
+              try {
+                this.instance?.scrollToCell?.({ col, row });
+              } catch (error) {
+                // Selection is enough for the prototype when scroll API is unavailable.
+              }
+            }, 80);
           }
 
           bindShiftWheelScroll(container) {
@@ -12148,6 +12602,409 @@
             this.shiftWheelHandler = null;
           }
 
+          bindFillHandle() {
+            if (!this.instance?.on) {
+              return;
+            }
+            this.instance.on("mousedown_fill_handle", (args) => {
+              this.hideFillMenu();
+              this.activeFillRange = this.normalizeFillRange(args);
+            });
+            this.instance.on("drag_fill_handle_end", (args) => {
+              const range = this.normalizeFillRange(args, this.activeFillRange);
+              this.activeFillRange = null;
+              if (!range || !this.canFillRange(range)) {
+                return;
+              }
+              this.pendingFillRange = range;
+              this.showFillMenu(args?.event || args?.nativeEvent || window.event, range);
+            });
+          }
+
+          normalizeFillRange(args = {}, fallback = null) {
+            const table = this.instance;
+            const currentSelection = this.getSelectedCellRange();
+            const target = currentSelection || fallback;
+            const startCol = Number(target?.startCol ?? args.startCol ?? args.sourceCol);
+            const endCol = Number(target?.endCol ?? args.endCol ?? args.targetCol ?? args.col ?? startCol);
+            const startRow = Number(target?.startRow ?? args.startRow ?? args.sourceRow);
+            const endRow = Number(target?.endRow ?? args.endRow ?? args.targetRow ?? args.row ?? startRow);
+            const normalized = {
+              startCol: Math.min(startCol, endCol),
+              endCol: Math.max(startCol, endCol),
+              startRow: Math.min(startRow, endRow),
+              endRow: Math.max(startRow, endRow)
+            };
+            if ([normalized.startCol, normalized.endCol, normalized.startRow, normalized.endRow].some((value) => !Number.isFinite(value))) {
+              return target;
+            }
+            const sourceRange = fallback || currentSelection || {};
+            if (Number.isFinite(sourceRange.startRow) && Number.isFinite(sourceRange.endRow)) {
+              normalized.sourceStartRow = Math.min(sourceRange.startRow, sourceRange.endRow);
+              normalized.sourceEndRow = Math.max(sourceRange.startRow, sourceRange.endRow);
+            } else {
+              normalized.sourceStartRow = normalized.startRow;
+              normalized.sourceEndRow = normalized.startRow;
+            }
+            if (Number.isFinite(sourceRange.startCol) && Number.isFinite(sourceRange.endCol)) {
+              normalized.sourceStartCol = Math.min(sourceRange.startCol, sourceRange.endCol);
+              normalized.sourceEndCol = Math.max(sourceRange.startCol, sourceRange.endCol);
+            } else {
+              normalized.sourceStartCol = normalized.startCol;
+              normalized.sourceEndCol = normalized.endCol;
+            }
+            return normalized;
+          }
+
+          getSelectedCellRange() {
+            const table = this.instance;
+            if (!table) {
+              return null;
+            }
+            const candidateMethods = ["getCellRange", "getSelectedCellRange", "getSelectedCellRanges"];
+            for (const method of candidateMethods) {
+              if (typeof table[method] !== "function") {
+                continue;
+              }
+              try {
+                const result = table[method]();
+                const range = Array.isArray(result) ? result[0] : result;
+                if (!range) {
+                  continue;
+                }
+                const startCol = Number(range.start?.col ?? range.startCol ?? range.col);
+                const endCol = Number(range.end?.col ?? range.endCol ?? range.col ?? startCol);
+                const startRow = Number(range.start?.row ?? range.startRow ?? range.row);
+                const endRow = Number(range.end?.row ?? range.endRow ?? range.row ?? startRow);
+                if ([startCol, endCol, startRow, endRow].every(Number.isFinite)) {
+                  return {
+                    startCol: Math.min(startCol, endCol),
+                    endCol: Math.max(startCol, endCol),
+                    startRow: Math.min(startRow, endRow),
+                    endRow: Math.max(startRow, endRow)
+                  };
+                }
+              } catch (error) {
+                // Try the next method name.
+              }
+            }
+            return null;
+          }
+
+          canFillRange(range) {
+            if (!range) {
+              return false;
+            }
+            if (range.endRow <= 1 || range.endCol <= 0) {
+              return false;
+            }
+            if (range.startCol !== range.endCol) {
+              return true;
+            }
+            return range.endRow !== range.sourceEndRow || range.startRow !== range.sourceStartRow;
+          }
+
+          showFillMenu(event, range) {
+            const menu = this.ensureFillMenu();
+            const point = this.getFillMenuPoint(event, range);
+            menu.style.left = point.left + "px";
+            menu.style.top = point.top + "px";
+            menu.hidden = false;
+            window.setTimeout(() => {
+              document.addEventListener("mousedown", this.boundOutsideFillMenuClick, true);
+            }, 0);
+          }
+
+          ensureFillMenu() {
+            if (this.fillMenu) {
+              return this.fillMenu;
+            }
+            this.fillMenu = document.createElement("div");
+            this.fillMenu.className = "operation-fill-menu";
+            this.fillMenu.hidden = true;
+            this.fillMenu.innerHTML = `
+              <button type="button" data-fill-mode="copy"><span></span><span>复制单元格</span></button>
+              <button type="button" data-fill-mode="series"><span class="fill-menu-check">✓</span><span>填充序列</span></button>
+              <button type="button" data-fill-mode="format"><span></span><span>仅填充格式</span></button>
+              <button type="button" data-fill-mode="value"><span></span><span>不带格式填充</span></button>
+            `;
+            this.boundFillMenuClick = (event) => {
+              const button = event.target.closest("[data-fill-mode]");
+              if (!button) {
+                return;
+              }
+              event.preventDefault();
+              event.stopPropagation();
+              this.applyFillMode(button.getAttribute("data-fill-mode") || "series");
+            };
+            this.boundOutsideFillMenuClick = (event) => {
+              if (this.fillMenu?.contains(event.target)) {
+                return;
+              }
+              this.hideFillMenu();
+            };
+            this.fillMenu.addEventListener("mousedown", (event) => event.stopPropagation());
+            this.fillMenu.addEventListener("click", this.boundFillMenuClick);
+            document.body.appendChild(this.fillMenu);
+            return this.fillMenu;
+          }
+
+          hideFillMenu() {
+            if (!this.fillMenu) {
+              return;
+            }
+            this.fillMenu.hidden = true;
+            document.removeEventListener("mousedown", this.boundOutsideFillMenuClick, true);
+          }
+
+          getFillMenuPoint(event, range) {
+            const eventX = Number(event?.clientX);
+            const eventY = Number(event?.clientY);
+            if (Number.isFinite(eventX) && Number.isFinite(eventY)) {
+              return {
+                left: Math.min(window.innerWidth - 156, Math.max(8, eventX + 8)),
+                top: Math.min(window.innerHeight - 126, Math.max(8, eventY + 8))
+              };
+            }
+            const rect = this.getCellRect(range.endCol, range.endRow);
+            return {
+              left: Math.min(window.innerWidth - 156, Math.max(8, (rect?.right || 220) + 6)),
+              top: Math.min(window.innerHeight - 126, Math.max(8, (rect?.bottom || 220) + 6))
+            };
+          }
+
+          getCellRect(col, row) {
+            const table = this.instance;
+            if (!table) {
+              return null;
+            }
+            const methods = ["getCellRect", "getCellRelativeRect"];
+            for (const method of methods) {
+              if (typeof table[method] !== "function") {
+                continue;
+              }
+              try {
+                const rect = table[method](col, row);
+                if (rect) {
+                  const containerRect = this.container?.getBoundingClientRect?.() || { left: 0, top: 0 };
+                  const left = Number(rect.left ?? rect.x ?? 0) + containerRect.left;
+                  const top = Number(rect.top ?? rect.y ?? 0) + containerRect.top;
+                  const width = Number(rect.width ?? 0);
+                  const height = Number(rect.height ?? 0);
+                  return { left, top, right: left + width, bottom: top + height };
+                }
+              } catch (error) {
+                // Try next method name.
+              }
+            }
+            return null;
+          }
+
+          applyFillMode(mode) {
+            const range = this.pendingFillRange;
+            this.hideFillMenu();
+            this.pendingFillRange = null;
+            if (!range) {
+              return;
+            }
+            if (mode === "format") {
+              this.updateFillSelection(range);
+              return;
+            }
+            const effectiveMode = mode === "copy" || mode === "value" ? "copy" : "series";
+            const updates = this.buildFillUpdates(range, effectiveMode);
+            if (!updates.length) {
+              return;
+            }
+            this.commitCellUpdates(updates);
+            this.updateFillSelection(range);
+          }
+
+          buildFillUpdates(range, mode) {
+            const updates = [];
+            const sourceRows = this.getSourceRows(range);
+            const targetRows = this.getTargetRows(range);
+            const targetCols = this.getTargetCols(range);
+            targetCols.forEach((col) => {
+              const field = this.getFieldByCol(col);
+              if (!field || field === "__rowIndex") {
+                return;
+              }
+              targetRows.forEach((row, targetIndex) => {
+                if (!this.isRecordFillEditable(row, col)) {
+                  return;
+                }
+                const sourceRow = sourceRows[targetIndex % sourceRows.length] ?? range.sourceStartRow;
+                const sourceValue = this.getCellValue(sourceRow, col);
+                const value = mode === "series"
+                  ? this.getSeriesValue(sourceValue, targetIndex + 1, targetRows.length)
+                  : sourceValue;
+                updates.push({ row, col, field, value });
+              });
+            });
+            return updates;
+          }
+
+          getSourceRows(range) {
+            const rows = [];
+            const start = Math.max(2, Math.min(range.sourceStartRow, range.sourceEndRow));
+            const end = Math.max(start, Math.max(range.sourceStartRow, range.sourceEndRow));
+            for (let row = start; row <= end; row += 1) {
+              rows.push(row);
+            }
+            return rows.length ? rows : [Math.max(2, range.startRow)];
+          }
+
+          getTargetRows(range) {
+            const rows = [];
+            const sourceStart = Math.min(range.sourceStartRow, range.sourceEndRow);
+            const sourceEnd = Math.max(range.sourceStartRow, range.sourceEndRow);
+            const fillStart = Math.min(range.startRow, range.endRow);
+            const fillEnd = Math.max(range.startRow, range.endRow);
+            for (let row = Math.max(2, fillStart); row <= fillEnd; row += 1) {
+              if (row >= sourceStart && row <= sourceEnd) {
+                continue;
+              }
+              rows.push(row);
+            }
+            return rows;
+          }
+
+          getTargetCols(range) {
+            const cols = [];
+            const sourceStart = Math.min(range.sourceStartCol, range.sourceEndCol);
+            const sourceEnd = Math.max(range.sourceStartCol, range.sourceEndCol);
+            const fillStart = Math.min(range.startCol, range.endCol);
+            const fillEnd = Math.max(range.startCol, range.endCol);
+            for (let col = Math.max(1, fillStart); col <= fillEnd; col += 1) {
+              if (col < sourceStart || col > sourceEnd) {
+                continue;
+              }
+              cols.push(col);
+            }
+            return cols.length ? [Math.max(1, range.startCol)] : cols;
+          }
+
+          getFieldByCol(col) {
+            return this.columns?.[col]?.field || "";
+          }
+
+          getRecordByTableRow(row) {
+            return this.records?.[row - 1] || null;
+          }
+
+          getCellValue(row, col) {
+            const field = this.getFieldByCol(col);
+            const record = this.getRecordByTableRow(row);
+            if (!record || !field) {
+              return "";
+            }
+            return record[field] ?? "";
+          }
+
+          isRecordFillEditable(row, col) {
+            const record = this.getRecordByTableRow(row);
+            const field = this.getFieldByCol(col);
+            if (!record || !field) {
+              return false;
+            }
+            if (this.readonlyColumnKeys.has(field)) {
+              return false;
+            }
+            return record.__rowType === "data" || record.__rowType === "blankEditable";
+          }
+
+          getSeriesValue(sourceValue, offset) {
+            const text = sourceValue === undefined || sourceValue === null ? "" : String(sourceValue);
+            if (!text) {
+              return "";
+            }
+            const numeric = text.match(/^(.*?)(-?\d+)(\D*)$/);
+            if (numeric) {
+              const prefix = numeric[1];
+              const rawNumber = numeric[2];
+              const suffix = numeric[3];
+              const nextNumber = Number(rawNumber) + offset;
+              const padded = rawNumber.startsWith("0")
+                ? String(Math.abs(nextNumber)).padStart(rawNumber.length, "0")
+                : String(Math.abs(nextNumber));
+              return prefix + (nextNumber < 0 ? "-" : "") + padded + suffix;
+            }
+            const dateTime = text.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})(?::(\d{2}))?$/);
+            if (dateTime) {
+              const date = new Date(
+                Number(dateTime[1]),
+                Number(dateTime[2]) - 1,
+                Number(dateTime[3]),
+                Number(dateTime[4]),
+                Number(dateTime[5]) + offset,
+                Number(dateTime[6] || 0)
+              );
+              return date.getFullYear() + "-" + pad(date.getMonth() + 1) + "-" + pad(date.getDate())
+                + " " + pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
+            }
+            return text;
+          }
+
+          commitCellUpdates(updates) {
+            updates.forEach((update) => {
+              const record = this.getRecordByTableRow(update.row);
+              if (record) {
+                record[update.field] = update.value;
+              }
+            });
+            const cellValues = updates.map((update) => ({
+              col: update.col,
+              row: update.row,
+              value: update.value
+            }));
+            const table = this.instance;
+            const candidateCalls = [
+              () => typeof table?.changeCellValues === "function" && (table.changeCellValues(cellValues), true),
+              () => typeof table?.changeCellValues === "function" && (table.changeCellValues(cellValues.map(({ col, row, value }) => [col, row, value])), true),
+              () => typeof table?.setRecords === "function" && (table.setRecords(this.records), true),
+              () => typeof table?.updateRecords === "function" && (table.updateRecords(this.records), true)
+            ];
+            for (const call of candidateCalls) {
+              try {
+                if (call()) {
+                  return;
+                }
+              } catch (error) {
+                // Try the next VTable-compatible update method.
+              }
+            }
+            try {
+              table?.renderWithRecreateCells?.();
+            } catch (error) {
+              // Last resort: records are already updated for subsequent table interactions.
+            }
+          }
+
+          updateFillSelection(range) {
+            const table = this.instance;
+            if (!table) {
+              return;
+            }
+            const start = { col: range.startCol, row: range.startRow };
+            const end = { col: range.endCol, row: range.endRow };
+            const candidateCalls = [
+              () => typeof table.selectCell === "function" && (table.selectCell(start.col, start.row, end.col, end.row), true),
+              () => typeof table.selectCells === "function" && (table.selectCells(start.col, start.row, end.col, end.row), true),
+              () => typeof table.setCellRange === "function" && (table.setCellRange({ start, end }), true),
+              () => typeof table.setSelectCellRange === "function" && (table.setSelectCellRange({ start, end }), true)
+            ];
+            for (const call of candidateCalls) {
+              try {
+                if (call()) {
+                  return;
+                }
+              } catch (error) {
+                // Selection APIs differ by VTable version.
+              }
+            }
+          }
+
           registerEditor() {
             if (this.editorRegistered || !window.VTable?.register?.editor || !window.VTable?.editors?.InputEditor) {
               return;
@@ -12157,6 +13014,7 @@
             window.VTable.register.editor("operation-asset-category-editor", this.selectEditors.assetCategory);
             window.VTable.register.editor("operation-asset-location-editor", this.selectEditors.assetLocation);
             window.VTable.register.editor("operation-start-u-editor", this.selectEditors.operationStartU);
+            window.VTable.register.editor("operation-datetime-editor", this.dateTimeEditor);
             this.editorRegistered = true;
           }
 
@@ -12247,6 +13105,9 @@
                 }
                 if (columnKey === "operationStartU") {
                   return "operation-start-u-editor";
+                }
+                if (columnKey === "powerOnTime") {
+                  return "operation-datetime-editor";
                 }
                 return "operation-input-editor";
               };
@@ -13082,7 +13943,9 @@
                   ${detail.tabs.map((tab) => {
                     const demandAttrs = tab.id === "relation"
                       ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
-                      : "";
+                      : tab.id === "history"
+                        ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4112" data-demand-title="资产详情履历展示规则" data-demand-text="需求来源：V3R5-4112。||交互目的：在资产详情中按时间轴展示资产履历，便于追溯属性变更、流程状态变化和关系变化。||展示规则：履历页签展示近7日、近10日、近15日筛选；每条履历包含时间、操作类型、操作人和字段变更明细，字段明细需展示旧值与新值；页面内不得直接展示系统字段英文名或编码字段，需转译为中文业务字段名称。||状态限制：无履历数据时展示空态，不影响基本信息、位置信息、关系拓扑和包含设备页签。||异常判断：字段名称缺失、旧值或新值为空、履历来源异常时，应使用“空”或“-”兜底，不应导致页面空白或时间轴断裂。"'
+                        : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
                   `;
@@ -13135,7 +13998,7 @@
                     </div>
                   </div>
                   <div class="operation-sheet-shell">
-                    <div class="operation-sheet-wrap" data-demand-version="v1.1" data-demand-req-id="V3R5-4315" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。">
+                    <div class="operation-sheet-wrap" data-demand-version="v1.1,v1.1,v1.2" data-demand-req-id="V3R5-4315,V3R5-4375,V3R5-4109" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。" data-demand-title-v12="电子表格时间组件选择" data-demand-text-v12="需求来源：V3R5-4109。||交互目的：电子表格中的时间字段支持直接点击单元格选择日期时间，减少手工输入时间格式错误。||展示规则：点击上电时间单元格时打开日期时间选择器，选择后将时间回填为YYYY-MM-DD HH:mm:ss格式；从需求索引进入时默认定位到该时间单元格。||状态限制：仅可编辑数据行或可编辑空白行允许打开时间选择器，字段标题行、占位行和只读列不触发时间选择。||异常判断：浏览器时间选择器不可用、用户取消选择或输入格式不完整时，应保留原单元格值或允许为空，不应弹出技术错误信息。">
                       <div class="operation-vtable-container" data-role="operation-vtable"></div>
                     </div>
                     <div class="operation-sheet-footer">
@@ -13250,6 +14113,7 @@
           }
 
           renderAssetDetailHistory(detail) {
+            const entries = detail.historyEntries || [];
             return `
               <div class="asset-tab-panel">
                 <div class="asset-history-toolbar">
@@ -13258,10 +14122,32 @@
                   `).join("")}
                 </div>
                 <div class="asset-history-stage">
-                  <div class="empty-state">
-                    <div class="empty-icon" aria-hidden="true"></div>
-                    <div>没有找到匹配的记录</div>
-                  </div>
+                  ${entries.length ? `
+                    <div class="asset-history-timeline">
+                      ${entries.map((entry) => `
+                        <div class="asset-history-item">
+                          <span class="asset-history-marker" aria-hidden="true"></span>
+                          <div class="asset-history-time">${escapeHtml(entry.time)}</div>
+                          <div class="asset-history-card">
+                            <div class="asset-history-action-title">${escapeHtml(entry.action)}</div>
+                            <div class="asset-history-operator"><em>${escapeHtml(entry.operator)}</em><span>${escapeHtml(entry.summary)}</span></div>
+                            ${entry.changes.map((change) => `
+                              <div class="asset-history-change">
+                                编辑了 <strong>${escapeHtml(change.field)}</strong>，旧值为<em>${escapeHtml(change.oldValue)}</em>，新值为<em>${escapeHtml(change.newValue)}</em>
+                              </div>
+                            `).join("")}
+                          </div>
+                        </div>
+                      `).join("")}
+                    </div>
+                  ` : `
+                    <div class="asset-history-empty">
+                      <div class="empty-state">
+                        <div class="empty-icon" aria-hidden="true"></div>
+                        <div>没有找到匹配的记录</div>
+                      </div>
+                    </div>
+                  `}
                 </div>
               </div>
             `;
@@ -13710,7 +14596,7 @@
               ? Object.fromEntries([...treeResult.expandedIds].map((id) => [id, true]))
               : treeState.expandedNodes;
             return `
-              <aside class="ledger-space-tree-panel" aria-label="空间视图树">
+              <aside class="ledger-space-tree-panel" aria-label="空间视图树" data-demand-version="v1.2" data-demand-req-id="V3R5-4110" data-demand-title="空间视图设备展示规则" data-demand-text="需求来源：V3R5-4110。||交互目的：优化空间视图模式下左侧空间树与右侧资产列表的展示关系。||展示规则：空间视图左侧仅展示空间层级树和节点数量，不在树节点下展开设备明细；设备仍在右侧台账列表中展示，右侧列表需保留完整列和行操作区域。||状态限制：空间树支持展开、收起和关键字搜索，搜索命中时展开到对应空间路径。||异常判断：无空间数据或无匹配节点时展示空态，不应在空间树中混入设备行或导致右侧列表丢失。">
                 <div class="ledger-space-tree-search">
                   <input data-role="space-tree-search" data-view="${escapeHtml(viewId)}" placeholder="请输入关键字" value="${escapeHtml(treeSearch)}" />
                 </div>
@@ -13771,12 +14657,15 @@
           }
 
           renderLedgerHierarchyControl(viewId, state) {
+            if (!this.store.isLedgerHierarchyControlVisible()) {
+              return "";
+            }
             const enabled = this.store.isMasterSlaveEnabled();
             const mode = this.store.getMasterSlaveDisplayMode();
             const menuOpen = !!state.ui.ledgerHierarchyMenuOpen;
             return `
               <div class="ledger-hierarchy-wrap">
-                <button class="ledger-hierarchy-btn ${enabled ? "is-active" : ""}" type="button" data-action="toggle-ledger-hierarchy-menu" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="台账层级配置入口" data-demand-text="交互目的：在台账列表页快速配置主从设备的列表展示方式。||点击后行为：展开或收起层级配置浮层，浮层内包含层级开关、展示方式和统一展开折叠操作。||状态限制：仅影响当前台账列表的主从展示形态，不改变主从关系数据本身。||异常判断：当前台账无主从关系数据时，开启后仍应保留独立设备展示，并避免出现空白列表。">
+                <button class="ledger-hierarchy-btn ${enabled ? "is-active" : ""}" type="button" data-action="toggle-ledger-hierarchy-menu" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="台账层级配置入口" data-demand-text="交互目的：在台账列表页快速配置主从设备的列表展示方式。||点击后行为：展开或收起层级配置浮层，浮层内包含层级开关、展示方式和统一展开折叠操作。||默认规则：层级开启后默认展示方式为树状展示；当展示方式切换为平铺展示时，不显示展开折叠选项。||状态限制：仅影响当前台账列表的主从展示形态，不改变主从关系数据本身。||异常判断：当前台账无主从关系数据时，开启后仍应保留独立设备展示，并避免出现空白列表。">
                   <span>层级</span>
                   <span>${enabled ? "已开启" : "未启用"}</span>
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -13787,7 +14676,7 @@
                   <div class="ledger-hierarchy-menu" role="menu">
                     <div class="ledger-hierarchy-head">
                       <div class="ledger-hierarchy-title">层级</div>
-                      <button class="ledger-hierarchy-switch ${enabled ? "is-on" : ""}" type="button" data-action="set-ledger-hierarchy-enabled" data-value="${enabled ? "no" : "yes"}" aria-label="层级模式${enabled ? "关闭" : "开启"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="层级模式开关" data-demand-text="交互目的：控制台账是否启用主从设备展示配置。||开启规则：开启后默认进入树状展示，列表仅展示主设备和独立设备，从设备通过展开主设备查看。||关闭规则：关闭后隐藏展示方式和展开折叠配置，台账恢复普通平铺列表。||异常判断：若主从关系数据缺失、冲突或循环，应按普通资产行展示并在关系维护或导入结果中提示异常。"></button>
+                      <button class="ledger-hierarchy-switch ${enabled ? "is-on" : ""}" type="button" data-action="set-ledger-hierarchy-enabled" data-value="${enabled ? "no" : "yes"}" aria-label="层级模式${enabled ? "关闭" : "开启"}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="层级模式开关" data-demand-text="交互目的：控制台账是否启用主从设备展示配置。||开启规则：开启后默认进入树状展示，列表仅展示主设备和独立设备，从设备通过展开主设备查看。||展示规则：展示方式为树状展示时显示展开折叠选项；切换为平铺展示时隐藏展开折叠选项。||关闭规则：关闭后隐藏展示方式和展开折叠配置，台账恢复普通平铺列表。||异常判断：若主从关系数据缺失、冲突或循环，应按普通资产行展示并在关系维护或导入结果中提示异常。"></button>
                     </div>
                     ${enabled ? `
                       <div class="ledger-hierarchy-row">
@@ -13801,8 +14690,8 @@
                         <div class="ledger-hierarchy-row">
                           <span>展开折叠</span>
                           <div class="ledger-hierarchy-actions">
-                            <button class="btn" type="button" data-action="expand-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部展开主从行" data-demand-text="交互目的：一次性展开当前台账列表中所有存在从设备的主设备，便于快速查看完整主从关系。||点击后行为：将当前视图内可展开的主设备全部置为展开状态，并在主设备下显示从设备行。||状态限制：仅在树状展示模式下显示；无从设备的主设备和独立设备不受影响。||异常判断：分页或筛选变化后，应按当前列表范围重新计算可展开行，避免展开已不在当前结果集中的资产。">全部展开</button>
-                            <button class="btn" type="button" data-action="collapse-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部折叠主从行" data-demand-text="交互目的：一次性收起当前台账列表中的从设备明细，恢复主设备和独立设备优先的列表视图。||点击后行为：将当前视图内已展开的主设备全部置为折叠状态，从设备行不再直接显示。||状态限制：仅在树状展示模式下显示，不删除或修改任何主从关系。||异常判断：重复点击、当前无展开行或无从设备时，应保持页面稳定，不应出现报错或列表闪烁。">全部折叠</button>
+                            <button class="ledger-hierarchy-action-btn" type="button" data-action="expand-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部展开主从行" data-demand-text="交互目的：一次性展开当前台账列表中所有存在从设备的主设备，便于快速查看完整主从关系。||点击后行为：将当前视图内可展开的主设备全部置为展开状态，并在主设备下显示从设备行。||状态限制：仅在树状展示模式下显示；展示方式为平铺展示时隐藏展开折叠选项。||异常判断：分页或筛选变化后，应按当前列表范围重新计算可展开行，避免展开已不在当前结果集中的资产。">全部展开</button>
+                            <button class="ledger-hierarchy-action-btn" type="button" data-action="collapse-all-master-slave" data-view="${escapeHtml(viewId)}" data-demand-version="v1.1" data-demand-req-id="V3R5-4281" data-demand-title="全部折叠主从行" data-demand-text="交互目的：一次性收起当前台账列表中的从设备明细，恢复主设备和独立设备优先的列表视图。||点击后行为：将当前视图内已展开的主设备全部置为折叠状态，从设备行不再直接显示。||状态限制：仅在树状展示模式下显示；展示方式为平铺展示时隐藏展开折叠选项，不删除或修改任何主从关系。||异常判断：重复点击、当前无展开行或无从设备时，应保持页面稳定，不应出现报错或列表闪烁。">全部折叠</button>
                           </div>
                         </div>
                       ` : ""}
@@ -13834,18 +14723,32 @@
               return "";
             }
             const actionLabel = escapeHtml(action);
-            return ` data-demand-version="v1.2" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、U高、资产分类按规则标识必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空或下拉选项缺失时，应提示用户按规则处理。"`
+            return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、U高、资产分类按规则标识必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。"`
+          }
+
+          getCrossPageSelectionDemandAttrs(target = "selection") {
+            const titleMap = {
+              header: "跨页选择当前页资产",
+              row: "跨页选择资产行",
+              toolbar: "跨页已选资产批量栏",
+              pagination: "跨页选择翻页保留"
+            };
+            return ` data-demand-version="v1.2" data-demand-req-id="V3R5-4111" data-demand-title="${titleMap[target] || "资产台账跨页选择数据"}" data-demand-text="需求来源：V3R5-4111。||交互目的：资产台账支持在分页列表中跨页勾选资产，并汇总到同一批量操作集合。||点击后行为：勾选行时将资产加入已选集合；再次勾选取消；表头勾选仅对当前页资产全选或取消，不清空其他页已选数据。||展示规则：已选数量跨页累计展示，翻页后保留之前页面的勾选结果；全局分页默认 200 条/页，模拟数据超过 200 条用于验证跨页选择。||状态限制：查询、重置或切换台账范围时重新计算列表并清空不再适用的选择；批量操作按累计已选资产执行。||异常判断：资产不存在、无操作权限、状态不允许或因筛选不在结果集中时，应跳过或提示原因，避免批量处理错误资产。"`
+          }
+
+          getMultiSelectMoreDemandAttrs() {
+            return ` data-demand-version="v1.2" data-demand-req-id="V3R5-4186" data-demand-title="多选更多操作去除入库" data-demand-text="需求来源：V3R5-4186。||交互目的：优化资产台账多选后的批量操作入口，避免在“更多”下拉中重复出现入库动作。||展示规则：多选资产后，“更多”下拉仅展示变动、下架、纸质标签打印等扩展操作，不展示“入库”。||状态限制：顶部独立的“批量入库”入口仍按原有业务规则保留；本规则仅作用于多选后的“更多”下拉菜单。||异常判断：若资产状态不允许执行某项批量操作，应在对应操作触发时提示原因，不应通过恢复“入库”菜单项处理。"`
           }
 
           getBatchSelectionActions(viewId) {
             const stationActions = {
               primary: ["部署", "编辑", "报废"],
-              more: ["回库", "变动", "入库", "纸质标签打印"]
+              more: ["回库", "变动", "纸质标签打印"]
             };
             const actionMap = {
               [VIEW_IDS.IT_FACILITY]: {
                 primary: ["上架", "编辑", "迁出"],
-                more: ["变动", "下架", "入库", "纸质标签打印"]
+                more: ["变动", "下架", "纸质标签打印"]
               },
               [VIEW_IDS.STATION_FACILITY]: stationActions,
               [VIEW_IDS.CABINET]: stationActions,
@@ -13870,13 +14773,13 @@
             const primaryActions = batchActions.primary;
             const moreActions = batchActions.more;
             return `
-              <div class="ledger-batch-selection-toolbar" aria-label="已选资产批量操作">
+              <div class="ledger-batch-selection-toolbar" aria-label="已选资产批量操作"${this.getCrossPageSelectionDemandAttrs("toolbar")}>
                 <span class="batch-selection-count">已选 ${selectedIds.length} 条</span>
                 ${primaryActions.map((action) => `
                   <button class="btn batch-pill-btn" type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getLedgerOperationDemandAttrs(action)}>${escapeHtml(action)}</button>
                 `).join("")}
                 <div class="batch-action-wrap">
-                  <button class="btn batch-pill-btn" type="button" data-action="${moreActions.length ? "toggle-batch-selection-menu" : "batch-selection-action"}" data-view="${escapeHtml(viewId)}" data-label="更多" aria-haspopup="${moreActions.length ? "menu" : "false"}" aria-expanded="${moreActions.length && menuOpen ? "true" : "false"}">
+                  <button class="btn batch-pill-btn" type="button" data-action="${moreActions.length ? "toggle-batch-selection-menu" : "batch-selection-action"}" data-view="${escapeHtml(viewId)}" data-label="更多" aria-haspopup="${moreActions.length ? "menu" : "false"}" aria-expanded="${moreActions.length && menuOpen ? "true" : "false"}"${this.getMultiSelectMoreDemandAttrs()}>
                     更多
                     ${moreActions.length ? `
                       <svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -13960,7 +14863,7 @@
               const selectedIds = this.store.getSelectedRowIds(viewId);
               const allSelected = rows.length > 0 && rows.every((row) => selectedIds.includes(row.id));
               return `
-                <th class="${stickyClass}" style="width:${this.store.getColumnWidth(viewId, column.key)}px;">
+                <th class="${stickyClass}" style="width:${this.store.getColumnWidth(viewId, column.key)}px;"${this.getCrossPageSelectionDemandAttrs("header")}>
                   <input type="checkbox" data-action="toggle-list-page-selection" data-view="${escapeHtml(viewId)}" aria-label="全选当前列表" ${allSelected ? "checked" : ""} />
                 </th>
               `;
@@ -13998,7 +14901,7 @@
                   <td class="${[
                     column.key === "__select" ? "sticky-left checkbox-cell" : "",
                     column.key === "__actions" ? "sticky-right" : ""
-                  ].filter(Boolean).join(" ")}">
+                  ].filter(Boolean).join(" ")}"${column.key === "__select" && isRepresentativeAction ? this.getCrossPageSelectionDemandAttrs("row") : ""}>
                     ${this.renderTableCell(viewId, row, column.key, { hasRelations, expanded, isRepresentativeRelation, isRepresentativeAction })}
                   </td>
                 `).join("")}
@@ -14055,7 +14958,7 @@
                   }
                   if (column.key === "assetStatus") {
                     const value = parentRow[column.key];
-                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : value === "报废" ? "discarded" : "";
+                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : (value === "报废" || value === "迁出") ? "discarded" : "";
                     return `<td><span class="status-text ${className}">${escapeHtml(value || "-")}</span></td>`;
                   }
                   const value = parentRow[column.key];
@@ -14102,7 +15005,7 @@
                   }
                   if (column.key === "assetStatus") {
                     const value = childRow[column.key];
-                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : value === "报废" ? "discarded" : "";
+                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : (value === "报废" || value === "迁出") ? "discarded" : "";
                     return `<td><span class="status-text ${className}">${escapeHtml(value || "-")}</span></td>`;
                   }
                   const value = childRow[column.key];
@@ -14120,7 +15023,7 @@
               return this.renderRowActions(viewId, row, options);
             }
             if (key === "assetStatus") {
-              const className = row[key] === "在用" ? "in-use" : row[key] === "空闲" ? "idle" : row[key] === "报废" ? "discarded" : "";
+              const className = row[key] === "在用" ? "in-use" : row[key] === "空闲" ? "idle" : (row[key] === "报废" || row[key] === "迁出") ? "discarded" : "";
               return `<span class="status-text ${className}">${escapeHtml(row[key] || "-")}</span>`;
             }
             if (key === "name") {
@@ -14197,7 +15100,7 @@
             const currentPage = pageMeta.currentPage;
             const pagerItems = buildPager(currentPage, pageMeta.pageCount);
             return `
-              <div class="pagination">
+              <div class="pagination"${this.getCrossPageSelectionDemandAttrs("pagination")}>
                 <div>${escapeHtml(pageMeta.totalText)}</div>
                 <div class="pager-right">
                   <button class="page-size" type="button" data-action="secondary-action" data-label="${escapeHtml(meta.pageSizeLabel)}">${escapeHtml(meta.pageSizeLabel)}</button>
@@ -14280,7 +15183,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="config-section" data-demand-version="v1.1,v1.2" data-demand-title="主从关系维护区" data-demand-text="交互目的：集中维护主从设备关系数据，包含模板下载、表格导入更新和导入记录查询。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：支持在资产基础配置页维护主从关系数据和模板能力。||异常判断：导入文件格式错误、模板列缺失、设备编号不存在、自关联、一从多主、超过两层、循环关系、状态禁用或重复关系时，应进入失败明细。" data-demand-title-v12="主从关系维护区调整" data-demand-text-v12="交互目的：收敛资产基础配置页中的主从关系维护范围，只保留关系数据维护能力。||调整内容：层级模式开关、树状/平铺展示和统一展开折叠已前移到台账页。||状态限制：本页不再承担台账展示方式配置，仅提供表格导入更新、导入记录和下载模板。||异常判断：若用户需要调整展示方式，应引导到台账页层级配置入口。">
+                  <div class="config-section" data-demand-version="v1.1,v1.2" data-demand-title="主从关系维护区" data-demand-text="交互目的：集中维护主从设备关系数据，包含模板下载、表格导入更新和导入记录查询。||业务范围：作用于 IT设施、场地设施、机柜、备件等支持主从关系的台账。||状态限制：支持在资产基础配置页维护主从关系数据和模板能力。||异常判断：导入文件格式错误、模板列缺失、设备编号不存在、自关联、一从多主、超过两层、循环关系、状态禁用或重复关系时，应进入失败明细。" data-demand-title-v12="主从关系维护区调整" data-demand-text-v12="交互目的：收敛资产基础配置页中的主从关系维护范围，只保留关系数据维护能力，并控制台账页层级入口是否展示。||调整内容：树状/平铺展示和统一展开折叠仍在台账页操作；本页新增层级开关显示/隐藏配置，用于控制台账页顶部“层级”入口是否出现。||状态限制：隐藏层级入口后，不修改已存在的主从关系数据和默认展示规则，仅隐藏台账页的层级配置按钮。||异常判断：若用户隐藏入口后需要调整展示方式，应回到本配置项切换为显示。">
                     <div class="config-section-title">主从关系维护</div>
                     <div class="config-form-grid single">
                       <div class="field-block">
@@ -14290,7 +15193,17 @@
                           <button class="btn" type="button" data-action="open-master-slave-import-records" data-demand-title="查看导入记录" data-demand-text="交互目的：查看主从关系导入的历史批次、进度和结果。||点击后行为：进入导入记录页，可查看结果、下载原文件或删除记录。||状态限制：导入中任务应展示进度，失败任务应保留异常原因。||异常判断：记录不存在、任务中断、失败明细丢失、原文件不可下载或删除失败时，应展示明确原因并保留操作痕迹。">导入记录</button>
                           <button class="btn btn-light" type="button" data-action="download-master-slave-template" data-demand-title="下载主从关系模板" data-demand-text="交互目的：导出可填写的主从设备关系模板。||点击后行为：打开模板下载弹窗，可选择全量台账或部分台账，并可配置从设备自动填充规则。||状态限制：部分台账至少选择一个范围；无可导出样例数据时提示下载失败。||异常判断：未选择台账、所选台账无样例数据、自动填充规则无效、浏览器拒绝下载或模板生成失败时，应阻止下载并提示原因。">下载模板</button>
                         </div>
-                        <div class="field-hint">台账页负责层级模式开启/关闭、展示方式和统一展开折叠；本页仅维护主从关系数据。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
+                        <div class="field-block" style="margin-top:12px;" data-demand-version="v1.2" data-demand-req-id="V3R5-4281" data-demand-title="层级开关入口显示配置" data-demand-text="交互目的：在主从关系维护配置中控制台账页顶部“层级”入口是否展示。||点击后行为：选择“显示”时台账页展示层级配置入口；选择“隐藏”时台账页不展示层级入口，并自动收起已打开的层级浮层。||状态限制：该配置只影响入口显示，不删除主从关系、不改变树状/平铺展示规则。||异常判断：切换隐藏后若当前台账无入口，应保持列表可正常查询、选择和执行批量操作。">
+                          <div class="field-label-row">
+                            <span>层级开关</span>
+                            <div class="ledger-segment" aria-label="层级开关显示配置">
+                              <button type="button" class="${state.ui.templateConfig.masterSlaveHierarchyControlVisible !== "hide" ? "is-active" : ""}" data-action="set-master-slave-hierarchy-control-visible" data-value="show">显示</button>
+                              <button type="button" class="${state.ui.templateConfig.masterSlaveHierarchyControlVisible === "hide" ? "is-active" : ""}" data-action="set-master-slave-hierarchy-control-visible" data-value="hide">隐藏</button>
+                            </div>
+                          </div>
+                          <div class="field-hint">控制台账列表顶部“层级”入口是否展示；隐藏后不影响已维护的主从关系数据。</div>
+                        </div>
+                        <div class="field-hint">台账页负责层级展示方式和统一展开折叠；本页维护主从关系数据，并控制台账页层级入口显示。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
                       </div>
                     </div>
                   </div>
@@ -14975,6 +15888,28 @@
           }
 
           renderDetailDesignHistoryPreview(previewModel) {
+            const previewEntries = [
+              {
+                time: "2026-06-04 15:09:02",
+                action: "编辑属性",
+                operator: "admin",
+                summary: "编辑属性",
+                changes: [
+                  { field: "资产流程状态", oldValue: "待上架", newValue: "空闲" }
+                ]
+              },
+              {
+                time: "2026-06-03 17:01:10",
+                action: "编辑属性",
+                operator: "admin",
+                summary: "编辑属性",
+                changes: [
+                  { field: "资产编号", oldValue: "空", newValue: "M2T-ISW-U2-01" },
+                  { field: "名称", oldValue: "空", newValue: "01# 动环接入交换机" },
+                  { field: "U高", oldValue: "空", newValue: "2" }
+                ]
+              }
+            ];
             return `
               <div class="detail-design-preview-panel">
                 <div class="asset-history-toolbar">
@@ -14983,9 +15918,22 @@
                   `).join("")}
                 </div>
                 <div class="asset-history-stage">
-                  <div class="empty-state">
-                    <div class="empty-icon" aria-hidden="true"></div>
-                    <div>没有找到匹配的记录</div>
+                  <div class="asset-history-timeline">
+                    ${previewEntries.map((entry) => `
+                      <div class="asset-history-item">
+                        <span class="asset-history-marker" aria-hidden="true"></span>
+                        <div class="asset-history-time">${escapeHtml(entry.time)}</div>
+                        <div class="asset-history-card">
+                          <div class="asset-history-action-title">${escapeHtml(entry.action)}</div>
+                          <div class="asset-history-operator"><em>${escapeHtml(entry.operator)}</em><span>${escapeHtml(entry.summary)}</span></div>
+                          ${entry.changes.map((change) => `
+                            <div class="asset-history-change">
+                              编辑了 <strong>${escapeHtml(change.field)}</strong>，旧值为<em>${escapeHtml(change.oldValue)}</em>，新值为<em>${escapeHtml(change.newValue)}</em>
+                            </div>
+                          `).join("")}
+                        </div>
+                      </div>
+                    `).join("")}
                   </div>
                 </div>
               </div>
@@ -16279,6 +17227,10 @@
                 this.store.saveTemplateConfig();
                 return;
               }
+              if (action === "set-master-slave-hierarchy-control-visible") {
+                this.store.setMasterSlaveHierarchyControlVisible(actionTarget.getAttribute("data-value"));
+                return;
+              }
               if (action === "import-master-slave-relations") {
                 this.store.importMasterSlaveRelations();
                 return;
@@ -16838,6 +17790,8 @@
             this.enabled = false;
             this.activeVersion = "all";
             this.activeRequirementId = null;
+            this.activeTrigger = null;
+            this.hideTimer = null;
             this.popover = document.createElement("div");
             this.popover.className = "demand-popover";
             document.body.appendChild(this.popover);
@@ -16854,9 +17808,11 @@
             document.addEventListener("mouseout", (event) => {
               const trigger = event.target.closest(".demand-badge-trigger");
               if (trigger) {
-                this.hide();
+                this.scheduleHide();
               }
             });
+            this.popover.addEventListener("mouseenter", () => this.cancelHide());
+            this.popover.addEventListener("mouseleave", () => this.scheduleHide());
             document.addEventListener("focusin", (event) => {
               const trigger = event.target.closest(".demand-badge-trigger");
               if (trigger) {
@@ -16866,7 +17822,7 @@
             document.addEventListener("focusout", (event) => {
               const trigger = event.target.closest(".demand-badge-trigger");
               if (trigger) {
-                this.hide();
+                this.scheduleHide();
               }
             });
             document.addEventListener("click", (event) => {
@@ -16941,11 +17897,13 @@
               .filter(Boolean);
             const entries = versions.map((version, index) => {
               const suffix = this.toVersionDatasetSuffix(version);
+              const duplicateIndex = versions.slice(0, index + 1).filter((item) => item === version).length;
+              const duplicateSuffix = duplicateIndex > 1 ? suffix + duplicateIndex : suffix;
               return {
                 version,
                 reqId: reqIds[index] || reqIds[0] || "",
-                title: scope.dataset["demandTitle" + suffix] || scope.dataset.demandTitle || "需求说明",
-                text: scope.dataset["demandText" + suffix] || scope.dataset.demandText || ""
+                title: scope.dataset["demandTitle" + duplicateSuffix] || scope.dataset["demandTitle" + suffix] || scope.dataset.demandTitle || "需求说明",
+                text: scope.dataset["demandText" + duplicateSuffix] || scope.dataset["demandText" + suffix] || scope.dataset.demandText || ""
               };
             });
             return entries.length > 0 ? entries : [{ version: "v1.1", title: scope.dataset.demandTitle || "需求说明", text: scope.dataset.demandText || "" }];
@@ -16992,11 +17950,13 @@
               this.hide();
               return;
             }
+            this.cancelHide();
             const entries = this.getVisibleEntries(trigger);
             if (entries.length === 0) {
               this.hide();
               return;
             }
+            this.activeTrigger = trigger;
             const title = entries.length === 1 ? entries[0].title : "需求说明";
             const splitParts = (text) => String(text || "")
               .split("||")
@@ -17050,7 +18010,27 @@
           }
 
           hide() {
+            this.cancelHide();
+            this.activeTrigger = null;
             this.popover.style.display = "none";
+          }
+
+          scheduleHide() {
+            this.cancelHide();
+            this.hideTimer = window.setTimeout(() => {
+              if (this.popover.matches(":hover") || this.activeTrigger?.matches(":hover")) {
+                this.scheduleHide();
+                return;
+              }
+              this.hide();
+            }, 160);
+          }
+
+          cancelHide() {
+            if (this.hideTimer) {
+              window.clearTimeout(this.hideTimer);
+              this.hideTimer = null;
+            }
           }
 
           position(trigger) {
