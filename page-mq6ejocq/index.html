@@ -720,10 +720,39 @@
         margin-bottom: 22px;
       }
 
+      .form-block.is-disabled {
+        color: #9aa7b8;
+        cursor: not-allowed;
+      }
+
       .form-label {
         display: block;
         margin-bottom: 10px;
         font-weight: 700;
+      }
+
+      .form-label-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .form-label-row .form-label {
+        margin-bottom: 0;
+      }
+
+      .status-tag {
+        display: inline-flex;
+        align-items: center;
+        height: 20px;
+        padding: 0 8px;
+        border: 1px solid #d9dee8;
+        border-radius: 10px;
+        color: #8b98aa;
+        background: #f4f6f9;
+        font-size: 12px;
+        font-weight: 400;
       }
 
       .duration-row {
@@ -731,6 +760,12 @@
         align-items: center;
         gap: 8px;
         color: #001733;
+      }
+
+      .duration-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
 
       .duration-input {
@@ -747,6 +782,15 @@
         align-items: center;
         gap: 8px;
         color: #001733;
+      }
+
+      .form-block.is-disabled .check-row {
+        color: #9aa7b8;
+        cursor: not-allowed;
+      }
+
+      .form-block.is-disabled input {
+        cursor: not-allowed;
       }
 
       .drawer-note {
@@ -1131,17 +1175,27 @@
       </div>
       <div class="drawer-body">
         <div class="form-block">
-          <label class="form-label" for="historyDuration">告警历史视频存储时长配置</label>
-          <div class="duration-row">
-            <span>告警产生前后</span>
-            <input class="duration-input" id="historyDuration" type="number" min="1" value="30" />
-            <span>秒</span>
+          <span class="form-label">告警历史视频存储时长配置</span>
+          <div class="duration-group">
+            <label class="duration-row" for="historyBeforeDuration">
+              <span>告警发生前</span>
+              <input class="duration-input" id="historyBeforeDuration" type="number" min="1" value="30" />
+              <span>秒</span>
+            </label>
+            <label class="duration-row" for="historyAfterDuration">
+              <span>告警发生后</span>
+              <input class="duration-input" id="historyAfterDuration" type="number" min="1" value="30" />
+              <span>秒</span>
+            </label>
           </div>
         </div>
-        <div class="form-block">
-          <span class="form-label">告警历史视频存储方式</span>
+        <div class="form-block is-disabled">
+          <div class="form-label-row">
+            <span class="form-label">告警历史视频存储方式</span>
+            <span class="status-tag">非本期实现</span>
+          </div>
           <label class="check-row">
-            <input type="checkbox" id="saveLocal" />
+            <input type="checkbox" id="saveLocal" disabled />
             <span>存储至本地</span>
           </label>
         </div>
