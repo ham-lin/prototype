@@ -642,6 +642,70 @@
         display: none;
       }
 
+      .demand-anchor {
+        position: relative;
+      }
+
+      .empty-state.demand-anchor,
+      .loading-state.demand-anchor {
+        position: absolute;
+      }
+
+      .demand-badge {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        z-index: 8;
+      }
+
+      .demand-badge-trigger {
+        width: 22px;
+        height: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 999px;
+        background: #1677ff;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: help;
+        box-shadow: 0 2px 8px rgba(22, 119, 255, 0.28);
+      }
+
+      .demand-popover {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: min(340px, calc(100vw - 32px));
+        z-index: 4000;
+        display: none;
+        padding: 12px 14px;
+        border: 1px solid #b7d6ff;
+        border-radius: 6px;
+        background: #fff;
+        color: #26384d;
+        box-shadow: 0 10px 26px rgba(15, 35, 70, 0.18);
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .demand-popover.is-visible {
+        display: block;
+      }
+
+      .demand-popover-title {
+        margin-bottom: 6px;
+        color: #0f2742;
+        font-weight: 700;
+      }
+
+      .demand-popover p {
+        margin: 0;
+      }
+
       .empty-illustration {
         width: 66px;
         height: 48px;
@@ -770,6 +834,12 @@
         flex-direction: column;
         justify-content: center;
         gap: 6px;
+      }
+
+      .timeline .demand-badge {
+        top: 14px;
+        right: 50%;
+        transform: translateX(70px);
       }
 
       .time-labels {
@@ -1040,7 +1110,11 @@
         </div>
         <div class="video-cell">
           <div class="camera-name">309 窗户</div>
-          <div class="empty-state">
+          <div
+            class="empty-state demand-anchor"
+            data-demand-title="暂无录像文件"
+            data-demand-text="当告警视频请求完成，但对应摄像头在告警时间段内没有可回放的录像文件时，展示该空态。用于区分没有录像和视频仍在加载，避免用户误判。"
+          >
             <div class="empty-illustration"></div>
             <div>暂无录像文件</div>
           </div>
@@ -1051,7 +1125,11 @@
         </div>
         <div class="video-cell">
           <div class="camera-name">310 值班室</div>
-          <div class="loading-state">
+          <div
+            class="loading-state demand-anchor"
+            data-demand-title="历史视频加载中"
+            data-demand-text="当告警视频正在从录像服务拉取或缓存时，展示加载动效和提示文案。加载成功后切换为视频画面，超时或确认无文件后切换为空态。"
+          >
             <div class="spinner"></div>
             <div>历史视频加载中...</div>
           </div>
@@ -1084,7 +1162,11 @@
             </button>
           </div>
         </div>
-        <div class="timeline">
+        <div
+          class="timeline demand-anchor"
+          data-demand-title="告警视频时间轴"
+          data-demand-text="仅在告警视频模式展示时间轴。左、右两端显示截取片段的开始和结束时间，中间标注告警发生时间点；蓝色表示已播放进度，浅灰色表示未播放或未加载区域。"
+        >
           <div class="time-labels">
             <span>15:00:00</span>
             <span>15:01:00</span>
@@ -1110,6 +1192,52 @@
       </div>
     </section>
     <script>
+      const demandTargets = document.querySelectorAll("[data-demand-text]");
+      const demandPopover = document.createElement("div");
+      demandPopover.className = "demand-popover";
+      demandPopover.setAttribute("role", "tooltip");
+      document.body.appendChild(demandPopover);
+
+      function showDemandPopover(trigger, target) {
+        const title = target.dataset.demandTitle || "需求说明";
+        const text = target.dataset.demandText || "";
+        demandPopover.innerHTML = `<div class="demand-popover-title">${title}</div><p>${text}</p>`;
+        demandPopover.classList.add("is-visible");
+
+        const triggerRect = trigger.getBoundingClientRect();
+        const popoverRect = demandPopover.getBoundingClientRect();
+        const gap = 10;
+        let left = triggerRect.right + gap;
+        let top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
+
+        if (left + popoverRect.width > window.innerWidth - 12) {
+          left = triggerRect.left - popoverRect.width - gap;
+        }
+
+        left = Math.max(12, Math.min(left, window.innerWidth - popoverRect.width - 12));
+        top = Math.max(12, Math.min(top, window.innerHeight - popoverRect.height - 12));
+
+        demandPopover.style.left = `${left}px`;
+        demandPopover.style.top = `${top}px`;
+      }
+
+      function hideDemandPopover() {
+        demandPopover.classList.remove("is-visible");
+      }
+
+      demandTargets.forEach((target) => {
+        const badge = document.createElement("span");
+        badge.className = "demand-badge";
+        badge.innerHTML = '<button class="demand-badge-trigger" type="button" aria-label="需求说明">需</button>';
+        target.appendChild(badge);
+
+        const trigger = badge.querySelector(".demand-badge-trigger");
+        trigger.addEventListener("mouseenter", () => showDemandPopover(trigger, target));
+        trigger.addEventListener("focus", () => showDemandPopover(trigger, target));
+        trigger.addEventListener("mouseleave", hideDemandPopover);
+        trigger.addEventListener("blur", hideDemandPopover);
+      });
+
       const videoModal = document.querySelector(".video-modal");
       const videoSelect = document.querySelector(".video-select");
 
