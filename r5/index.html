@@ -2144,6 +2144,239 @@
         font-weight: 700;
       }
 
+      .asset-board-config-page {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - var(--topbar-h) - 20px);
+        min-height: 0;
+        background: #eef2f7;
+        overflow: hidden;
+      }
+
+      .asset-board-config-head {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 52px;
+        padding: 0 18px;
+        border-bottom: 1px solid #edf2f8;
+        background: #fff;
+      }
+
+      .asset-board-config-title {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        color: #1f3349;
+        font-weight: 700;
+      }
+
+      .asset-board-config-title span {
+        color: #4e637d;
+        font-size: 13px;
+        font-weight: 400;
+      }
+
+      .asset-board-back {
+        height: 32px;
+        padding: 0 18px;
+        border: 1px solid #0f7af5;
+        border-radius: 16px;
+        color: #0f7af5;
+        background: #fff;
+      }
+
+      .asset-board-config-main {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 14px;
+        padding: 14px;
+        overflow: hidden;
+      }
+
+      .asset-board-side {
+        min-height: 0;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        border-radius: 6px;
+        background: #fff;
+        border: 1px solid #e5edf6;
+        overflow: hidden;
+      }
+
+      .asset-board-tree {
+        min-height: 0;
+        padding: 10px 8px;
+        overflow: auto;
+      }
+
+      .asset-board-tree-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 30px;
+        padding: 0 8px;
+        border-radius: 4px;
+        color: #24425f;
+        font-size: 13px;
+      }
+
+      .asset-board-tree-row.is-active {
+        background: #d9ecff;
+        color: #005dcc;
+        font-weight: 700;
+      }
+
+      .asset-board-tree-row.is-child {
+        padding-left: 28px;
+      }
+
+      .asset-board-tree-row svg {
+        flex: 0 0 auto;
+        color: #0f7af5;
+      }
+
+      .asset-board-checks {
+        padding: 12px 8px;
+        border-top: 1px solid #e5edf6;
+      }
+
+      .asset-board-checks label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 28px;
+        padding: 0 2px;
+        color: #25394f;
+        font-size: 13px;
+      }
+
+      .asset-board-stage {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        overflow: hidden;
+      }
+
+      .asset-board-tabsbar {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 52px;
+        padding: 0 16px;
+        border-radius: 4px;
+        background: #fff;
+      }
+
+      .asset-board-tabs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .asset-board-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 44px;
+        padding: 0 16px;
+        color: #1f3349;
+        border-bottom: 2px solid transparent;
+      }
+
+      .asset-board-tab.is-active {
+        color: #0f7af5;
+        border-bottom-color: #0f7af5;
+      }
+
+      .asset-board-tab .drag-dot,
+      .asset-board-widget .drag-dot {
+        color: #8ba2ba;
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .asset-board-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .asset-board-actions .btn-pill {
+        height: 30px;
+        padding: 0 16px;
+        border-radius: 15px;
+        border: 1px solid #0f7af5;
+        background: #fff;
+        color: #0f7af5;
+      }
+
+      .asset-board-actions .btn-pill.is-primary {
+        background: #0f7af5;
+        color: #fff;
+      }
+
+      .asset-board-canvas {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding-right: 4px;
+        overflow: auto;
+      }
+
+      .asset-board-widget-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 420px));
+        gap: 14px;
+        align-content: start;
+      }
+
+      .asset-board-widget {
+        position: relative;
+        height: 200px;
+        padding: 12px 14px;
+        background: #fff;
+        border: 1px solid #e5edf6;
+      }
+
+      .asset-board-widget-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #1f3349;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .asset-board-widget .overview-chart {
+        height: 150px;
+      }
+
+      .asset-board-widget .overview-donut-wrap {
+        height: 145px;
+      }
+
+      .asset-board-widget .overview-donut {
+        width: 132px;
+        height: 132px;
+      }
+
+      .asset-board-widget-resize {
+        position: absolute;
+        right: 4px;
+        bottom: 4px;
+        width: 10px;
+        height: 10px;
+        border-right: 2px solid #b8c6d8;
+        border-bottom: 2px solid #b8c6d8;
+      }
+
       .overview-chart {
         height: 170px;
         display: flex;
@@ -2221,20 +2454,30 @@
 
       .overview-rank {
         display: grid;
-        gap: 10px;
+        gap: 8px;
         padding-top: 8px;
       }
 
       .overview-rank-row {
         display: grid;
-        grid-template-columns: 86px minmax(0, 1fr);
+        grid-template-columns: 104px minmax(0, 1fr);
         align-items: center;
         gap: 8px;
         color: #52657c;
         font-size: 12px;
+        line-height: 1.2;
+        min-width: 0;
+      }
+
+      .overview-rank-row > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .overview-rank-track {
+        min-width: 0;
         height: 8px;
         border-radius: 999px;
         background: #edf4fb;
@@ -4339,6 +4582,228 @@
         min-height: 0;
       }
 
+      .asset-room-location-layout {
+        display: grid;
+        grid-template-columns: 260px minmax(700px, 1fr);
+        gap: 14px;
+        padding: 16px 20px 14px;
+        align-items: stretch;
+        min-height: 420px;
+      }
+
+      .asset-room-card {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        border: 1px solid #e6eef7;
+        border-radius: 6px;
+        background: #fff;
+        padding: 14px;
+      }
+
+      .asset-room-card-title {
+        margin-bottom: 12px;
+        color: #1f3349;
+        font-weight: 700;
+      }
+
+      .asset-room-path {
+        display: grid;
+        gap: 8px;
+      }
+
+      .asset-room-path-item {
+        display: grid;
+        grid-template-columns: 68px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        color: #6b7f95;
+      }
+
+      .asset-room-path-item strong {
+        min-width: 0;
+        color: #1f3349;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .asset-room-info {
+        margin-top: 14px;
+        padding: 10px;
+        border: 1px solid #d8e9ff;
+        border-radius: 4px;
+        background: #f6faff;
+        color: #6b7f95;
+      }
+
+      .asset-room-info strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #1f3349;
+      }
+
+      .asset-room-device-card {
+        border-color: #b8d8ff;
+        background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+      }
+
+      .asset-room-device-card .asset-room-device-meta {
+        margin-top: auto;
+        padding-top: 18px;
+      }
+
+      .asset-room-device-name {
+        color: #183d66;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .asset-room-device-code {
+        margin-top: 8px;
+        color: #425d78;
+        font-weight: 600;
+      }
+
+      .asset-room-device-sub {
+        margin-top: 8px;
+        color: #6b7f95;
+      }
+
+      .asset-room-device-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .asset-room-tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 26px;
+        padding: 0 10px;
+        border-radius: 13px;
+        background: #eaf4ff;
+        color: #1d62b4;
+        font-weight: 600;
+      }
+
+      .asset-room-same-list {
+        display: grid;
+        gap: 8px;
+        max-height: 316px;
+        padding-right: 4px;
+        overflow-y: auto;
+      }
+
+      .asset-room-search {
+        width: 100%;
+        height: 32px;
+        margin: -2px 0 10px;
+        padding: 0 10px;
+        border: 1px solid #d8e4f2;
+        border-radius: 4px;
+        color: #1f3349;
+        outline: none;
+      }
+
+      .asset-room-search:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.08);
+      }
+
+      .asset-room-same-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(210px, 280px) 96px;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 10px;
+        border: 1px solid #edf2f7;
+        border-radius: 4px;
+        background: #fbfdff;
+      }
+
+      .asset-room-peer-link {
+        min-width: 0;
+        overflow: hidden;
+        border: 0;
+        background: transparent;
+        color: #1f3349;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        text-align: left;
+        white-space: nowrap;
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .asset-room-peer-link:hover {
+        color: var(--primary);
+        text-decoration: underline;
+      }
+
+      .asset-room-same-row span {
+        min-width: 0;
+        overflow: hidden;
+        color: #6b7f95;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .asset-room-location-note {
+        margin: 0 20px 22px;
+        padding: 8px 12px;
+        border: 1px solid #ffe3ba;
+        border-radius: 6px;
+        background: #fffaf2;
+        color: #6b4a18;
+        line-height: 1.7;
+      }
+
+      .asset-room-location-note strong {
+        margin-right: 8px;
+        color: #3f2f11;
+      }
+
+      .asset-room-note-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+
+      .asset-room-note-input {
+        width: 100%;
+        height: 32px;
+        min-height: 32px;
+        border: 1px solid #ffd89d;
+        border-radius: 4px;
+        padding: 6px 10px;
+        color: #3f2f11;
+        background: #fffaf2;
+        outline: none;
+        line-height: 18px;
+      }
+
+      .asset-room-note-input[readonly] {
+        overflow: hidden;
+        cursor: default;
+      }
+
+      .asset-room-location-note.is-editing .asset-room-note-input {
+        height: 32px;
+        min-height: 32px;
+        background: #fff;
+      }
+
+      .asset-room-note-input:focus {
+        border-color: #ff9a2e;
+        box-shadow: 0 0 0 2px rgba(255, 154, 46, 0.12);
+      }
+
       .asset-rack-legend {
         padding: 10px 12px;
         border: 1px solid #e6eef7;
@@ -5443,6 +5908,208 @@
         gap: 8px;
       }
 
+      .advanced-search-backdrop {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 44px;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.46);
+        z-index: 40;
+      }
+
+      .advanced-search-panel {
+        position: fixed;
+        top: 44px;
+        right: 0;
+        bottom: 0;
+        width: min(560px, calc(100vw - 32px));
+        background: #fff;
+        box-shadow: -10px 0 24px rgba(16, 33, 51, 0.18);
+        z-index: 41;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .advanced-search-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px 22px 16px;
+      }
+
+      .advanced-search-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2d3d;
+        white-space: nowrap;
+      }
+
+      .advanced-search-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .advanced-search-actions .btn {
+        height: 32px;
+        padding: 0 14px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .advanced-search-body {
+        flex: 1;
+        overflow: auto;
+        padding: 38px 36px 24px;
+      }
+
+      .advanced-search-mode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        color: #126ef5;
+        font-size: 13px;
+      }
+
+      .advanced-search-mode input {
+        width: 14px;
+        height: 14px;
+        accent-color: #1677ff;
+      }
+
+      .advanced-search-field {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .advanced-search-field.is-removable {
+        grid-template-columns: 86px minmax(0, 1fr) 24px;
+      }
+
+      .advanced-search-field span {
+        color: #1f2d3d;
+        font-size: 13px;
+        text-align: right;
+      }
+
+      .advanced-search-field input,
+      .advanced-search-field select {
+        width: 100%;
+        height: 32px;
+        border: 1px solid #dce5ef;
+        border-radius: 4px;
+        background: #fff;
+        padding: 0 10px;
+        color: #1f2d3d;
+        font-size: 13px;
+      }
+
+      .advanced-search-field input:focus,
+      .advanced-search-field select:focus {
+        border-color: #1677ff;
+        box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
+        outline: none;
+      }
+
+      .advanced-search-remove {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #1677ff;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .advanced-search-remove:hover {
+        background: #0f62d8;
+      }
+
+      .advanced-search-add {
+        margin: 18px 0 0 100px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #1677ff;
+        font-size: 13px;
+      }
+
+      .advanced-search-add span {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #1677ff;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .advanced-search-add-wrap {
+        position: relative;
+        margin: 18px 0 0 100px;
+        display: inline-block;
+      }
+
+      .advanced-search-add-wrap .advanced-search-add {
+        margin: 0;
+      }
+
+      .advanced-search-field-menu {
+        position: absolute;
+        top: 28px;
+        left: 0;
+        width: 170px;
+        max-height: 260px;
+        overflow: auto;
+        padding: 6px 0;
+        border: 1px solid #dce8f5;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(18, 33, 52, 0.16);
+        z-index: 45;
+      }
+
+      .advanced-search-field-option {
+        display: block;
+        width: 100%;
+        height: 32px;
+        padding: 0 12px;
+        text-align: left;
+        color: #1f2d3d;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      .advanced-search-field-option:hover,
+      .advanced-search-field-option.is-active {
+        background: #eaf4ff;
+        color: #126ef5;
+      }
+
+      .advanced-search-field-option:disabled {
+        color: #a4b3c2;
+        background: transparent;
+        cursor: not-allowed;
+      }
+
       .toast-root {
         position: fixed;
         right: 18px;
@@ -5762,6 +6429,139 @@
         height: min(780px, calc(100vh - 48px));
       }
 
+      .relation-modal.requirement-description-dialog {
+        width: min(680px, calc(100vw - 48px));
+        height: fit-content;
+        max-height: min(680px, calc(100vh - 48px));
+      }
+
+      .relation-modal.asset-board-save-dialog {
+        width: min(720px, calc(100vw - 48px));
+        height: fit-content;
+        max-height: min(760px, calc(100vh - 48px));
+      }
+
+      .asset-board-save-options {
+        display: grid;
+        gap: 10px;
+      }
+
+      .asset-board-save-option {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid #dfe8f3;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .asset-board-save-option:has(input:checked) {
+        border-color: var(--primary);
+        background: #eef6ff;
+      }
+
+      .asset-board-save-option strong {
+        display: block;
+        color: #1f3349;
+        font-size: 13px;
+      }
+
+      .asset-board-save-option span {
+        display: block;
+        margin-top: 4px;
+        color: #6b7d90;
+        font-size: 12px;
+      }
+
+      .asset-board-save-custom {
+        margin-top: 12px;
+        padding: 12px;
+        border: 1px solid #e3ebf5;
+        border-radius: 8px;
+        background: #f8fbff;
+      }
+
+      .asset-board-save-tree {
+        margin-top: 10px;
+        max-height: 260px;
+        overflow: auto;
+      }
+
+      .asset-board-save-tree ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .asset-board-save-tree-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 28px;
+        padding: 3px 6px;
+        border-radius: 4px;
+        color: #25394f;
+        font-size: 13px;
+      }
+
+      .asset-board-save-tree-row:hover {
+        background: #eef6ff;
+      }
+
+      .asset-board-save-tree-toggle,
+      .asset-board-save-tree-toggle-spacer {
+        flex: 0 0 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .asset-board-save-tree-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #7a8da3;
+      }
+
+      .asset-board-save-tree-toggle::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 5px solid currentColor;
+        transition: transform 0.16s ease;
+      }
+
+      .asset-board-save-tree-toggle.is-open::before {
+        transform: rotate(90deg);
+      }
+
+      .asset-board-save-type-icon {
+        flex: 0 0 18px;
+        width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        color: #0f7af5;
+        background: #eaf3ff;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .requirement-description-dialog .relation-modal-body {
+        flex: 0 1 auto;
+        min-height: auto;
+      }
+
+      .requirement-description-dialog .relation-modal-footer {
+        flex: 0 0 auto;
+      }
+
       .relation-modal-head {
         display: flex;
         align-items: flex-start;
@@ -5852,6 +6652,21 @@
         display: flex;
         flex-direction: column;
         gap: 14px;
+      }
+
+      .requirement-description-content {
+        display: grid;
+        gap: 10px;
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      .requirement-description-content p {
+        margin: 0;
+        padding: 10px 12px;
+        background: #f8fbff;
+        border: 1px solid #e4edf8;
+        border-radius: 6px;
       }
 
       .relation-current {
@@ -7735,7 +8550,7 @@
 
 ## 22. V1.2 资产概览
 
-需求来源：`V3R5-4123`、`V3R5-4117`、`V3R5-4113`
+需求来源：`V3R5-4117`、`V3R5-4113`
 
 ### 22.1 功能范围
 
@@ -8578,7 +9393,7 @@
           {
             id: "V3R5-4186",
             ticketId: "V3R5-4186",
-            version: "v1.2",
+            version: "v1.1",
             type: "优化",
             title: "资产台账多选入库按钮",
             description: "优化 资产台账，去除多选后的入库按钮",
@@ -8597,18 +9412,6 @@
             scope: "资产配置",
             targetView: VIEW_IDS.FORM_DESIGN,
             targetLabel: "资产表单/详情设计资产树",
-            status: "已设计完成"
-          },
-          {
-            id: "V3R5-4123",
-            ticketId: "V3R5-4123",
-            version: "v1.2",
-            type: "优化",
-            title: "资产概览样式",
-            description: "优化 资产概览样式（与容量能效保持一致）",
-            scope: "资产概览",
-            targetView: VIEW_IDS.ASSET_OVERVIEW,
-            targetLabel: "资产概览",
             status: "已设计完成"
           },
           {
@@ -8682,6 +9485,66 @@
             targetView: VIEW_IDS.IT_FACILITY,
             targetAction: "批量入库",
             targetLabel: "电子表格作业页",
+            status: "已设计完成"
+          },
+          {
+            id: "V3R5-4427",
+            ticketId: "V3R5-4427",
+            version: "v1.2",
+            type: "优化",
+            title: "场地设施位置信息内容显示",
+            description: "优化 场地设施位置信息内容显示",
+            detail: [
+              "需求来源：V3R5-4427。",
+              "交互目的：场地设施详情的位置信息不使用机柜/U位图，改为展示所属房间、当前设备、同房间设备和位置补充说明。",
+              "展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；当前设备展示名称、资产编号、所属房间、状态和类型；同房间设备支持搜索并可点击名称查看详情；位置补充说明支持编辑保存。"
+            ],
+            scope: "台账",
+            targetView: VIEW_IDS.STATION_FACILITY,
+            targetLabel: "场地设施-位置信息",
+            status: "已设计完成"
+          },
+          {
+            id: "V3R5-4422",
+            ticketId: "V3R5-4422",
+            version: "v1.2",
+            type: "优化",
+            title: "上传本地数据表格字段一致",
+            description: "优化 上传本地数据表格与在线表格字段一致",
+            scope: "台账",
+            targetView: VIEW_IDS.IT_FACILITY,
+            targetAction: "批量入库",
+            targetLabel: "上传本地数据",
+            status: "已设计完成"
+          },
+          {
+            id: "V3R5-4421",
+            ticketId: "V3R5-4421",
+            version: "v1.2",
+            type: "优化",
+            title: "厂商字段显隐规则",
+            description: "优化 厂商字段能根据表单控制显隐",
+            detail: [
+              "需求来源：V3R5-4421。",
+              "交互目的：资产台账中的“厂商”字段应跟随资产表单字段配置控制显隐，避免表单已隐藏但台账仍展示。",
+              "展示规则：当当前台账或资产分类的表单配置启用“厂商”字段时，列表可展示厂商列；当表单配置隐藏“厂商”字段时，列表同步隐藏厂商列。"
+            ],
+            showDescriptionDialog: true,
+            scope: "台账",
+            targetView: VIEW_IDS.IT_FACILITY,
+            targetLabel: "资产台账字段",
+            status: "已设计完成"
+          },
+          {
+            id: "V3R5-4418",
+            ticketId: "V3R5-4418",
+            version: "v1.2",
+            type: "优化",
+            title: "高级搜索支持厂商条件",
+            description: "新增 高级搜索支持厂商作为搜索条件",
+            scope: "台账",
+            targetView: VIEW_IDS.IT_FACILITY,
+            targetLabel: "高级搜索",
             status: "已设计完成"
           }
         ];
@@ -9226,6 +10089,7 @@
                 operationPage: null,
                 detailPage: null,
                 drawer: null,
+                advancedSearch: null,
                 rowMoreMenu: null,
                 ledgerHierarchyMenuOpen: false,
                 guideMenuOpen: false,
@@ -9235,6 +10099,8 @@
                 demandExplainEnabled: true,
                 toasts: [],
                 relationDialog: null,
+                requirementDescriptionDialog: null,
+                assetBoardSaveDialog: null,
                 masterSlaveTemplateDialog: null,
                 masterSlaveImportDialog: null,
                 masterSlaveImportResultDialog: null,
@@ -9314,7 +10180,8 @@
                 },
                 assetOverview: {
                   scope: "数据楼",
-                  tab: "概览"
+                  tab: "概览",
+                  managing: false
                 },
                 integrationConfigEditing: false,
                 integrationAssetDetectEnabled: true,
@@ -9602,7 +10469,7 @@
               return;
             }
             if (!this.state.ui.assetOverview) {
-              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览" };
+              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览", managing: false };
             }
             this.state.ui.assetOverview.scope = scope;
             this.closeRowMoreMenu(false);
@@ -9616,12 +10483,121 @@
               return;
             }
             if (!this.state.ui.assetOverview) {
-              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览" };
+              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览", managing: false };
             }
             this.state.ui.assetOverview.tab = tab;
             this.closeRowMoreMenu(false);
             this.closeGuideMenu(false);
             this.emit();
+          }
+
+          openAssetOverviewBoardManager() {
+            if (!this.state.ui.assetOverview) {
+              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览", managing: false };
+            }
+            this.state.ui.assetOverview.managing = true;
+            this.closeRowMoreMenu(false);
+            this.closeGuideMenu(false);
+            this.emit();
+          }
+
+          closeAssetOverviewBoardManager() {
+            if (!this.state.ui.assetOverview) {
+              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览", managing: false };
+            }
+            this.state.ui.assetOverview.managing = false;
+            this.emit();
+          }
+
+          saveAssetOverviewBoardManager() {
+            if (!this.state.ui.assetOverview) {
+              this.state.ui.assetOverview = { scope: "数据楼", tab: "概览", managing: false };
+            }
+            this.state.ui.assetBoardSaveDialog = {
+              mode: "current",
+              currentNodeType: "园区",
+              expandedNodes: {
+                "南山园区": true,
+                "南山园区 / 数据楼A": true,
+                "南山园区 / 数据楼A / 2层": true,
+                "南山园区 / 数据楼A / 2层 / 弱电间": true,
+                "南山园区 / 数据楼B": true,
+                "南山园区 / 数据楼B / B1层": true,
+                "南山园区 / 数据楼B / B1层 / 冷站配电室": true
+              },
+              nodes: {
+                "南山园区": false,
+                "南山园区 / 数据楼A": false,
+                "南山园区 / 数据楼A / 2层": false,
+                "南山园区 / 数据楼A / 2层 / 弱电间": false,
+                "南山园区 / 数据楼A / 2层 / 弱电间 / A列": false,
+                "南山园区 / 数据楼A / 3层": false,
+                "南山园区 / 数据楼B": false,
+                "南山园区 / 数据楼B / B1层": false,
+                "南山园区 / 数据楼B / B1层 / 冷站配电室": false,
+                "南山园区 / 数据楼B / B1层 / 冷站配电室 / B列": false
+              }
+            };
+            this.emit();
+          }
+
+          setAssetBoardSaveMode(mode) {
+            const dialog = this.state.ui.assetBoardSaveDialog;
+            if (!dialog) {
+              return;
+            }
+            dialog.mode = ["current", "sameType", "custom"].includes(mode) ? mode : "current";
+            this.emit();
+          }
+
+          toggleAssetBoardSaveNode(node) {
+            const dialog = this.state.ui.assetBoardSaveDialog;
+            if (!dialog || !node || !Object.prototype.hasOwnProperty.call(dialog.nodes || {}, node)) {
+              return;
+            }
+            dialog.mode = "custom";
+            dialog.nodes[node] = !dialog.nodes[node];
+            this.emit();
+          }
+
+          toggleAssetBoardSaveTreeNode(node) {
+            const dialog = this.state.ui.assetBoardSaveDialog;
+            if (!dialog || !node) {
+              return;
+            }
+            if (!dialog.expandedNodes) {
+              dialog.expandedNodes = {};
+            }
+            dialog.expandedNodes[node] = !dialog.expandedNodes[node];
+            this.emit();
+          }
+
+          closeAssetBoardSaveDialog() {
+            this.state.ui.assetBoardSaveDialog = null;
+            this.emit();
+          }
+
+          confirmAssetBoardSave() {
+            const dialog = this.state.ui.assetBoardSaveDialog;
+            if (!dialog) {
+              return;
+            }
+            const selectedNodes = Object.entries(dialog.nodes || {})
+              .filter(([, checked]) => checked)
+              .map(([node]) => node);
+            if (dialog.mode === "custom" && selectedNodes.length === 0) {
+              this.pushToast("请选择节点", "自定义应用时至少需要勾选一个目标节点。", "warning");
+              this.emit();
+              return;
+            }
+            const modeText = dialog.mode === "sameType"
+              ? "已应用至同类型节点"
+              : dialog.mode === "custom"
+                ? "已应用至 " + selectedNodes.length + " 个自定义节点"
+                : "已保存当前节点";
+            this.state.ui.assetBoardSaveDialog = null;
+            this.state.ui.assetOverview.managing = false;
+            this.pushToast("保存成功", modeText + "，看板数据保持与概览页一致。", "success");
           }
 
           openAssetOverviewDrilldown(label, viewId) {
@@ -9635,6 +10611,26 @@
 
           closeAssetOverviewDialog() {
             this.state.ui.assetOverviewDialog = null;
+            this.emit();
+          }
+
+          openRequirementDescriptionDialog(reqId) {
+            const requirement = VERSION_REQUIREMENTS.find((item) => item.id === reqId);
+            if (!requirement) {
+              this.pushToast("未找到需求说明", "该需求条目不存在或已被移除。", "warning");
+              return;
+            }
+            this.state.ui.versionRequirementFilter = requirement.version || "all";
+            this.state.ui.focusedRequirementId = requirement.id;
+            this.state.ui.demandExplainEnabled = true;
+            this.state.ui.requirementDescriptionDialog = {
+              reqId: requirement.id
+            };
+            this.emit();
+          }
+
+          closeRequirementDescriptionDialog() {
+            this.state.ui.requirementDescriptionDialog = null;
             this.emit();
           }
 
@@ -9675,7 +10671,20 @@
           }
 
           setFilter(viewId, keyword) {
-            this.state.ui.filters[viewId] = { keyword: String(keyword || "") };
+            this.state.ui.filters[viewId] = {
+              keyword: String(keyword || ""),
+              assetCode: "",
+              assetCategory: "",
+              assetLocation: "",
+              uHeight: "",
+              name: "",
+              ratedPower: "",
+              model: "",
+              assetStatus: "",
+              productionDate: "",
+              id: "",
+              vendor: ""
+            };
             this.state.ui.pagers[viewId] = 1;
             if (this.state.ui.listSelections) {
               this.state.ui.listSelections[viewId] = [];
@@ -9687,8 +10696,207 @@
             this.emit();
           }
 
+          openAdvancedSearch(viewId) {
+            if (!LIST_PAGE_META[viewId]) {
+              return;
+            }
+            const filter = this.state.ui.filters[viewId] || {};
+            const baseFields = ["assetCode", "assetCategory", "assetLocation", "vendor", "model"];
+            this.state.ui.advancedSearch = {
+              viewId,
+              fields: {
+                assetCode: filter.assetCode || "",
+                assetCategory: filter.assetCategory || "",
+                assetLocation: filter.assetLocation || "",
+                uHeight: filter.uHeight || "",
+                name: filter.name || "",
+                ratedPower: filter.ratedPower || "",
+                model: filter.model || "",
+                assetStatus: filter.assetStatus || "",
+                productionDate: filter.productionDate || "",
+                id: filter.id || "",
+                vendor: filter.vendor || ""
+              },
+              activeFields: [
+                ...baseFields,
+                ...["uHeight", "name", "ratedPower", "assetStatus", "productionDate", "id"].filter((key) => filter[key])
+              ],
+              fieldMenuOpen: false
+            };
+            this.closeRowMoreMenu(false);
+            this.closeGuideMenu(false);
+            this.closeLedgerHierarchyMenu(false);
+            this.emit();
+          }
+
+          closeAdvancedSearch() {
+            if (!this.state.ui.advancedSearch) {
+              return;
+            }
+            this.state.ui.advancedSearch = null;
+            this.emit();
+          }
+
+          setAdvancedSearchField(field, value, shouldEmit = true) {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog) {
+              return;
+            }
+            const allowed = this.getAdvancedSearchFieldOptions(dialog.viewId).map((item) => item.key);
+            if (!allowed.includes(field)) {
+              return;
+            }
+            dialog.fields = {
+              ...(dialog.fields || {}),
+              [field]: String(value || "")
+            };
+            if (shouldEmit) {
+              this.emit();
+            }
+          }
+
+          toggleAdvancedSearchFieldMenu() {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog) {
+              return;
+            }
+            dialog.fieldMenuOpen = !dialog.fieldMenuOpen;
+            this.emit();
+          }
+
+          addAdvancedSearchCondition(field) {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog) {
+              return;
+            }
+            const allowed = this.getAdvancedSearchFieldOptions(dialog.viewId).map((item) => item.key);
+            if (!allowed.includes(field)) {
+              return;
+            }
+            const activeFields = Array.isArray(dialog.activeFields) ? dialog.activeFields : ["assetCode", "assetCategory", "assetLocation"];
+            if (!activeFields.includes(field)) {
+              dialog.activeFields = [...activeFields, field];
+            }
+            dialog.fieldMenuOpen = false;
+            this.emit();
+          }
+
+          removeAdvancedSearchCondition(field) {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog) {
+              return;
+            }
+            const fixedFields = ["assetCode", "assetCategory", "assetLocation", "vendor", "model"];
+            if (fixedFields.includes(field)) {
+              return;
+            }
+            const activeFields = Array.isArray(dialog.activeFields) ? dialog.activeFields : fixedFields;
+            dialog.activeFields = activeFields.filter((item) => item !== field);
+            dialog.fields = {
+              ...(dialog.fields || {}),
+              [field]: ""
+            };
+            dialog.fieldMenuOpen = false;
+            this.emit();
+          }
+
+          getAdvancedSearchFieldOptions(viewId) {
+            const meta = LIST_PAGE_META[viewId] || {};
+            const columnOptions = (meta.columns || [])
+              .filter((column) => column.key && !column.key.startsWith("__"))
+              .map((column) => ({ key: column.key, label: column.label }));
+            const extraOptions = [
+              { key: "model", label: "型号" },
+              { key: "productionDate", label: "投产日期" },
+              { key: "id", label: "ID" }
+            ];
+            const merged = [...columnOptions, ...extraOptions];
+            const seen = new Set();
+            return merged.filter((item) => {
+              if (!item.key || seen.has(item.key)) {
+                return false;
+              }
+              seen.add(item.key);
+              return true;
+            });
+          }
+
+          resetAdvancedSearch() {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog) {
+              return;
+            }
+            dialog.fields = {
+              assetCode: "",
+              assetCategory: "",
+              assetLocation: "",
+              uHeight: "",
+              name: "",
+              ratedPower: "",
+              model: "",
+              assetStatus: "",
+              productionDate: "",
+              id: "",
+              vendor: ""
+            };
+            dialog.activeFields = ["assetCode", "assetCategory", "assetLocation", "vendor", "model"];
+            dialog.fieldMenuOpen = false;
+            this.emit();
+          }
+
+          applyAdvancedSearch() {
+            const dialog = this.state.ui.advancedSearch;
+            if (!dialog || !LIST_PAGE_META[dialog.viewId]) {
+              return;
+            }
+            const currentFilter = this.state.ui.filters[dialog.viewId] || {};
+            this.state.ui.filters[dialog.viewId] = {
+              keyword: currentFilter.keyword || "",
+              assetCode: dialog.fields?.assetCode || "",
+              assetCategory: dialog.fields?.assetCategory || "",
+              assetLocation: dialog.fields?.assetLocation || "",
+              uHeight: dialog.fields?.uHeight || "",
+              name: dialog.fields?.name || "",
+              ratedPower: dialog.fields?.ratedPower || "",
+              model: dialog.fields?.model || "",
+              assetStatus: dialog.fields?.assetStatus || "",
+              productionDate: dialog.fields?.productionDate || "",
+              id: dialog.fields?.id || "",
+              vendor: dialog.fields?.vendor || ""
+            };
+            this.state.ui.pagers[dialog.viewId] = 1;
+            if (this.state.ui.listSelections) {
+              this.state.ui.listSelections[dialog.viewId] = [];
+            }
+            this.state.ui.batchSelectionMenuOpen = null;
+            this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.advancedSearch = null;
+            this.closeRowMoreMenu(false);
+            this.closeLedgerHierarchyMenu(false);
+            this.pushToast("高级查询完成", LIST_PAGE_META[dialog.viewId].title + " 已按高级条件完成筛选。", "success");
+          }
+
+          saveAdvancedSearchShortcut() {
+            const dialog = this.state.ui.advancedSearch;
+            const title = dialog?.viewId && LIST_PAGE_META[dialog.viewId] ? LIST_PAGE_META[dialog.viewId].title : "当前台账";
+            this.pushToast("已保存快捷搜索", title + " 的高级查询条件已保存为快捷搜索示例。", "success");
+          }
+
           resetFilter(viewId) {
-            this.state.ui.filters[viewId] = { keyword: "" };
+            this.state.ui.filters[viewId] = {
+              keyword: "",
+              assetCode: "",
+              assetCategory: "",
+              assetLocation: "",
+              uHeight: "",
+              name: "",
+              ratedPower: "",
+              model: "",
+              assetStatus: "",
+              productionDate: "",
+              id: "",
+              vendor: ""
+            };
             this.state.ui.pagers[viewId] = 1;
             if (this.state.ui.listSelections) {
               this.state.ui.listSelections[viewId] = [];
@@ -9990,7 +11198,15 @@
 
           getFilteredRows(viewId) {
             const rows = this.getListRows(viewId);
-            const keyword = (this.state.ui.filters[viewId]?.keyword || "").trim().toLowerCase();
+            const filter = this.state.ui.filters[viewId] || {};
+            const keyword = (filter.keyword || "").trim().toLowerCase();
+            const advancedConditions = ["assetCode", "assetCategory", "assetLocation", "uHeight", "name", "ratedPower", "model", "assetStatus", "productionDate", "id", "vendor"].map((key) => ({
+              key,
+              value: filter[key]
+            })).map((item) => ({
+              key: item.key,
+              value: String(item.value || "").trim().toLowerCase()
+            })).filter((item) => item.value);
             const applyMasterSlaveMode = (items) => {
               if (!this.isLedgerHierarchyEnabled()) {
                 return items;
@@ -10000,23 +11216,36 @@
             if (!this.state.ui.autoExpandRows) {
               this.state.ui.autoExpandRows = {};
             }
-            if (!keyword) {
+            if (!keyword && advancedConditions.length === 0) {
               this.state.ui.autoExpandRows[viewId] = {};
               return applyMasterSlaveMode(rows);
             }
+            const rowMatchesAdvanced = (row) => {
+              if (!row || advancedConditions.length === 0) return true;
+              return advancedConditions.every((condition) => {
+                const rawValue = condition.key === "model"
+                  ? (row.model || String(row.assetCategory || "").split(">").slice(-1)[0])
+                  : row[condition.key];
+                const value = String(rawValue || "").toLowerCase();
+                return value.includes(condition.value);
+              });
+            };
             const rowMatchesKeyword = (row) => {
               if (!row) return false;
-              return Object.values(row).join(" ").toLowerCase().includes(keyword);
+              return !keyword || Object.values(row).join(" ").toLowerCase().includes(keyword);
+            };
+            const rowMatchesAll = (row) => {
+              return rowMatchesKeyword(row) && rowMatchesAdvanced(row);
             };
             const autoExpand = {};
             const result = rows.filter((row) => {
-              if (rowMatchesKeyword(row)) {
+              if (rowMatchesAll(row)) {
                 return true;
               }
               const children = this.findChildrenOf(viewId, row.id);
               for (const rel of children) {
                 const childRow = this.getRowById(rel.childViewId, rel.childRowId);
-                if (rowMatchesKeyword(childRow)) {
+                if (rowMatchesAll(childRow)) {
                   autoExpand[row.id] = true;
                   return true;
                 }
@@ -10024,7 +11253,7 @@
               const parentRel = this.findParentOf(viewId, row.id);
               if (parentRel) {
                 const parentRow = this.getRowById(parentRel.parentViewId, parentRel.parentRowId);
-                if (rowMatchesKeyword(parentRow)) {
+                if (rowMatchesAll(parentRow)) {
                   autoExpand[row.id] = true;
                   return true;
                 }
@@ -10187,6 +11416,10 @@
             this.state.ui.versionRequirementFilter = requirement.version || "all";
             this.state.ui.focusedRequirementId = requirement.id;
             this.state.ui.demandExplainEnabled = true;
+            if (requirement.showDescriptionDialog) {
+              this.openRequirementDescriptionDialog(requirement.id);
+              return;
+            }
             if (!requirement.targetView) {
               this.pushToast("待确认索引", "“" + requirement.description + "”暂未绑定到当前原型页面，请确认后再补充索引。", "warning");
               this.emit();
@@ -10214,6 +11447,20 @@
                 this.state.ui.demandExplainEnabled = true;
                 this.state.ui.detailPage.activeTab = "history";
                 this.state.ui.detailPage.historyRange = "近7日";
+                this.pushToast("已定位需求范围", "已跳转到“" + requirement.targetLabel + "”。", "success");
+                this.emit();
+              }
+              return;
+            }
+            if (requirement.id === "V3R5-4427") {
+              const targetView = requirement.targetView || VIEW_IDS.STATION_FACILITY;
+              const sampleRow = this.getFilteredRows(targetView)[0] || this.getListRows(targetView)[0];
+              if (sampleRow) {
+                this.openDetailPage(targetView, sampleRow.id);
+                this.state.ui.versionRequirementFilter = requirement.version || "all";
+                this.state.ui.focusedRequirementId = requirement.id;
+                this.state.ui.demandExplainEnabled = true;
+                this.state.ui.detailPage.activeTab = "position";
                 this.pushToast("已定位需求范围", "已跳转到“" + requirement.targetLabel + "”。", "success");
                 this.emit();
               }
@@ -10925,15 +12172,63 @@
               { label: "IP地址", value: "-" },
               { label: "MAC地址", value: "-" }
             ];
-            const breadcrumb = [
-              "上江区",
-              "园区机房",
-              locationParts[0] || "D8",
-              "区厅",
-              (locationParts[0] || "D8") + "-L41托管资源机房",
-              "机柜_" + (locationLabel === "-" ? normalize(row.name) : locationLabel),
-              startU + "U"
-            ].join(" > ");
+            const building = locationParts[0] || "1号楼";
+            const floor = locationParts[1] || "1层";
+            const room = locationParts[2] || "中心机房";
+            const park = row.parkName || row.campusName || "南山园区";
+            const cabinetName = row.cabinetName || row.cabinetCode || row.relatedAsset || "机柜_" + building + "-" + floor + "-" + room;
+            const cabinetLine = row.cabinetLine || row.rackRow || "A列";
+            const locationBreadcrumbPartsByView = {
+              [VIEW_IDS.CABINET]: [park, building, floor, room, cabinetLine],
+              [VIEW_IDS.STATION_FACILITY]: [park, building, floor, room],
+              [VIEW_IDS.IT_FACILITY]: [park, building, floor, room, cabinetName, startU + "U"],
+              [VIEW_IDS.SPARE_PART]: [park, building, floor, room]
+            };
+            const breadcrumb = (locationBreadcrumbPartsByView[detailPage.viewId] || [park, building, floor, room])
+              .filter((item) => item !== undefined && item !== null && String(item).trim() !== "" && item !== "-")
+              .join(" > ");
+            const stationCategoryLabel = normalize(row.assetCategory).split(">").filter(Boolean).slice(-1)[0] || "场地设施";
+            const stationText = [normalize(row.name), stationCategoryLabel].join(" ");
+            const stationLocationHint = /UPS|PDU|电源/i.test(stationText)
+              ? "A路UPS区，靠近东侧墙面"
+              : /空调|蓄冷|冷/i.test(stationText)
+                ? "冷通道入口旁，靠近末端空调检修侧"
+                : /配电|电量仪|插接箱|开关量|柜/i.test(stationText)
+                  ? "配电柜旁，面向主通道"
+                  : "房间设备区，靠近巡检通道";
+            const stationPeerRows = ((this.state.data.lists[VIEW_IDS.STATION_FACILITY] || []))
+              .filter((item) => item.id !== row.id && normalize(item.assetLocation) === locationLabel)
+              .slice(0, 5)
+              .map((item) => ({
+                id: item.id,
+                name: normalize(item.name || item.assetCode),
+                code: normalize(item.assetCode || item.serialCode),
+                category: normalize(item.assetCategory).split(">").filter(Boolean).slice(-1)[0] || "场地设施",
+                status: normalize(item.assetStatus)
+              }));
+            const stationLocationCard = {
+              pathItems: [
+                { label: "园区", value: park },
+                { label: "楼栋", value: building },
+                { label: "楼层", value: floor },
+                { label: "房间/区域", value: room }
+              ],
+              roomName: room,
+              roomType: /机房/.test(room) ? "机房" : /井/.test(room) ? "竖井/管井" : /库/.test(room) ? "库房" : "房间",
+              current: {
+                name: normalize(row.name || row.assetCode),
+                code: normalize(row.assetCode || row.serialCode),
+                status: normalize(row.assetStatus),
+                room,
+                category: stationCategoryLabel
+              },
+              peers: stationPeerRows.length ? stationPeerRows : [
+                { name: "UPS-A路主机", code: "UPS-A-01", category: "UPS", status: "在用" },
+                { name: "精密空调-01", code: "AC-CR-01", category: "空调", status: "在用" },
+                { name: "低压配电柜A", code: "PDC-A-01", category: "配电柜", status: "在用" }
+              ],
+              note: normalize(row.locationNote) !== "-" ? normalize(row.locationNote) : stationLocationHint
+            };
             const parentRelation = this.findParentOf(detailPage.viewId, row.id);
             const parentRow = parentRelation ? this.getRowById(parentRelation.parentViewId, parentRelation.parentRowId) : null;
             const childRelation = this.findChildrenOf(detailPage.viewId, row.id)[0];
@@ -11012,6 +12307,7 @@
               historyEntries,
               basicFields,
               breadcrumb,
+              stationLocationCard,
               rackUnits,
               rackHoverCard: {
                 top: selectedTop,
@@ -11409,6 +12705,7 @@
             const page = this.getOperationPageData();
             const title = page?.title || "页面";
             if (label === "上传本地数据") {
+              this.downloadOperationLocalDataTemplate();
               this.openLocalDataUploadDialog();
               return;
             }
@@ -11464,7 +12761,175 @@
           downloadLocalDataTemplate() {
             const dialog = this.state.ui.localDataUploadDialog;
             const type = dialog?.assetTemplateType || "小型机";
-            this.pushToast("下载模板", "已下载“" + type + "”入库模板示例。", "success");
+            this.downloadOperationLocalDataTemplate(type);
+          }
+
+          getOperationTemplateExample(column, page) {
+            const formatByKey = {
+              assetCode: "示例：M2T-ISW-U2-01",
+              name: "示例：01# 动环接入交换机",
+              assetStatus: "示例：在用 / 空闲",
+              assetSummary: "示例：已入库 / 已上架 / 已部署",
+              assetCategory: "示例：管理分类>弱电系统>网络设备>动环接入交换机",
+              assetLocation: "示例：1号楼-2层-弱电间",
+              uHeight: "示例：2；填写正整数",
+              powerOnTime: "示例：2026-06-02 09:15:00；格式 YYYY-MM-DD HH:mm:ss",
+              portCount: "示例：24；填写正整数",
+              serialCode: "示例：001",
+              description: "示例：设备安装说明或备注",
+              warehouseLocation: "示例：2号楼-B1层-备件库A区",
+              shelfLocation: "示例：1号楼-7层-D7机房",
+              deployLocation: "示例：1号楼-1层-低压配电室A区",
+              newLocation: "示例：2号楼-4层-网络机房",
+              returnLocation: "示例：2号楼-B1层-备件库A区",
+              offShelfLocation: "示例：2号楼-B1层-备件库B区",
+              transferWarehouse: "示例：2号楼-B1层-备件库C区",
+              operationStartU: "示例：18；填写机柜起始U位"
+            };
+            return formatByKey[column.key] || "按在线表格字段要求填写。";
+          }
+
+          buildOperationTemplateWorkbook(page, templateType = "") {
+            const escapeCell = (value) => escapeHtml(value ?? "");
+            const columns = page.sheetColumns || [];
+            const sampleRow = Object.fromEntries(columns.map((column) => [column.key, ""]));
+            columns.forEach((column) => {
+              const value = page.sheetValues?.[column.key] || page.sheetRows?.[0]?.[column.key] || "";
+              sampleRow[column.key] = value === "-" ? "" : value;
+            });
+            const fieldCodeMap = {
+              assetCode: "asset_num",
+              name: "name",
+              assetStatus: "asset_status",
+              assetSummary: "asset_flow_status",
+              assetCategory: "manage_type",
+              assetLocation: "location",
+              uHeight: "u",
+              powerOnTime: "power_on_time",
+              portCount: "port_count",
+              serialCode: "serial_num",
+              description: "description",
+              warehouseLocation: "warehouse_location",
+              shelfLocation: "location",
+              deployLocation: "location",
+              newLocation: "new_location",
+              returnLocation: "return_location",
+              offShelfLocation: "off_shelf_location",
+              transferWarehouse: "transfer_warehouse",
+              operationStartU: "startU"
+            };
+            const title = [LIST_PAGE_META[page.viewId]?.title || "台账", page.title || page.action, templateType].filter(Boolean).join("-");
+            const colCount = Math.max(1, columns.length);
+            const fillTips = [
+              "说明：1.所有红色带*号为必填项目，若一行内前两个必填项缺失则视作该行无记录，请注意填写。",
+              "2.位置类字段请填写完整路径，需精确到可上架/部署/入库的具体位置。",
+              "3.导入资产模板格式不能随便修改；字段编码行和字段名称行请勿删除或调整顺序。",
+              "4.字段填写格式示例：" + columns.map((column) => column.label + "（" + this.getOperationTemplateExample(column, page).replace(/^示例：/, "") + "）").join("；")
+            ].join("       ");
+            const codeHeader = columns.map((column) => `<th class="code-header">${escapeCell(fieldCodeMap[column.key] || column.key)}</th>`).join("");
+            const importHeader = columns.map((column) => `<th class="field-header">${column.required ? `<span class="required">*</span>` : ""}${escapeCell(column.required && column.label === "名称" ? "资产名称" : column.label)}</th>`).join("");
+            const blankRows = Array.from({ length: 15 }, () => `
+              <tr>
+                ${columns.map(() => "<td></td>").join("")}
+              </tr>
+            `).join("");
+            const exampleRows = (Array.isArray(page.sheetRows) && page.sheetRows.length ? page.sheetRows.slice(0, 3) : [sampleRow]).map((row) => `
+              <tr>
+                ${columns.map((column) => `<td>${escapeCell((row?.[column.key] || sampleRow[column.key] || "") === "-" ? "" : (row?.[column.key] || sampleRow[column.key] || ""))}</td>`).join("")}
+              </tr>
+            `).join("");
+            return `
+              <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                  <meta charset="UTF-8" />
+                  <!--[if gte mso 9]>
+                  <xml>
+                    <x:ExcelWorkbook>
+                      <x:ExcelWorksheets>
+                        <x:ExcelWorksheet>
+                          <x:Name>导入模板</x:Name>
+                          <x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+                        </x:ExcelWorksheet>
+                        <x:ExcelWorksheet>
+                          <x:Name>导入示例</x:Name>
+                          <x:WorksheetOptions></x:WorksheetOptions>
+                        </x:ExcelWorksheet>
+                      </x:ExcelWorksheets>
+                    </x:ExcelWorkbook>
+                  </xml>
+                  <![endif]-->
+                  <style>
+                    table { border-collapse: collapse; font-family: Arial, "Microsoft YaHei", sans-serif; font-size: 12px; }
+                    th, td { border: 1px solid #bfbfbf; padding: 8px 10px; mso-number-format:"\\@"; vertical-align: middle; width: 150px; height: 30px; }
+                    th { font-weight: 700; text-align: center; white-space: normal; }
+                    .required { color: #ff0000; }
+                    .tips { border: 1px solid #bfbfbf; height: 64px; white-space: normal; text-align: left; vertical-align: top; color: #1f3349; }
+                    .sheet-title { height: 44px; font-weight: 700; font-size: 16px; text-align: center; vertical-align: middle; }
+                    .code-header { background: #ffffff; color: #000000; font-size: 12px; }
+                    .field-header { background: #c0c0c0; color: #000000; font-size: 12px; font-weight: 400; }
+                    .example-note { border: 1px solid #bfbfbf; height: 34px; text-align: left; color: #1f3349; }
+                  </style>
+                </head>
+                <body>
+                  <div class="sheet1">
+                  <table>
+                    <tr><td class="tips" colspan="${colCount}">${escapeCell(fillTips)}</td></tr>
+                    <tr><td class="sheet-title" colspan="${colCount}">${escapeCell(title)}</td></tr>
+                    <tr>${codeHeader}</tr>
+                    <tr>${importHeader}</tr>
+                    ${blankRows}
+                  </table>
+                  </div>
+                  <br style="mso-special-character:line-break;page-break-before:always;" />
+                  <div class="sheet2">
+                  <table>
+                    <tr><td class="example-note" colspan="${colCount}">1.${escapeCell(title)}导入示例，位置类字段需填写完整路径，示例如下。</td></tr>
+                    <tr><td class="sheet-title" colspan="${colCount}">${escapeCell(title)}</td></tr>
+                    <tr>${codeHeader}</tr>
+                    <tr>${importHeader}</tr>
+                    ${exampleRows}
+                    <tr><td class="example-note" colspan="${colCount}">2.示例数据仅用于说明字段填写格式，正式导入时请替换为真实资产数据。</td></tr>
+                    <tr><td class="sheet-title" colspan="${colCount}">${escapeCell(title)}补充示例</td></tr>
+                    <tr>${codeHeader}</tr>
+                    <tr>${importHeader}</tr>
+                    ${exampleRows}
+                  </table>
+                  </div>
+                </body>
+              </html>
+            `;
+          }
+
+          downloadOperationLocalDataTemplate(templateType = "") {
+            const page = this.getOperationPageData();
+            if (!page) {
+              this.pushToast("下载失败", "当前页面无法识别在线表字段。", "warning");
+              return;
+            }
+            const workbookText = "\uFEFF" + this.buildOperationTemplateWorkbook(page, templateType);
+            const now = new Date();
+            const stamp = now.getFullYear()
+              + pad(now.getMonth() + 1)
+              + pad(now.getDate())
+              + "_"
+              + pad(now.getHours())
+              + pad(now.getMinutes())
+              + pad(now.getSeconds());
+            const fileName = [LIST_PAGE_META[page.viewId]?.title || "台账", page.title || page.action, "上传本地数据模板", stamp].filter(Boolean).join("_") + ".xls";
+            try {
+              const blob = new Blob([workbookText], { type: "application/vnd.ms-excel;charset=utf-8;" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 0);
+              this.pushToast("模板已下载", "已导出与在线表字段一致的 Excel 模板，并包含字段说明。", "success");
+            } catch (error) {
+              this.pushToast("下载失败", "浏览器拒绝了模板下载请求。", "warning");
+            }
           }
 
           submitLocalDataUpload() {
@@ -14345,8 +15810,8 @@
 
           getVersionRequirementGoal(version) {
             const goals = {
-              "v1.1": "电子表格性能与主从设备展示范围",
-              "v1.2": "电子表格、资产台账、资产树、资产概览、资产详情与空间视图范围"
+              "v1.1": "支持主从设备及电子表格优化",
+              "v1.2": "易用性需求优化"
             };
             return goals[version] || "版本需求规格范围";
           }
@@ -14490,11 +15955,13 @@
                 </div>
                 <div class="tabs">
                   ${detail.tabs.map((tab) => {
-                    const demandAttrs = tab.id === "relation"
-                      ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
-                      : tab.id === "history"
-                        ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4112" data-demand-title="资产详情履历展示规则" data-demand-text="需求来源：V3R5-4112。||交互目的：在资产详情中按时间轴展示资产履历，便于追溯属性变更、流程状态变化和关系变化。||展示规则：履历页签展示近7日、近10日、近15日筛选；每条履历包含时间、操作类型、操作人和字段变更明细，字段明细需展示旧值与新值；页面内不得直接展示系统字段英文名或编码字段，需转译为中文业务字段名称。||状态限制：无履历数据时展示空态，不影响基本信息、位置信息、关系拓扑和包含设备页签。||异常判断：字段名称缺失、旧值或新值为空、履历来源异常时，应使用“空”或“-”兜底，不应导致页面空白或时间轴断裂。"'
-                        : "";
+                    const demandAttrs = tab.id === "position" && detail.viewId === VIEW_IDS.STATION_FACILITY
+                      ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施详情位置信息页签不展示机柜/U位图，改为展示所属房间、当前设备、同房间设备和位置补充说明。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同房间设备支持搜索并可点击名称查看详情；位置补充说明支持编辑保存。||状态限制：仅作用于场地设施详情，机柜和IT设备仍按各自位置模型展示。"'
+                      : tab.id === "relation"
+                        ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
+                        : tab.id === "history"
+                          ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4112" data-demand-title="资产详情履历展示规则" data-demand-text="需求来源：V3R5-4112。||交互目的：在资产详情中按时间轴展示资产履历，便于追溯属性变更、流程状态变化和关系变化。||展示规则：履历页签展示近7日、近10日、近15日筛选；每条履历包含时间、操作类型、操作人和字段变更明细，字段明细需展示旧值与新值；页面内不得直接展示系统字段英文名或编码字段，需转译为中文业务字段名称。||状态限制：无履历数据时展示空态，不影响基本信息、位置信息、关系拓扑和包含设备页签。||异常判断：字段名称缺失、旧值或新值为空、履历来源异常时，应使用“空”或“-”兜底，不应导致页面空白或时间轴断裂。"'
+                          : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
                   `;
@@ -14537,7 +16004,9 @@
                     </label>
                     <div class="operation-toolbar-actions">
                       ${page.toolbarActions.map((item) => {
-                        const demandAttrs = "";
+                        const demandAttrs = item.label === "上传本地数据"
+                          ? ` data-demand-version="v1.2" data-demand-req-id="V3R5-4422" data-demand-title="上传本地数据字段一致" data-demand-text="需求来源：V3R5-4422。||交互目的：上传本地数据前可导出与当前在线表格字段完全一致的 Excel 模板，降低离线填报字段错漏。||展示规则：导出的 Excel 模板字段顺序、字段名称、隐藏字段、必填标识需与当前在线表格保持一致；模板同时提供字段说明，包含是否必填、填写格式和示例说明。||状态限制：模板按当前台账类型和当前操作动作生成，如入库、上架、部署、调拨等动作字段不同，应导出对应动作下的字段范围。||异常判断：当前页面无法识别在线表字段、浏览器拒绝下载或模板生成失败时，应提示下载失败，不影响继续在线填写。"`
+                          : "";
                         return `
                         <button class="btn ${item.tone === "primary" ? "btn-primary" : item.tone === "light" ? "btn-light" : ""}" type="button" data-action="operation-tool" data-label="${escapeHtml(item.label)}"${demandAttrs}>
                           ${escapeHtml(item.label)}
@@ -14623,6 +16092,56 @@
           }
 
           renderAssetDetailLocation(detail) {
+            if (detail.viewId === VIEW_IDS.STATION_FACILITY && detail.stationLocationCard) {
+              const location = detail.stationLocationCard;
+              return `
+                <div class="asset-tab-panel">
+                  <div class="asset-location-breadcrumb">${escapeHtml(detail.breadcrumb)}</div>
+                  <div class="asset-room-location-layout">
+                    <section class="asset-room-card asset-room-device-card">
+                      <div class="asset-room-card-title">当前设备</div>
+                      <div class="asset-room-device-name">${escapeHtml(location.current.name)}</div>
+                      <div class="asset-room-device-code">资产编号：${escapeHtml(location.current.code)}</div>
+                      <div class="asset-room-device-sub">所属${escapeHtml(location.roomType)}：${escapeHtml(location.current.room)}</div>
+                      <div class="asset-room-device-meta">
+                        <span class="asset-room-tag">${escapeHtml(location.current.status)}</span>
+                        <span class="asset-room-tag">${escapeHtml(location.current.category)}</span>
+                      </div>
+                    </section>
+                    <section class="asset-room-card">
+                      <div class="asset-room-card-title">同房间设备</div>
+                      <input
+                        class="asset-room-search"
+                        type="search"
+                        placeholder="搜索名称/编号/类型"
+                        aria-label="搜索同房间设备"
+                        oninput="this.closest('.asset-room-card').querySelectorAll('.asset-room-same-row').forEach(function(row){row.hidden = !row.textContent.includes(this.value.trim());}, this)"
+                      />
+                      <div class="asset-room-same-list">
+                        ${location.peers.map((item) => `
+                          <div class="asset-room-same-row">
+                            ${item.id ? `
+                              <button class="asset-room-peer-link" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.STATION_FACILITY)}" data-id="${escapeHtml(item.id)}" data-label="查看" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>
+                            ` : `
+                              <button class="asset-room-peer-link" type="button" data-action="top-action" data-label="查看同房间设备" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>
+                            `}
+                            <span title="${escapeHtml(item.code)}">${escapeHtml(item.code)}</span>
+                            <span>${escapeHtml(item.category)} · ${escapeHtml(item.status)}</span>
+                          </div>
+                        `).join("")}
+                      </div>
+                    </section>
+                  </div>
+                  <div class="asset-room-location-note">
+                    <div class="asset-room-note-head">
+                      <strong>位置补充说明</strong>
+                      <button class="btn btn-light" type="button" onclick="var note=this.closest('.asset-room-location-note');var input=note.querySelector('.asset-room-note-input');var editing=note.classList.toggle('is-editing');input.readOnly=!editing;this.textContent=editing?'保存':'编辑';if(editing){input.focus();}">编辑</button>
+                    </div>
+                    <input class="asset-room-note-input" type="text" aria-label="编辑位置补充说明" value="${escapeHtml(location.note)}" readonly />
+                  </div>
+                </div>
+              `;
+            }
             return `
               <div class="asset-tab-panel">
                 <div class="asset-location-breadcrumb">${escapeHtml(detail.breadcrumb)}</div>
@@ -14884,7 +16403,7 @@
           }
 
           renderAssetOverviewPage(state) {
-            const overviewState = state?.ui?.assetOverview || { scope: "数据楼", tab: "概览" };
+            const overviewState = state?.ui?.assetOverview || { scope: "数据楼", tab: "概览", managing: false };
             const activeScope = overviewState.scope || "数据楼";
             const activeTab = overviewState.tab || "概览";
             const scopeDelta = { "全国": 10, "深圳": 6, "南山区": 3, "数据楼": 0 }[activeScope] || 0;
@@ -14962,6 +16481,111 @@
               ["配电柜", 54],
               ["PDU", 48]
             ];
+            if (overviewState.managing) {
+              const managerCharts = [
+                "资产位置统计",
+                "资产状态统计",
+                "资产分类Top10",
+                "资产类型统计",
+                "资产厂商统计",
+                "近30天资产增量统计",
+                "近30天资产总数统计",
+                "资产到期数"
+              ];
+              const treeRows = [
+                { label: "工程", active: true, icon: "home" },
+                { label: "0_231:sfj地区", child: true },
+                { label: "0_205:gll", child: true },
+                { label: "0_230:sfj园区", child: true },
+                { label: "0_78:smd", child: true },
+                { label: "0_1:YM", child: true },
+                { label: "0_208:lwt", child: true }
+              ];
+              return `
+                <div class="page-surface asset-board-config-page">
+                  <div class="asset-board-config-head">
+                    <div class="asset-board-config-title">
+                      <strong>概览配置</strong>
+                      <span>请选择概览展示内容，或调整合适的卡片位置</span>
+                    </div>
+                    <button class="asset-board-back" type="button" data-action="asset-overview-board-back">返回</button>
+                  </div>
+                  <div class="asset-board-config-main">
+                    <aside class="asset-board-side">
+                      <div class="asset-board-tree">
+                        ${treeRows.map((row) => `
+                          <div class="asset-board-tree-row ${row.active ? "is-active" : ""} ${row.child ? "is-child" : ""}">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                              ${row.icon === "home"
+                                ? `<path d="M3 7.2L8 3l5 4.2V13H9.7V9.6H6.3V13H3V7.2z" fill="currentColor"></path>`
+                                : `<path d="M6 4l4 4-4 4V4z" fill="currentColor"></path>`}
+                            </svg>
+                            <span>${escapeHtml(row.label)}</span>
+                          </div>
+                        `).join("")}
+                      </div>
+                      <div class="asset-board-checks">
+                        ${managerCharts.map((name, index) => `
+                          <label>
+                            <input type="checkbox" ${index < 2 ? "checked" : ""} />
+                            <span>${escapeHtml(name)}</span>
+                          </label>
+                        `).join("")}
+                      </div>
+                    </aside>
+                    <section class="asset-board-stage">
+                      <div class="asset-board-tabsbar">
+                        <div class="asset-board-tabs">
+                          ${["资产概览", "IT设备", "机柜", "场地设施", "备件"].map((tab, index) => `
+                            <button class="asset-board-tab ${index === 0 ? "is-active" : ""}" type="button" data-action="asset-overview-tab" data-tab="${escapeHtml(tab === "IT设备" ? "IT设施" : tab)}">
+                              <span class="drag-dot">⋮⋮</span>
+                              <span>${escapeHtml(tab)}</span>
+                            </button>
+                          `).join("")}
+                        </div>
+                        <div class="asset-board-actions">
+                          <button class="btn-pill" type="button" data-action="top-action" data-label="页面管理">页面管理</button>
+                          <button class="btn-pill" type="button" data-action="top-action" data-label="重置默认">重置默认</button>
+                          <button class="btn-pill" type="button" data-action="top-action" data-label="添加">添加</button>
+                          <button class="btn-pill is-primary" type="button" data-action="asset-overview-board-save">保存</button>
+                        </div>
+                      </div>
+                      <div class="asset-board-canvas">
+                        <div class="asset-board-widget-grid">
+                          <section class="asset-board-widget">
+                            <div class="asset-board-widget-title">
+                              <span>资产位置统计</span>
+                              <span class="drag-dot">☰</span>
+                            </div>
+                            <div class="overview-chart">${renderBars([48, 2, 10, 1, 1, 78], ["YM", "gll", "lwt", "sfj园区", "sfj地区", "smd"], "资产位置统计", VIEW_IDS.IT_FACILITY)}</div>
+                            <span class="asset-board-widget-resize"></span>
+                          </section>
+                          <section class="asset-board-widget">
+                            <div class="asset-board-widget-title">
+                              <span>资产状态统计</span>
+                              <span class="drag-dot">☰</span>
+                            </div>
+                            <div class="overview-donut-wrap">
+                              <button class="overview-donut overview-drilldown" type="button" data-action="asset-overview-drilldown" data-label="资产状态统计 · 在用/空闲" data-view="${VIEW_IDS.IT_FACILITY}" aria-label="查看资产状态统计资产列表">
+                                ${renderEchartsTooltip("资产状态统计", [
+                                  { name: "在用", value: "91", percent: "", color: "#5aaeea" },
+                                  { name: "空闲", value: "50", percent: "", color: "#83dfb0" }
+                                ])}
+                              </button>
+                              <div class="overview-legend">
+                                <span>在用：91</span>
+                                <span>空闲：50</span>
+                              </div>
+                            </div>
+                            <span class="asset-board-widget-resize"></span>
+                          </section>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              `;
+            }
             return `
               <div class="page-surface asset-overview-page" data-demand-version="v1.2" data-demand-req-id="V3R5-4123,V3R5-4117,V3R5-4113" data-demand-title="资产概览看板样式" data-demand-text="需求来源：V3R5-4123。||交互目的：将资产概览页面调整为与容量能效一致的看板样式，统一卡片、图表和看板管理入口。||展示规则：页面包含资产数量、状态、分类 Top10、趋势和统计卡片等概览信息。||状态限制：当前为原型态静态数据，用于表达页面结构和视觉效果。||异常判断：图表数据为空时应展示空态，筛选条件无结果时应提示暂无数据。" data-demand-title-v12="资产概览应用层级与数据下钻" data-demand-text-v12="需求来源：V3R5-4117、V3R5-4113。||交互目的：支持资产概览按层级应用，并从图表区域进入对应数据范围。||点击后行为：点击柱子、排行条、环形图或趋势图日期节点时，弹窗展示对应资产列表；看板管理入口用于维护展示配置。||状态限制：不同层级应只展示当前层级权限内数据。||异常判断：无权限、层级为空或下钻目标不存在时，应保留当前页面并提示原因。">
                 <div class="asset-overview-nav">
@@ -14971,7 +16595,7 @@
                   <div class="asset-overview-tabs" aria-label="资产概览层级">
                     ${["概览", "IT设施", "场地设施", "机柜", "备件"].map((tab) => `<button type="button" class="${tab === activeTab ? "is-active" : ""}" data-action="asset-overview-tab" data-tab="${escapeHtml(tab)}">${escapeHtml(tab)}</button>`).join("")}
                   </div>
-                  <button class="asset-overview-filter" type="button" data-action="top-action" data-label="看板管理">看板管理</button>
+                  <button class="asset-overview-filter" type="button" data-action="asset-overview-board-open">看板管理</button>
                 </div>
                 <div class="asset-overview-grid">
                   <section class="overview-card">
@@ -15092,7 +16716,7 @@
                       <form class="search-form" data-view="${escapeHtml(viewId)}">
                         <input class="search-input" name="keyword" placeholder="${escapeHtml(meta.placeholder)}" value="${escapeHtml(state.ui.filters[viewId].keyword)}" />
                         <button class="btn btn-primary" type="submit">查询</button>
-                        ${meta.secondaryLabel ? `<button class="btn btn-light" type="button" data-action="secondary-action" data-label="${escapeHtml(meta.secondaryLabel)}">${escapeHtml(meta.secondaryLabel)}</button>` : ""}
+                        ${meta.secondaryLabel ? `<button class="btn btn-light" type="button" data-action="open-advanced-search" data-view="${escapeHtml(viewId)}" data-demand-version="v1.2" data-demand-req-id="V3R5-4418" data-demand-title="高级搜索支持厂商和型号条件" data-demand-text="需求来源：V3R5-4418。||交互目的：点击高级搜索后打开右侧高级搜索面板，默认提供厂商、型号作为搜索条件，便于按设备来源和型号快速筛选台账资产。||展示规则：厂商和型号字段默认展示在高级搜索面板中，字段使用下拉选择，选项来自当前台账模拟数据去重结果；查询后按“满足以下全部条件”组合刷新列表。||状态限制：取消关闭面板不改变列表；重置清空高级条件并恢复默认条件项。||异常判断：当前台账无厂商或型号数据时，下拉保留请选择，不应影响其他条件查询。">${escapeHtml(meta.secondaryLabel)}</button>` : ""}
                       </form>
                     `}
                   </div>
@@ -15276,7 +16900,7 @@
           }
 
           getMultiSelectMoreDemandAttrs() {
-            return ` data-demand-version="v1.2" data-demand-req-id="V3R5-4186" data-demand-title="多选更多操作去除入库" data-demand-text="需求来源：V3R5-4186。||交互目的：优化资产台账多选后的批量操作入口，避免在“更多”下拉中重复出现入库动作。||展示规则：多选资产后，“更多”下拉仅展示变动、下架、纸质标签打印等扩展操作，不展示“入库”。||状态限制：顶部独立的“批量入库”入口仍按原有业务规则保留；本规则仅作用于多选后的“更多”下拉菜单。||异常判断：若资产状态不允许执行某项批量操作，应在对应操作触发时提示原因，不应通过恢复“入库”菜单项处理。"`
+            return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4186" data-demand-title="多选更多操作去除入库" data-demand-text="需求来源：V3R5-4186。||交互目的：优化资产台账多选后的批量操作入口，避免在“更多”下拉中重复出现入库动作。||展示规则：多选资产后，“更多”下拉仅展示变动、下架、纸质标签打印等扩展操作，不展示“入库”。||状态限制：顶部独立的“批量入库”入口仍按原有业务规则保留；本规则仅作用于多选后的“更多”下拉菜单。||异常判断：若资产状态不允许执行某项批量操作，应在对应操作触发时提示原因，不应通过恢复“入库”菜单项处理。"`
           }
 
           getBatchSelectionActions(viewId) {
@@ -16685,6 +18309,12 @@
             if (state.ui.assetOverviewDialog) {
               return this.renderAssetOverviewDialog(state.ui.assetOverviewDialog);
             }
+            if (state.ui.assetBoardSaveDialog) {
+              return this.renderAssetBoardSaveDialog(state.ui.assetBoardSaveDialog);
+            }
+            if (state.ui.requirementDescriptionDialog) {
+              return this.renderRequirementDescriptionDialog(state.ui.requirementDescriptionDialog);
+            }
             if (state.ui.relationDialog) {
               return this.renderRelationDialog(state.ui.relationDialog);
             }
@@ -16699,6 +18329,9 @@
             }
             if (state.ui.masterSlaveTemplateDialog) {
               return this.renderMasterSlaveTemplateDialog(state.ui.masterSlaveTemplateDialog);
+            }
+            if (state.ui.advancedSearch) {
+              return this.renderAdvancedSearchPanel(state.ui.advancedSearch);
             }
             const drawer = state.ui.drawer;
             if (!drawer) {
@@ -16734,6 +18367,94 @@
                 <div class="drawer-footer">
                   <button class="btn" data-action="close-drawer">关闭</button>
                   <button class="btn btn-primary" data-action="drawer-action">${drawer.intent === "init" ? "执行初始化" : "确认操作"}</button>
+                </div>
+              </aside>
+            `;
+          }
+
+          renderAdvancedSearchPanel(dialog) {
+            const viewId = dialog.viewId || VIEW_IDS.IT_FACILITY;
+            const fields = dialog.fields || {};
+            const rows = this.store.getListRows(viewId);
+            const categoryOptions = [...new Set(rows.map((row) => row.assetCategory).filter(Boolean))].slice(0, 24);
+            const locationOptions = [...new Set(rows.map((row) => row.assetLocation).filter(Boolean))].slice(0, 24);
+            const vendorOptions = [...new Set(rows.map((row) => row.vendor).filter(Boolean))].slice(0, 24);
+            const modelOptions = [...new Set(rows.map((row) => row.model || String(row.assetCategory || "").split(">").slice(-1)[0]).filter(Boolean))].slice(0, 24);
+            const fieldOptions = this.store.getAdvancedSearchFieldOptions(viewId);
+            const activeFields = Array.isArray(dialog.activeFields) && dialog.activeFields.length
+              ? dialog.activeFields
+              : ["assetCode", "assetCategory", "assetLocation", "vendor", "model"];
+            const optionList = (options, selected, placeholder) => `
+              <option value="">${escapeHtml(placeholder)}</option>
+              ${options.map((option) => `<option value="${escapeHtml(option)}"${option === selected ? " selected" : ""}>${escapeHtml(option)}</option>`).join("")}
+            `;
+            const renderSearchControl = (field) => {
+              if (field === "assetCategory") {
+                return `<select data-role="advanced-search-field" data-field="${escapeHtml(field)}">${optionList(categoryOptions, fields[field] || "", "请选择")}</select>`;
+              }
+              if (field === "assetLocation") {
+                return `<select data-role="advanced-search-field" data-field="${escapeHtml(field)}">${optionList(locationOptions, fields[field] || "", "请选择")}</select>`;
+              }
+              if (field === "assetStatus") {
+                return `<select data-role="advanced-search-field" data-field="${escapeHtml(field)}">${optionList(["在用", "空闲"], fields[field] || "", "请选择")}</select>`;
+              }
+              if (field === "vendor") {
+                return `<select data-role="advanced-search-field" data-field="${escapeHtml(field)}">${optionList(vendorOptions, fields[field] || "", "请选择")}</select>`;
+              }
+              if (field === "model") {
+                return `<select data-role="advanced-search-field" data-field="${escapeHtml(field)}">${optionList(modelOptions, fields[field] || "", "请选择")}</select>`;
+              }
+              return `<input type="text" data-role="advanced-search-field" data-field="${escapeHtml(field)}" value="${escapeHtml(fields[field] || "")}" />`;
+            };
+            const renderSearchField = (field) => {
+              const meta = fieldOptions.find((item) => item.key === field);
+              if (!meta) {
+                return "";
+              }
+              const removable = !["assetCode", "assetCategory", "assetLocation", "vendor", "model"].includes(field);
+              const demandAttrs = field === "vendor" || field === "model"
+                ? ` data-demand-version="v1.2" data-demand-req-id="V3R5-4418" data-demand-title="高级搜索支持厂商和型号条件" data-demand-text="需求来源：V3R5-4418。||交互目的：高级搜索中默认提供厂商、型号作为查询条件，便于按设备来源和型号快速筛选台账资产。||展示规则：厂商和型号默认展示在高级搜索面板中，字段使用下拉选择，选项来自当前台账模拟数据去重结果。||状态限制：该条件与资产编号、资产分类、资产位置等条件按“满足以下全部条件”组合查询。||异常判断：当前台账无厂商或型号数据时，下拉保留请选择，不应影响其他条件查询。"`
+                : "";
+              return `
+                <label class="advanced-search-field ${removable ? "is-removable" : ""}"${demandAttrs}>
+                  <span>${escapeHtml(meta.label)}</span>
+                  ${renderSearchControl(field)}
+                  ${removable ? `<button class="advanced-search-remove" type="button" data-action="remove-advanced-search-condition" data-field="${escapeHtml(field)}" aria-label="清除${escapeHtml(meta.label)}条件">−</button>` : ""}
+                </label>
+              `;
+            };
+            return `
+              <div class="advanced-search-backdrop" data-action="close-advanced-search"></div>
+              <aside class="advanced-search-panel" role="dialog" aria-modal="true" aria-label="高级搜索">
+                <header class="advanced-search-head">
+                  <h3 class="advanced-search-title">高级搜索</h3>
+                  <div class="advanced-search-actions">
+                    <button class="btn btn-primary" type="button" data-action="save-advanced-search-shortcut">保存为快捷搜索</button>
+                    <button class="btn btn-primary" type="button" data-action="apply-advanced-search">查询</button>
+                    <button class="btn" type="button" data-action="reset-advanced-search">重置</button>
+                    <button class="btn" type="button" data-action="close-advanced-search">取消</button>
+                  </div>
+                </header>
+                <div class="advanced-search-body">
+                  <label class="advanced-search-mode">
+                    <input type="radio" checked />
+                    <span>满足以下全部条件</span>
+                  </label>
+                  ${activeFields.map((field) => renderSearchField(field)).join("")}
+                  <div class="advanced-search-add-wrap">
+                    <button class="advanced-search-add" type="button" data-action="toggle-advanced-search-field-menu">
+                      <span>+</span>
+                      添加筛选条件
+                    </button>
+                    ${dialog.fieldMenuOpen ? `
+                      <div class="advanced-search-field-menu">
+                        ${fieldOptions.map((option) => {
+                          const active = activeFields.includes(option.key);
+                          return `<button class="advanced-search-field-option ${active ? "is-active" : ""}" type="button" data-action="select-advanced-search-field" data-field="${escapeHtml(option.key)}"${active ? " disabled" : ""}>${escapeHtml(option.label)}</button>`;
+                        }).join("")}
+                      </div>
+                    ` : ""}
+                  </div>
                 </div>
               </aside>
             `;
@@ -16797,6 +18518,137 @@
                   </div>
                   <div class="relation-modal-actions">
                     <button class="btn btn-primary" type="button" data-action="close-asset-overview-dialog">确定</button>
+                  </div>
+                </footer>
+              </section>
+            `;
+          }
+
+          renderRequirementDescriptionDialog(dialog) {
+            const requirement = VERSION_REQUIREMENTS.find((item) => item.id === dialog.reqId);
+            if (!requirement) {
+              return "";
+            }
+            const detailRows = Array.isArray(requirement.detail) && requirement.detail.length
+              ? requirement.detail
+              : [requirement.description || "暂无需求说明。"];
+            return `
+              <div class="relation-modal-backdrop" data-action="close-requirement-description"></div>
+              <section class="relation-modal requirement-description-dialog" role="dialog" aria-modal="true" aria-labelledby="requirementDescriptionTitle">
+                <header class="relation-modal-head">
+                  <div>
+                    <div class="relation-modal-title" id="requirementDescriptionTitle">${escapeHtml(requirement.ticketId || requirement.id)} · ${escapeHtml(requirement.title || requirement.description)}</div>
+                    <div class="relation-modal-subtitle">${escapeHtml(requirement.version || "")} · ${escapeHtml(requirement.scope || "")} · ${escapeHtml(requirement.targetLabel || "")} · ${escapeHtml(requirement.status || "")}</div>
+                  </div>
+                  <button class="relation-modal-close" type="button" data-action="close-requirement-description" aria-label="关闭">×</button>
+                </header>
+                <div class="relation-modal-body">
+                  <div class="requirement-description-content">
+                    ${detailRows.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}
+                  </div>
+                </div>
+                <footer class="relation-modal-footer">
+                  <div></div>
+                  <div class="relation-modal-actions">
+                    <button class="btn btn-primary" type="button" data-action="close-requirement-description">知道了</button>
+                  </div>
+                </footer>
+              </section>
+            `;
+          }
+
+          renderAssetBoardSaveDialog(dialog) {
+            const mode = dialog.mode || "current";
+            const nodes = dialog.nodes || {};
+            const currentNodeType = dialog.currentNodeType || "园区";
+            const expandedNodes = dialog.expandedNodes || {};
+            const typeIconMap = {
+              "园区": "园",
+              "楼栋": "楼",
+              "楼层": "层",
+              "房间": "房",
+              "机柜列": "列"
+            };
+            const buildTree = () => {
+              const root = [];
+              const lookup = new Map();
+              Object.keys(nodes).forEach((nodePath) => {
+                const parts = nodePath.split(" / ");
+                let parentPath = "";
+                let siblings = root;
+                parts.forEach((part, index) => {
+                  const path = parentPath ? parentPath + " / " + part : part;
+                  let item = lookup.get(path);
+                  if (!item) {
+                    item = { path, label: part, depth: index, children: [] };
+                    lookup.set(path, item);
+                    siblings.push(item);
+                  }
+                  parentPath = path;
+                  siblings = item.children;
+                });
+              });
+              return root;
+            };
+            const renderNode = (node) => {
+              const hasChildren = node.children.length > 0;
+              const expanded = !hasChildren || expandedNodes[node.path];
+              const type = ["园区", "楼栋", "楼层", "房间", "机柜列"][node.depth] || "空间";
+              return `
+                <li>
+                  <div class="asset-board-save-tree-row" style="padding-left:${6 + node.depth * 18}px;">
+                    ${hasChildren
+                      ? `<button class="asset-board-save-tree-toggle ${expanded ? "is-open" : ""}" type="button" data-action="toggle-asset-board-save-tree-node" data-node="${escapeHtml(node.path)}" aria-label="${expanded ? "收起" : "展开"}${escapeHtml(node.label)}"></button>`
+                      : '<span class="asset-board-save-tree-toggle-spacer" aria-hidden="true"></span>'}
+                    <input type="checkbox" data-role="asset-board-save-node" data-node="${escapeHtml(node.path)}"${nodes[node.path] ? " checked" : ""} />
+                    <span class="asset-board-save-type-icon" title="${escapeHtml(type)}">${escapeHtml(typeIconMap[type] || "空")}</span>
+                    <span>${escapeHtml(node.label)}</span>
+                  </div>
+                  ${hasChildren && expanded ? `<ul>${node.children.map(renderNode).join("")}</ul>` : ""}
+                </li>
+              `;
+            };
+            const option = (value, title, desc) => `
+              <label class="asset-board-save-option">
+                <input type="radio" name="assetBoardSaveMode" data-role="asset-board-save-mode" value="${escapeHtml(value)}"${mode === value ? " checked" : ""} />
+                <span>
+                  <strong>${escapeHtml(title)}</strong>
+                  <span>${escapeHtml(desc)}</span>
+                </span>
+              </label>
+            `;
+            return `
+              <div class="relation-modal-backdrop" data-action="close-asset-board-save-dialog"></div>
+              <section class="relation-modal asset-board-save-dialog" role="dialog" aria-modal="true" aria-labelledby="assetBoardSaveTitle">
+                <header class="relation-modal-head">
+                  <div>
+                    <div class="relation-modal-title" id="assetBoardSaveTitle">保存看板配置</div>
+                    <div class="relation-modal-subtitle">请选择本次配置的应用范围，当前看板数据不变。</div>
+                  </div>
+                  <button class="relation-modal-close" type="button" data-action="close-asset-board-save-dialog" aria-label="关闭">×</button>
+                </header>
+                <div class="relation-modal-body">
+                  <div class="asset-board-save-options">
+                    ${option("current", "仅修改当前节点", "只保存到当前选中的空间节点，不影响其他节点。")}
+                    ${option("sameType", "应用至同类型节点", "当前空间节点类型为“" + currentNodeType + "”，保存后同步应用到同类型节点。")}
+                    ${option("custom", "自定义勾选应用的节点", "手动勾选需要应用本次看板配置的节点。")}
+                  </div>
+                  ${mode === "custom" ? `
+                    <div class="asset-board-save-custom">
+                      <strong>选择应用空间节点</strong>
+                      <div class="asset-board-save-tree">
+                        <ul>
+                          ${buildTree().map(renderNode).join("")}
+                        </ul>
+                      </div>
+                    </div>
+                  ` : ""}
+                </div>
+                <footer class="relation-modal-footer">
+                  <div></div>
+                  <div class="relation-modal-actions">
+                    <button class="btn" type="button" data-action="close-asset-board-save-dialog">取消</button>
+                    <button class="btn btn-primary" type="button" data-action="confirm-asset-board-save">确定保存</button>
                   </div>
                 </footer>
               </section>
@@ -17656,6 +19508,10 @@
                 this.store.closeAssetOverviewDialog();
                 return;
               }
+              if (action === "close-requirement-description") {
+                this.store.closeRequirementDescriptionDialog();
+                return;
+              }
               if (action === "row-action") {
                 this.store.handleRowAction(
                   actionTarget.getAttribute("data-view"),
@@ -17674,6 +19530,38 @@
               }
               if (action === "header-action") {
                 this.store.handleHeaderAction(actionTarget.getAttribute("data-label"), actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "open-advanced-search") {
+                this.store.openAdvancedSearch(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "close-advanced-search") {
+                this.store.closeAdvancedSearch();
+                return;
+              }
+              if (action === "apply-advanced-search") {
+                this.store.applyAdvancedSearch();
+                return;
+              }
+              if (action === "reset-advanced-search") {
+                this.store.resetAdvancedSearch();
+                return;
+              }
+              if (action === "save-advanced-search-shortcut") {
+                this.store.saveAdvancedSearchShortcut();
+                return;
+              }
+              if (action === "toggle-advanced-search-field-menu") {
+                this.store.toggleAdvancedSearchFieldMenu();
+                return;
+              }
+              if (action === "select-advanced-search-field") {
+                this.store.addAdvancedSearchCondition(actionTarget.getAttribute("data-field"));
+                return;
+              }
+              if (action === "remove-advanced-search-condition") {
+                this.store.removeAdvancedSearchCondition(actionTarget.getAttribute("data-field"));
                 return;
               }
               if (action === "tiny-tool") {
@@ -17970,6 +19858,30 @@
                 this.store.setAssetOverviewTab(actionTarget.getAttribute("data-tab") || "");
                 return;
               }
+              if (action === "asset-overview-board-open") {
+                this.store.openAssetOverviewBoardManager();
+                return;
+              }
+              if (action === "asset-overview-board-back") {
+                this.store.closeAssetOverviewBoardManager();
+                return;
+              }
+              if (action === "asset-overview-board-save") {
+                this.store.saveAssetOverviewBoardManager();
+                return;
+              }
+              if (action === "close-asset-board-save-dialog") {
+                this.store.closeAssetBoardSaveDialog();
+                return;
+              }
+              if (action === "confirm-asset-board-save") {
+                this.store.confirmAssetBoardSave();
+                return;
+              }
+              if (action === "toggle-asset-board-save-tree-node") {
+                this.store.toggleAssetBoardSaveTreeNode(actionTarget.getAttribute("data-node"));
+                return;
+              }
               if (action === "secondary-action" || action === "top-action") {
                 const label = actionTarget.getAttribute("data-label") || "";
                 if (TOP_NAV.includes(label)) {
@@ -18106,6 +20018,14 @@
                 this.store.setLocalDataUploadTemplateType(target.value);
                 return;
               }
+              if (target.matches('[data-role="asset-board-save-mode"]')) {
+                this.store.setAssetBoardSaveMode(target.value);
+                return;
+              }
+              if (target.matches('[data-role="asset-board-save-node"]')) {
+                this.store.toggleAssetBoardSaveNode(target.getAttribute("data-node"));
+                return;
+              }
               if (target.matches('[data-role="master-slave-download-scope"]')) {
                 this.store.setMasterSlaveTemplateDialogScope(target.value);
                 return;
@@ -18139,14 +20059,21 @@
                 return;
               }
               if (target.matches('[data-role="relation-check"]')) {
+                const relationTableScroll = this.captureRelationTableScroll();
                 this.store.toggleRelationSelection(
                   target.getAttribute("data-view"),
                   target.getAttribute("data-id")
                 );
+                this.restoreRelationTableScroll(relationTableScroll);
                 return;
               }
               if (target.matches('[data-role="relation-page-size"]')) {
                 this.store.setRelationPageSize(target.value);
+                return;
+              }
+              if (target.matches('[data-role="advanced-search-field"]')) {
+                const shouldEmit = target instanceof HTMLSelectElement;
+                this.store.setAdvancedSearchField(target.getAttribute("data-field"), target.value, shouldEmit);
                 return;
               }
             });
@@ -18166,6 +20093,10 @@
               }
               if (target.matches('[data-role="relation-field"]')) {
                 this.store.setRelationField(target.getAttribute("data-field"), target.value);
+                return;
+              }
+              if (target.matches('[data-role="advanced-search-field"]')) {
+                this.store.setAdvancedSearchField(target.getAttribute("data-field"), target.value);
                 return;
               }
               if (target.matches('[data-role="master-slave-autofill-field"]')) {
@@ -18269,6 +20200,31 @@
                 event.preventDefault();
                 this.store.setPage(target.getAttribute("data-view"), target.value);
               }
+            });
+          }
+
+          captureRelationTableScroll() {
+            const tableWrap = document.querySelector(".asset-relation-dialog .relation-table-wrap");
+            if (!(tableWrap instanceof HTMLElement)) {
+              return null;
+            }
+            return {
+              left: tableWrap.scrollLeft,
+              top: tableWrap.scrollTop
+            };
+          }
+
+          restoreRelationTableScroll(scrollState) {
+            if (!scrollState) {
+              return;
+            }
+            window.requestAnimationFrame(() => {
+              const tableWrap = document.querySelector(".asset-relation-dialog .relation-table-wrap");
+              if (!(tableWrap instanceof HTMLElement)) {
+                return;
+              }
+              tableWrap.scrollLeft = scrollState.left || 0;
+              tableWrap.scrollTop = scrollState.top || 0;
             });
           }
 
