@@ -4588,7 +4588,7 @@
         gap: 14px;
         padding: 16px 20px 14px;
         align-items: stretch;
-        min-height: 420px;
+        min-height: calc(100vh - 270px);
       }
 
       .asset-room-card {
@@ -5134,6 +5134,33 @@
       .asset-history-change em {
         color: #6a7f95;
         font-style: normal;
+      }
+
+      .asset-history-work-order {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        color: #24384f;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .asset-history-work-order strong {
+        color: #1d2f43;
+        font-weight: 700;
+      }
+
+      .asset-history-work-order-link {
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .asset-history-work-order-link:hover {
+        text-decoration: underline;
       }
 
       .asset-history-empty {
@@ -9475,33 +9502,20 @@
             status: "已设计完成"
           },
           {
-            id: "V3R5-4109",
-            ticketId: "V3R5-4109",
-            version: "v1.2",
-            type: "优化",
-            title: "电子表格时间组件选择",
-            description: "优化 电子表格时间组件选择",
-            scope: "电子表格",
-            targetView: VIEW_IDS.IT_FACILITY,
-            targetAction: "批量入库",
-            targetLabel: "电子表格作业页",
-            status: "已设计完成"
-          },
-          {
             id: "V3R5-4427",
             ticketId: "V3R5-4427",
             version: "v1.2",
             type: "优化",
-            title: "场地设施位置信息内容显示",
-            description: "优化 场地设施位置信息内容显示",
+            title: "场地设施及备件 位置信息内容显示",
+            description: "优化 场地设施及备件 位置信息内容显示",
             detail: [
               "需求来源：V3R5-4427。",
-              "交互目的：场地设施详情的位置信息不使用机柜/U位图，改为展示所属房间、当前设备、同房间设备和位置补充说明。",
-              "展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；当前设备展示名称、资产编号、所属房间、状态和类型；同房间设备支持搜索并可点击名称查看详情；位置补充说明支持编辑保存。"
+              "交互目的：场地设施及备件详情的位置信息不使用机柜/U位图，改为展示所属空间、当前设备和同空间设备。",
+              "展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；当前设备展示名称、资产编号、所属空间、状态和类型；同空间设备支持搜索并可点击名称查看详情。"
             ],
             scope: "台账",
             targetView: VIEW_IDS.STATION_FACILITY,
-            targetLabel: "场地设施-位置信息",
+            targetLabel: "场地设施及备件-位置信息",
             status: "已设计完成"
           },
           {
@@ -11303,7 +11317,7 @@
               viewId,
               rowId,
               activeTab: "basic",
-              historyRange: "近7日"
+              historyRange: "全部"
             };
             this.state.ui.drawer = null;
             this.closeRowMoreMenu(false);
@@ -11425,10 +11439,6 @@
               this.emit();
               return;
             }
-            if (requirement.id === "V3R5-4109") {
-              this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "入库", [], { focusColumnKey: "powerOnTime" });
-              return;
-            }
             if (requirement.targetAction === "批量入库") {
               this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "入库");
               return;
@@ -11446,7 +11456,7 @@
                 this.state.ui.focusedRequirementId = requirement.id;
                 this.state.ui.demandExplainEnabled = true;
                 this.state.ui.detailPage.activeTab = "history";
-                this.state.ui.detailPage.historyRange = "近7日";
+                this.state.ui.detailPage.historyRange = "全部";
                 this.pushToast("已定位需求范围", "已跳转到“" + requirement.targetLabel + "”。", "success");
                 this.emit();
               }
@@ -12241,6 +12251,14 @@
             const today = "2026-06-04";
             const historyEntries = [
               {
+                time: "2026-06-15 10:27:38",
+                action: "事件管理",
+                workOrder: {
+                  no: "INC2026061500001",
+                  title: "双机MySQL数据库备机->主机同步异常"
+                }
+              },
+              {
                 time: today + " 15:09:02",
                 action: "编辑属性",
                 operator: "admin",
@@ -12302,8 +12320,8 @@
               row,
               activeTab: detailPage.activeTab,
               tabs: ASSET_DETAIL_TABS,
-              historyRange: detailPage.historyRange || "近7日",
-              historyRanges: ["近7日", "近10日", "近15日"],
+              historyRange: detailPage.historyRange || "全部",
+              historyRanges: ["全部", "近7日", "近10日", "近15日"],
               historyEntries,
               basicFields,
               breadcrumb,
@@ -15229,7 +15247,7 @@
                 }
                 return { unit, label: pad(unit, 2), tone };
               }),
-              historyRanges: ["近7日", "近10日", "近15日"],
+              historyRanges: ["全部", "近7日", "近10日", "近15日"],
               containsColumns: ["资产编号", "名称", "序列号", "资产状态", "资产分类", "资产位置", "U高", "开始U位", "额定供电功率", "操作"]
             };
           }
@@ -15956,11 +15974,11 @@
                 <div class="tabs">
                   ${detail.tabs.map((tab) => {
                     const demandAttrs = tab.id === "position" && detail.viewId === VIEW_IDS.STATION_FACILITY
-                      ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施详情位置信息页签不展示机柜/U位图，改为展示所属房间、当前设备、同房间设备和位置补充说明。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同房间设备支持搜索并可点击名称查看详情；位置补充说明支持编辑保存。||状态限制：仅作用于场地设施详情，机柜和IT设备仍按各自位置模型展示。"'
+                      ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施及备件位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施及备件详情位置信息页签不展示机柜/U位图，改为展示所属空间、当前设备和同空间设备。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同空间设备支持搜索并可点击名称查看详情。||状态限制：仅作用于场地设施及备件详情，机柜和IT设备仍按各自位置模型展示。"'
                       : tab.id === "relation"
                         ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                         : tab.id === "history"
-                          ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4112" data-demand-title="资产详情履历展示规则" data-demand-text="需求来源：V3R5-4112。||交互目的：在资产详情中按时间轴展示资产履历，便于追溯属性变更、流程状态变化和关系变化。||展示规则：履历页签展示近7日、近10日、近15日筛选；每条履历包含时间、操作类型、操作人和字段变更明细，字段明细需展示旧值与新值；页面内不得直接展示系统字段英文名或编码字段，需转译为中文业务字段名称。||状态限制：无履历数据时展示空态，不影响基本信息、位置信息、关系拓扑和包含设备页签。||异常判断：字段名称缺失、旧值或新值为空、履历来源异常时，应使用“空”或“-”兜底，不应导致页面空白或时间轴断裂。"'
+                          ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4112" data-demand-title="资产详情履历展示规则" data-demand-text="需求来源：V3R5-4112。||交互目的：在资产详情中按时间轴展示资产履历，便于追溯属性变更、流程状态变化和关系变化。||展示规则：履历页签展示全部、近7日、近10日、近15日筛选，默认选中全部；每条履历包含时间、操作类型、操作人和字段变更明细，字段明细需展示旧值与新值；页面内不得直接展示系统字段英文名或编码字段，需转译为中文业务字段名称。||状态限制：无履历数据时展示空态，不影响基本信息、位置信息、关系拓扑和包含设备页签。||异常判断：字段名称缺失、旧值或新值为空、履历来源异常时，应使用“空”或“-”兜底，不应导致页面空白或时间轴断裂。"'
                           : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
@@ -16016,7 +16034,7 @@
                     </div>
                   </div>
                   <div class="operation-sheet-shell">
-                    <div class="operation-sheet-wrap" data-demand-version="v1.1,v1.1,v1.2" data-demand-req-id="V3R5-4315,V3R5-4375,V3R5-4109" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。" data-demand-title-v12="电子表格时间组件选择" data-demand-text-v12="需求来源：V3R5-4109。||交互目的：电子表格中的时间字段支持直接点击单元格选择日期时间，减少手工输入时间格式错误。||展示规则：点击上电时间单元格时打开日期时间选择器，选择后将时间回填为YYYY-MM-DD HH:mm:ss格式；从需求索引进入时默认定位到该时间单元格。||状态限制：仅可编辑数据行或可编辑空白行允许打开时间选择器，字段标题行、占位行和只读列不触发时间选择。||异常判断：浏览器时间选择器不可用、用户取消选择或输入格式不完整时，应保留原单元格值或允许为空，不应弹出技术错误信息。">
+                    <div class="operation-sheet-wrap" data-demand-version="v1.1,v1.1" data-demand-req-id="V3R5-4315,V3R5-4375" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。">
                       <div class="operation-vtable-container" data-role="operation-vtable"></div>
                     </div>
                     <div class="operation-sheet-footer">
@@ -16102,19 +16120,19 @@
                       <div class="asset-room-card-title">当前设备</div>
                       <div class="asset-room-device-name">${escapeHtml(location.current.name)}</div>
                       <div class="asset-room-device-code">资产编号：${escapeHtml(location.current.code)}</div>
-                      <div class="asset-room-device-sub">所属${escapeHtml(location.roomType)}：${escapeHtml(location.current.room)}</div>
+                      <div class="asset-room-device-sub">所属空间：${escapeHtml(location.current.room)}</div>
                       <div class="asset-room-device-meta">
                         <span class="asset-room-tag">${escapeHtml(location.current.status)}</span>
                         <span class="asset-room-tag">${escapeHtml(location.current.category)}</span>
                       </div>
                     </section>
                     <section class="asset-room-card">
-                      <div class="asset-room-card-title">同房间设备</div>
+                      <div class="asset-room-card-title">同空间设备</div>
                       <input
                         class="asset-room-search"
                         type="search"
                         placeholder="搜索名称/编号/类型"
-                        aria-label="搜索同房间设备"
+                        aria-label="搜索同空间设备"
                         oninput="this.closest('.asset-room-card').querySelectorAll('.asset-room-same-row').forEach(function(row){row.hidden = !row.textContent.includes(this.value.trim());}, this)"
                       />
                       <div class="asset-room-same-list">
@@ -16123,7 +16141,7 @@
                             ${item.id ? `
                               <button class="asset-room-peer-link" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.STATION_FACILITY)}" data-id="${escapeHtml(item.id)}" data-label="查看" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>
                             ` : `
-                              <button class="asset-room-peer-link" type="button" data-action="top-action" data-label="查看同房间设备" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>
+                              <button class="asset-room-peer-link" type="button" data-action="top-action" data-label="查看同空间设备" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</button>
                             `}
                             <span title="${escapeHtml(item.code)}">${escapeHtml(item.code)}</span>
                             <span>${escapeHtml(item.category)} · ${escapeHtml(item.status)}</span>
@@ -16131,13 +16149,6 @@
                         `).join("")}
                       </div>
                     </section>
-                  </div>
-                  <div class="asset-room-location-note">
-                    <div class="asset-room-note-head">
-                      <strong>位置补充说明</strong>
-                      <button class="btn btn-light" type="button" onclick="var note=this.closest('.asset-room-location-note');var input=note.querySelector('.asset-room-note-input');var editing=note.classList.toggle('is-editing');input.readOnly=!editing;this.textContent=editing?'保存':'编辑';if(editing){input.focus();}">编辑</button>
-                    </div>
-                    <input class="asset-room-note-input" type="text" aria-label="编辑位置补充说明" value="${escapeHtml(location.note)}" readonly />
                   </div>
                 </div>
               `;
@@ -16198,12 +16209,19 @@
                           <div class="asset-history-time">${escapeHtml(entry.time)}</div>
                           <div class="asset-history-card">
                             <div class="asset-history-action-title">${escapeHtml(entry.action)}</div>
-                            <div class="asset-history-operator"><em>${escapeHtml(entry.operator)}</em><span>${escapeHtml(entry.summary)}</span></div>
-                            ${entry.changes.map((change) => `
-                              <div class="asset-history-change">
-                                编辑了 <strong>${escapeHtml(change.field)}</strong>，旧值为<em>${escapeHtml(change.oldValue)}</em>，新值为<em>${escapeHtml(change.newValue)}</em>
+                            ${entry.workOrder ? `
+                              <div class="asset-history-work-order">
+                                <span>工单单号：<button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.workOrder.no)}">${escapeHtml(entry.workOrder.no)}</button></span>
+                                <span>工单标题：${escapeHtml(entry.workOrder.title)}</span>
                               </div>
-                            `).join("")}
+                            ` : `
+                              <div class="asset-history-operator"><em>${escapeHtml(entry.operator)}</em><span>${escapeHtml(entry.summary)}</span></div>
+                              ${(entry.changes || []).map((change) => `
+                                <div class="asset-history-change">
+                                  编辑了 <strong>${escapeHtml(change.field)}</strong>，旧值为<em>${escapeHtml(change.oldValue)}</em>，新值为<em>${escapeHtml(change.newValue)}</em>
+                                </div>
+                              `).join("")}
+                            `}
                           </div>
                         </div>
                       `).join("")}
@@ -19686,6 +19704,11 @@
               }
               if (action === "asset-history-range") {
                 this.store.setAssetHistoryRange(actionTarget.getAttribute("data-value"));
+                return;
+              }
+              if (action === "open-work-order") {
+                const no = actionTarget.getAttribute("data-no") || "工单";
+                this.store.pushToast("打开工单详情", "已打开工单“" + no + "”详情。", "info");
                 return;
               }
               if (action === "close-drawer") {
