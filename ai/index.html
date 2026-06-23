@@ -374,11 +374,12 @@
     .sbd-head { display:flex; align-items:center; justify-content:space-between; padding:9px 14px; border-bottom:1px solid var(--line-soft); gap:8px; }
     .sbd-title-txt { font-weight:700; font-size:13px; white-space:nowrap; }
     .sbd-title-txt span { font-size:12px; color:var(--muted); font-weight:400; }
-    .sbd-search { flex:1; max-width:180px; border:1px solid var(--line); border-radius:6px; padding:4px 9px; font-size:12px; background:var(--bg); color:var(--text); outline:none; }
+    .sbd-search { flex:1; min-width:100px; max-width:180px; height:28px; box-sizing:border-box; border:1px solid var(--line); border-radius:6px; padding:0 9px; font-size:12px; background:var(--bg); color:var(--text); outline:none; }
+    .sbd-search::placeholder { color:var(--muted); }
     .sbd-search:focus { border-color:var(--primary); }
-    .sbd-sort-sel { border:1px solid var(--line); border-radius:6px; padding:4px 6px; font-size:12px; background:var(--bg); color:var(--text); outline:none; cursor:pointer; }
+    .sbd-sort-sel { height:28px; box-sizing:border-box; border:1px solid var(--line); border-radius:6px; padding:0 6px; font-size:12px; background:var(--bg); color:var(--text); outline:none; cursor:pointer; }
     .sbd-sort-sel:focus { border-color:var(--primary); }
-    .sbd-icon-btn { border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--text); padding:4px 9px; cursor:pointer; font-size:12px; transition:all .14s; white-space:nowrap; }
+    .sbd-icon-btn { height:28px; box-sizing:border-box; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--text); padding:0 9px; cursor:pointer; font-size:12px; transition:all .14s; white-space:nowrap; }
     .sbd-icon-btn:hover { border-color:var(--primary); color:var(--primary); }
     .sbd-icon-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
     .sbd-body { display:flex; }
@@ -871,6 +872,10 @@
     .pad-qtype.judge { background: #e8ffea; color: #00b42a; }
     .pad-exam-times { font-size: 12px; color: var(--muted); white-space: nowrap; padding-top: 5px; }
     .pad-exam-times strong { color: var(--primary); font-size: 13px; }
+    .pad-countdown { display: inline-flex; align-items: center; gap: 5px; background: #e8f3ff; border-radius: 100px; padding: 4px 12px; font-size: 15px; font-weight: 800; color: #165dff; letter-spacing: .5px; transition: background .3s, color .3s; }
+    .pad-countdown.warning { background: #fff3e8; color: #FF7D00; }
+    .pad-countdown.danger  { background: #ffece8; color: #f53f3f; animation: cdblink .8s step-end infinite; }
+    @keyframes cdblink { 0%,100%{opacity:1} 50%{opacity:.4} }
     .pad-q-progress { height: 6px; border-radius: 100px; background: var(--line-soft); overflow: hidden; margin-bottom: 18px; }
     .pad-q-progress span { display: block; height: 100%; background: linear-gradient(90deg,#165dff,#4080ff); border-radius: 100px; transition: width .25s ease; }
     .pad-q-text { font-size: 16px; font-weight: 600; line-height: 1.7; color: var(--text); margin: 0 0 4px; }
@@ -1851,18 +1856,18 @@
               <span class="req-toggle">点击展开/收起</span>
             </div>
             <div class="req-panel-body">
-              <p><strong>字段说明</strong>：培训名称（必填）/ 培训编号（系统自动生成4位唯一数字，只读）/ 项目（必填）/ 培训类型 / 计划开始时间 / 计划结束时间 / 参与学员（多选）/ 关联设备（多选）/ 备注。</p>
+              <p><strong>字段说明</strong>：培训名称（必填）/ 培训编号（系统自动生成4位唯一数字，只读）/ 项目（必填）/ 培训类型 / 计划开始时间 / 计划结束时间 / 参与学员（多选）/ 关联设备（多选）/ 综合得分权重（仅待开始可配置）/ 备注。</p>
               <table>
-                <tr><th>状态</th><th>含义</th><th>允许操作</th></tr>
-                <tr><td>待开始</td><td>培训已创建，未正式开始</td><td>编辑、配置考卷、上传附件、删除</td></tr>
-                <tr><td>进行中</td><td>培训正在进行，学员可接入</td><td>查看脑机数据、查看考试结果（只读）</td></tr>
-                <tr><td>已结束</td><td>培训已结束，数据归档</td><td>查看报告、导出数据（全部只读）</td></tr>
+                <tr><th>状态</th><th>含义</th><th>允许操作</th><th>禁止操作</th></tr>
+                <tr><td>待开始</td><td>培训已创建，未正式开始</td><td>编辑、配置考卷、设置综合得分权重、上传/删除附件及视频、删除培训</td><td>—</td></tr>
+                <tr><td>进行中</td><td>培训正在进行，学员可接入</td><td>查看脑机数据（含状态标签）、查看交卷详情、查看学员答题详情</td><td>删除培训、删除视频附件、编辑字段（全部只读）</td></tr>
+                <tr><td>已结束</td><td>培训已结束，数据归档</td><td>查看报告、导出数据（全部只读）</td><td>—</td></tr>
               </table>
-              <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"二次确认 → 进行中（全部字段只读，考卷锁定）→ 点击"结束培训"弹窗确认 → 已结束（不可逆）。进行中不允许删除。</p>
-              <p><strong>交互 — Tab 联动</strong>：详情弹窗内脑机/考试/附件三个 Tab 在同一弹窗切换，不重新请求培训基本信息；脑机 Tab 进入时自动建立推流连接，切出 Tab 或关闭弹窗时立即断开，避免空跑。</p>
-              <p><strong>数据流 — 脑机数据</strong>：实时推送每位学员的注意力、情绪、疲劳度三个维度，综合得分前端按权重计算（注意力×30% + 情绪×20% + 学习曲线×30% + (100-疲劳度)×20%），折线图滚动展示最近 60 个数据点。</p>
-              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则在保存时一次性抽题生成快照；考卷一旦培训开始即锁定，学员答题数据追加在考卷快照上，不影响题库原始数据。</p>
-              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；开始/结束培训操作失败时 toast 提示原因，状态不变；删除进行中培训时前端直接阻断，不发请求。</p>
+              <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"弹出二次确认（蓝色提示框，说明学员加入方式及答题规则）→ 进行中（全部字段只读，考卷锁定）→ 点击"结束培训"弹出二次确认（红色警告框，提示不可逆操作）→ 已结束（不可逆）。</p>
+              <p><strong>交互 — Tab 联动</strong>：详情面板内脑机/考试/附件三个 Tab 在同一面板切换，不重新请求培训基本信息；脑机 Tab 进入时自动建立推流连接，切出 Tab 或关闭面板时立即断开，避免空跑。</p>
+              <p><strong>数据流 — 脑机指标</strong>：实时推送每位学员的注意力、情绪、疲劳度三个维度，每项附带状态标签（注意力：集中≥75 / 一般60~75 / 不集中&lt;60；情绪：良好≥75 / 一般60~75 / 不佳&lt;60；疲劳：不疲劳≥75 / 一般60~75 / 疲劳&lt;60）；综合得分按权重前端计算，折线图滚动展示最近 60 个数据点。</p>
+              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则在保存时一次性抽题生成快照；考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）及学员逐题答题详情（展示正确答案与学员作答对比）。</p>
+              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。</p>
             </div>
           </div>
           <div class="toolbar">
@@ -2750,6 +2755,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       </div>
       <button class="btn full" id="padBtDisconnect" style="color:var(--danger);border-color:var(--danger);">断开设备</button>
     </div>
+    <button class="btn primary full" id="padEnterTrainingBtn" style="margin-top:14px;opacity:.45;" disabled data-pad-task="padLobby">进入培训</button>
     <button class="btn full" style="margin-top:10px;" data-pad-task="padHome">返回首页</button>
   </div>
 </section>
@@ -2757,7 +2763,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         <div class="req-panel" id="req-pad-exam"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 考试流程需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：题目展示 题型标签 / 进度条 / 题目内容 / 选项列表 / 剩余答题次数；答题记录字段为 题目ID / 所选答案 / 是否正确 / 答题时间。</p><table><tr><th>规则</th><th>说明</th></tr><tr><td>答题次数</td><td>管理员配置（1-3 次），超上限后入口置灰，以最新成绩为准</td></tr><tr><td>切题</td><td>未作答直接切题时 toast"请先选择答案"</td></tr><tr><td>提交</td><td>最后一题"下一题"变为"提交"，提交前弹窗确认</td></tr><tr><td>成绩</td><td>后端计算总分和正确率，学员不可见正确答案</td></tr></table><p><strong>数据流</strong>：答题数据实时写入本地，提交时一次性上传；成绩由后端返回。</p><p><strong>异常处理</strong>：提交失败 toast"提交失败，请检查网络"并保留本地记录，支持重新提交。</p></div></div>
         <div class="pad-exam-head">
           <div class="pad-exam-titles"><span class="pad-qtype single" id="padQType">单选题</span><h2 id="padQuestionTitle">第 1 / 8 题</h2><span id="padQScore" style="font-size:12px;font-weight:700;color:var(--primary);background:#e8f3ff;padding:3px 10px;border-radius:100px;white-space:nowrap;">2 分</span></div>
-          <span class="pad-exam-times">剩余答题次数 <strong id="padExamTimes">2</strong> · 以最新成绩为准</span>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+            <div class="pad-countdown" id="padCountdown"><span>⏱</span><span id="padCountdownVal">30:00</span></div>
+            <span class="pad-exam-times">剩余答题次数 <strong id="padExamTimes">2</strong> · 以最新成绩为准</span>
+          </div>
         </div>
         <div class="pad-q-progress"><span id="padQProgress" style="width:12.5%"></span></div>
         <p class="pad-q-text" id="padQText">在生产过程中，下列哪种行为是正确的安全操作？</p>
@@ -2765,7 +2774,6 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         <div class="answer-list" id="padAnswerList"></div>
         <div class="actions pad-exam-actions">
           <button class="btn" id="prevPadQuestion">上一题</button>
-          <button class="btn" data-pad-task="padHome">返回首页</button>
           <button class="btn primary" id="nextPadQuestion">下一题</button>
           <button class="btn primary hidden" id="showResult">提交</button>
         </div>
@@ -2790,10 +2798,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
                 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                   <span id="lobbyStatusBadge" style="background:rgba(255,255,255,.22);border-radius:100px;padding:3px 10px;font-size:12px;font-weight:700;">进行中</span>
                   <span style="font-size:12px;opacity:.8;">编号 1111</span>
-                  <span style="font-size:12px;opacity:.5;">·</span>
-                  <span style="font-size:12px;opacity:.8;">09:00 – 11:00</span>
                 </div>
-                <div style="margin-top:8px;font-size:12px;opacity:.85;">
+                <div style="margin-top:8px;display:flex;gap:18px;font-size:12px;opacity:.9;flex-wrap:wrap;">
+                  <span><span style="opacity:.7;">培训开始时间：</span><span style="font-weight:700;">2025-12-10 09:00</span></span>
+                  <span><span style="opacity:.7;">培训进行时长：</span><span style="font-weight:700;">1 小时 24 分</span></span>
+                </div>
+                <div style="margin-top:6px;font-size:12px;opacity:.85;">
                   <span style="margin-right:4px;opacity:.7;">📁</span><span style="opacity:.75;">所属项目：</span><span style="font-weight:600;">2025年度化工安全培训项目</span>
                 </div>
                 <div style="margin-top:6px;font-size:12px;opacity:.85;">
@@ -2810,17 +2820,17 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
               <div style="text-align:center;padding:0 8px;">
                 <div style="font-size:22px;font-weight:900;color:#00B42A;line-height:1.1;">87<span style="font-size:13px;">分</span></div>
-                <div style="font-size:11px;color:var(--muted);margin-top:3px;">注意力</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:3px;">注意力 · <span style="color:#00B42A;font-weight:700;">集中</span></div>
                 <div style="height:4px;background:#E8FFEC;border-radius:2px;margin-top:6px;"><div style="height:100%;width:87%;background:#00B42A;border-radius:2px;"></div></div>
               </div>
               <div style="text-align:center;padding:0 8px;border-left:1px solid var(--line-soft);">
                 <div style="font-size:22px;font-weight:900;color:var(--primary);line-height:1.1;">80<span style="font-size:13px;">分</span></div>
-                <div style="font-size:11px;color:var(--muted);margin-top:3px;">情绪状态</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:3px;">情绪状态 · <span style="color:var(--primary);font-weight:700;">良好</span></div>
                 <div style="height:4px;background:#E8F0FF;border-radius:2px;margin-top:6px;"><div style="height:100%;width:80%;background:var(--primary);border-radius:2px;"></div></div>
               </div>
               <div style="text-align:center;padding:0 8px;border-left:1px solid var(--line-soft);">
                 <div style="font-size:22px;font-weight:900;color:#FF7D00;line-height:1.1;">20<span style="font-size:13px;">分</span></div>
-                <div style="font-size:11px;color:var(--muted);margin-top:3px;">疲劳程度</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:3px;">疲劳程度 · <span style="color:#FF7D00;font-weight:700;">疲劳</span></div>
                 <div style="height:4px;background:#FFF3E8;border-radius:2px;margin-top:6px;"><div style="height:100%;width:20%;background:#FF7D00;border-radius:2px;"></div></div>
               </div>
               <div style="text-align:center;padding:0 8px;border-left:1px solid var(--line-soft);">
@@ -2839,7 +2849,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
                 <h3 style="margin:0;font-size:16px;color:#fff;font-weight:800;">参加考试</h3>
               </div>
               <div style="padding:12px 20px 16px;" id="lobbyExamCardBottom">
-                <p style="margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 30 分钟 · 及格 60 分</p>
+                <p style="margin:0 0 8px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 及格 60 分</p>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">⏱ 考试时长：<strong style="color:var(--text);" id="lobbyExamDuration">30 分钟</strong></div>
                 <div style="display:flex;gap:6px;align-items:center;" id="lobbyExamStatusLine"><span class="tag blue">关联考试</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">剩余 2 次</span></div>
               </div>
             </button>
@@ -3042,7 +3053,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       autoExam: ['自动组卷配置', '<p style="color:var(--muted);font-size:13px;margin:0 0 14px;">系统将按所选标签和数量从题库随机抽题，已有题目将被替换。</p><div class="form-grid"><div class="field wide"><label>考试标签（点击多选）</label><div class="filter-tags" style="margin:6px 0 0;"><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">消防安全</button><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">电气安全</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">高处作业</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">急救技巧</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">危险化学品</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">机械安全</button></div></div><div class="field"><label>考题数量</label><input type="number" value="10" min="1" max="50" placeholder="1~50题"></div><div class="field"><label>时间限制（分钟）</label><input type="number" value="30" min="5" max="120" placeholder="5~120分钟"></div><div class="field"><label>及格分数（满分100）</label><input type="number" value="60" min="0" max="100"></div><div class="field"><label>重复作答限制</label><input value="最多2次（以成绩提交为准）" readonly style="background:#f7f8fa;color:var(--text);cursor:not-allowed;"></div></div><div style="background:#e8f3ff;border-radius:4px;padding:10px 14px;font-size:12px;color:var(--primary);margin-top:10px;">题库中符合所选标签的题目共 <strong>24</strong> 道，将随机抽取 <strong>10</strong> 道。</div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn" data-close>预览题目</button><button class="btn primary" data-close>确认组卷</button></div>'],
       exportQuestion: ['导出考题', '<p>导出当前培训关联考题，格式为 xlsx。</p><button class="btn primary" data-close>开始导出</button>'],
       manualSelectQ: ['手动选题', '<p style="color:var(--muted);font-size:13px;margin:0 0 14px;">从题库中手动挑选考题，加入当前培训的考试。</p><div class="toolbar" style="grid-template-columns:1fr 1fr 1fr auto;margin-bottom:10px;"><div class="field"><label>题目类型</label><select><option>全部</option><option>单选题</option><option>多选题</option><option>判断题</option></select></div><div class="field"><label>标签</label><select><option>全部</option><option>消防安全</option><option>电气安全</option><option>高处作业</option></select></div><div class="field"><label>搜索</label><input placeholder="搜索题目内容..."></div><div class="field" style="padding-top:20px;"><button class="btn primary">搜索</button></div></div><div class="table-scroll" style="max-height:260px;overflow-y:auto;"><table style="min-width:auto;"><thead><tr><th style="width:32px;"><input type="checkbox"></th><th>题目内容</th><th style="width:70px;">类型</th><th style="width:80px;">正确率</th></tr></thead><tbody><tr><td><input type="checkbox" checked></td><td style="white-space:normal;">以下哪种灭火器适用于电气火灾？</td><td><span class="tag blue">单选题</span></td><td>92%</td></tr><tr><td><input type="checkbox" checked></td><td style="white-space:normal;">高处作业时，应配备哪些安全防护装备？</td><td><span class="tag purple">多选题</span></td><td>78%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">发生触电事故时，首先应该怎么办？</td><td><span class="tag blue">单选题</span></td><td>85%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">安全帽在使用前必须检查是否有裂纹。</td><td><span class="tag orange">判断题</span></td><td>96%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">工作场所噪声标准不得超过多少分贝？</td><td><span class="tag blue">单选题</span></td><td>71%</td></tr></tbody></table></div><div style="margin-top:10px;font-size:12px;color:var(--muted);">已选 <strong>2</strong> 道题目</div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn primary" data-close>确认加入考试</button></div>'],
-      questionDetail: ['试题详情', '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;"><span class="tag blue">单选题</span><span class="tag orange">消防安全</span><span class="tag">电气安全</span><span style="margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;">题号 Q-001 &nbsp;·&nbsp; 难度：基础</span></div><div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">以下哪种灭火器适用于电气火灾？</div><div style="display:grid;gap:9px;margin-bottom:18px;"><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">A</span><span style="font-size:14px;color:var(--text-2);">泡沫灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #00B42A;border-radius:6px;background:#E8FFEA;"><span style="width:28px;height:28px;border-radius:50%;background:#00B42A;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">B</span><span style="font-size:14px;font-weight:600;color:#00B42A;flex:1;">二氧化碳灭火器</span><span style="font-size:12px;color:#fff;font-weight:700;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">C</span><span style="font-size:14px;color:var(--text-2);">水基型灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">D</span><span style="font-size:14px;color:var(--text-2);">清水灭火器</span></div></div><div style="background:var(--line-soft);border-radius:6px;padding:13px 15px;margin-bottom:18px;"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;letter-spacing:.3px;">答案解析</div><div style="font-size:13px;line-height:1.8;color:var(--text-2);">电气火灾应优先使用 <strong>二氧化碳灭火器</strong> 或干粉灭火器。泡沫、水基型及清水灭火器均含水，导电会造成触电危险，不适用于带电设备火灾。</div></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;"><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div><div style="font-size:24px;font-weight:800;color:#00B42A;">92%</div><div class="progress green" style="margin-top:8px;"><span style="width:92%"></span></div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">使用次数</div><div style="font-size:24px;font-weight:800;color:var(--primary);">125</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">关联 8 场培训</div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">题目难度</div><div style="margin-top:10px;"><span class="tag green">基础</span></div></div></div></div>'],
+      questionDetail: ['试题详情', '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;"><span class="tag blue">单选题</span><span class="tag orange">消防安全</span><span class="tag">电气安全</span><span style="margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;">题号 Q-001</span></div><div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">以下哪种灭火器适用于电气火灾？</div><div style="display:grid;gap:9px;margin-bottom:18px;"><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">A</span><span style="font-size:14px;color:var(--text-2);">泡沫灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #00B42A;border-radius:6px;background:#E8FFEA;"><span style="width:28px;height:28px;border-radius:50%;background:#00B42A;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">B</span><span style="font-size:14px;font-weight:600;color:#00B42A;flex:1;">二氧化碳灭火器</span><span style="font-size:12px;color:#fff;font-weight:700;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">C</span><span style="font-size:14px;color:var(--text-2);">水基型灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">D</span><span style="font-size:14px;color:var(--text-2);">清水灭火器</span></div></div><div style="background:var(--line-soft);border-radius:6px;padding:13px 15px;margin-bottom:18px;"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;letter-spacing:.3px;">答案解析</div><div style="font-size:13px;line-height:1.8;color:var(--text-2);">电气火灾应优先使用 <strong>二氧化碳灭火器</strong> 或干粉灭火器。泡沫、水基型及清水灭火器均含水，导电会造成触电危险，不适用于带电设备火灾。</div></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;"><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div><div style="font-size:24px;font-weight:800;color:#00B42A;">92%</div><div class="progress green" style="margin-top:8px;"><span style="width:92%"></span></div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">使用次数</div><div style="font-size:24px;font-weight:800;color:var(--primary);">125</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">关联 8 场培训</div></div></div></div>'],
       uploadAttach: ['上传附件', '<div class="upload-zone">拖拽或选择附件上传</div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>上传</button></div>'],
       uploadVideo: ['上传培训视频', '<div class="upload-zone">上传培训视频<br><button class="btn primary" data-close style="margin-top:10px;">选择文件</button></div>'],
       reportExport: ['报告导出', '<p>导出当前培训的综合得分、学习曲线、注意力、情绪、疲劳度、考试结果与事件记录。</p><div class="actions"><button class="btn">预览报告</button><button class="btn primary" data-close>导出 PDF</button></div>'],
@@ -3072,6 +3083,41 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     let questionSeq = 4;
     let padDeviceStep = 'idle';
     let examAttemptCount = 0;
+    let padExamTimer = null;
+    let padExamSecondsLeft = 0;
+    const PAD_EXAM_DURATION = 30 * 60; // 30 分钟
+
+    function startCountdown() {
+      stopCountdown();
+      padExamSecondsLeft = PAD_EXAM_DURATION;
+      const cdEl  = document.getElementById('padCountdown');
+      const valEl = document.getElementById('padCountdownVal');
+      function tick() {
+        if (padExamSecondsLeft <= 0) {
+          stopCountdown();
+          if (valEl) valEl.textContent = '00:00';
+          showToast('考试时间已到，自动提交答卷');
+          submitPadExam();
+          return;
+        }
+        padExamSecondsLeft--;
+        const m = String(Math.floor(padExamSecondsLeft / 60)).padStart(2, '0');
+        const s = String(padExamSecondsLeft % 60).padStart(2, '0');
+        if (valEl) valEl.textContent = m + ':' + s;
+        if (cdEl) {
+          cdEl.classList.toggle('danger',  padExamSecondsLeft <= 60);
+          cdEl.classList.toggle('warning', padExamSecondsLeft > 60 && padExamSecondsLeft <= 300);
+          if (padExamSecondsLeft > 300) cdEl.classList.remove('warning', 'danger');
+        }
+      }
+      tick();
+      padExamTimer = setInterval(tick, 1000);
+    }
+    function stopCountdown() {
+      if (padExamTimer) { clearInterval(padExamTimer); padExamTimer = null; }
+      const cdEl = document.getElementById('padCountdown');
+      if (cdEl) cdEl.classList.remove('warning', 'danger');
+    }
     const chartData = {
       training: {
         title: '培训统计',
@@ -3486,7 +3532,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
             <td onclick="event.stopPropagation();" style="white-space:nowrap;">
               <button data-edit-training="${t.id}" class="btn" style="font-size:11px;padding:2px 6px;" title="编辑">✏️</button>
               <button data-copy-training="${t.id}" class="btn" style="font-size:11px;padding:2px 6px;" title="复制">📋</button>
-              <button data-delete-training="${t.id}" class="btn" style="font-size:11px;padding:2px 6px;color:var(--danger);" title="删除">🗑️</button>
+              <button ${t.status==='running' ? 'disabled title="进行中不可删除"' : 'data-delete-training="' + t.id + '" title="删除"'} class="btn" style="font-size:11px;padding:2px 6px;${t.status==='running' ? 'opacity:.4;cursor:not-allowed;' : 'color:var(--danger);'}">🗑️</button>
             </td>
           </tr>`).join('') || '<tr><td colspan="13" style="text-align:center;color:var(--muted);padding:24px 0;">暂无培训数据</td></tr>';
         return;
@@ -3498,7 +3544,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
             <div class="train-card-actions">
               <button class="icon-btn" data-edit-training="${t.id}" title="编辑培训" style="font-size:13px;">✏️</button>
               <button class="icon-btn" data-copy-training="${t.id}" title="复制培训" style="font-size:13px;">📋</button>
-              <button class="icon-btn danger" data-delete-training="${t.id}" title="删除培训" style="font-size:13px;">🗑️</button>
+              <button class="icon-btn ${t.status==='running' ? '' : 'danger'}" ${t.status==='running' ? 'disabled title="进行中不可删除"' : 'data-delete-training="' + t.id + '" title="删除培训"'} style="font-size:13px;${t.status==='running' ? 'opacity:.4;cursor:not-allowed;' : ''}">🗑️</button>
             </div>
           </div>
           <p>${t.type}<br>创建时间: ${t.date}<span style="float:right;">参与人数: ${t.count}</span></p>
@@ -3529,10 +3575,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const hb = document.getElementById('trainingHeaderBtns');
       if (t.status === 'pending') {
         hb.innerHTML = '<button class="btn primary" id="startTrBtn">开始培训</button>';
-        document.getElementById('startTrBtn').onclick = () => startTraining(t.id);
+        document.getElementById('startTrBtn').onclick = () => confirmStartTraining(t.id);
       } else if (t.status === 'running') {
         hb.innerHTML = '<button class="btn" style="background:var(--danger);color:#fff;border-color:var(--danger);" id="endTrBtn">结束培训</button>';
-        document.getElementById('endTrBtn').onclick = () => endTraining(t.id);
+        document.getElementById('endTrBtn').onclick = () => confirmEndTraining(t.id);
       } else { hb.innerHTML = ''; }
       // 事件提示：待开始显示空态，进行中/已结束显示事件列表
       const el = document.getElementById('eventList');
@@ -3540,11 +3586,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         if (t.status === 'pending') {
           _stopEventScroll();
           const pendingEvents = [
-            ['ev-green', 'ic-green', '🧢','学员6设备连接成功','已就绪','学员6的脑机头环已稳定配对，等待培训开始'],
-            ['ev-green', 'ic-green', '🧢','学员5设备连接成功','已就绪','学员5的脑机头环已稳定配对，等待培训开始'],
-            ['ev-green', 'ic-green', '🧢','学员4设备连接成功','已就绪','学员4的脑机头环已稳定配对，等待培训开始'],
-            ['ev-green', 'ic-green', '🧢','学员2设备连接成功','已就绪','学员2的脑机头环已稳定配对，等待培训开始'],
-            ['ev-green', 'ic-green', '🧢','学员1设备连接成功','已就绪','学员1的脑机头环已稳定配对，等待培训开始'],
+            ['ev-warn',  'ic-warn',  '⚠️','学员3设备脱落','08:58:30','学员3的脑机头环连接中断，请提醒学员重新佩戴'],
+            ['ev-green', 'ic-green', '🧢','学员6设备连接成功','08:55:40','学员6的脑机头环已稳定配对，等待培训开始'],
+            ['ev-green', 'ic-green', '🧢','学员5设备连接成功','08:54:22','学员5的脑机头环已稳定配对，等待培训开始'],
+            ['ev-green', 'ic-green', '🧢','学员4设备连接成功','08:53:10','学员4的脑机头环已稳定配对，等待培训开始'],
+            ['ev-green', 'ic-green', '🧢','学员2设备连接成功','08:52:05','学员2的脑机头环已稳定配对，等待培训开始'],
+            ['ev-green', 'ic-green', '🧢','学员1设备连接成功','08:51:30','学员1的脑机头环已稳定配对，等待培训开始'],
           ];
           el.innerHTML = pendingEvents.map(([cls,ico,icon,title,time,desc]) =>
             '<div class="ev-card ' + cls + '"><div class="ev-icon ' + ico + '">' + icon + '</div>'
@@ -3555,10 +3602,11 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         } else {
           const cnt = t.count || 0;
           el.innerHTML = [
-            ['ev-orange','ic-orange','🧢','学员2设备信号弱','10:42:15','学员2的脑机头环信号强度下降，请检查佩戴位置'],
+            ['ev-warn',  'ic-warn',  '⚠️','群体状态提醒 · 注意力不集中','10:45:00','当前 18% 的学员注意力不集中已持续超过 1 分钟（共 17 名），建议调整培训节奏或互动提问。'],
+            ['ev-green', 'ic-green', '📊','群体状态提醒 · 综合状态优秀','10:30:00','综合得分已连续 10 分钟保持在 85 分以上，学员整体专注度良好，请知悉。'],
+            ['ev-green', 'ic-green', '😊','群体状态提醒 · 情绪积极','10:15:00','当前 72% 的学员情绪积极已持续超过 1 分钟（共 68 名），培训效果良好。'],
             ['ev-green', 'ic-green', '🧢','学员4设备连接成功','10:38:52','学员4的脑机头环已稳定配对，数据采集中'],
             ['ev-green', 'ic-green', '🧢','学员1设备连接成功','09:05:30','学员1的脑机头环已稳定配对，数据采集中'],
-            ['ev-orange','ic-orange','🧢','学员3正在佩戴设备','09:02:11','学员3已扫码进入培训，正在佩戴脑机头环'],
             ['ev-blue',  'ic-blue',  '🚀','培训已开始',t.startTime ? t.startTime.split(' ')[1] : '09:00:00','培训正式开始，学员可通过编号加入并连接设备'],
           ].map(([cls,ico,icon,title,time,desc]) =>
             '<div class="ev-card ' + cls + '"><div class="ev-icon ' + ico + '">' + icon + '</div>'
@@ -3600,6 +3648,39 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (trElapsedInterval) { clearInterval(trElapsedInterval); trElapsedInterval = null; }
     }
 
+    function confirmStartTraining(id) {
+      const t = trainings.find(x => x.id === id); if (!t) return;
+      document.getElementById('modalTitle').textContent = '确认开始培训';
+      document.getElementById('modalBody').innerHTML =
+        '<div style="padding:4px 0;">'
+        + '<p style="margin:0 0 12px;font-size:14px;color:var(--text);line-height:1.7;">即将开始培训 <strong>「' + t.name + '」</strong>。</p>'
+        + '<div style="background:#e8f3ff;border-radius:6px;padding:10px 14px;font-size:12px;color:var(--primary);line-height:1.8;margin-bottom:16px;">'
+        + '• 培训开始后所有基本信息字段变为只读<br>'
+        + '• 考卷将锁定，不可再修改题目<br>'
+        + '• 如有考题，学员可以进行答题'
+        + '</div>'
+        + '<div class="actions"><button class="btn" data-close>取消</button><button class="btn primary" onclick="startTraining(' + id + ');hideModal();">确认开始</button></div>'
+        + '</div>';
+      document.getElementById('modalMask').classList.add('show');
+      liftModalActions();
+    }
+    function confirmEndTraining(id) {
+      const t = trainings.find(x => x.id === id); if (!t) return;
+      document.getElementById('modalTitle').textContent = '确认结束培训';
+      document.getElementById('modalBody').innerHTML =
+        '<div style="padding:4px 0;">'
+        + '<p style="margin:0 0 12px;font-size:14px;color:var(--text);line-height:1.7;">即将结束培训 <strong>「' + t.name + '」</strong>。</p>'
+        + '<div style="background:#fff2f0;border-radius:6px;padding:10px 14px;font-size:12px;color:var(--danger);line-height:1.8;margin-bottom:16px;">'
+        + '⚠ 此操作不可逆，请确认后继续：<br>'
+        + '• 培训结束后无法重新开始<br>'
+        + '• 所有脑机数据采集将停止<br>'
+        + '• 正在考试中的学员答卷将自动提交'
+        + '</div>'
+        + '<div class="actions"><button class="btn" data-close>取消</button><button class="btn" style="background:var(--danger);color:#fff;border-color:var(--danger);" onclick="endTraining(' + id + ');hideModal();">确认结束</button></div>'
+        + '</div>';
+      document.getElementById('modalMask').classList.add('show');
+      liftModalActions();
+    }
     function startTraining(id) {
       const t = trainings.find(x => x.id === id); if (!t) return;
       t.status = 'running'; t.statusText = '进行中';
@@ -3613,6 +3694,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       stopElapsedTimer();
       renderTrainings(document.getElementById('trainingStatusFilter').value);
       renderTrainingDetail(); showToast('培训已结束');
+    }
+    function metricStatus(type, val) {
+      if (type === 'attention') return val < 60 ? '不集中' : val < 75 ? '一般' : '集中';
+      if (type === 'emotion')   return val < 60 ? '不佳'   : val < 75 ? '一般' : '良好';
+      if (type === 'fatigue')   return val < 60 ? '疲劳'   : val < 75 ? '一般' : '不疲劳';
+      return '';
     }
     function renderBrainTab(t) {
       const vc = v => v>=80?'var(--success)':v>=60?'var(--warning)':'var(--danger)';
@@ -3630,16 +3717,25 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<div class="td-info-cell"><div class="k">培训状态</div><div class="v"><span class="tag ' + (t.status==='running'?'blue':t.status==='done'?'green':'orange') + '">' + t.statusText + '</span></div></div>'
         + '<div class="td-info-cell"><div class="k">所属项目</div><div class="v">' + t.project + '</div></div>'
         + '<div class="td-info-cell"><div class="k">培训类型</div><div class="v">' + t.type + '</div></div>'
-        + '<div class="td-info-cell"><div class="k">培训时间</div><div class="v" style="font-size:12px;">' + t.startTime + '</div></div>'
+        + '<div class="td-info-cell"><div class="k">培训开始时间</div><div class="v" style="font-size:12px;">' + t.startTime + '</div></div>'
         + '<div class="td-info-cell"><div class="k">参与人数</div><div class="v">' + (pendingConnCount !== null ? pendingConnCount : t.count) + ' 人</div></div>'
         + '<div class="td-info-cell"><div class="k">创建人</div><div class="v">' + t.creator + '</div></div>'
         + '<div class="td-info-cell"><div class="k">培训负责人</div><div class="v">' + t.manager + '</div></div>'
         + (t.status==='running'
           ? '<div class="td-info-cell" style="border:1px solid rgba(0,180,42,.25);background:rgba(0,180,42,.05);">'
-            + '<div class="k" style="color:var(--success);">⏱ 已进行时长</div>'
+            + '<div class="k" style="color:var(--success);">⏱ 进行时长</div>'
             + '<div class="v" style="color:var(--success);font-size:18px;font-weight:900;letter-spacing:.5px;"><span id="trElapsedVal">—</span></div>'
             + '</div>'
-          : '')
+          : t.status==='done'
+          ? '<div class="td-info-cell" style="border:1px solid rgba(134,144,156,.2);background:rgba(134,144,156,.05);">'
+            + '<div class="k">进行时长</div>'
+            + '<div class="v" style="font-size:15px;font-weight:800;">' + (t.duration || '—') + '</div>'
+            + '</div>'
+          : '<div class="td-info-cell" style="border:1px solid rgba(134,144,156,.15);background:rgba(134,144,156,.04);">'
+            + '<div class="k" style="color:var(--muted);">进行时长</div>'
+            + '<div class="v" style="color:var(--muted);font-weight:600;">尚未开始</div>'
+            + '</div>'
+          )
         + '</div>';
       if (t.status === 'running') { setTimeout(function(){ startElapsedTimer(); }, 30); }
       if (t.status === 'pending') {
@@ -3678,12 +3774,13 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         const live = t.status === 'running';
         html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">'
           + '<div style="font-weight:700;font-size:13px;">综合脑机数据' + (live?'<span style="margin-left:8px;font-size:11px;color:var(--success);font-weight:400;">● 实时更新</span>':'') + '</div>'
-          + '<button class="btn" data-modal="scoreConfig" style="font-size:12px;">设置综合得分</button></div>'
+          + (t.status === 'pending' ? '<button class="btn" data-modal="scoreConfig" style="font-size:12px;">设置综合得分</button>' : '')
+          + '</div>'
           + '<div class="brain-metrics">'
-          + '<div class="brain-metric bm-composite"><div class="bm-val">82</div><div class="bm-label">综合得分<i class="bm-tip-icon" data-tip="曲线×30% + 注意力×30% + 情绪×20% + 活跃×20%">ⓘ</i></div><div class="bm-bar"><div class="bm-fill" style="width:82%;"></div></div></div>'
-          + '<div class="brain-metric"><div class="bm-val" style="color:var(--warning);">79</div><div class="bm-label">注意力</div><div class="bm-bar"><div class="bm-fill" style="width:79%;background:var(--warning);"></div></div></div>'
-          + '<div class="brain-metric"><div class="bm-val" style="color:var(--purple);">89</div><div class="bm-label">情绪</div><div class="bm-bar"><div class="bm-fill" style="width:89%;background:var(--purple);"></div></div></div>'
-          + '<div class="brain-metric"><div class="bm-val" style="color:var(--success);">72</div><div class="bm-label">疲劳度</div><div class="bm-bar"><div class="bm-fill" style="width:28%;background:var(--success);"></div></div></div>'
+          + '<div class="brain-metric bm-composite"><div class="bm-val">82</div><div class="bm-label">综合得分<i class="bm-tip-icon" data-tip="情绪×30% + 注意力×40% + 疲劳×30%">ⓘ</i></div><div class="bm-bar"><div class="bm-fill" style="width:82%;"></div></div></div>'
+          + '<div class="brain-metric"><div class="bm-val" style="color:var(--warning);">82</div><div class="bm-label">注意力 · <span style="color:var(--warning);">' + metricStatus('attention',82) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:82%;background:var(--warning);"></div></div></div>'
+          + '<div class="brain-metric"><div class="bm-val" style="color:var(--purple);">85</div><div class="bm-label">情绪 · <span style="color:var(--purple);">' + metricStatus('emotion',85) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:85%;background:var(--purple);"></div></div></div>'
+          + '<div class="brain-metric"><div class="bm-val" style="color:var(--success);">78</div><div class="bm-label">疲劳度 · <span style="color:var(--success);">' + metricStatus('fatigue',78) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:22%;background:var(--success);"></div></div></div>'
           + '</div>'
           + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'
           + '<div style="font-weight:700;font-size:13px;">学习曲线分析</div>'
@@ -3759,7 +3856,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const submitBlock = pending
         ? '<div style="border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;background:var(--bg);margin-bottom:14px;color:var(--muted);font-size:13px;text-align:center;">培训开始后显示交卷情况</div>'
         : '<div style="border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;background:var(--bg);margin-bottom:14px;">'
-          + '<div style="font-weight:700;font-size:13px;margin-bottom:10px;">学员交卷情况 <span style="font-size:11px;font-weight:400;color:var(--muted);">共 ' + total + ' 人参与</span></div>'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">'
+          + '<div style="font-weight:700;font-size:13px;">学员交卷情况 <span style="font-size:11px;font-weight:400;color:var(--muted);">共 ' + total + ' 人参与</span></div>'
+          + '<button class="btn" onclick="openSubmitDetail()" style="font-size:12px;">查看交卷详情</button>'
+          + '</div>'
           + '<div style="display:flex;gap:0;margin-bottom:10px;">'
           + '<div style="flex:1;text-align:center;padding:6px 0;border-right:1px solid var(--line-soft);">'
             + '<div style="font-size:22px;font-weight:900;color:var(--success);">' + submitted + '</div>'
@@ -3885,9 +3985,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '</div>'
           + '<div class="si-device">' + s.device + '</div>'
           + '<div class="si-scores">'
-          + '<span>注 <strong style="color:' + vc(s.attention) + ';">' + s.attention + '%</strong></span>'
-          + '<span>情 <strong style="color:var(--purple);">' + s.emotion + '%</strong></span>'
-          + '<span>疲 <strong style="color:' + vc(100-s.fatigue) + ';">' + s.fatigue + '%</strong></span>'
+          + '<span>注 <strong style="color:' + vc(s.attention) + ';">' + s.attention + '</strong></span>'
+          + '<span>情 <strong style="color:var(--purple);">' + s.emotion + '</strong></span>'
+          + '<span>疲 <strong style="color:' + vc(100-s.fatigue) + ';">' + s.fatigue + '</strong></span>'
           + '<span>分 <strong style="color:var(--primary);">' + s.score + '</strong></span>'
           + '</div></div>';
       }).join('');
@@ -4072,6 +4172,86 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (act2 && foot2) { foot2.innerHTML = act2.innerHTML; foot2.classList.add('show'); act2.remove(); }
       document.getElementById('modalMask').classList.add('show');
     }
+    // ── 交卷详情 & 学员答题详情 ───────────────────────────────────────────────
+    var submitMockData = [
+      { name:'赵六', device:'BrainLink-004', status:'submitted', score:94, submitTime:'09:48:22' },
+      { name:'张三', device:'BrainLink-001', status:'submitted', score:88, submitTime:'09:52:11' },
+      { name:'周八', device:'BrainLink-006', status:'submitted', score:85, submitTime:'09:55:03' },
+      { name:'李四', device:'BrainLink-002', status:'submitted', score:79, submitTime:'10:01:47' },
+      { name:'陈七', device:'BrainLink-005', status:'inExam',    score:null, submitTime:null },
+      { name:'王五', device:'BrainLink-003', status:'notStart',  score:null, submitTime:null },
+    ];
+    var examQuestionsMock = [
+      { type:'单选题', q:'以下哪种灭火器适用于电气火灾？',       correct:'B', answers:{'赵六':'B','张三':'B','周八':'A','李四':'B'} },
+      { type:'多选题', q:'高处作业时，应配备哪些安全防护装备？',   correct:'A,B,C,D', answers:{'赵六':'A,B,C,D','张三':'A,B,D','周八':'A,B,C,D','李四':'A,C'} },
+      { type:'单选题', q:'发生触电事故时，首先应该怎么办？',       correct:'B', answers:{'赵六':'B','张三':'B','周八':'B','李四':'C'} },
+      { type:'判断题', q:'安全帽在使用前必须检查是否有裂纹。',     correct:'正确', answers:{'赵六':'正确','张三':'正确','周八':'正确','李四':'正确'} },
+      { type:'单选题', q:'工作场所噪声标准不得超过多少分贝？',     correct:'C', answers:{'赵六':'C','张三':'C','周八':'B','李四':'C'} },
+      { type:'多选题', q:'化学品泄漏时正确的应急措施有哪些？',     correct:'A,B,D', answers:{'赵六':'A,B,D','张三':'A,D','周八':'A,B,D','李四':'A,B'} },
+      { type:'判断题', q:'气瓶存放时应远离热源和明火。',           correct:'正确', answers:{'赵六':'正确','张三':'正确','周八':'正确','李四':'正确'} },
+      { type:'单选题', q:'动火作业前需要办理什么手续？',           correct:'A', answers:{'赵六':'A','张三':'A','周八':'A','李四':'B'} },
+    ];
+    function openSubmitDetail() {
+      var statusLabel = { submitted:'已交卷', inExam:'考试中', notStart:'未开始' };
+      var statusColor = { submitted:'var(--success)', inExam:'var(--warning)', notStart:'var(--muted)' };
+      var rows = submitMockData.map(function(s) {
+        var scoreTxt = s.score !== null ? '<strong style="color:var(--primary);">' + s.score + ' 分</strong>' : '<span style="color:var(--muted);">—</span>';
+        var timeTxt  = s.submitTime || '<span style="color:var(--muted);">—</span>';
+        var actionBtn = s.status === 'submitted'
+          ? '<button class="btn" style="font-size:12px;padding:2px 10px;" onclick="openStudentAnswerDetail(\'' + s.name + '\',' + s.score + ')">查看答题</button>'
+          : '<button class="btn" style="font-size:12px;padding:2px 10px;opacity:.4;cursor:not-allowed;pointer-events:none;">查看答题</button>';
+        return '<tr>'
+          + '<td style="font-weight:600;">' + s.name + '</td>'
+          + '<td style="font-size:12px;color:var(--muted);">' + s.device + '</td>'
+          + '<td><span style="font-size:12px;font-weight:700;color:' + statusColor[s.status] + ';">' + statusLabel[s.status] + '</span></td>'
+          + '<td>' + scoreTxt + '</td>'
+          + '<td style="font-size:12px;color:var(--muted);">' + timeTxt + '</td>'
+          + '<td>' + actionBtn + '</td>'
+          + '</tr>';
+      }).join('');
+      document.getElementById('modalTitle').textContent = '交卷详情';
+      document.getElementById('modalBody').innerHTML =
+        '<div class="table-scroll" style="max-height:400px;overflow-y:auto;">'
+        + '<table style="min-width:auto;"><thead><tr>'
+        + '<th>姓名</th><th>设备</th><th>状态</th><th>得分</th><th>交卷时间</th><th>操作</th>'
+        + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
+        + '<div class="actions" style="margin-top:16px;"><button class="btn" data-close>关闭</button></div>';
+      document.getElementById('modalMask').classList.add('show');
+      liftModalActions();
+    }
+    function openStudentAnswerDetail(name, score) {
+      var qRows = examQuestionsMock.map(function(q, i) {
+        var studentAns = q.answers[name] || '—';
+        var isCorrect  = studentAns === q.correct;
+        var typeColor  = q.type === '多选题' ? 'purple' : q.type === '判断题' ? 'orange' : 'blue';
+        return '<div style="border:1px solid var(--line-soft);border-radius:8px;padding:10px 14px;margin-bottom:8px;">'
+          + '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">'
+          + '<span style="flex-shrink:0;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;">Q' + (i+1) + '</span>'
+          + '<span class="tag ' + typeColor + '" style="flex-shrink:0;">' + q.type + '</span>'
+          + '<span style="font-size:13px;color:var(--text);line-height:1.6;flex:1;">' + q.q + '</span>'
+          + '<span style="flex-shrink:0;font-size:13px;font-weight:700;" style="color:' + (isCorrect?'var(--success)':'var(--danger)') + ';">'
+          + (isCorrect ? '✓' : '✗') + '</span>'
+          + '</div>'
+          + '<div style="display:flex;gap:16px;font-size:12px;padding-left:20px;">'
+          + '<span style="color:var(--muted);">学员答案：<strong style="color:' + (isCorrect?'var(--success)':'var(--danger)') + ';">' + studentAns + '</strong></span>'
+          + '<span style="color:var(--muted);">正确答案：<strong style="color:var(--success);">' + q.correct + '</strong></span>'
+          + '</div></div>';
+      }).join('');
+      var correctCount = examQuestionsMock.filter(function(q){ return q.answers[name] === q.correct; }).length;
+      document.getElementById('modalTitle').textContent = name + ' — 答题详情';
+      document.getElementById('modalBody').innerHTML =
+        '<div style="display:flex;align-items:center;gap:16px;padding:10px 14px;background:var(--bg);border-radius:8px;margin-bottom:14px;">'
+        + '<div style="text-align:center;"><div style="font-size:28px;font-weight:900;color:var(--primary);">' + score + '</div><div style="font-size:11px;color:var(--muted);">综合得分</div></div>'
+        + '<div style="width:1px;height:40px;background:var(--line-soft);"></div>'
+        + '<div style="text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--success);">' + correctCount + '/' + examQuestionsMock.length + '</div><div style="font-size:11px;color:var(--muted);">答对题数</div></div>'
+        + '<div style="width:1px;height:40px;background:var(--line-soft);"></div>'
+        + '<div style="text-align:center;"><div style="font-size:20px;font-weight:800;color:var(--warning);">' + Math.round(correctCount/examQuestionsMock.length*100) + '%</div><div style="font-size:11px;color:var(--muted);">正确率</div></div>'
+        + '</div>'
+        + qRows
+        + '<div class="actions" style="margin-top:16px;"><button class="btn" onclick="openSubmitDetail()">返回交卷列表</button><button class="btn" data-close>关闭</button></div>';
+      document.getElementById('modalMask').classList.add('show');
+      liftModalActions();
+    }
     function calcScoreTotal() {
       const a = Number(document.getElementById('sc-attention')?.value) || 0;
       const e = Number(document.getElementById('sc-emotion')?.value)   || 0;
@@ -4160,7 +4340,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '</div></div></div>'
         + '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 2px;">'
         + '<div style="font-size:12px;color:var(--text);">📹 安全生产操作规程培训.mp4 <span style="color:var(--muted);">· 512MB</span></div>'
-        + '<button class="btn" data-action="removeVideo" style="font-size:11px;padding:2px 8px;color:var(--danger);border-color:var(--danger);">删除</button>'
+        + (activeTraining && activeTraining.status === 'running'
+          ? '<button class="btn" style="font-size:11px;padding:2px 8px;opacity:.4;cursor:not-allowed;" disabled title="进行中不可删除">删除</button>'
+          : '<button class="btn" data-action="removeVideo" style="font-size:11px;padding:2px 8px;color:var(--danger);border-color:var(--danger);">删除</button>')
         + '</div>';
     }
         function openEditDevice(i) {
@@ -4175,8 +4357,26 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         const fo = document.getElementById('df-owner'); if (fo) fo.value = d.owner;
       }, 0);
     }
+    function toggleMaintenance(i) {
+      const d = devices[i];
+      if (d.state === '维护中') {
+        d.state = d._prevState || '在线';
+        d._prevState = null;
+        showToast('「' + d.name + '」已取消维护，恢复为' + d.state);
+      } else {
+        d._prevState = d.state;
+        d.state = '维护中';
+        showToast('「' + d.name + '」已标记为维护中');
+      }
+      renderDevices();
+    }
     function renderDevices() {
-      document.getElementById('deviceRows').innerHTML = devices.map((d, i) => `<tr>
+      document.getElementById('deviceRows').innerHTML = devices.map((d, i) => {
+        const isMaint = d.state === '维护中';
+        const maintBtn = isMaint
+          ? `<button class="btn" style="font-size:12px;padding:2px 10px;color:var(--warning);border-color:var(--warning);margin-left:4px;" onclick="toggleMaintenance(${i})">取消维护</button>`
+          : `<button class="btn" style="font-size:12px;padding:2px 10px;margin-left:4px;" onclick="toggleMaintenance(${i})">标记维护</button>`;
+        return `<tr${isMaint ? ' style="background:rgba(255,125,0,.04);"' : ''}>
         <td><input type="checkbox" class="dev-check" data-idx="${i}" style="accent-color:var(--primary);width:14px;height:14px;cursor:pointer;"></td>
         <td>${d.id}</td><td>${d.name}</td><td>${d.type}</td>
         <td><span class="tag ${d.state === '在线' ? 'green' : d.state === '维护中' ? 'orange' : ''}">${d.state}</span></td>
@@ -4186,9 +4386,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         <td style="white-space:nowrap;">
           <button class="btn" style="font-size:12px;padding:2px 10px;" onclick="openEditDevice(${i})">编辑</button>
           <button class="btn" style="font-size:12px;padding:2px 10px;color:var(--danger);border-color:var(--danger);margin-left:4px;" data-action="delete" onclick="this.closest('tr').remove();showToast('设备已删除');">删除</button>
-          <button class="btn" style="font-size:12px;padding:2px 10px;margin-left:4px;" data-action="refresh" onclick="showToast('设备状态已刷新');">刷新</button>
+          ${maintBtn}
         </td>
-      </tr>`).join('');
+      </tr>`;
+      }).join('');
       // 全选 checkbox
       const all = document.getElementById('deviceCheckAll');
       if (all) {
@@ -5123,6 +5324,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     }
     var _lastExamResult = null;
     function submitPadExam() {
+      stopCountdown();
       let earnedScore = 0, totalScore = 0;
       PAD_QUESTIONS.forEach((q, idx) => {
         const qs = q.score || 2;
@@ -5207,6 +5409,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       padQIndex = 0;
       padAnswers = [];
       renderPadQuestion();
+      startCountdown();
     }
     document.getElementById('prevPadQuestion')?.addEventListener('click', () => {
       if (padQIndex > 0) { padQIndex -= 1; renderPadQuestion(); }
@@ -5231,9 +5434,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     const _brainRTData = [
       [70,80,60],[60,90,55],[65,80,50],[55,95,45],[60,100,42],
       [50,90,40],[55,85,42],[48,80,40],[50,95,38],[38,100,30],[38,130,28]
-    ]; // [注意力,疲劳,情绪] y值
+    ];
+
     function _brainTipTime(ratio) {
-      // 根据 activeTraining 的开始/结束时间计算当前悬停对应的时间点
       try {
         const st = activeTraining && activeTraining.startTime ? activeTraining.startTime : '2025-12-10 09:00';
         const et = activeTraining && activeTraining.endTime   ? activeTraining.endTime   : '2025-12-10 11:00';
@@ -5251,41 +5454,43 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const px = (e.clientX - rect.left) / rect.width;
       const tip = document.getElementById('brainTooltip');
       if (!tip) return;
-      const idx = Math.round(px * 10);
-      const i = Math.max(0, Math.min(10, idx));
-      const timeLabel = _brainTipTime(i / 10);
-      // Position tooltip horizontally along cursor
-      const tipPct = Math.max(10, Math.min(90, px * 100));
-      tip.style.left = tipPct + '%';
-      let html;
-      if (!isRT) {
-        const d = _brainCurveData[i];
-        html = '<div style="font-weight:700;margin-bottom:4px;font-size:13px;">🕐 ' + timeLabel + '</div>'
-          + '<div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:2px;background:#2f6bff;display:inline-block;"></span>综合得分 <b>' + Math.round(100-(d[0]-20)/1.1) + '</b></div>';
+      const idx = Math.min(10, Math.max(0, Math.round(px * 10)));
+      const data = isRT ? _brainRTData : _brainCurveData;
+      const pt = data[idx] || data[0];
+      const time = _brainTipTime(idx / 10);
+      if (isRT) {
+        tip.innerHTML = '<strong>' + time + '</strong>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--success)"></i>注意力</span><b>' + (100-pt[0]) + '</b></div>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--warning)"></i>疲劳度</span><b>' + (100-pt[1]) + '</b></div>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--purple)"></i>情绪</span><b>'   + (100-pt[2]) + '</b></div>';
       } else {
-        const d = _brainRTData[i];
-        html = '<div style="font-weight:700;margin-bottom:4px;font-size:13px;">🕐 ' + timeLabel + '</div>'
-          + '<div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:2px;background:#00b42a;display:inline-block;"></span>注意力 <b>' + Math.round(100-(d[0]-38)/0.32) + '</b></div>'
-          + '<div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:2px;background:#FF7D00;display:inline-block;"></span>疲劳度 <b>' + Math.round(100-(d[1]-28)/1.02) + '</b></div>'
-          + '<div style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:2px;background:#722ed1;display:inline-block;"></span>情绪 <b>' + Math.round(100-(d[2]-28)/0.32) + '</b></div>';
+        tip.innerHTML = '<strong>' + time + '</strong>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--primary)"></i>综合得分</span><b>' + (100-pt[3]) + '</b></div>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--success)"></i>注意力</span><b>'  + (100-pt[1]) + '</b></div>'
+          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--purple)"></i>情绪</span><b>'     + (100-pt[2]) + '</b></div>';
       }
-      tip.innerHTML = html;
+      tip.style.left = Math.min(window.innerWidth - 190, e.clientX + 14) + 'px';
+      tip.style.top  = Math.max(12, e.clientY - 16) + 'px';
       tip.style.display = 'block';
-      var _tx = e.clientX + 16;
-      tip.style.left = (_tx + 200 > window.innerWidth ? e.clientX - 208 : _tx) + 'px';
-      tip.style.top = Math.max(4, e.clientY - 10) + 'px';
     }
     function hideBrainTip() {
-      const tip = document.getElementById('brainTooltip');
+      var tip = document.getElementById('brainTooltip');
       if (tip) tip.style.display = 'none';
     }
-    // ── end tooltip ────────────────────────────────────────────────────────────
+    document.querySelectorAll('.brain-svg-curve').forEach(function(svg) {
+      svg.addEventListener('mousemove', function(e) { showBrainTip(e, svg, false); });
+      svg.addEventListener('mouseleave', hideBrainTip);
+    });
+    document.querySelectorAll('.brain-svg-rt').forEach(function(svg) {
+      svg.addEventListener('mousemove', function(e) { showBrainTip(e, svg, true); });
+      svg.addEventListener('mouseleave', hideBrainTip);
+    });
 
-    // ── Pad 端：蓝牙设备连接 ─────────────────────────────────────────────────
-    const _mockBtDevices = [
-      { name: 'BrainLink-X 001', num: 'BL-X 001', id: 'BL-20240001', battery: 71, wearing: true },
-      { name: 'BrainLink-X 003', num: 'BL-X 003', id: 'BL-20240003', battery: 88, wearing: false },
-      { name: 'BrainLink-Pro 2', num: 'BL-Pro 2', id: 'BL-20240007', battery: 55, wearing: false },
+    // ── 蓝牙设备模拟 ──────────────────────────────────────────────────────────
+    var _mockBtDevices = [
+      { name:'BrainLink-X 001', id:'BL-X-001', num:'SN-20251210-001', battery:85, wearing:true  },
+      { name:'BrainLink-X 002', id:'BL-X-002', num:'SN-20251210-002', battery:72, wearing:false },
+      { name:'BrainLink-X 003', id:'BL-X-003', num:'SN-20251210-003', battery:45, wearing:false },
     ];
     let _connectedBtDevice = null;
 
@@ -5304,16 +5509,15 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         var list2 = document.getElementById('pdDeviceList');
         if (!list2) return;
         list2.innerHTML = _mockBtDevices.map(function(d, i) {
-          var sig = i === 0 ? '强' : i === 1 ? '中' : '弱';
-          var sigColor = i === 0 ? 'var(--success)' : i === 1 ? 'var(--warning)' : 'var(--muted)';
+          var sig = i===0?'强':i===1?'中':'弱';
+          var sigColor = i===0?'var(--success)':i===1?'var(--warning)':'var(--muted)';
           return '<button class="btn" data-pd-dev="' + i + '" style="display:flex;align-items:center;justify-content:space-between;text-align:left;padding:11px 14px;border-radius:10px;width:100%;">'
             + '<div style="display:flex;align-items:center;gap:10px;">'
             + '<div style="width:36px;height:36px;border-radius:8px;background:#e8f3ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
             + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M12 2L7 7M12 2L17 7M12 22L7 17M12 22L17 17" stroke="#2f6bff" stroke-width="2" stroke-linecap="round"/></svg></div>'
             + '<div><div style="font-weight:700;font-size:13px;color:var(--text);">' + d.name + '</div>'
             + '<div style="font-size:11px;color:var(--muted);">ID: ' + d.id + '</div></div></div>'
-            + '<span style="font-size:11px;font-weight:600;color:' + sigColor + ';">信号' + sig + '</span>'
-            + '</button>';
+            + '<span style="font-size:11px;font-weight:600;color:' + sigColor + ';">信号' + sig + '</span></button>';
         }).join('');
         list2.querySelectorAll('[data-pd-dev]').forEach(function(btn) {
           btn.addEventListener('click', function() {
@@ -5330,117 +5534,86 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
               if (el('pdConnDevId'))   el('pdConnDevId').textContent   = dev.id;
               if (el('pdBatText'))     el('pdBatText').textContent     = dev.battery + '%';
               if (el('pdBatBar'))      el('pdBatBar').style.width      = dev.battery + '%';
-              if (el('pdBatBar'))      el('pdBatBar').style.background = dev.battery >= 50 ? 'var(--success)' : dev.battery >= 20 ? 'var(--warning)' : 'var(--danger)';
+              if (el('pdBatBar'))      el('pdBatBar').style.background = dev.battery>=50?'var(--success)':dev.battery>=20?'var(--warning)':'var(--danger)';
               if (el('pdConnWear'))    el('pdConnWear').innerHTML = dev.wearing
                 ? '<span style="color:var(--success);">● 已佩戴</span>'
                 : '<span style="color:var(--warning);">● 未佩戴</span>';
               var badge = el('pdStatusBadge');
-              if (badge) { badge.textContent = '已连接'; badge.style.background = '#e8fff0'; badge.style.color = 'var(--success)'; }
+              if (badge) { badge.textContent='已连接'; badge.style.background='#e8fff0'; badge.style.color='var(--success)'; }
               var b2 = el('step2Badge');
-              if (b2) { b2.textContent = '已完成'; b2.style.background = '#e8fff0'; b2.style.color = '#00B42A'; }
+              if (b2) { b2.textContent='已完成'; b2.style.background='#e8fff0'; b2.style.color='#00B42A'; }
               var s3 = el('stepCard3');
-              if (s3) { s3.removeAttribute('disabled'); s3.style.opacity = '1'; s3.style.pointerEvents = ''; }
+              if (s3) { s3.removeAttribute('disabled'); s3.style.opacity='1'; s3.style.pointerEvents=''; }
               var b3 = el('step3Badge');
-              if (b3) { b3.textContent = '已解锁'; b3.style.background = '#e8f3ff'; b3.style.color = 'var(--primary)'; }
+              if (b3) { b3.textContent='已解锁'; b3.style.background='#e8f3ff'; b3.style.color='var(--primary)'; }
               var i3 = el('step3Icon');
-              if (i3) { i3.style.background = 'linear-gradient(135deg,#165DFF 0%,#4080FF 100%)'; i3.style.boxShadow = '0 4px 14px rgba(22,93,255,.32)'; }
+              if (i3) { i3.style.background='linear-gradient(135deg,#165DFF 0%,#4080FF 100%)'; i3.style.boxShadow='0 4px 14px rgba(22,93,255,.32)'; }
               _pdShow('pdConnected');
+              var enterBtn = el('padEnterTrainingBtn');
+              if (enterBtn) { enterBtn.removeAttribute('disabled'); enterBtn.style.opacity=''; }
               showToast(dev.name + ' 连接成功');
             }, 1800);
           });
         });
       }, 1500);
-    } // end _pdStartScan
+    }
 
     var _btPermGranted = false;
     document.getElementById('padBtScan')?.addEventListener('click', function() {
-      if (_btPermGranted) {
-        _pdStartScan();
-        return;
-      }
-      // Show Android permission dialog
+      if (_btPermGranted) { _pdStartScan(); return; }
       var ov = document.getElementById('pdPermOverlay');
       if (ov) ov.style.display = 'flex';
     });
-
     document.getElementById('pdPermAllow')?.addEventListener('click', function() {
       var ov = document.getElementById('pdPermOverlay');
       if (ov) ov.style.display = 'none';
       _btPermGranted = true;
-      showToast('已获得附近设备权限');
-      setTimeout(function() { _pdStartScan(); }, 300);
+      _pdStartScan();
     });
-
     document.getElementById('pdPermDeny')?.addEventListener('click', function() {
       var ov = document.getElementById('pdPermOverlay');
       if (ov) ov.style.display = 'none';
-      showToast('已拒绝权限，无法搜索蓝牙设备');
+      showToast('需要蓝牙权限才能搜索设备');
     });
-
-    document.getElementById('padBtCancel')?.addEventListener('click', function() {
-      _pdShow('pdIdle');
-    });
-
     document.getElementById('padBtDisconnect')?.addEventListener('click', function() {
-      var elD = function(id) { return document.getElementById(id); };
       _connectedBtDevice = null;
-      var badge = elD('pdStatusBadge');
-      if (badge) { badge.textContent = '未连接'; badge.style.background = '#F2F3F5'; badge.style.color = 'var(--muted)'; }
-      var b2 = elD('step2Badge');
-      if (b2) { b2.textContent = '未完成'; b2.style.background = '#F2F3F5'; b2.style.color = 'var(--muted)'; }
-      var s3 = elD('stepCard3');
-      if (s3) { s3.setAttribute('disabled', ''); s3.style.opacity = '0.5'; s3.style.pointerEvents = 'none'; }
-      var b3 = elD('step3Badge');
-      if (b3) { b3.textContent = '未解锁'; b3.style.background = '#F2F3F5'; b3.style.color = 'var(--muted)'; }
-      var i3 = elD('step3Icon');
-      if (i3) { i3.style.background = '#C9CDD4'; i3.style.boxShadow = 'none'; }
+      _btPermGranted = false;
       _pdShow('pdIdle');
-      showToast('设备已断开连接');
+      var badge = document.getElementById('pdStatusBadge');
+      if (badge) { badge.textContent='未连接'; badge.style.background=''; badge.style.color=''; }
+      showToast('设备已断开');
     });
 
-    // 事件列表自动滚动
+    // ── 事件列表自动滚动 ──────────────────────────────────────────────────────
     var _evScrollTimer = null;
     var _evIdx = 0;
     var _liveEvents = [
-      ['ev-green',  'ic-green',  '\ud83d\ude80', '培训已开始',       '实时', '培训正式开始，学员可通过编号加入并连接设备'],
-      ['ev-orange', 'ic-orange', '\ud83e\udde2', '学员3正在佩戴设备', '实时', '学员3已扫码进入培训，正在佩戴脑机头环'],
-      ['ev-green',  'ic-green',  '\ud83e\udde2', '学员5设备连接成功', '实时', '学员5的脑机头环已稳定配对，数据采集中'],
-      ['ev-orange', 'ic-orange', '\ud83e\udde2', '学员2设备信号弱',   '实时', '学员2的脑机设备信号强度下降，请检查佩戴位置'],
-      ['ev-green',  'ic-green',  '\ud83e\udde2', '学员6设备连接成功', '实时', '学员6的脑机头环已稳定配对，数据采集中'],
-      ['ev-blue',   'ic-blue',   '\ud83d\udccb', '系统通知',         '实时', '新学员加入培训，当前共 12 人在线'],
+      ['ev-green', 'ic-green', '🚀', '培训已开始',       '实时', '培训正式开始，学员可通过编号加入并连接设备'],
+      ['ev-green', 'ic-green', '🧢', '学员5设备连接成功', '实时', '学员5的脑机头环已稳定配对，数据采集中'],
+      ['ev-green', 'ic-green', '🧢', '学员6设备连接成功', '实时', '学员6的脑机头环已稳定配对，数据采集中'],
+      ['ev-blue',  'ic-blue',  '📋', '系统通知',         '实时', '新学员加入培训，当前共 12 人在线'],
     ];
     function _startEventScroll(el) {
       _stopEventScroll();
       _evScrollTimer = setInterval(function() {
         var item = _liveEvents[_evIdx % _liveEvents.length];
         _evIdx++;
-        var cls = item[0], ico = item[1], icon = item[2], title = item[3], desc = item[5];
         var now = new Date();
-        var ts = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
-        var card = document.createElement('div');
-        card.className = 'ev-card ' + cls;
-        card.innerHTML = '<div class="ev-icon ' + ico + '">' + icon + '</div>'
-          + '<div class="ev-body"><div class="ev-row1"><span class="ev-title">' + title + '</span>'
-          + '<span class="ev-time">' + ts + '</span></div>'
-          + '<div class="ev-desc">' + desc + '</div></div>';
-        el.insertBefore(card, el.firstChild);
-        while (el.children.length > 8) el.removeChild(el.lastChild);
+        var hh = String(now.getHours()).padStart(2,'0');
+        var mm = String(now.getMinutes()).padStart(2,'0');
+        var ss = String(now.getSeconds()).padStart(2,'0');
+        var card = '<div class="ev-card ' + item[0] + '"><div class="ev-icon ' + item[1] + '">' + item[2] + '</div>'
+          + '<div class="ev-body"><div class="ev-row1"><span class="ev-title">' + item[3] + '</span>'
+          + '<span class="ev-time">' + hh+':'+mm+':'+ss + '</span></div>'
+          + '<div class="ev-desc">' + item[5] + '</div></div></div>';
+        el.insertAdjacentHTML('afterbegin', card);
+        while (el.children.length > 20) el.lastElementChild.remove();
       }, 4000);
     }
     function _stopEventScroll() {
       if (_evScrollTimer) { clearInterval(_evScrollTimer); _evScrollTimer = null; }
     }
 
-    // 初始化渲染
-    renderTrainings();
-    selectTraining(trainings[0].id);
-    renderDevices();
-    renderUsers();
-    initCharts();
   </script>
-
-  <!-- 系统公告管理弹窗 -->
-  
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
