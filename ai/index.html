@@ -3024,7 +3024,11 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     ];
     let projectSeq = 5;
     let editProjectId = null;
-    const devices = Array.from({ length: 12 }, (_, i) => ({ id: `DEV-H-2026-${String(i + 1).padStart(3, '0')}`, name: `脑机头环-${String(i + 1).padStart(2, '0')}`, type: '脑机头环', state: i % 7 === 0 ? '离线' : i % 11 === 0 ? '维护中' : '在线', project: ['2025年度化工安全培训项目','机械设备操作规范培训项目','电气安全知识普及项目','新员工入职安全培训项目','机械设备操作规范培训项目'][i % 5], owner: ['王五','李四','赵六','周九','张三'][i % 5] }));
+    const _owners = ['王五','李四','赵六','周九','张三'];
+    const _projs  = ['2025年度化工安全培训项目','机械设备操作规范培训项目','电气安全知识普及项目','新员工入职安全培训项目','机械设备操作规范培训项目'];
+    const _headsets = Array.from({ length: 20 }, (_, i) => ({ id: `DEV-H-2026-${String(i + 1).padStart(3, '0')}`, name: `脑机头环-${String(i + 1).padStart(2, '0')}`, type: '脑机头环', state: i % 7 === 0 ? '离线' : i % 11 === 0 ? '维护中' : '在线', project: _projs[i % 5], owner: _owners[i % 5] }));
+    const _tablets  = Array.from({ length: 20 }, (_, i) => ({ id: `DEV-T-2026-${String(i + 1).padStart(3, '0')}`, name: `培训平板-${String(i + 1).padStart(2, '0')}`, type: '平板', state: i % 6 === 0 ? '离线' : i % 10 === 0 ? '维护中' : '在线', project: _projs[i % 5], owner: _owners[i % 5] }));
+    const devices = [..._headsets, ..._tablets];
     const users = [
       ['admin',    '张三','zhangsan@example.com','138-0000-1111','安全生产部','公司管理员',        '活跃'],
       ['trainer01','李四','lisi@example.com',    '138-0000-2222','研发部',    '项目管理员',        '活跃'],
@@ -3173,6 +3177,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       }
       if (id === 'student') renderStudents();
       if (id === 'project') renderProjects();
+      if (id === 'training') { renderTrainings(); renderTrainingDetail(); }
+      if (id === 'device') renderDevices();
     }
 
     // ── 学员管理 ──────────────────────────────────────────────────────────────
