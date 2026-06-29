@@ -1054,6 +1054,11 @@
       background: #fff;
       border-radius: 6px;
       box-shadow: 0 18px 45px rgba(29,33,41,.22);
+      transition: width .2s ease;
+    }
+    .modal.wide {
+      width: min(1020px, 96vw);
+      max-height: 90vh;
     }
     .modal-head {
       flex: 0 0 auto;
@@ -2186,7 +2191,7 @@
                   <div>
                     <h4 style="margin:0 0 10px;font-size:14px;">考试 Tab — 组卷规则</h4>
                     <div style="font-size:13px;color:var(--text-2);line-height:1.8;">
-                    · <strong>自动组卷</strong>：按标签和数量从题库随机抽题，支持设置时间限制（分钟）和及格分数。<br>
+                    · <strong>自动组卷</strong>：按标签和数量从题库随机抽题，支持设置时间限制（分钟），预览题目后可调整分值，总分需为 100 分才可确认组卷。<br>
                     · <strong>手动选题</strong>：从题库筛选后逐题勾选加入考试。<br>
                     · 仅「待开始」状态可修改考卷；「进行中」考卷锁定只读。<br>
                     · 重复作答限制：最多 N 次（管理员可配置），以最新成绩为准。</div>
@@ -2640,7 +2645,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     <p style="color:var(--muted);margin-bottom:12px;font-size:13px;">通过蓝牙搜索并连接脑机设备，连接后检测佩戴状态</p>
     <div class="req-panel" id="req-pad-device"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 设备连接需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><table><tr><th>连接阶段</th><th>显示内容</th><th>操作</th></tr><tr><td>待搜索</td><td>"开始扫描"按钮</td><td>申请蓝牙权限后触发</td></tr><tr><td>扫描中</td><td>附近设备列表（名称/信号/电量）</td><td>点击设备发起配对</td></tr><tr><td>连接中</td><td>进度动画</td><td>可取消</td></tr><tr><td>已连接</td><td>设备名 + 绿色徽标 + 电量</td><td>可断开重连</td></tr></table><p><strong>交互</strong>：首次进入弹出蓝牙权限弹窗；拒绝权限则显示说明并退出流程；连接成功后自动进入佩戴检测（未佩戴/检测中/已佩戴），Step 2 标记完成。</p><p><strong>数据流</strong>：设备配对成功后将设备信息写入会话；佩戴检测由设备端上报信号，前端每 2 秒轮询刷新。</p><p><strong>异常处理</strong>：扫描超时（15 秒）→ "未找到附近设备，请确认设备已开机"；配对失败 → "连接失败，请靠近设备后重试"；佩戴检测超时（30 秒）→ 提示"未检测到佩戴，可跳过继续"。</p></div></div>
     <!-- Permission overlay (Android style) -->
-    <div id="pdPermOverlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);border-radius:inherit;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px;">
+    <div id="pdPermOverlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);border-radius:inherit;z-index:10;align-items:center;justify-content:center;padding:24px;">
       <div style="background:var(--card);border-radius:14px;width:100%;max-width:320px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.2);">
         <div style="padding:20px 20px 16px;">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
@@ -2760,9 +2765,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
   </div>
 </section>
       <section class="pad-task" id="padExam"><div class="pad-card">
-        <div class="req-panel" id="req-pad-exam"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 考试流程需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：题目展示 题型标签 / 进度条 / 题目内容 / 选项列表 / 剩余答题次数；答题记录字段为 题目ID / 所选答案 / 是否正确 / 答题时间。</p><table><tr><th>规则</th><th>说明</th></tr><tr><td>答题次数</td><td>管理员配置（1-3 次），超上限后入口置灰，以最新成绩为准</td></tr><tr><td>切题</td><td>未作答直接切题时 toast"请先选择答案"</td></tr><tr><td>提交</td><td>最后一题"下一题"变为"提交"，提交前弹窗确认</td></tr><tr><td>成绩</td><td>后端计算总分和正确率，学员不可见正确答案</td></tr></table><p><strong>数据流</strong>：答题数据实时写入本地，提交时一次性上传；成绩由后端返回。</p><p><strong>异常处理</strong>：提交失败 toast"提交失败，请检查网络"并保留本地记录，支持重新提交。</p></div></div>
+        <div class="req-panel" id="req-pad-exam"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 考试流程需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：题目展示 题型标签 / 进度条 / 题目内容 / 选项列表 / 剩余答题次数；答题记录字段为 题目ID / 所选答案 / 是否正确 / 答题时间。</p><table><tr><th>规则</th><th>说明</th></tr><tr><td>答题次数</td><td>共 2 次答题机会，选择重新测试后剩余次数 -1；成绩正式提交后入口改为查看答题结果</td></tr><tr><td>切题</td><td>未作答直接切题时 toast"请先选择答案"</td></tr><tr><td>提交</td><td>最后一题"下一题"变为"提交"，提交前弹窗确认</td></tr><tr><td>成绩</td><td>后端计算总分和正确率，学员不可见正确答案</td></tr></table><p><strong>数据流</strong>：答题数据实时写入本地，提交时一次性上传；成绩由后端返回。</p><p><strong>异常处理</strong>：提交失败 toast"提交失败，请检查网络"并保留本地记录，支持重新提交。</p></div></div>
         <div class="pad-exam-head">
-          <div class="pad-exam-titles"><span class="pad-qtype single" id="padQType">单选题</span><h2 id="padQuestionTitle">第 1 / 8 题</h2><span id="padQScore" style="font-size:12px;font-weight:700;color:var(--primary);background:#e8f3ff;padding:3px 10px;border-radius:100px;white-space:nowrap;">2 分</span></div>
+          <div class="pad-exam-titles"><span class="pad-qtype single" id="padQType">单选题</span><h2 id="padQuestionTitle">第 1 / 8 题</h2><span id="padQScore" style="font-size:12px;font-weight:700;color:var(--primary);background:#e8f3ff;padding:3px 10px;border-radius:100px;white-space:nowrap;">10 分</span></div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
             <div class="pad-countdown" id="padCountdown"><span>⏱</span><span id="padCountdownVal">30:00</span></div>
             <span class="pad-exam-times">剩余答题次数 <strong id="padExamTimes">2</strong> · 以最新成绩为准</span>
@@ -2849,7 +2854,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
                 <h3 style="margin:0;font-size:16px;color:#fff;font-weight:800;">参加考试</h3>
               </div>
               <div style="padding:12px 20px 16px;" id="lobbyExamCardBottom">
-                <p style="margin:0 0 8px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 及格 60 分</p>
+                <p style="margin:0 0 8px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 满分 100 分</p>
                 <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">⏱ 考试时长：<strong style="color:var(--text);" id="lobbyExamDuration">30 分钟</strong></div>
                 <div style="display:flex;gap:6px;align-items:center;" id="lobbyExamStatusLine"><span class="tag blue">关联考试</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">剩余 2 次</span></div>
               </div>
@@ -3054,7 +3059,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         </div>`;
       })()],
             examOnly: ['仅添加考试', '<p>可不创建培训，仅配置考试标签和考题数量自动组卷。</p><div class="form-grid"><div class="field"><label>考试标签</label><input value="安全生产"></div><div class="field"><label>考题数量</label><input value="8"></div></div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>保存考试</button></div>'],
-      autoExam: ['自动组卷配置', '<p style="color:var(--muted);font-size:13px;margin:0 0 14px;">系统将按所选标签和数量从题库随机抽题，已有题目将被替换。</p><div class="form-grid"><div class="field wide"><label>考试标签（点击多选）</label><div class="filter-tags" style="margin:6px 0 0;"><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">消防安全</button><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">电气安全</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">高处作业</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">急救技巧</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">危险化学品</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">机械安全</button></div></div><div class="field"><label>考题数量</label><input type="number" value="10" min="1" max="50" placeholder="1~50题"></div><div class="field"><label>时间限制（分钟）</label><input type="number" value="30" min="5" max="120" placeholder="5~120分钟"></div><div class="field"><label>及格分数（满分100）</label><input type="number" value="60" min="0" max="100"></div><div class="field"><label>重复作答限制</label><input value="最多2次（以成绩提交为准）" readonly style="background:#f7f8fa;color:var(--text);cursor:not-allowed;"></div></div><div style="background:#e8f3ff;border-radius:4px;padding:10px 14px;font-size:12px;color:var(--primary);margin-top:10px;">题库中符合所选标签的题目共 <strong>24</strong> 道，将随机抽取 <strong>10</strong> 道。</div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn" data-close>预览题目</button><button class="btn primary" data-close>确认组卷</button></div>'],
+      autoExam: ['自动组卷配置', '<p style="color:var(--muted);font-size:13px;margin:0 0 14px;">系统将按所选标签和数量从题库随机抽题，已有题目将被替换。</p><div class="form-grid"><div class="field wide"><label>考试标签（点击多选）</label><div class="filter-tags" style="margin:6px 0 0;"><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">消防安全</button><button class="filter-tag active" type="button" onclick="this.classList.toggle(\'active\')">电气安全</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">高处作业</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">急救技巧</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">危险化学品</button><button class="filter-tag" type="button" onclick="this.classList.toggle(\'active\')">机械安全</button></div></div><div class="field"><label>考题数量</label><input type="number" value="10" min="1" max="50" placeholder="1~50题"></div><div class="field"><label>时间限制（分钟）</label><input type="number" value="30" min="5" max="120" placeholder="5~120分钟"></div><div class="field"><label>重复作答限制</label><input value="最多2次（以成绩提交为准）" readonly style="background:#f7f8fa;color:var(--text);cursor:not-allowed;"></div></div><div style="background:#e8f3ff;border-radius:4px;padding:10px 14px;font-size:12px;color:var(--primary);margin-top:10px;">题库中符合所选标签的题目共 <strong>24</strong> 道，将随机抽取 <strong>10</strong> 道。</div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn" onclick="showAutoExamPreview()">预览题目</button><button class="btn primary" data-close onclick="showToast(\'组卷成功，已生成考试题目\')">确认组卷</button></div>'],
       exportQuestion: ['导出考题', '<p>导出当前培训关联考题，格式为 xlsx。</p><button class="btn primary" data-close>开始导出</button>'],
       manualSelectQ: ['手动选题', '<p style="color:var(--muted);font-size:13px;margin:0 0 14px;">从题库中手动挑选考题，加入当前培训的考试。</p><div class="toolbar" style="grid-template-columns:1fr 1fr 1fr auto;margin-bottom:10px;"><div class="field"><label>题目类型</label><select><option>全部</option><option>单选题</option><option>多选题</option><option>判断题</option></select></div><div class="field"><label>标签</label><select><option>全部</option><option>消防安全</option><option>电气安全</option><option>高处作业</option></select></div><div class="field"><label>搜索</label><input placeholder="搜索题目内容..."></div><div class="field" style="padding-top:20px;"><button class="btn primary">搜索</button></div></div><div class="table-scroll" style="max-height:260px;overflow-y:auto;"><table style="min-width:auto;"><thead><tr><th style="width:32px;"><input type="checkbox"></th><th>题目内容</th><th style="width:70px;">类型</th><th style="width:80px;">正确率</th></tr></thead><tbody><tr><td><input type="checkbox" checked></td><td style="white-space:normal;">以下哪种灭火器适用于电气火灾？</td><td><span class="tag blue">单选题</span></td><td>92%</td></tr><tr><td><input type="checkbox" checked></td><td style="white-space:normal;">高处作业时，应配备哪些安全防护装备？</td><td><span class="tag purple">多选题</span></td><td>78%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">发生触电事故时，首先应该怎么办？</td><td><span class="tag blue">单选题</span></td><td>85%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">安全帽在使用前必须检查是否有裂纹。</td><td><span class="tag orange">判断题</span></td><td>96%</td></tr><tr><td><input type="checkbox"></td><td style="white-space:normal;">工作场所噪声标准不得超过多少分贝？</td><td><span class="tag blue">单选题</span></td><td>71%</td></tr></tbody></table></div><div style="margin-top:10px;font-size:12px;color:var(--muted);">已选 <strong>2</strong> 道题目</div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn primary" data-close>确认加入考试</button></div>'],
       questionDetail: ['试题详情', '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;"><span class="tag blue">单选题</span><span class="tag orange">消防安全</span><span class="tag">电气安全</span><span style="margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;">题号 Q-001</span></div><div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">以下哪种灭火器适用于电气火灾？</div><div style="display:grid;gap:9px;margin-bottom:18px;"><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">A</span><span style="font-size:14px;color:var(--text-2);">泡沫灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #00B42A;border-radius:6px;background:#E8FFEA;"><span style="width:28px;height:28px;border-radius:50%;background:#00B42A;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">B</span><span style="font-size:14px;font-weight:600;color:#00B42A;flex:1;">二氧化碳灭火器</span><span style="font-size:12px;color:#fff;font-weight:700;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">C</span><span style="font-size:14px;color:var(--text-2);">水基型灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">D</span><span style="font-size:14px;color:var(--text-2);">清水灭火器</span></div></div><div style="background:var(--line-soft);border-radius:6px;padding:13px 15px;margin-bottom:18px;"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;letter-spacing:.3px;">答案解析</div><div style="font-size:13px;line-height:1.8;color:var(--text-2);">电气火灾应优先使用 <strong>二氧化碳灭火器</strong> 或干粉灭火器。泡沫、水基型及清水灭火器均含水，导电会造成触电危险，不适用于带电设备火灾。</div></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;"><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div><div style="font-size:24px;font-weight:800;color:#00B42A;">92%</div><div class="progress green" style="margin-top:8px;"><span style="width:92%"></span></div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">使用次数</div><div style="font-size:24px;font-weight:800;color:var(--primary);">125</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">关联 8 场培训</div></div></div></div>'],
@@ -3689,6 +3694,15 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     }
     function startTraining(id) {
       const t = trainings.find(x => x.id === id); if (!t) return;
+      const examTotal = examScoreTotal(getTrainingExamQuestions(t));
+      if (examTotal !== 100) {
+        activeTraining = t;
+        activeTrainTab = 'exam';
+        renderTrainingDetail();
+        hideModal();
+        showToast('考题分值总分需为 100 分，当前为 ' + examTotal + ' 分');
+        return;
+      }
       t.status = 'running'; t.statusText = '进行中';
       trElapsedSeconds = 0;
       renderTrainings(document.getElementById('trainingStatusFilter').value);
@@ -3836,18 +3850,76 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       }
       return html;
     }
+    const DEFAULT_EXAM_QUESTIONS = [
+      { type:'单选题', text:'以下哪种灭火器适用于电气火灾？', correct:'92%', wrong:'8%', score:10 },
+      { type:'多选题', text:'高处作业时，应配备哪些安全防护装备？', correct:'78%', wrong:'22%', score:15 },
+      { type:'单选题', text:'发生触电事故时，首先应该怎么办？', correct:'85%', wrong:'15%', score:10 },
+      { type:'判断题', text:'安全帽在使用前必须检查是否有裂纹。', correct:'96%', wrong:'4%', score:10 },
+      { type:'单选题', text:'工作场所噪声标准不得超过多少分贝？', correct:'71%', wrong:'29%', score:10 },
+      { type:'多选题', text:'化学品泄漏时正确的应急措施有哪些？', correct:'63%', wrong:'37%', score:15 },
+      { type:'判断题', text:'气瓶存放时应远离热源和明火。', correct:'88%', wrong:'12%', score:15 },
+      { type:'单选题', text:'动火作业前需要办理什么手续？', correct:'82%', wrong:'18%', score:15 },
+    ];
+
+    function cloneExamQuestion(q) {
+      return Object.assign({}, q, { tags: q.tags ? q.tags.slice() : [] });
+    }
+    function getTrainingExamQuestions(t) {
+      if (!t) return [];
+      if (!t.examQuestions) t.examQuestions = DEFAULT_EXAM_QUESTIONS.map(cloneExamQuestion);
+      return t.examQuestions;
+    }
+    function distributeExamScores(count) {
+      if (!count) return [];
+      const base = Math.floor(100 / count);
+      let remainder = 100 - base * count;
+      return Array.from({ length: count }, function(_, i) {
+        const extra = i < remainder ? 1 : 0;
+        return base + extra;
+      });
+    }
+    function examScoreTotal(list) {
+      return (list || []).reduce(function(sum, q) { return sum + (Number(q.score) || 0); }, 0);
+    }
+    function refreshExamScoreSummary() {
+      const list = getTrainingExamQuestions(activeTraining);
+      const total = examScoreTotal(list);
+      const ok = total === 100;
+      const totalEl = document.getElementById('examTotalScore');
+      const boxEl = document.getElementById('examPaperTotalBox');
+      const hintEl = document.getElementById('examScoreHint');
+      if (totalEl) {
+        totalEl.textContent = total + ' 分';
+        totalEl.style.color = ok ? 'var(--success)' : 'var(--danger)';
+      }
+      if (boxEl) {
+        boxEl.textContent = total + ' 分';
+        boxEl.style.color = ok ? 'var(--success)' : 'var(--danger)';
+      }
+      if (hintEl) {
+        hintEl.textContent = ok ? '总分已满足 100 分，可开始培训。' : '总分需等于 100 分，当前不可开始培训。';
+        hintEl.style.color = ok ? 'var(--success)' : 'var(--danger)';
+      }
+    }
+    function updateTrainingExamScore(idx, value) {
+      const list = getTrainingExamQuestions(activeTraining);
+      if (!list[idx]) return;
+      list[idx].score = Math.min(100, Math.max(0, parseInt(value, 10) || 0));
+      refreshExamScoreSummary();
+    }
+    function deleteTrainingExamQuestion(idx) {
+      const list = getTrainingExamQuestions(activeTraining);
+      if (!list[idx]) return;
+      list.splice(idx, 1);
+      renderTrainingDetail();
+      showToast('题目已删除，请确认试卷总分为 100 分');
+    }
+
     function renderExamTab(t) {
       const bars = [['0-59','#f53f3f',3,20],['60-69','#FF7D00',8,53],['70-79','#FFD166',14,93],['80-89','#2f6bff',22,100],['90-100','#00B42A',18,82]];
-      const qs = [
-        ['单选题','以下哪种灭火器适用于电气火灾？','92%','8%'],
-        ['多选题','高处作业时，应配备哪些安全防护装备？','78%','22%'],
-        ['单选题','发生触电事故时，首先应该怎么办？','85%','15%'],
-        ['判断题','安全帽在使用前必须检查是否有裂纹。','96%','4%'],
-        ['单选题','工作场所噪声标准不得超过多少分贝？','71%','29%'],
-        ['多选题','化学品泄漏时正确的应急措施有哪些？','63%','37%'],
-        ['判断题','气瓶存放时应远离热源和明火。','88%','12%'],
-        ['单选题','动火作业前需要办理什么手续？','82%','18%'],
-      ];
+      const qs = getTrainingExamQuestions(t);
+      const paperTotal = examScoreTotal(qs);
+      const paperOk = paperTotal === 100;
       const pending = t.status === 'pending';
       const done    = t.status === 'done';
       const dash = '<strong style="color:var(--muted);">--</strong>';
@@ -3891,10 +3963,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '</div></div>';
       return submitBlock
         + '<div class="metric-mini" style="margin-bottom:14px;">'
-        + '<div class="box"><span>考试总题数</span><strong>8</strong></div>'
+        + '<div class="box"><span>考试总题数</span><strong>' + qs.length + '</strong></div>'
+        + '<div class="box"><span>试卷总分</span><strong id="examPaperTotalBox" style="color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + paperTotal + ' 分</strong></div>'
         + '<div class="box"><span>参与人数</span>' + (pending ? dash : '<strong>' + t.count + '</strong>') + '</div>'
         + '<div class="box"><span>平均分</span>' + (pending ? dash : '<strong style="color:var(--primary);">87</strong>') + '</div>'
-        + '<div class="box"><span>最高分</span>' + (pending ? dash : '<strong style="color:var(--success);">100</strong>') + '</div>'
         + '</div>'
         + '<div style="display:flex;gap:8px;margin-bottom:16px;">'
         + '<button class="btn primary" data-modal="autoExam"' + (pending ? '' : ' disabled style="opacity:.45;cursor:not-allowed;pointer-events:none;"') + '>自动组卷配置</button>'
@@ -3907,12 +3979,28 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           : '<div class="score-dist-wrap">'
             + bars.map(([range,color,n,h]) => '<div class="score-dist-col"><div class="score-dist-count">' + n + '人</div><div class="score-dist-bar-area"><div class="score-dist-bar" style="height:' + h + '%;background:' + color + ';opacity:.85;"></div></div><div class="score-dist-label">' + range + '</div></div>').join('')
             + '</div>')
-        + '<div style="font-weight:700;font-size:13px;margin:14px 0 8px;">考题统计</div>'
-        + qs.map(([type,q,correct,wrong]) => '<div class="exam-q-card" onclick="openModal(\'questionDetail\')">'
-          + '<div class="eq-title"><span class="tag ' + (type==='多选题'?'purple':type==='判断题'?'orange':'blue') + '" style="flex-shrink:0;">' + type + '</span>' + q + '</div>'
-          + '<div class="eq-rates">' + (pending ? '<span style="color:var(--muted);">暂无作答数据</span>' : '<span style="color:var(--success);">✓ 正确率 ' + correct + '</span><span style="color:var(--danger);">✗ 错误率 ' + wrong + '</span>')
-          + (pending ? '<button class="btn" style="margin-left:auto;font-size:11px;padding:2px 8px;" onclick="event.stopPropagation();this.closest(\'.exam-q-card\').remove();showToast(\'题目已删除\');">删除</button>' : '<button class="btn" style="margin-left:auto;font-size:11px;padding:2px 8px;opacity:.45;cursor:not-allowed;pointer-events:none;">删除</button>') + '</div>'
-          + '</div>').join('');
+        + '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 8px;flex-wrap:wrap;">'
+          + '<div style="font-weight:700;font-size:13px;">考题统计</div>'
+          + '<div style="font-size:12px;color:var(--muted);">总分：<strong id="examTotalScore" style="font-size:16px;color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + paperTotal + ' 分</strong><span id="examScoreHint" style="margin-left:8px;color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + (paperOk ? '总分已满足 100 分，可开始培训。' : '总分需等于 100 分，当前不可开始培训。') + '</span></div>'
+        + '</div>'
+        + qs.map(function(item, i) {
+          const type = item.type;
+          const q = item.text || item.q || '';
+          const typeCls = type === '多选题' ? 'purple' : (type === '判断题' ? 'orange' : 'blue');
+          const scorePart = pending
+            ? '<span style="color:var(--muted);">分值</span><input type="number" min="0" max="100" value="' + (Number(item.score) || 0) + '" onclick="event.stopPropagation()" oninput="updateTrainingExamScore(' + i + ', this.value)" style="width:58px;height:28px;text-align:center;font-weight:700;color:var(--primary);padding:0 4px;">'
+            : '<span style="color:var(--primary);font-weight:700;">分值 ' + (Number(item.score) || 0) + ' 分</span>';
+          const statPart = pending
+            ? '<span style="color:var(--muted);">暂无作答数据</span>'
+            : '<span style="color:var(--success);">✓ 正确率 ' + (item.correct || '—') + '</span><span style="color:var(--danger);">✗ 错误率 ' + (item.wrong || '—') + '</span>';
+          const delBtn = pending
+            ? '<button class="btn" style="margin-left:auto;font-size:11px;padding:2px 8px;" onclick="event.stopPropagation();deleteTrainingExamQuestion(' + i + ');">删除</button>'
+            : '<button class="btn" style="margin-left:auto;font-size:11px;padding:2px 8px;opacity:.45;cursor:not-allowed;pointer-events:none;">删除</button>';
+          return '<div class="exam-q-card" onclick="openModal(\'questionDetail\')">'
+            + '<div class="eq-title"><span class="tag ' + typeCls + '" style="flex-shrink:0;">' + type + '</span>' + q + '</div>'
+            + '<div class="eq-rates">' + statPart + scorePart + delBtn + '</div>'
+            + '</div>';
+        }).join('');
     }
     function renderAttachTab(t) {
       const files = [
@@ -4457,8 +4545,210 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         matrix.classList.add('hidden');
       }
     }
+    // ── 自动组卷题库 & 预览 ───────────────────────────────────────────────────
+    const _questionBank = [
+      { type:'单选题', tags:['消防安全','电气安全'], text:'以下哪种灭火器适用于电气火灾？', answer:'B', accuracy:92 },
+      { type:'多选题', tags:['高处作业'],            text:'高处作业时，应配备哪些安全防护装备？', answer:'A,B,C,D', accuracy:78 },
+      { type:'单选题', tags:['急救技巧'],            text:'发生触电事故时，首先应该怎么做？', answer:'B', accuracy:85 },
+      { type:'判断题', tags:['消防安全'],            text:'安全帽在使用前必须检查是否有裂纹。', answer:'正确', accuracy:96 },
+      { type:'单选题', tags:['机械安全'],            text:'工作场所噪声标准不得超过多少分贝？', answer:'A', accuracy:71 },
+      { type:'单选题', tags:['危险化学品'],          text:'危险化学品泄漏时，第一步应该做什么？', answer:'C', accuracy:83 },
+      { type:'多选题', tags:['消防安全','急救技巧'], text:'火场逃生时，下列哪些做法是正确的？', answer:'A,C,D', accuracy:88 },
+      { type:'判断题', tags:['电气安全'],            text:'湿手不可以触摸电源开关。', answer:'正确', accuracy:97 },
+      { type:'单选题', tags:['机械安全'],            text:'旋转机械运行时，操作人员不允许做的是？', answer:'D', accuracy:79 },
+      { type:'多选题', tags:['危险化学品'],          text:'以下属于易燃易爆化学品的是？', answer:'B,C', accuracy:74 },
+      { type:'单选题', tags:['高处作业'],            text:'安全带的正确佩戴方式是？', answer:'A', accuracy:91 },
+      { type:'判断题', tags:['机械安全'],            text:'设备运行时可以进行清洁维护操作。', answer:'错误', accuracy:94 },
+      { type:'单选题', tags:['急救技巧'],            text:'心肺复苏（CPR）标准按压频率是？', answer:'C', accuracy:76 },
+      { type:'多选题', tags:['消防安全'],            text:'火灾初期可使用哪些方式扑救？', answer:'A,B,D', accuracy:82 },
+      { type:'单选题', tags:['电气安全'],            text:'发现电线老化应如何处理？', answer:'B', accuracy:89 },
+      { type:'判断题', tags:['高处作业'],            text:'5米以下高度作业无需使用安全带。', answer:'错误', accuracy:93 },
+      { type:'单选题', tags:['危险化学品'],          text:'化学品储存室温度应保持在多少度以下？', answer:'A', accuracy:68 },
+      { type:'多选题', tags:['急救技巧','电气安全'], text:'以下哪些是触电急救的正确步骤？', answer:'A,C,D', accuracy:80 },
+      { type:'判断题', tags:['消防安全'],            text:'消防通道不得堆放任何物品。', answer:'正确', accuracy:98 },
+      { type:'单选题', tags:['机械安全','危险化学品'], text:'进入受限空间作业前必须做什么？', answer:'D', accuracy:77 },
+      { type:'多选题', tags:['高处作业','机械安全'], text:'下列属于特种作业的是？', answer:'A,B,C', accuracy:85 },
+      { type:'判断题', tags:['急救技巧'],            text:'骨折患者在未固定前不可随意移动。', answer:'正确', accuracy:91 },
+      { type:'单选题', tags:['电气安全'],            text:'低压触电的安全电压上限是？', answer:'B', accuracy:73 },
+      { type:'多选题', tags:['危险化学品','消防安全'], text:'以下哪些化学品禁止混合储存？', answer:'A,C,D', accuracy:69 },
+    ];
+
+    let _autoExamPreviewPool = [];
+    let _autoExamPreviewMeta = { activeTags: [], totalMatch: 0 };
+
+    function initAutoExamConfig() {
+      const body = document.getElementById('modalBody');
+      const foot = document.getElementById('modalFoot');
+      if (!body) return;
+      const countInput = body.querySelector('input[type="number"]');
+      if (countInput) {
+        countInput.id = 'autoExamCount';
+        countInput.addEventListener('input', updateAutoExamConfigCount);
+      }
+      const hint = body.querySelector('div[style*="background:#e8f3ff"]');
+      if (hint) hint.innerHTML = '题库中符合所选标签的题目共 <strong>24</strong> 道，将随机抽取 <strong id="autoExamHintCount">10</strong> 道。确认组卷后可在考题统计列表中调整分值，试卷总分需为 <strong>100</strong> 分。';
+      if (foot) {
+        const confirmBtn = Array.from(foot.querySelectorAll('button')).find(btn => btn.textContent.includes('确认组卷'));
+        if (confirmBtn) {
+          confirmBtn.removeAttribute('data-close');
+          confirmBtn.onclick = function() { confirmAutoExamFromConfig(); };
+        }
+      }
+      updateAutoExamConfigCount();
+    }
+
+    function updateAutoExamConfigCount() {
+      const countInput = document.getElementById('autoExamCount');
+      const hintCount = document.getElementById('autoExamHintCount');
+      const count = Math.min(Math.max(parseInt(countInput?.value || '10', 10) || 0, 1), _questionBank.length);
+      if (hintCount) hintCount.textContent = count;
+    }
+
+    function buildAutoExamPoolFromConfig() {
+      const body = document.getElementById('modalBody');
+      if (!body) return [];
+      const activeTags = Array.from(body.querySelectorAll('.filter-tag.active')).map(b => b.textContent.trim());
+      const countInput = document.getElementById('autoExamCount') || body.querySelector('input[type="number"]');
+      const count = Math.min(Math.max(parseInt(countInput?.value || '10', 10), 1), _questionBank.length);
+      let pool = activeTags.length
+        ? _questionBank.filter(q => q.tags.some(t => activeTags.includes(t)))
+        : [..._questionBank];
+      const totalMatch = pool.length;
+      pool = pool.sort(() => Math.random() - 0.5).slice(0, count).map(cloneExamQuestion);
+      _autoExamPreviewPool = pool;
+      _autoExamPreviewMeta = { activeTags, totalMatch };
+      return pool;
+    }
+
+    function applyAutoExamPaper(pool) {
+      const list = pool || _autoExamPreviewPool;
+      if (!list.length) {
+        showToast('请先选择题目');
+        return;
+      }
+      const scores = distributeExamScores(list.length);
+      activeTraining.examQuestions = list.map(function(q, i) {
+        return {
+          type: q.type,
+          text: q.text,
+          answer: q.answer,
+          tags: q.tags ? q.tags.slice() : [],
+          correct: (q.accuracy !== undefined ? q.accuracy : 0) + '%',
+          wrong: (q.accuracy !== undefined ? (100 - q.accuracy) : 0) + '%',
+          score: scores[i] || 0
+        };
+      });
+      activeTrainTab = 'exam';
+      hideModal();
+      renderTrainingDetail();
+      showToast('组卷成功，已生成 ' + list.length + ' 道考试题目，请在考题统计中确认总分为 100 分');
+    }
+
+    function confirmAutoExamFromConfig() {
+      const pool = buildAutoExamPoolFromConfig();
+      applyAutoExamPaper(pool);
+    }
+
+    function confirmAutoExamPaper() {
+      if (!_autoExamPreviewPool.length) {
+        showToast('请先预览并选择题目');
+        return;
+      }
+      applyAutoExamPaper(_autoExamPreviewPool);
+    }
+
+    function renderAutoExamPreview() {
+      const body = document.getElementById('modalBody');
+      if (!body) return;
+      const activeTags = _autoExamPreviewMeta.activeTags || [];
+      const totalMatch = _autoExamPreviewMeta.totalMatch || 0;
+      const typeColor = { '单选题':'blue', '多选题':'purple', '判断题':'orange' };
+      const rows = _autoExamPreviewPool.map((q, i) => {
+        const color = q.accuracy >= 90 ? 'var(--success,#00b42a)' : q.accuracy >= 75 ? 'var(--warning,#ff7d00)' : 'var(--danger,#f53f3f)';
+        return `<tr style="cursor:pointer;" onclick="_showPreviewDetail(${i})" title="点击查看详情">
+          <td style="color:var(--muted);font-size:12px;width:32px;">${i + 1}</td>
+          <td style="width:72px;"><span class="tag ${typeColor[q.type] || 'blue'}">${q.type}</span></td>
+          <td>
+            <span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--primary);font-weight:500;"
+                  title="${q.text.replace(/"/g,'&quot;')}">${q.text}</span>
+          </td>
+          <td style="width:80px;color:var(--text);font-weight:700;font-family:monospace;">${q.answer}</td>
+          <td style="width:140px;">${q.tags.map(t => `<span class="tag blue" style="margin-right:3px;margin-bottom:2px;">${t}</span>`).join('')}</td>
+          <td style="width:60px;color:${color};font-weight:700;text-align:right;">${q.accuracy}%</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('modalTitle').textContent = `题目预览（共 ${_autoExamPreviewPool.length} 道）`;
+      document.querySelector('.modal').classList.add('wide');
+      body.innerHTML = `
+        <div style="margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          ${activeTags.map(t => `<span class="tag blue">${t}</span>`).join('')}
+          <span style="color:var(--muted);font-size:12px;margin-left:4px;">随机抽取 ${_autoExamPreviewPool.length} / ${totalMatch} 道符合题目 &nbsp;·&nbsp; 点击行查看详情</span>
+        </div>
+        <div class="table-scroll" style="max-height:420px;overflow-y:auto;">
+          <table style="min-width:auto;table-layout:fixed;width:100%;">
+            <colgroup><col style="width:36px"><col style="width:76px"><col><col style="width:84px"><col style="width:150px"><col style="width:64px"></colgroup>
+            <thead><tr><th>#</th><th>类型</th><th>题目内容</th><th>答案</th><th>标签</th><th style="text-align:right;">正确率</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="6" style="text-align:center;padding:24px 0;color:var(--muted);">没有符合所选标签的题目</td></tr>'}</tbody>
+          </table>
+        </div>
+        <div class="actions" style="margin-top:16px;">
+          <button class="btn" onclick="openModal('autoExam')">← 返回配置</button>
+          <button class="btn primary" id="autoExamConfirmBtn" onclick="confirmAutoExamPaper()" style="margin-left:8px;">确认组卷</button>
+        </div>`;
+      liftModalActions();
+    }
+
+    function showAutoExamPreview() {
+      buildAutoExamPoolFromConfig();
+      renderAutoExamPreview();
+    }
+
+    function _showPreviewDetail(idx) {
+      const q = _autoExamPreviewPool[idx];
+      if (!q) return;
+      const typeColor = { '单选题':'blue', '多选题':'purple', '判断题':'orange' };
+      const body = document.getElementById('modalBody');
+      document.getElementById('modalTitle').textContent = '题目详情';
+      const answerLabels = q.type === '判断题' ? ['正确','错误'] : ['A','B','C','D'];
+      const correctSet = new Set(q.answer.split(',').map(s => s.trim()));
+      const optRows = answerLabels.map(label => {
+        const isCorrect = correctSet.has(label);
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:${isCorrect?'2px solid #00B42A':'1px solid var(--line)'};border-radius:6px;background:${isCorrect?'#E8FFEA':'var(--card,#fff)'};margin-bottom:8px;">
+          <span style="width:28px;height:28px;border-radius:50%;background:${isCorrect?'#00B42A':'var(--line-soft)'};color:${isCorrect?'#fff':'var(--text-2)'};display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">${label}</span>
+          <span style="font-size:14px;font-weight:${isCorrect?'600':'400'};color:${isCorrect?'#00B42A':'var(--text-2)'};flex:1;">${label === '正确' || label === '错误' ? label : '（选项 ' + label + '）'}</span>
+          ${isCorrect ? '<span style="font-size:11px;color:#fff;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span>' : ''}
+        </div>`;
+      }).join('');
+      const accColor = q.accuracy >= 90 ? '#00b42a' : q.accuracy >= 75 ? '#ff7d00' : '#f53f3f';
+      body.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <span class="tag ${typeColor[q.type]||'blue'}">${q.type}</span>
+          ${q.tags.map(t => `<span class="tag blue">${t}</span>`).join('')}
+        </div>
+        <div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">${q.text}</div>
+        <div style="margin-bottom:16px;">${optRows}</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;">
+          <div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card,#fff);">
+            <div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div>
+            <div style="font-size:24px;font-weight:800;color:${accColor};">${q.accuracy}%</div>
+            <div class="progress ${q.accuracy>=90?'green':q.accuracy>=75?'orange':''}" style="margin-top:8px;"><span style="width:${q.accuracy}%"></span></div>
+          </div>
+          <div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card,#fff);">
+            <div style="color:var(--muted);font-size:12px;margin-bottom:6px;">题目类型</div>
+            <div style="font-size:18px;font-weight:800;color:var(--primary);">${q.type}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">答案：${q.answer}</div>
+          </div>
+        </div>
+        <div class="actions" style="margin-top:8px;">
+          <button class="btn" onclick="renderAutoExamPreview()">← 返回预览</button>
+        </div>`;
+      liftModalActions();
+    }
+
     function hideModal() {
       document.getElementById('modalMask').classList.remove('show');
+      document.querySelector('.modal').classList.remove('wide');
       const foot = document.getElementById('modalFoot');
       if (foot) { foot.innerHTML = ''; foot.classList.remove('show'); }
     }
@@ -4487,7 +4777,21 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         foot.classList.remove('show');
       }
       document.getElementById('modalMask').classList.add('show');
+      if (key === 'autoExam') initAutoExamConfig();
       if (key === 'questionForm') initQuestionForm();
+    }
+    function showPadConfirm(title, content, confirmText, onConfirm, danger) {
+      const mask = document.getElementById('modalMask');
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML =
+        '<div style="font-size:14px;color:var(--text-2);line-height:1.7;">' + content + '</div>'
+        + '<div class="actions"><button class="btn" data-close>取消</button><button class="btn ' + (danger ? 'danger' : 'primary') + '" id="padConfirmAction" style="margin-left:8px;">' + confirmText + '</button></div>';
+      liftModalActions();
+      mask.classList.add('show');
+      document.getElementById('padConfirmAction').onclick = function() {
+        hideModal();
+        onConfirm();
+      };
     }
     // ── 学员端当前培训状态 ───────────────────────────────────────────
     var padCurrentTrainingStatus = 'running'; // 'pending' | 'running' | 'done'
@@ -4509,17 +4813,33 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       var card   = document.getElementById('lobbyExamCard');
       var bottom = document.getElementById('lobbyExamCardBottom');
       var header = card ? card.querySelector('div[style*="gradient"]') : null;
+      var title = card ? card.querySelector('h3') : null;
       if (!card) return;
       if (padCurrentTrainingStatus === 'running') {
         card.removeAttribute('disabled');
         card.style.opacity  = '';
         card.style.cursor   = '';
         card.style.pointerEvents = '';
-        card.dataset.padTask = 'padExam';
         if (header) header.style.filter = '';
-        if (bottom) bottom.innerHTML =
-          '<p style="margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 30 分钟 · 及格 60 分</p>'
-          + '<div style="display:flex;gap:6px;align-items:center;" id="lobbyExamStatusLine"><span class="tag blue">关联考试</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">剩余 2 次</span></div>';
+        if (padExamSubmitted && _lastExamResult) {
+          card.dataset.padTask = 'padResult';
+          if (title) title.textContent = '查看答题结果';
+          if (bottom) {
+            bottom.style.background = _lastExamResult.level === 'fail' ? '#fff0f0' : (_lastExamResult.level === 'good' ? '#f0f7ff' : '#f0fff5');
+            bottom.innerHTML =
+              '<p style="margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">已提交成绩：<strong style="color:' + _lastExamResult.scoreColor + ';">' + _lastExamResult.earnedScore + ' 分</strong>（满分 ' + _lastExamResult.totalScore + ' 分）&nbsp;·&nbsp;' + _lastExamResult.tagText + '</p>'
+              + '<div style="display:flex;gap:6px;align-items:center;" id="lobbyExamStatusLine"><span class="tag green">已提交</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">仅可查看答题结果</span></div>';
+          }
+        } else {
+          card.dataset.padTask = 'padExam';
+          if (title) title.textContent = '参加考试';
+          if (bottom) {
+            bottom.style.background = '';
+            bottom.innerHTML =
+              '<p style="margin:0 0 10px;font-size:12px;color:var(--muted);line-height:1.5;" id="lobbyExamDesc">8 道题 · 30 分钟 · 满分 100 分</p>'
+              + '<div style="display:flex;gap:6px;align-items:center;" id="lobbyExamStatusLine"><span class="tag blue">关联考试</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">剩余 ' + padExamRemaining() + ' 次</span></div>';
+          }
+        }
       } else {
         card.setAttribute('disabled', '');
         card.style.opacity  = '.55';
@@ -4527,6 +4847,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         card.style.pointerEvents = 'none';
         delete card.dataset.padTask;
         if (header) header.style.filter = 'grayscale(60%)';
+        if (title) title.textContent = '参加考试';
         var tip = padCurrentTrainingStatus === 'pending'
           ? '⏳ 培训尚未开始，考试暂未开放'
           : '✓ 培训已结束，考试已关闭';
@@ -4900,6 +5221,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         if (i3) { i3.style.background = '#C9CDD4'; i3.style.boxShadow = 'none'; }
         // 清空编号输入框
         document.querySelectorAll('.pad-code-input').forEach(i => i.value = '');
+        padExamSubmitted = false;
+        _lastExamResult = null;
+        examAttemptCount = 0;
+        stopCountdown();
         switchPadTask('padHome');
         showToast('已退出培训');
       };
@@ -5252,6 +5577,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const inputs = Array.from(document.querySelectorAll('.pad-code-input'));
       const code = inputs.map(i => i.value).join('');
       if (code.length < 4) { showToast('请输入完整的4位培训编号'); return; }
+      padExamSubmitted = false;
+      _lastExamResult = null;
+      examAttemptCount = 0;
 
       // 根据编号确定培训状态（待开始同样允许加入）
       const info = padCodeStatusMap[code] || { status:'running', statusText:'进行中', tagClass:'blue' };
@@ -5282,18 +5610,32 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       switchPadTask('padDevice');
     });
     // ── Pad 端：答题流程 ─────────────────────────────────────────────────────
+    const PAD_EXAM_MAX_ATTEMPTS = 2;
     const PAD_QUESTIONS = [
-      { type:'单选题', q:'在生产过程中，下列哪种行为是正确的安全操作？', options:['快速通过危险区域','按规范佩戴防护用品','忽略警示标识','单人进入有限空间'], answer:[1], score:2, analysis:'正确的安全操作是按规范佩戴防护用品。快速通过危险区域、忽略警示标识及单人进入有限空间均属于违章行为，极易引发安全事故。' },
-      { type:'多选题', q:'火灾发生时，以下哪些是正确的逃生方法？', options:['用湿毛巾捂住口鼻','乘坐电梯逃生','低姿弯腰前行','沿安全通道有序撤离'], answer:[0,2,3], score:4, analysis:'火灾逃生应用湿毛巾捂口鼻防止吸入有毒气体、低姿弯腰减少烟雾吸入、沿安全通道撤离。严禁乘坐电梯，因火灾时电梯可能断电或充满烟雾，造成被困。' },
-      { type:'单选题', q:'以下哪种不属于安全生产"三违"行为？', options:['违章指挥','违章操作','违反劳动纪律','按章佩戴防护用品'], answer:[3], score:2, analysis:'"三违"是指违章指挥、违章操作、违反劳动纪律。"按章佩戴防护用品"是正确的安全行为，不属于"三违"。' },
-      { type:'判断题', q:'发现安全隐患应立即上报，不得隐瞒。', options:['正确','错误'], answer:[0], score:2, analysis:'正确。发现安全隐患必须及时上报，以便采取整改措施，防止事故发生。隐瞒隐患不仅违反安全生产法规，还可能导致重大事故。' },
-      { type:'单选题', q:'电气火灾应优先使用下列哪种灭火器？', options:['泡沫灭火器','二氧化碳灭火器','清水灭火器','水基型灭火器'], answer:[1], score:2, analysis:'电气火灾应使用二氧化碳灭火器或干粉灭火器。泡沫、清水、水基型灭火器均含水，导电会造成触电危险，严禁用于带电设备火灾。' },
-      { type:'多选题', q:'进入有限空间作业前必须做到？', options:['先通风','先检测','无需审批','专人监护'], answer:[0,1,3], score:4, analysis:'进入有限空间作业前必须先通风换气、检测气体浓度（含氧量、有害气体），并设专人在外监护。有限空间作业必须办理审批手续，"无需审批"说法错误。' },
-      { type:'单选题', q:'高处作业是指坠落高度基准面多少米及以上？', options:['1 米','2 米','3 米','5 米'], answer:[1], score:2, analysis:'根据《高处作业分级》标准，坠落高度基准面 2 米及以上的作业均属于高处作业，必须采取防坠落措施。' },
-      { type:'判断题', q:'安全帽超过有效期仍可继续使用。', options:['正确','错误'], answer:[1], score:2, analysis:'错误。安全帽有明确的使用年限，植物帽衬为 2.5 年，塑料帽衬为 3 年。超过有效期的安全帽材料老化，防护性能下降，必须更换。' },
+      { type:'单选题', q:'在生产过程中，下列哪种行为是正确的安全操作？', options:['快速通过危险区域','按规范佩戴防护用品','忽略警示标识','单人进入有限空间'], answer:[1], score:10, analysis:'正确的安全操作是按规范佩戴防护用品。快速通过危险区域、忽略警示标识及单人进入有限空间均属于违章行为，极易引发安全事故。' },
+      { type:'多选题', q:'火灾发生时，以下哪些是正确的逃生方法？', options:['用湿毛巾捂住口鼻','乘坐电梯逃生','低姿弯腰前行','沿安全通道有序撤离'], answer:[0,2,3], score:15, analysis:'火灾逃生应用湿毛巾捂口鼻防止吸入有毒气体、低姿弯腰减少烟雾吸入、沿安全通道撤离。严禁乘坐电梯，因火灾时电梯可能断电或充满烟雾，造成被困。' },
+      { type:'单选题', q:'以下哪种不属于安全生产"三违"行为？', options:['违章指挥','违章操作','违反劳动纪律','按章佩戴防护用品'], answer:[3], score:10, analysis:'"三违"是指违章指挥、违章操作、违反劳动纪律。"按章佩戴防护用品"是正确的安全行为，不属于"三违"。' },
+      { type:'判断题', q:'发现安全隐患应立即上报，不得隐瞒。', options:['正确','错误'], answer:[0], score:10, analysis:'正确。发现安全隐患必须及时上报，以便采取整改措施，防止事故发生。隐瞒隐患不仅违反安全生产法规，还可能导致重大事故。' },
+      { type:'单选题', q:'电气火灾应优先使用下列哪种灭火器？', options:['泡沫灭火器','二氧化碳灭火器','清水灭火器','水基型灭火器'], answer:[1], score:10, analysis:'电气火灾应使用二氧化碳灭火器或干粉灭火器。泡沫、清水、水基型灭火器均含水，导电会造成触电危险，严禁用于带电设备火灾。' },
+      { type:'多选题', q:'进入有限空间作业前必须做到？', options:['先通风','先检测','无需审批','专人监护'], answer:[0,1,3], score:15, analysis:'进入有限空间作业前必须先通风换气、检测气体浓度（含氧量、有害气体），并设专人在外监护。有限空间作业必须办理审批手续，"无需审批"说法错误。' },
+      { type:'单选题', q:'高处作业是指坠落高度基准面多少米及以上？', options:['1 米','2 米','3 米','5 米'], answer:[1], score:15, analysis:'根据《高处作业分级》标准，坠落高度基准面 2 米及以上的作业均属于高处作业，必须采取防坠落措施。' },
+      { type:'判断题', q:'安全帽超过有效期仍可继续使用。', options:['正确','错误'], answer:[1], score:15, analysis:'错误。安全帽有明确的使用年限，植物帽衬为 2.5 年，塑料帽衬为 3 年。超过有效期的安全帽材料老化，防护性能下降，必须更换。' },
     ];
     let padQIndex = 0;
     let padAnswers = [];
+    function padExamRemaining() {
+      return Math.max(0, PAD_EXAM_MAX_ATTEMPTS - examAttemptCount);
+    }
+    function canPadRetest() {
+      return !padExamSubmitted && examAttemptCount < PAD_EXAM_MAX_ATTEMPTS - 1;
+    }
+    function syncPadExamTimes() {
+      const remain = padExamSubmitted ? 0 : padExamRemaining();
+      const examTimes = document.getElementById('padExamTimes');
+      if (examTimes) examTimes.textContent = remain;
+      const lobbyTimes = document.getElementById('lobbyExamTimes');
+      if (lobbyTimes && !padExamSubmitted) lobbyTimes.textContent = '剩余 ' + remain + ' 次';
+    }
     function padTypeClass(t) { return t === '多选题' ? 'multi' : (t === '判断题' ? 'judge' : 'single'); }
     function renderPadQuestion() {
       const total = PAD_QUESTIONS.length;
@@ -5307,6 +5649,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       document.getElementById('padQHint').textContent = q.type === '多选题' ? '本题为多选题，请选择所有正确答案' : (q.type === '判断题' ? '本题为判断题，请判断对错' : '本题为单选题，请选择 1 个答案');
       const scoreEl = document.getElementById('padQScore');
       if (scoreEl) scoreEl.textContent = (q.score || 2) + ' 分';
+      syncPadExamTimes();
       const sel = padAnswers[padQIndex] || [];
       document.getElementById('padAnswerList').innerHTML = q.options.map((opt, i) =>
         '<button class="answer' + (sel.includes(i) ? ' active' : '') + '" data-pad-opt="' + i + '"><span class="answer-letter">' + String.fromCharCode(65 + i) + '</span><span>' + opt + '</span></button>'
@@ -5329,7 +5672,13 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       renderPadQuestion();
     }
     var _lastExamResult = null;
+    var padExamSubmitted = false;
     function submitPadExam() {
+      if (padExamSubmitted) {
+        showToast('成绩已提交，仅可查看答题结果');
+        switchPadTask('padResult');
+        return;
+      }
       stopCountdown();
       let earnedScore = 0, totalScore = 0;
       PAD_QUESTIONS.forEach((q, idx) => {
@@ -5356,15 +5705,25 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       var wrap = document.getElementById('padResultDetailWrap'); if (wrap) wrap.style.display = 'none';
       var acts = document.getElementById('padResultActions');
       if (acts) {
-        acts.innerHTML = '<button class="btn primary" id="confirmSubmitExam">提交成绩</button><button class="btn" id="restartExam">重新测试</button>';
+        const remain = padExamRemaining();
+        const canRetest = canPadRetest();
+        acts.innerHTML =
+          '<div style="flex-basis:100%;text-align:left;background:var(--bg);border:1px solid var(--line-soft);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-2);line-height:1.7;margin-bottom:4px;">'
+          + '<div><strong style="color:var(--primary);">提交成绩：</strong>确认并保存为正式成绩，提交后不能再参加考试，只能查看答题结果。</div>'
+          + '<div><strong style="color:var(--warning);">重新测试：</strong>' + (canRetest ? '放弃当前未提交结果，并消耗 1 次答题机会；确认后剩余 ' + Math.max(0, remain - 1) + ' 次。' : '已无剩余重新测试机会，请提交成绩或查看当前结果。') + '</div>'
+          + '</div>'
+          + '<button class="btn primary" id="confirmSubmitExam">提交成绩</button>'
+          + '<button class="btn" id="restartExam"' + (canRetest ? '' : ' disabled style="opacity:.45;cursor:not-allowed;"') + '>重新测试</button>';
         _bindResultActions();
       }
       switchPadTask('padResult');
     }
     function confirmSubmitExam() {
       if (!_lastExamResult) return;
+      if (padExamSubmitted) { showToast('成绩已提交，不能重复提交'); return; }
       const { earnedScore, totalScore, level, tagText, scoreColor, answers } = _lastExamResult;
-      examAttemptCount += 1;
+      examAttemptCount = Math.min(PAD_EXAM_MAX_ATTEMPTS, examAttemptCount + 1);
+      padExamSubmitted = true;
       document.getElementById('padResultDetail').innerHTML = PAD_QUESTIONS.map((q, idx) => {
         const ok = (answers[idx] || []).slice().sort().join(',') === q.answer.slice().sort().join(',');
         const qs = q.score || 2;
@@ -5383,16 +5742,20 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '</div>';
       }).join('');
       var wrap = document.getElementById('padResultDetailWrap'); if (wrap) wrap.style.display = '';
-      const remainTimes = Math.max(0, 2 - examAttemptCount);
+      const remainTimes = 0;
       const timesEl = document.getElementById('lobbyExamTimes');
-      if (timesEl) timesEl.textContent = '剩余 ' + remainTimes + ' 次';
+      if (timesEl) timesEl.textContent = '仅可查看答题结果';
       const lobbyDesc = document.getElementById('lobbyExamDesc');
-      if (lobbyDesc) lobbyDesc.innerHTML = '得分 <strong style="color:' + scoreColor + ';">' + earnedScore + ' 分</strong>（满分 ' + totalScore + ' 分）&nbsp;·&nbsp;' + tagText;
+      if (lobbyDesc) lobbyDesc.innerHTML = '已提交成绩：<strong style="color:' + scoreColor + ';">' + earnedScore + ' 分</strong>（满分 ' + totalScore + ' 分）&nbsp;·&nbsp;' + tagText;
       const lobbyBottom = document.getElementById('lobbyExamCardBottom');
       if (lobbyBottom) lobbyBottom.style.background = level === 'fail' ? '#fff0f0' : level === 'good' ? '#f0f7ff' : '#f0fff5';
       document.getElementById('padExamTimes').textContent = remainTimes;
       var lobbyCard = document.getElementById('lobbyExamCard');
       if (lobbyCard) lobbyCard.setAttribute('data-pad-task', 'padResult');
+      var lobbyTitle = lobbyCard ? lobbyCard.querySelector('h3') : null;
+      if (lobbyTitle) lobbyTitle.textContent = '查看答题结果';
+      var statusLine = document.getElementById('lobbyExamStatusLine');
+      if (statusLine) statusLine.innerHTML = '<span class="tag green">已提交</span><span style="font-size:12px;color:var(--muted);" id="lobbyExamTimes">仅可查看答题结果</span>';
       var acts = document.getElementById('padResultActions');
       if (acts) {
         acts.innerHTML = '<button class="btn" id="backToLobbyBtn">返回培训</button>';
@@ -5402,16 +5765,28 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     }
     function _bindResultActions() {
       var confirmBtn = document.getElementById('confirmSubmitExam');
-      if (confirmBtn) confirmBtn.addEventListener('click', confirmSubmitExam);
+      if (confirmBtn) confirmBtn.addEventListener('click', function() {
+        showPadConfirm('确认提交成绩', '<p style="margin:0 0 10px;">提交后成绩将正式保存，本次考试将锁定。</p><p style="margin:0;color:var(--danger);font-weight:700;">提交后不能再参加考试，只能查看答题结果。</p>', '确认提交', confirmSubmitExam);
+      });
       var restartBtn = document.getElementById('restartExam');
       if (restartBtn) restartBtn.addEventListener('click', function() {
-        if (examAttemptCount >= 2) { showToast('已达到最大提交次数2次），以最新成绩为准。'); return; }
-        var w = document.getElementById('padResultDetailWrap'); if (w) w.style.display = 'none';
-        startPadExam();
-        switchPadTask('padExam');
+        if (padExamSubmitted) { showToast('成绩已提交，不能重新测试'); return; }
+        if (!canPadRetest()) { showToast('已无剩余重新测试次数'); return; }
+        const afterRetestRemain = Math.max(0, padExamRemaining() - 1);
+        showPadConfirm('确认重新测试', '<p style="margin:0 0 10px;">重新测试将清空当前未提交的答题结果，并从第 1 题重新开始。</p><p style="margin:0;color:var(--muted);">本次操作将消耗 1 次答题机会，确认后剩余 ' + afterRetestRemain + ' 次。</p>', '重新测试', function() {
+          examAttemptCount = Math.min(PAD_EXAM_MAX_ATTEMPTS, examAttemptCount + 1);
+          syncPadExamTimes();
+          var w = document.getElementById('padResultDetailWrap'); if (w) w.style.display = 'none';
+          switchPadTask('padExam');
+        }, true);
       });
     }
     function startPadExam() {
+      if (padExamSubmitted) {
+        showToast('成绩已提交，仅可查看答题结果');
+        switchPadTask('padResult');
+        return;
+      }
       padQIndex = 0;
       padAnswers = [];
       renderPadQuestion();
@@ -5465,106 +5840,135 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const pt = data[idx] || data[0];
       const time = _brainTipTime(idx / 10);
       if (isRT) {
-        tip.innerHTML = '<strong>' + time + '</strong>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--success)"></i>注意力</span><b>' + (100-pt[0]) + '</b></div>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--warning)"></i>疲劳度</span><b>' + (100-pt[1]) + '</b></div>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--purple)"></i>情绪</span><b>'   + (100-pt[2]) + '</b></div>';
+        tip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">${time}</div><div style="display:grid;gap:3px;">` +
+          `<div><span style="color:#2f6bff;">●</span> 反应时：<b>${Math.round(100 - pt[0]/1.5)}%</b></div>` +
+          `<div><span style="color:#00B42A;">●</span> 精准度：<b>${pt[1]}%</b></div>` +
+          `<div><span style="color:#FF7D00;">●</span> 疲劳度：<b>${pt[2]}%</b></div>` +
+          `</div>`;
       } else {
-        tip.innerHTML = '<strong>' + time + '</strong>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--primary)"></i>综合得分</span><b>' + (100-pt[3]) + '</b></div>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--success)"></i>注意力</span><b>'  + (100-pt[1]) + '</b></div>'
-          + '<div class="tip-row"><span><i class="tip-dot" style="background:var(--purple)"></i>情绪</span><b>'     + (100-pt[2]) + '</b></div>';
+        tip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">${time}</div><div style="display:grid;gap:3px;">` +
+          `<div><span style="color:#2f6bff;">●</span> 学习投入：<b>${Math.round(100 - pt[0]/1.5)}%</b></div>` +
+          `<div><span style="color:#00B42A;">●</span> 注意力：<b>${Math.round(100 - pt[1]/1.2)}%</b></div>` +
+          `<div><span style="color:#FF7D00;">●</span> 情绪稳定：<b>${Math.round(100 - pt[2]/1.3)}%</b></div>` +
+          `<div><span style="color:#722ed1;">●</span> 疲劳度：<b>${pt[3]}%</b></div>` +
+          `</div>`;
       }
-      tip.style.left = Math.min(window.innerWidth - 190, e.clientX + 14) + 'px';
-      tip.style.top  = Math.max(12, e.clientY - 16) + 'px';
+      const wrap = svg.parentElement;
+      const wrect = wrap ? wrap.getBoundingClientRect() : rect;
+      const relX = e.clientX - wrect.left;
+      const relY = e.clientY - wrect.top;
       tip.style.display = 'block';
+      tip.style.left = (relX + 12) + 'px';
+      tip.style.top  = Math.max(0, relY - 60) + 'px';
     }
     function hideBrainTip() {
-      var tip = document.getElementById('brainTooltip');
+      const tip = document.getElementById('brainTooltip');
       if (tip) tip.style.display = 'none';
-    }
-    document.querySelectorAll('.brain-svg-curve').forEach(function(svg) {
-      svg.addEventListener('mousemove', function(e) { showBrainTip(e, svg, false); });
-      svg.addEventListener('mouseleave', hideBrainTip);
-    });
-    document.querySelectorAll('.brain-svg-rt').forEach(function(svg) {
-      svg.addEventListener('mousemove', function(e) { showBrainTip(e, svg, true); });
-      svg.addEventListener('mouseleave', hideBrainTip);
-    });
-
-    // ── 蓝牙设备模拟 ──────────────────────────────────────────────────────────
-    var _mockBtDevices = [
-      { name:'BrainLink-X 001', id:'BL-X-001', num:'SN-20251210-001', battery:85, wearing:true  },
-      { name:'BrainLink-X 002', id:'BL-X-002', num:'SN-20251210-002', battery:72, wearing:false },
-      { name:'BrainLink-X 003', id:'BL-X-003', num:'SN-20251210-003', battery:45, wearing:false },
-    ];
-    let _connectedBtDevice = null;
-
-    function _pdShow(state) {
-      ['pdIdle','pdScanning','pdConnecting','pdConnected'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.style.display = (id === state) ? '' : 'none';
-      });
-    }
-
-    function _pdStartScan() {
-      _pdShow('pdScanning');
-      var list = document.getElementById('pdDeviceList');
-      if (list) list.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px 0;">正在扫描...</div>';
-      setTimeout(function() {
-        var list2 = document.getElementById('pdDeviceList');
-        if (!list2) return;
-        list2.innerHTML = _mockBtDevices.map(function(d, i) {
-          var sig = i===0?'强':i===1?'中':'弱';
-          var sigColor = i===0?'var(--success)':i===1?'var(--warning)':'var(--muted)';
-          return '<button class="btn" data-pd-dev="' + i + '" style="display:flex;align-items:center;justify-content:space-between;text-align:left;padding:11px 14px;border-radius:10px;width:100%;">'
-            + '<div style="display:flex;align-items:center;gap:10px;">'
-            + '<div style="width:36px;height:36px;border-radius:8px;background:#e8f3ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
-            + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M12 2L7 7M12 2L17 7M12 22L7 17M12 22L17 17" stroke="#2f6bff" stroke-width="2" stroke-linecap="round"/></svg></div>'
-            + '<div><div style="font-weight:700;font-size:13px;color:var(--text);">' + d.name + '</div>'
-            + '<div style="font-size:11px;color:var(--muted);">ID: ' + d.id + '</div></div></div>'
-            + '<span style="font-size:11px;font-weight:600;color:' + sigColor + ';">信号' + sig + '</span></button>';
-        }).join('');
-        list2.querySelectorAll('[data-pd-dev]').forEach(function(btn) {
-          btn.addEventListener('click', function() {
-            var idx = Number(btn.dataset.pdDev);
-            var dev = _mockBtDevices[idx];
-            var nm = document.getElementById('pdConnectingName');
-            if (nm) nm.textContent = dev.name;
-            _pdShow('pdConnecting');
-            setTimeout(function() {
-              _connectedBtDevice = dev;
-              var el = function(id) { return document.getElementById(id); };
-              if (el('pdConnDevName')) el('pdConnDevName').textContent = dev.name;
-              if (el('pdConnDevNum'))  el('pdConnDevNum').textContent  = dev.num;
-              if (el('pdConnDevId'))   el('pdConnDevId').textContent   = dev.id;
-              if (el('pdBatText'))     el('pdBatText').textContent     = dev.battery + '%';
-              if (el('pdBatBar'))      el('pdBatBar').style.width      = dev.battery + '%';
-              if (el('pdBatBar'))      el('pdBatBar').style.background = dev.battery>=50?'var(--success)':dev.battery>=20?'var(--warning)':'var(--danger)';
-              if (el('pdConnWear'))    el('pdConnWear').innerHTML = dev.wearing
-                ? '<span style="color:var(--success);">● 已佩戴</span>'
-                : '<span style="color:var(--warning);">● 未佩戴</span>';
-              var badge = el('pdStatusBadge');
-              if (badge) { badge.textContent='已连接'; badge.style.background='#e8fff0'; badge.style.color='var(--success)'; }
-              var b2 = el('step2Badge');
-              if (b2) { b2.textContent='已完成'; b2.style.background='#e8fff0'; b2.style.color='#00B42A'; }
-              var s3 = el('stepCard3');
-              if (s3) { s3.removeAttribute('disabled'); s3.style.opacity='1'; s3.style.pointerEvents=''; }
-              var b3 = el('step3Badge');
-              if (b3) { b3.textContent='已解锁'; b3.style.background='#e8f3ff'; b3.style.color='var(--primary)'; }
-              var i3 = el('step3Icon');
-              if (i3) { i3.style.background='linear-gradient(135deg,#165DFF 0%,#4080FF 100%)'; i3.style.boxShadow='0 4px 14px rgba(22,93,255,.32)'; }
-              _pdShow('pdConnected');
-              var enterBtn = el('padEnterTrainingBtn');
-              if (enterBtn) { enterBtn.removeAttribute('disabled'); enterBtn.style.opacity=''; }
-              showToast(dev.name + ' 连接成功');
-            }, 1800);
-          });
-        });
-      }, 1500);
     }
 
     var _btPermGranted = false;
+    var _connectedBtDevice = null;
+    var _pdScanTimer = null;
+    var _pdConnectTimer = null;
+    var _pdDevices = [
+      { name:'BrainLink-X 001', num:'BL-X 001', id:'BL-20240001', signal:92, battery:71 },
+      { name:'BrainLink-X 006', num:'BL-X 006', id:'BL-20240006', signal:86, battery:84 },
+      { name:'BrainLink-Lite 003', num:'BL-L 003', id:'BL-20240003', signal:73, battery:58 }
+    ];
+    function _pdShow(id) {
+      ['pdIdle','pdScanning','pdConnecting','pdConnected'].forEach(function(sid) {
+        var el = document.getElementById(sid);
+        if (el) el.style.display = sid === id ? '' : 'none';
+      });
+    }
+    function _pdSetBadge(text, bg, color) {
+      var badge = document.getElementById('pdStatusBadge');
+      if (!badge) return;
+      badge.textContent = text;
+      badge.style.background = bg || '#F2F3F5';
+      badge.style.color = color || 'var(--muted)';
+    }
+    function _pdRenderDeviceList() {
+      var list = document.getElementById('pdDeviceList');
+      if (!list) return;
+      list.innerHTML = _pdDevices.map(function(d, i) {
+        var signalColor = d.signal >= 85 ? 'var(--success)' : (d.signal >= 70 ? 'var(--warning)' : 'var(--muted)');
+        return '<button type="button" class="btn" onclick="_pdConnectDevice(' + i + ')" style="height:auto;text-align:left;padding:12px 14px;display:flex;align-items:center;gap:12px;justify-content:flex-start;border-radius:10px;">'
+          + '<span style="width:38px;height:38px;border-radius:10px;background:#e8f3ff;color:var(--primary);display:grid;place-items:center;font-size:18px;flex-shrink:0;">⌁</span>'
+          + '<span style="flex:1;min-width:0;"><span style="display:block;font-size:14px;font-weight:800;color:var(--text);margin-bottom:3px;">' + d.name + '</span>'
+          + '<span style="display:flex;gap:10px;font-size:12px;color:var(--muted);"><span>信号 <strong style="color:' + signalColor + ';">' + d.signal + '%</strong></span><span>电量 <strong style="color:var(--text);">' + d.battery + '%</strong></span></span></span>'
+          + '<span style="font-size:12px;font-weight:700;color:var(--primary);white-space:nowrap;">连接</span>'
+          + '</button>';
+      }).join('');
+    }
+    function _pdStartScan() {
+      clearTimeout(_pdScanTimer);
+      clearTimeout(_pdConnectTimer);
+      _connectedBtDevice = null;
+      _pdSetBadge('搜索中', '#e8f3ff', 'var(--primary)');
+      _pdShow('pdScanning');
+      var list = document.getElementById('pdDeviceList');
+      if (list) list.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px 0;">正在扫描，请稍候...</div>';
+      _pdScanTimer = setTimeout(function() {
+        _pdRenderDeviceList();
+        showToast('已发现 ' + _pdDevices.length + ' 台附近设备');
+      }, 700);
+    }
+    function _pdConnectDevice(index) {
+      var d = _pdDevices[index];
+      if (!d) return;
+      clearTimeout(_pdScanTimer);
+      clearTimeout(_pdConnectTimer);
+      _pdSetBadge('连接中', '#fff7e8', 'var(--warning)');
+      var name = document.getElementById('pdConnectingName');
+      if (name) name.textContent = d.name;
+      _pdShow('pdConnecting');
+      _pdConnectTimer = setTimeout(function() { _pdFinishConnection(d); }, 900);
+    }
+    function _pdFinishConnection(d) {
+      _connectedBtDevice = d;
+      var name = document.getElementById('pdConnDevName'); if (name) name.textContent = d.name;
+      var num = document.getElementById('pdConnDevNum'); if (num) num.textContent = d.num;
+      var id = document.getElementById('pdConnDevId'); if (id) id.textContent = d.id;
+      var bar = document.getElementById('pdBatBar'); if (bar) bar.style.width = d.battery + '%';
+      var bat = document.getElementById('pdBatText'); if (bat) bat.textContent = d.battery + '%';
+      var wear = document.getElementById('pdConnWear'); if (wear) wear.innerHTML = '<span style="color:var(--success);">● 已佩戴</span>';
+      _pdSetBadge('已连接', '#e8fff0', 'var(--success)');
+      _pdShow('pdConnected');
+
+      var detail = document.getElementById('step2Detail'); if (detail) detail.style.display = '';
+      var stepDevice = document.getElementById('step2Device'); if (stepDevice) stepDevice.textContent = d.name;
+      var b2 = document.getElementById('step2Badge');
+      if (b2) { b2.textContent = '已完成'; b2.style.background = '#e8fff0'; b2.style.color = '#00B42A'; }
+      var s3 = document.getElementById('stepCard3');
+      if (s3) { s3.removeAttribute('disabled'); s3.style.opacity = '1'; s3.style.pointerEvents = ''; }
+      var b3 = document.getElementById('step3Badge');
+      if (b3) { b3.textContent = '已解锁'; b3.style.background = '#e8f3ff'; b3.style.color = 'var(--primary)'; }
+      var i3 = document.getElementById('step3Icon');
+      if (i3) { i3.style.background = 'linear-gradient(135deg,#165DFF 0%,#4080FF 100%)'; i3.style.boxShadow = '0 4px 14px rgba(22,93,255,.32)'; }
+      var enter = document.getElementById('padEnterTrainingBtn');
+      if (enter) { enter.disabled = false; enter.style.opacity = '1'; }
+      showToast('设备连接成功，佩戴状态正常');
+    }
+    function _pdResetDeviceState() {
+      clearTimeout(_pdScanTimer);
+      clearTimeout(_pdConnectTimer);
+      _connectedBtDevice = null;
+      _pdShow('pdIdle');
+      _pdSetBadge('未连接', '#F2F3F5', 'var(--muted)');
+      var enter = document.getElementById('padEnterTrainingBtn');
+      if (enter) { enter.disabled = true; enter.style.opacity = '.45'; }
+      var detail = document.getElementById('step2Detail'); if (detail) detail.style.display = 'none';
+      var stepDevice = document.getElementById('step2Device'); if (stepDevice) stepDevice.textContent = '—';
+      var b2 = document.getElementById('step2Badge');
+      if (b2) { b2.textContent = '待完成'; b2.style.background = '#F2F3F5'; b2.style.color = 'var(--muted)'; }
+      var s3 = document.getElementById('stepCard3');
+      if (s3) { s3.setAttribute('disabled', ''); s3.style.opacity = '.45'; s3.style.pointerEvents = 'none'; }
+      var b3 = document.getElementById('step3Badge');
+      if (b3) { b3.textContent = '未解锁'; b3.style.background = '#F2F3F5'; b3.style.color = 'var(--muted)'; }
+      var i3 = document.getElementById('step3Icon');
+      if (i3) { i3.style.background = '#C9CDD4'; i3.style.boxShadow = 'none'; }
+    }
     document.getElementById('padBtScan')?.addEventListener('click', function() {
       if (_btPermGranted) { _pdStartScan(); return; }
       var ov = document.getElementById('pdPermOverlay');
@@ -5581,12 +5985,15 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (ov) ov.style.display = 'none';
       showToast('需要蓝牙权限才能搜索设备');
     });
-    document.getElementById('padBtDisconnect')?.addEventListener('click', function() {
-      _connectedBtDevice = null;
-      _btPermGranted = false;
+    document.getElementById('padBtCancel')?.addEventListener('click', function() {
+      clearTimeout(_pdScanTimer);
       _pdShow('pdIdle');
-      var badge = document.getElementById('pdStatusBadge');
-      if (badge) { badge.textContent='未连接'; badge.style.background=''; badge.style.color=''; }
+      _pdSetBadge('未连接', '#F2F3F5', 'var(--muted)');
+      showToast('已取消搜索');
+    });
+    document.getElementById('padBtDisconnect')?.addEventListener('click', function() {
+      _btPermGranted = false;
+      _pdResetDeviceState();
       showToast('设备已断开');
     });
 
