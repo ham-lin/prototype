@@ -1136,7 +1136,7 @@
 
       .version-req-groups {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
         gap: 12px;
         padding: 12px;
       }
@@ -1550,6 +1550,218 @@
       .ledger-space-tree-empty {
         padding: 12px 6px;
         color: #8a98a8;
+      }
+
+      .cabinet-space-panel {
+        flex: 1;
+        min-width: 0;
+        overflow: auto;
+        background: #f7f9fc;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .cabinet-space-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .cabinet-space-stat {
+        min-height: 82px;
+        padding: 14px 16px;
+        border: 1px solid #e7eef7;
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .cabinet-space-stat-title {
+        font-size: 13px;
+        color: #607086;
+      }
+
+      .cabinet-space-stat-value {
+        margin-top: 8px;
+        font-size: 22px;
+        line-height: 1;
+        font-weight: 700;
+        color: #16345c;
+      }
+
+      .cabinet-space-stat-sub {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #6d7f91;
+      }
+
+      .cabinet-space-stat-icon {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #f0f6ff;
+        color: #1f78ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        box-shadow: inset 0 0 0 1px #d8e8ff;
+      }
+
+      .cabinet-space-stat-icon svg {
+        width: 24px;
+        height: 24px;
+        display: block;
+      }
+
+      .cabinet-space-content-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .cabinet-space-search {
+        width: 320px;
+        max-width: 100%;
+        height: 32px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 0 10px;
+        color: #23405f;
+        background: #fff;
+      }
+
+      .cabinet-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 14px;
+        align-items: start;
+      }
+
+      .cabinet-visual-card {
+        min-height: 250px;
+        padding: 12px;
+        border: 1px solid #e5edf7;
+        border-radius: 8px;
+        background: #fff;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 4px 14px rgba(31, 57, 91, 0.04);
+      }
+
+      .cabinet-visual-card:hover {
+        border-color: #8cc2ff;
+        box-shadow: 0 8px 22px rgba(31, 120, 255, 0.12);
+        transform: translateY(-1px);
+      }
+
+      .cabinet-visual-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .cabinet-visual-title {
+        min-width: 0;
+        font-size: 13px;
+        font-weight: 700;
+        color: #18365f;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cabinet-visual-u {
+        flex: none;
+        color: #1f78ff;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .cabinet-mini-rack {
+        width: 76px;
+        min-height: 128px;
+        padding: 8px 9px;
+        border: 4px solid #202832;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #27313d, #111820 45%, #2c3742);
+        align-self: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 3px;
+      }
+
+      .cabinet-mini-rack-unit {
+        height: 5px;
+        border-radius: 2px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #2d3742;
+      }
+
+      .cabinet-mini-rack-unit.is-used {
+        background: #2da7e8;
+      }
+
+      .cabinet-usage-line {
+        display: flex;
+        justify-content: space-between;
+        color: #53667f;
+        font-size: 12px;
+      }
+
+      .cabinet-usage-line strong {
+        color: #18365f;
+      }
+
+      .cabinet-usage-bar {
+        height: 5px;
+        border-radius: 999px;
+        background: #e8eef7;
+        overflow: hidden;
+      }
+
+      .cabinet-usage-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: #2d8cff;
+      }
+
+      .cabinet-card-meta {
+        font-size: 12px;
+        color: #6d7f91;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cabinet-space-empty {
+        padding: 28px;
+        border: 1px dashed #d8e5f2;
+        border-radius: 8px;
+        background: #fff;
+        color: #8090a5;
+        text-align: center;
+      }
+
+      @media (max-width: 960px) {
+        .cabinet-space-stats {
+          grid-template-columns: 1fr;
+        }
       }
 
       .ledger-hierarchy-wrap {
@@ -4582,6 +4794,250 @@
         min-height: 0;
       }
 
+      .cabinet-position-layout {
+        position: relative;
+        flex: 1;
+        min-height: calc(100vh - 250px);
+        padding: 16px 20px 26px;
+        overflow: auto;
+      }
+
+      .cabinet-position-legend {
+        position: absolute;
+        top: 16px;
+        left: 20px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .cabinet-position-legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #1f3349;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .cabinet-position-swatch {
+        position: relative;
+        width: 56px;
+        height: 28px;
+        flex-shrink: 0;
+        border: 2px solid #2f7fc7;
+        border-radius: 2px;
+        background: #fff;
+      }
+
+      .cabinet-position-swatch.is-occupied {
+        background: #dff2fb;
+        box-shadow: inset 0 0 0 1px rgba(33, 118, 198, 0.16);
+      }
+
+      .cabinet-position-swatch.is-occupied::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 4px;
+        bottom: 4px;
+        width: 9px;
+        border: 1px solid rgba(47, 127, 199, 0.45);
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(47, 127, 199, 0.35) 0,
+          rgba(47, 127, 199, 0.35) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      }
+
+      .cabinet-position-swatch.is-occupied::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        right: 5px;
+        bottom: 4px;
+        width: 5px;
+        border-radius: 1px;
+        background: #0c6ee8;
+      }
+
+      .cabinet-position-swatch.is-selected {
+        border-color: #15ad83;
+        background: #19e5ad;
+        box-shadow: inset 0 0 0 2px rgba(12, 161, 116, 0.2);
+      }
+
+      .cabinet-position-stage {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 72px;
+        min-width: 560px;
+        padding: 54px 20px 18px;
+      }
+
+      .cabinet-position-column {
+        display: flex;
+        min-width: 164px;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cabinet-position-column-title {
+        min-height: 24px;
+        color: #1f3349;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: center;
+      }
+
+      .cabinet-position-slots {
+        display: grid;
+        gap: 4px;
+        padding: 8px 10px;
+        border: 1px solid #e3edf8;
+        border-radius: 4px;
+        background: #fbfdff;
+      }
+
+      .cabinet-position-slot-row {
+        display: grid;
+        grid-template-columns: 118px 32px;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .cabinet-position-column.is-number-left .cabinet-position-slot-row {
+        grid-template-columns: 32px 118px;
+      }
+
+      .cabinet-position-no {
+        min-width: 24px;
+        color: #1c2f46;
+        font-size: 14px;
+        line-height: 1;
+        text-align: center;
+      }
+
+      .cabinet-position-slot {
+        position: relative;
+        width: 118px;
+        height: 58px;
+        padding: 0;
+        border: 3px solid #2f7fc7;
+        border-radius: 5px;
+        background: #fff;
+        cursor: default;
+        outline: none;
+      }
+
+      .cabinet-position-slot.is-occupied {
+        background: #dff2fb;
+        box-shadow: inset 0 0 0 1px rgba(33, 118, 198, 0.18);
+      }
+
+      .cabinet-position-slot.is-occupied::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        bottom: 8px;
+        width: 14px;
+        border: 1px solid rgba(47, 127, 199, 0.45);
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(47, 127, 199, 0.38) 0,
+          rgba(47, 127, 199, 0.38) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+      }
+
+      .cabinet-position-slot.is-occupied::after {
+        content: "";
+        position: absolute;
+        top: 7px;
+        right: 8px;
+        bottom: 7px;
+        width: 6px;
+        border-radius: 1px;
+        background: #0c6ee8;
+      }
+
+      .cabinet-position-slot.is-selected {
+        border-color: #15ad83;
+        background: #19e5ad;
+        box-shadow: inset 0 0 0 2px rgba(12, 161, 116, 0.22);
+      }
+
+      .cabinet-position-slot.has-tooltip {
+        cursor: pointer;
+      }
+
+      .cabinet-position-slot.has-tooltip:hover,
+      .cabinet-position-slot.has-tooltip:focus {
+        box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.1);
+      }
+
+      .cabinet-position-tooltip {
+        position: absolute;
+        left: calc(100% + 12px);
+        top: 50%;
+        z-index: 6;
+        width: 220px;
+        padding: 8px 12px;
+        border-radius: 2px;
+        background: rgba(49, 56, 64, 0.96);
+        color: #fff;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: left;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        box-shadow: 0 8px 18px rgba(17, 24, 33, 0.16);
+        transition: opacity 0.15s ease, visibility 0.15s ease;
+      }
+
+      .cabinet-position-tooltip::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        background: rgba(49, 56, 64, 0.96);
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .cabinet-position-column.is-number-left .cabinet-position-tooltip {
+        right: calc(100% + 12px);
+        left: auto;
+      }
+
+      .cabinet-position-column.is-number-left .cabinet-position-tooltip::before {
+        right: -5px;
+        left: auto;
+      }
+
+      .cabinet-position-slot.has-tooltip:hover .cabinet-position-tooltip,
+      .cabinet-position-slot.has-tooltip:focus .cabinet-position-tooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .cabinet-position-tooltip span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .asset-room-location-layout {
         display: grid;
         grid-template-columns: 260px minmax(700px, 1fr);
@@ -5331,57 +5787,545 @@
 
       .cabinet-contains-layout {
         display: grid;
-        grid-template-columns: 188px minmax(0, 1fr);
-        gap: 18px;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 22px;
         padding: 12px 18px 18px;
-        flex: 1;
+        flex: 0 0 calc(100vh - 210px);
+        height: calc(100vh - 210px);
+        max-height: calc(100vh - 210px);
         min-height: 0;
+        align-items: start;
+        overflow: hidden;
       }
 
       .cabinet-contains-side {
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding-top: 2px;
+        height: 100%;
+        min-height: 0;
+        overflow: visible;
       }
 
-      .cabinet-contains-side .asset-rack {
-        gap: 8px;
+      .cabinet-contains-rack {
+        align-items: stretch;
+        gap: 10px;
+        width: 226px;
+        height: 100%;
+        min-height: 0;
       }
 
-      .cabinet-contains-side .rack-shell {
-        width: 128px;
-        padding: 9px 7px 4px;
+      .cabinet-contains-rack .rack-shell {
+        width: 186px;
+        height: 100%;
+        min-height: 0;
+        padding: 12px 12px 8px;
+        border: 1px solid #0b0f13;
+        border-radius: 1px;
+        background:
+          linear-gradient(90deg, #11161b 0, #20252b 8%, #15191e 12%, #15191e 88%, #20252b 92%, #11161b 100%);
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+          0 8px 16px rgba(17, 24, 33, 0.12);
       }
 
-      .cabinet-contains-side .rack-frame {
-        padding: 9px 7px 5px;
+      .cabinet-contains-rack .rack-frame {
+        position: relative;
+        height: calc(100% - 14px);
+        padding: 8px 20px 8px;
+        border: 1px solid #05070a;
+        background: #23272b;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       }
 
-      .cabinet-contains-side .rack-unit {
+      .cabinet-contains-rack .rack-frame::before,
+      .cabinet-contains-rack .rack-frame::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        bottom: 8px;
+        width: 9px;
+        border: 1px solid #11161a;
+        background:
+          radial-gradient(circle at center, #11161a 0 1px, transparent 1.4px),
+          linear-gradient(180deg, #81878b 0%, #5d646a 100%);
+        background-size: 100% 10px, 100% 100%;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+
+      .cabinet-contains-rack .rack-frame::before {
+        left: 6px;
+      }
+
+      .cabinet-contains-rack .rack-frame::after {
+        right: 6px;
+      }
+
+      .cabinet-contains-rack .rack-units {
+        position: relative;
+        height: 100%;
+        gap: 1px;
+      }
+
+      .cabinet-contains-rack .rack-unit {
+        flex: 1;
+        min-height: 0;
+        height: auto;
+        border-radius: 1px;
+        background:
+          linear-gradient(180deg, #373b3f 0%, #25292d 46%, #1e2226 48%, #31363a 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.05),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.48);
+      }
+
+      .cabinet-contains-rack .rack-unit::after {
+        left: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.32);
+      }
+
+      .cabinet-contains-rack .rack-unit.is-occupied,
+      .cabinet-contains-rack .rack-unit.is-selected {
+        background:
+          linear-gradient(180deg, #33383c 0%, #252a2e 46%, #1b1f23 48%, #2a2f33 100%);
+      }
+
+      .cabinet-mounted-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      .cabinet-empty-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        pointer-events: none;
+      }
+
+      .cabinet-empty-slot {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        min-height: 15px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        cursor: pointer;
+        opacity: 0;
+        outline: none;
+        pointer-events: auto;
+        transition: opacity 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .cabinet-empty-slot:hover,
+      .cabinet-empty-slot:focus {
+        opacity: 1;
+        background: rgba(30, 137, 255, 0.16);
+        box-shadow: inset 0 0 0 1px rgba(20, 113, 227, 0.45);
+      }
+
+      .cabinet-empty-add {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 20px;
+        padding: 0 7px;
+        border: 1px solid #78b7ff;
+        border-radius: 10px;
+        background: rgba(236, 246, 255, 0.96);
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 18px;
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+      }
+
+      .cabinet-mounted-device {
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        min-height: 15px;
+        border: 1px solid #05070a;
+        border-radius: 1px;
+        background:
+          linear-gradient(180deg, #34393d 0%, #23282c 48%, #15191d 50%, #292e32 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+          0 1px 2px rgba(0, 0, 0, 0.35);
+        cursor: pointer;
+        outline: none;
+        pointer-events: auto;
+      }
+
+      .cabinet-mounted-device::before,
+      .cabinet-mounted-device::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        width: 3px;
+        border-radius: 1px;
+        background: #070a0d;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .cabinet-mounted-device::before {
+        left: 4px;
+      }
+
+      .cabinet-mounted-device::after {
+        right: 4px;
+      }
+
+      .cabinet-mounted-device:focus,
+      .cabinet-mounted-device:hover {
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+          0 0 0 2px rgba(41, 132, 255, 0.42);
+      }
+
+      .cabinet-mounted-face {
+        position: absolute;
+        inset: 3px 11px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .cabinet-mounted-leds {
+        display: grid;
+        grid-template-columns: repeat(2, 4px);
+        gap: 3px;
+        flex-shrink: 0;
+      }
+
+      .cabinet-mounted-leds i {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #21d56a;
+        box-shadow: 0 0 4px rgba(33, 213, 106, 0.75);
+      }
+
+      .cabinet-mounted-leds i:nth-child(2n) {
+        background: #f2ce4d;
+        box-shadow: 0 0 4px rgba(242, 206, 77, 0.62);
+      }
+
+      .cabinet-mounted-bays {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 2px;
+        flex: 1;
+        min-width: 0;
+        height: 70%;
+      }
+
+      .cabinet-mounted-bays span {
+        border: 1px solid rgba(126, 136, 143, 0.65);
+        border-radius: 1px;
+        background:
+          linear-gradient(180deg, #1f2428 0%, #111519 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .cabinet-mounted-ports {
+        display: grid;
+        grid-template-columns: repeat(3, 5px);
+        gap: 2px;
+        flex-shrink: 0;
+      }
+
+      .cabinet-mounted-ports i {
+        width: 5px;
+        height: 4px;
+        border: 1px solid #586169;
+        background: #06090c;
+      }
+
+      .cabinet-mounted-tooltip {
+        position: absolute;
+        left: calc(100% + 18px);
+        top: 50%;
+        z-index: 8;
+        width: 224px;
+        padding: 8px 12px;
+        border-radius: 2px;
+        background: rgba(49, 56, 64, 0.96);
+        color: #fff;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: left;
+        transform: translateY(-50%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        box-shadow: 0 8px 18px rgba(17, 24, 33, 0.16);
+        transition: opacity 0.15s ease, visibility 0.15s ease;
+      }
+
+      .cabinet-mounted-tooltip::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        background: rgba(49, 56, 64, 0.96);
+        transform: translateY(-50%) rotate(45deg);
+      }
+
+      .cabinet-mounted-device:hover .cabinet-mounted-tooltip,
+      .cabinet-mounted-device:focus .cabinet-mounted-tooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .cabinet-mounted-tooltip span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cabinet-mounted-device:hover .cabinet-mounted-face,
+      .cabinet-mounted-device:focus .cabinet-mounted-face {
+        opacity: 0.2;
+      }
+
+      .cabinet-device-actions {
+        position: absolute;
+        inset: 0;
+        z-index: 7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: rgba(12, 16, 20, 0.68);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.15s ease, visibility 0.15s ease;
+      }
+
+      .cabinet-mounted-device:hover .cabinet-device-actions,
+      .cabinet-mounted-device:focus-within .cabinet-device-actions,
+      .cabinet-mounted-device:focus .cabinet-device-actions {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .cabinet-device-action-btn {
+        height: 24px;
+        padding: 0 9px;
+        border: 1px solid rgba(255, 255, 255, 0.36);
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .cabinet-device-action-btn:hover {
+        border-color: #41d7ff;
+        color: #e8fbff;
+      }
+
+      .cabinet-device-action-btn.is-danger:hover {
+        border-color: #ff9b9b;
+        color: #fff1f1;
+      }
+
+      .cabinet-contains-rack .rack-index {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        height: calc(100% - 34px);
+        padding-top: 16px;
+      }
+
+      .cabinet-contains-rack .rack-index span {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        height: auto;
+        min-height: 0;
+        color: #1c4a76;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .cabinet-contains-rack .rack-feet::before,
+      .cabinet-contains-rack .rack-feet::after {
+        position: relative;
+        top: 4px;
+        width: 18px;
         height: 12px;
+        border-radius: 10px 10px 2px 2px;
+        background:
+          radial-gradient(ellipse at center bottom, #c7cbd0 0 42%, transparent 44%),
+          linear-gradient(180deg, #7e858b 0%, #3a4046 100%);
       }
 
-      .cabinet-contains-side .rack-index {
-        padding-top: 13px;
+      .cabinet-rack-dialog {
+        width: min(860px, calc(100vw - 56px));
       }
 
-      .cabinet-contains-side .rack-index span {
-        height: 12px;
-        line-height: 12px;
+      .cabinet-rack-dialog.compact {
+        width: min(520px, calc(100vw - 56px));
+      }
+
+      .cabinet-rack-choice-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .cabinet-rack-choice {
+        min-height: 112px;
+        padding: 16px;
+        border: 1px solid #d9e7f6;
+        border-radius: 6px;
+        background: #fbfdff;
+        color: #30465d;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .cabinet-rack-choice:hover {
+        border-color: var(--primary);
+        background: #f4f9ff;
+      }
+
+      .cabinet-rack-choice strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #12385f;
+        font-size: 15px;
+      }
+
+      .cabinet-rack-choice span {
+        color: #637b94;
+        line-height: 1.6;
+      }
+
+      .cabinet-rack-device-list {
+        max-height: 360px;
+        overflow: auto;
+        border: 1px solid #e3ebf4;
+      }
+
+      .cabinet-rack-dialog-table {
+        width: 100%;
+        min-width: 760px;
+        table-layout: fixed;
+        border-collapse: collapse;
+      }
+
+      .cabinet-rack-dialog-table th,
+      .cabinet-rack-dialog-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #edf2f8;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .cabinet-rack-dialog-table th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #f7f9fc;
+        color: #43576f;
+        font-weight: 600;
+      }
+
+      .cabinet-rack-dialog-table tbody tr {
+        cursor: pointer;
+      }
+
+      .cabinet-rack-dialog-table tbody tr:hover td {
+        background: #f5f9ff;
+      }
+
+      .cabinet-rack-dialog-table tbody tr.is-selected td {
+        background: #eaf4ff;
+        color: #0b57d0;
+        font-weight: 600;
+      }
+
+      .cabinet-rack-dialog-table tbody tr.is-selected td:first-child {
+        box-shadow: inset 3px 0 0 var(--primary);
+      }
+
+      .cabinet-rack-selected-text {
+        margin-right: auto;
+        color: #587086;
+        font-size: 12px;
+      }
+
+      .cabinet-rack-form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 14px;
+      }
+
+      .cabinet-rack-form label,
+      .cabinet-off-shelf-form label {
+        display: grid;
+        gap: 6px;
+        color: #43576f;
+        font-size: 12px;
+      }
+
+      .cabinet-rack-form input,
+      .cabinet-rack-form select,
+      .cabinet-off-shelf-form select {
+        width: 100%;
+        height: 32px;
+        border: 1px solid #d8e4f2;
+        border-radius: 4px;
+        padding: 0 9px;
+        color: #1f3349;
+        outline: none;
+      }
+
+      .cabinet-rack-form .is-wide {
+        grid-column: 1 / -1;
+      }
+
+      .cabinet-confirm-message {
+        padding: 8px 0 4px;
+        color: #30465d;
+        line-height: 1.8;
       }
 
       .cabinet-contains-main {
         min-width: 0;
-        display: flex;
-        flex-direction: column;
+        min-height: 0;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
         gap: 14px;
+        height: 100%;
+        overflow: hidden;
       }
 
       .cabinet-section {
         display: flex;
         flex-direction: column;
         min-height: 0;
+        overflow: hidden;
       }
 
       .cabinet-section-head {
@@ -5409,35 +6353,55 @@
       }
 
       .cabinet-section-body {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
         border-top: 1px solid #edf2f8;
+        background: #fff;
       }
 
       .cabinet-related-panel .cabinet-section-body {
-        min-height: 160px;
+        min-height: 0;
       }
 
       .cabinet-u-panel {
-        flex: 1;
         min-height: 0;
       }
 
       .cabinet-inline-table {
         width: 100%;
-        min-width: 0;
+        min-width: 100%;
         table-layout: fixed;
         border-collapse: collapse;
       }
 
       .cabinet-inline-table thead th {
-        position: static;
-        z-index: auto;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        box-sizing: border-box;
         padding: 9px 10px;
+        background: #f7f9fc;
+        border-bottom: 1px solid var(--border);
+        color: #43576f;
         font-size: 12px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+        overflow: visible;
       }
 
       .cabinet-inline-table tbody td {
-        padding: 8px 10px;
+        box-sizing: border-box;
+        height: 40px;
+        padding: 9px 10px;
+        border-bottom: 1px solid #edf2f8;
+        color: #33485f;
         font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+        white-space: nowrap;
       }
 
       .cabinet-inline-table .empty-state {
@@ -5445,12 +6409,21 @@
       }
 
       .cabinet-inline-table .checkbox-cell {
-        width: 34px;
+        width: 36px;
+        padding-right: 8px;
+        padding-left: 8px;
+        text-align: center;
+        overflow: visible;
       }
 
       .cabinet-inline-table .op-cell,
       .cabinet-inline-table thead th.op-cell {
-        text-align: right;
+        width: 72px;
+        text-align: left;
+      }
+
+      .cabinet-inline-table .th-content {
+        padding-right: 10px;
       }
 
       .cabinet-op-link {
@@ -8635,6 +9608,7 @@
         const VIEW_IDS = {
           ASSET_OVERVIEW: "assetOverview",
           IT_FACILITY: "itFacility",
+          PENDING_IT_ASSET: "pendingItAsset",
           STATION_FACILITY: "stationFacility",
           PENDING_ASSET: "pendingAsset",
           CABINET: "cabinetLedger",
@@ -8657,7 +9631,15 @@
 
         const SIDEBAR_MENU = [
           { type: "static", id: "deviceOverview", viewId: VIEW_IDS.ASSET_OVERVIEW, label: "资产概览" },
-          { type: "group", id: "it", label: "IT设备", children: [{ id: VIEW_IDS.IT_FACILITY, label: "台账" }] },
+          {
+            type: "group",
+            id: "it",
+            label: "IT设备",
+            children: [
+              { id: VIEW_IDS.IT_FACILITY, label: "台账" },
+              { id: VIEW_IDS.PENDING_IT_ASSET, label: "待初始化IT设备" }
+            ]
+          },
           {
             type: "group",
             id: "station",
@@ -8777,6 +9759,33 @@
               { key: "__actions", label: "操作" }
             ]
           },
+          [VIEW_IDS.PENDING_IT_ASSET]: {
+            title: "待初始化IT设备",
+            modeLabel: "",
+            placeholder: "请输入资产编号/资产名称",
+            secondaryLabel: "",
+            pageSize: 200,
+            pageSizeLabel: "200条/页",
+            showTools: false,
+            actions: ["批量初始化"],
+            rowActions: ["初始化"],
+            columns: [
+              { key: "__select", label: "" },
+              { key: "assetStatus", label: "资产状态" },
+              { key: "assetCode", label: "资产编号" },
+              { key: "assetCategory", label: "资产分类" },
+              { key: "serialCode", label: "编号" },
+              { key: "assetSummary", label: "资产流程状态" },
+              { key: "name", label: "名称" },
+              { key: "description", label: "描述" },
+              { key: "dataTag", label: "物理标签编号" },
+              { key: "serialNumber", label: "序列号" },
+              { key: "assetLocation", label: "资产位置" },
+              { key: "vendor", label: "厂商" },
+              { key: "relatedAsset", label: "关联资产" },
+              { key: "__actions", label: "操作" }
+            ]
+          },
           [VIEW_IDS.STATION_FACILITY]: {
             title: "场地设施",
             modeLabel: "标准视图",
@@ -8799,7 +9808,7 @@
             ]
           },
           [VIEW_IDS.PENDING_ASSET]: {
-            title: "待录入资产",
+            title: "待初始化场地设施",
             modeLabel: "",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "",
@@ -8827,7 +9836,7 @@
           },
           [VIEW_IDS.CABINET]: {
             title: "机柜管理",
-            modeLabel: "",
+            modeLabel: "标准视图",
             placeholder: "请输入资产编号/资产名称",
             secondaryLabel: "高级查询",
             pageSize: 200,
@@ -9393,6 +10402,18 @@
             status: "已设计完成"
           },
           {
+            id: "V3R5-4820",
+            ticketId: "V3R5-4820",
+            version: "v1.1",
+            type: "新增",
+            title: "支持IT设备初始化",
+            description: "【IT设备】新增 支持IT设备初始化",
+            scope: "IT设备",
+            targetView: VIEW_IDS.PENDING_IT_ASSET,
+            targetLabel: "待初始化IT设备",
+            status: "已设计完成"
+          },
+          {
             id: "V3R5-4336",
             ticketId: "V3R5-4336",
             version: "v1.1",
@@ -9560,6 +10581,18 @@
             targetView: VIEW_IDS.IT_FACILITY,
             targetLabel: "高级搜索",
             status: "已设计完成"
+          },
+          {
+            id: "V3R5-4419",
+            ticketId: "V3R5-4419",
+            version: "v1.3",
+            type: "新增",
+            title: "机柜层级可视化展示",
+            description: "新增 机柜层级可视化展示",
+            scope: "资产管理",
+            targetView: VIEW_IDS.CABINET,
+            targetLabel: "机柜层级可视化展示",
+            status: "未开始"
           }
         ];
 
@@ -9586,6 +10619,14 @@
           "部署": {
             kind: "sheet",
             title: "部署",
+            submitLabel: "提交",
+            toolbarActions: [
+              { label: "选择资产", tone: "primary" }
+            ]
+          },
+          "初始化": {
+            kind: "sheet",
+            title: "初始化",
             submitLabel: "提交",
             toolbarActions: [
               { label: "选择资产", tone: "primary" }
@@ -9826,6 +10867,10 @@
           serialNumber: 168,
           relatedAsset: 108,
           cabinetHeight: 116,
+          action: 96,
+          uPositionName: 220,
+          uPositionStatus: 180,
+          uPositionAction: 96,
           "序号": 56,
           "序列号": 180,
           "通讯状态": 108,
@@ -10080,6 +11125,7 @@
                 },
                 filters: {
                   [VIEW_IDS.IT_FACILITY]: { keyword: "" },
+                  [VIEW_IDS.PENDING_IT_ASSET]: { keyword: "" },
                   [VIEW_IDS.STATION_FACILITY]: { keyword: "" },
                   [VIEW_IDS.PENDING_ASSET]: { keyword: "" },
                   [VIEW_IDS.CABINET]: { keyword: "" },
@@ -10088,6 +11134,7 @@
                 },
                 pagers: {
                   [VIEW_IDS.IT_FACILITY]: 1,
+                  [VIEW_IDS.PENDING_IT_ASSET]: 1,
                   [VIEW_IDS.STATION_FACILITY]: 1,
                   [VIEW_IDS.PENDING_ASSET]: 1,
                   [VIEW_IDS.CABINET]: 1,
@@ -10101,6 +11148,7 @@
                 listSelections: {},
                 batchSelectionMenuOpen: null,
                 operationPage: null,
+                operationAssetDialog: null,
                 detailPage: null,
                 drawer: null,
                 advancedSearch: null,
@@ -10114,6 +11162,7 @@
                 toasts: [],
                 relationDialog: null,
                 requirementDescriptionDialog: null,
+                cabinetRackDialog: null,
                 assetBoardSaveDialog: null,
                 masterSlaveTemplateDialog: null,
                 masterSlaveImportDialog: null,
@@ -10204,6 +11253,7 @@
               data: {
                 lists: {
                   [VIEW_IDS.IT_FACILITY]: SeedFactory.createItFacilities(),
+                  [VIEW_IDS.PENDING_IT_ASSET]: SeedFactory.createPendingItAssets(),
                   [VIEW_IDS.STATION_FACILITY]: SeedFactory.createStationFacilities(),
                   [VIEW_IDS.PENDING_ASSET]: SeedFactory.createPendingAssets(),
                   [VIEW_IDS.CABINET]: SeedFactory.createCabinets(),
@@ -10305,6 +11355,39 @@
               assetStatus: statuses[index % statuses.length],
               assetSummary: getAssetFlowStatus(VIEW_IDS.STATION_FACILITY, index, statuses[index % statuses.length]),
               vendor: ""
+            }));
+            return disambiguateNames(rows);
+          }
+
+          static createPendingItAssets() {
+            const source = [
+              ["机架式服务器_SRV-INIT-D7-01", "管理分类>IT设施>计算设备>机架式服务器", "1号楼-7层-D7机房", "浪潮", "6", "2", "4"],
+              ["机架式服务器_SRV-INIT-D7-02", "管理分类>IT设施>计算设备>机架式服务器", "1号楼-7层-D7机房", "戴尔", "6", "4", "4"],
+              ["动环接入交换机_ISW-INIT-U2-01", "管理分类>弱电系统>网络设备>动环接入交换机", "1号楼-2层-弱电间", "华三", "2", "8", "24"],
+              ["动环接入交换机_ISW-INIT-U1-01", "管理分类>弱电系统>网络设备>动环接入交换机", "1号楼-2层-弱电间", "华为", "2", "10", "24"],
+              ["存储阵列_STO-INIT-D7-01", "管理分类>IT设施>存储设备>存储阵列", "1号楼-7层-D7机房", "新华三", "4", "14", "8"],
+              ["核心路由器_RTR-INIT-NW-01", "管理分类>IT设施>网络设备>路由器", "2号楼-4层-网络机房", "锐捷", "2", "18", "12"],
+              ["防火墙_FW-INIT-NW-01", "管理分类>IT设施>安全设备>防火墙", "2号楼-4层-网络机房", "深信服", "1", "20", "8"],
+              ["KVM切换器_KVM-INIT-D7-01", "管理分类>IT设施>辅助设备>KVM切换器", "1号楼-7层-D7机房", "宏正", "1", "22", "16"]
+            ];
+            const rows = expandRows(source, 120, (item, index, round) => ({
+              id: "PI-" + pad(index + 1, 3),
+              assetStatus: "待初始化",
+              assetCode: "ITINIT-" + pad(2026060001 + index),
+              assetCategory: item[1],
+              serialCode: "IT" + pad(index + 1, 5),
+              assetSummary: "-",
+              name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
+              description: "-",
+              dataTag: "-",
+              serialNumber: "SN-IT-" + pad(880000 + index),
+              assetLocation: item[2],
+              vendor: item[3],
+              relatedAsset: "",
+              ratedPower: item[4],
+              uHeight: item[5],
+              portCount: item[6],
+              startU: ""
             }));
             return disambiguateNames(rows);
           }
@@ -10450,6 +11533,7 @@
               ? VIEW_IDS.INTEGRATION_ASSET_DETECTION_CONFIG
               : VIEW_IDS.IT_FACILITY;
             this.state.ui.operationPage = null;
+            this.state.ui.operationAssetDialog = null;
             this.state.ui.drawer = null;
             this.state.ui.detailPage = null;
             this.state.ui.guidePage = null;
@@ -10466,6 +11550,7 @@
             this.state.ui.currentView = viewId;
             this.state.ui.integrationConfigEditing = false;
             this.state.ui.operationPage = null;
+            this.state.ui.operationAssetDialog = null;
             this.state.ui.drawer = null;
             this.state.ui.detailPage = null;
             this.state.ui.guidePage = null;
@@ -10938,7 +12023,7 @@
           }
 
           getListViewMode(viewId) {
-            return this.state.ui.listViewModes?.[viewId] || "standard";
+            return this.state.ui.listViewModes?.[viewId] || (viewId === VIEW_IDS.CABINET ? "space" : "standard");
           }
 
           toggleListViewModeMenu(viewId) {
@@ -11099,6 +12184,21 @@
             return this.getListRows(viewId).find((item) => item.id === rowId) || null;
           }
 
+          getCabinetUsage(row, index = 0) {
+            const height = Number(row.cabinetHeight) || 42;
+            const seed = Number(String(row.id || "").replace(/\D/g, "")) || index + 1;
+            const deviceCount = row.assetStatus === "空闲" ? 0 : 1 + (seed % 5);
+            const usedU = row.assetStatus === "空闲" ? 0 : Math.min(height, deviceCount * 2 + (seed % 4));
+            const percent = height > 0 ? Math.round((usedU / height) * 100) : 0;
+            return {
+              height,
+              deviceCount,
+              usedU,
+              freeU: Math.max(0, height - usedU),
+              percent
+            };
+          }
+
           getColumnWidth(viewId, columnKey) {
             return this.state.ui.columnWidths?.[viewId]?.[columnKey] || DEFAULT_COLUMN_WIDTHS[columnKey] || 128;
           }
@@ -11194,6 +12294,10 @@
             this.state.ui.batchSelectionMenuOpen = null;
             if (!count) {
               this.pushToast("批量操作", "请先勾选需要操作的资产。", "warning");
+              return;
+            }
+            if (this.isPendingInitializationView(viewId) && actionLabel === "初始化") {
+              this.openInitializationOperationPage(viewId, selected);
               return;
             }
             const sheetBatchActionsByView = {
@@ -11316,7 +12420,7 @@
             this.state.ui.detailPage = {
               viewId,
               rowId,
-              activeTab: "basic",
+              activeTab: viewId === VIEW_IDS.CABINET ? "contains" : "basic",
               historyRange: "全部"
             };
             this.state.ui.drawer = null;
@@ -11327,8 +12431,80 @@
 
           closeDetailPage() {
             this.state.ui.detailPage = null;
+            this.state.ui.cabinetRackDialog = null;
             this.closeRowMoreMenu(false);
             this.emit();
+          }
+
+          openCabinetRackDialog(mode, payload = {}) {
+            this.state.ui.cabinetRackDialog = {
+              mode: mode || "add",
+              unit: payload.unit || "",
+              deviceCode: payload.deviceCode || "",
+              deviceName: payload.deviceName || "",
+              startU: payload.startU || "",
+              uHeight: payload.uHeight || ""
+            };
+            this.emit();
+          }
+
+          setCabinetRackDialogMode(mode) {
+            if (!this.state.ui.cabinetRackDialog) {
+              return;
+            }
+            this.state.ui.cabinetRackDialog.mode = mode || "add";
+            this.emit();
+          }
+
+          selectCabinetRackDevice(rowId) {
+            if (!this.state.ui.cabinetRackDialog || !rowId) {
+              return;
+            }
+            this.state.ui.cabinetRackDialog.selectedDeviceId = rowId;
+            this.emit();
+          }
+
+          closeCabinetRackDialog() {
+            this.state.ui.cabinetRackDialog = null;
+            this.emit();
+          }
+
+          confirmCabinetRackAction(label) {
+            const dialog = this.state.ui.cabinetRackDialog;
+            const unitText = dialog?.unit ? "第" + dialog.unit + "U位" : "当前U位";
+            const selectedDevice = dialog?.selectedDeviceId ? this.getRowById(VIEW_IDS.IT_FACILITY, dialog.selectedDeviceId) : null;
+            const deviceText = selectedDevice?.name || dialog?.deviceName || dialog?.deviceCode || "当前设备";
+            this.state.ui.cabinetRackDialog = null;
+            this.pushToast(label || "操作完成", unitText + " · " + deviceText + " 已完成原型操作反馈。", "success");
+          }
+
+          isPendingInitializationView(viewId) {
+            return viewId === VIEW_IDS.PENDING_IT_ASSET || viewId === VIEW_IDS.PENDING_ASSET;
+          }
+
+          getInitializationTargetView(viewId) {
+            if (viewId === VIEW_IDS.PENDING_IT_ASSET) {
+              return VIEW_IDS.IT_FACILITY;
+            }
+            if (viewId === VIEW_IDS.PENDING_ASSET) {
+              return VIEW_IDS.STATION_FACILITY;
+            }
+            return viewId;
+          }
+
+          openInitializationOperationPage(sourceViewId, rowIds = []) {
+            const selectedRowIds = Array.isArray(rowIds) ? rowIds.filter(Boolean) : [rowIds].filter(Boolean);
+            if (!this.isPendingInitializationView(sourceViewId)) {
+              return;
+            }
+            if (!selectedRowIds.length) {
+              this.pushToast("初始化", "请先勾选需要初始化的资产。", "warning");
+              return;
+            }
+            this.openOperationPage(this.getInitializationTargetView(sourceViewId), null, "初始化", selectedRowIds, {
+              source: "pendingInit",
+              sourceViewId
+            });
           }
 
           openOperationPage(viewId, rowId, action, selectedRowIds = [], options = {}) {
@@ -11338,11 +12514,13 @@
               action,
               selectedRowIds: Array.isArray(selectedRowIds) ? selectedRowIds.slice() : [],
               source: options.source || "",
+              sourceViewId: options.sourceViewId || viewId,
               focusColumnKey: options.focusColumnKey || ""
             };
             this.state.ui.guidePage = null;
             this.state.ui.detailPage = null;
             this.state.ui.drawer = null;
+            this.state.ui.operationAssetDialog = null;
             this.state.ui.ledgerHierarchyMenuOpen = false;
             this.closeRowMoreMenu(false);
             this.closeGuideMenu(false);
@@ -11351,7 +12529,123 @@
 
           closeOperationPage() {
             this.state.ui.operationPage = null;
+            this.state.ui.operationAssetDialog = null;
             this.emit();
+          }
+
+          openOperationAssetDialog() {
+            const page = this.state.ui.operationPage;
+            if (!page) {
+              return;
+            }
+            const sourceViewId = page.sourceViewId || page.viewId;
+            const rows = this.getListRows(sourceViewId);
+            if (!rows.length) {
+              this.pushToast("选择资产", "当前没有可选择的资产。", "warning");
+              return;
+            }
+            const selectedRowIds = Array.isArray(page.selectedRowIds) && page.selectedRowIds.length
+              ? page.selectedRowIds.slice()
+              : (page.rowId ? [page.rowId] : []);
+            this.state.ui.operationAssetDialog = {
+              sourceViewId,
+              selectedRowIds
+            };
+            this.emit();
+          }
+
+          closeOperationAssetDialog() {
+            this.state.ui.operationAssetDialog = null;
+            this.emit();
+          }
+
+          toggleOperationAssetDialogSelection(rowId) {
+            const dialog = this.state.ui.operationAssetDialog;
+            if (!dialog || !rowId) {
+              return;
+            }
+            const selected = new Set(dialog.selectedRowIds || []);
+            if (selected.has(rowId)) {
+              selected.delete(rowId);
+            } else {
+              selected.add(rowId);
+            }
+            dialog.selectedRowIds = [...selected];
+            this.emit();
+          }
+
+          confirmOperationAssetDialogSelection() {
+            const dialog = this.state.ui.operationAssetDialog;
+            const page = this.state.ui.operationPage;
+            if (!dialog || !page) {
+              return;
+            }
+            const selectedRowIds = Array.isArray(dialog.selectedRowIds)
+              ? dialog.selectedRowIds.filter(Boolean)
+              : [];
+            if (!selectedRowIds.length) {
+              this.pushToast("选择资产", "请至少选择一条资产。", "warning");
+              return;
+            }
+            page.selectedRowIds = selectedRowIds;
+            page.sourceViewId = dialog.sourceViewId || page.sourceViewId || page.viewId;
+            page.rowId = null;
+            this.state.ui.operationAssetDialog = null;
+            this.pushToast("已选择资产", "已将 " + selectedRowIds.length + " 条资产带入电子表格。", "success");
+          }
+
+          completePendingInitialization(page) {
+            const sourceViewId = page.sourceViewId || this.state.ui.operationPage?.sourceViewId || VIEW_IDS.PENDING_ASSET;
+            const targetViewId = page.viewId;
+            const rows = (Array.isArray(page.selectedRows) && page.selectedRows.length
+              ? page.selectedRows
+              : (page.row ? [page.row] : [])).filter(Boolean);
+            if (!rows.length) {
+              this.pushToast("初始化", "请先选择需要初始化的资产。", "warning");
+              return;
+            }
+            const sourceRows = this.state.data.lists[sourceViewId] || [];
+            const targetRows = this.state.data.lists[targetViewId] || [];
+            const sourceIds = new Set(rows.map((row) => row.id));
+            const existingIds = new Set(targetRows.map((row) => row.id));
+            const idPrefix = targetViewId === VIEW_IDS.IT_FACILITY ? "IT" : "ST";
+            let nextNumber = targetRows.length + 1;
+            const buildId = () => {
+              let nextId = "";
+              do {
+                nextId = idPrefix + "-" + pad(nextNumber++, 3);
+              } while (existingIds.has(nextId));
+              existingIds.add(nextId);
+              return nextId;
+            };
+            const initializedRows = rows.map((row, index) => {
+              const assetStatus = targetViewId === VIEW_IDS.IT_FACILITY ? "空闲" : "在用";
+              const normalizedDescription = row.description === "-" ? "" : (row.description || "");
+              const normalizedTag = row.dataTag === "-" ? "" : (row.dataTag || "");
+              return {
+                ...row,
+                id: buildId(),
+                assetStatus,
+                assetSummary: getAssetFlowStatus(targetViewId, index, assetStatus, assetStatus),
+                description: normalizedDescription,
+                dataTag: normalizedTag,
+                relatedAsset: row.relatedAsset || "",
+                ratedPower: row.ratedPower || (targetViewId === VIEW_IDS.IT_FACILITY ? "2" : ""),
+                uHeight: row.uHeight || (targetViewId === VIEW_IDS.IT_FACILITY ? "1" : ""),
+                portCount: row.portCount || (targetViewId === VIEW_IDS.IT_FACILITY ? "8" : ""),
+                startU: row.startU || ""
+              };
+            });
+            this.state.data.lists[sourceViewId] = sourceRows.filter((row) => !sourceIds.has(row.id));
+            this.state.data.lists[targetViewId] = [...initializedRows, ...targetRows];
+            this.state.ui.operationPage = null;
+            this.state.ui.operationAssetDialog = null;
+            this.state.ui.currentView = targetViewId;
+            this.state.ui.pagers[targetViewId] = 1;
+            this.state.ui.listSelections[sourceViewId] = [];
+            this.state.ui.listSelections[targetViewId] = [];
+            const targetTitle = LIST_PAGE_META[targetViewId]?.title || "台账";
+            this.pushToast("初始化完成", rows.length + " 条资产已写入" + targetTitle + "台账。", "success");
           }
 
           toggleGuideMenu() {
@@ -12075,7 +13369,11 @@
               return;
             }
             if (action === "初始化") {
-              this.openDrawer(viewId, rowId, "init");
+              if (this.isPendingInitializationView(viewId)) {
+                this.openInitializationOperationPage(viewId, [rowId]);
+                return;
+              }
+              this.openOperationPage(viewId, rowId, "初始化");
               return;
             }
             if (action === "更多") {
@@ -12141,16 +13439,56 @@
               : rackUnitHeight;
             const selectedTop = selectedStartIndex * (rackUnitHeight + rackUnitGap);
             const cabinetHeight = Math.max(1, Number(row.cabinetHeight) || 42);
-            const cabinetOccupiedStatusSlots = new Set([1, 6, 7]);
+            const cabinetRowIndex = detailPage.viewId === VIEW_IDS.CABINET
+              ? this.getListRows(VIEW_IDS.CABINET).findIndex((item) => item.id === row.id)
+              : -1;
+            const cabinetUsage = detailPage.viewId === VIEW_IDS.CABINET
+              ? this.getCabinetUsage(row, cabinetRowIndex > -1 ? cabinetRowIndex : 0)
+              : { height: cabinetHeight, deviceCount: 0, usedU: 0, freeU: cabinetHeight, percent: 0 };
+            const mountedSourceRows = this.getListRows(VIEW_IDS.IT_FACILITY).filter((item) => item.assetStatus === "在用");
+            const mountedSeed = Number(String(row.id || "").replace(/\D/g, "")) || cabinetRowIndex + 1 || 1;
+            let remainingMountedU = cabinetUsage.usedU;
+            let nextMountedU = 1 + (mountedSeed % 3);
+            const cabinetMountedDevices = Array.from({ length: cabinetUsage.deviceCount }, (_, index) => {
+              const source = mountedSourceRows.length ? mountedSourceRows[(mountedSeed + index) % mountedSourceRows.length] : {};
+              const slotsLeft = cabinetUsage.deviceCount - index - 1;
+              const preferredUHeight = Math.max(1, Number(source.uHeight) || 2);
+              const uHeight = index === cabinetUsage.deviceCount - 1
+                ? Math.max(1, remainingMountedU)
+                : Math.min(preferredUHeight, Math.max(1, remainingMountedU - slotsLeft));
+              const start = Math.min(Math.max(1, nextMountedU), Math.max(1, cabinetHeight - uHeight + 1));
+              nextMountedU = start + uHeight + 1;
+              remainingMountedU = Math.max(0, remainingMountedU - uHeight);
+              return {
+                assetCode: source.assetCode || "IT-CAB-" + pad(mountedSeed) + "-" + pad(index + 1),
+                name: source.name || "机柜上架设备-" + pad(index + 1),
+                serialNumber: source.serialNumber || source.serialCode || "SN-CAB-" + pad(mountedSeed) + pad(index + 1),
+                assetStatus: source.assetStatus || "在用",
+                assetCategory: source.assetCategory || "管理分类>IT设施>计算设备>机架式服务器",
+                assetLocation: (locationLabel === "-" ? normalize(row.assetLocation) : locationLabel) + " > " + start + "U",
+                uHeight: String(uHeight),
+                uHeightNumber: uHeight,
+                startU: String(start),
+                startUNumber: start,
+                ratedPower: source.ratedPower || "2",
+                action: "查看"
+              };
+            });
+            const cabinetOccupiedStatusSlots = new Set();
+            cabinetMountedDevices.forEach((device) => {
+              for (let unit = device.startUNumber; unit < device.startUNumber + device.uHeightNumber && unit <= cabinetHeight; unit += 1) {
+                cabinetOccupiedStatusSlots.add(unit);
+              }
+            });
             const cabinetRackUnits = Array.from({ length: cabinetHeight }, (_, index) => {
               const unit = cabinetHeight - index;
               return {
                 unit,
                 label: pad(unit, 2),
-                tone: "empty"
+                tone: cabinetOccupiedStatusSlots.has(unit) ? "occupied" : "empty"
               };
             });
-            const cabinetUPositionRows = Array.from({ length: 10 }, (_, index) => {
+            const cabinetUPositionRows = Array.from({ length: cabinetHeight }, (_, index) => {
               const slot = index + 1;
               const occupied = cabinetOccupiedStatusSlots.has(slot);
               return {
@@ -12159,7 +13497,7 @@
                 status: occupied ? "占用" : "空闲",
                 action: "禁用"
               };
-            });
+            }).filter((item) => item.status === "空闲");
             const basicFields = [
               { label: "资产编号", value: normalize(row.assetCode) },
               { label: "名称", value: normalize(row.name) },
@@ -12188,6 +13526,47 @@
             const park = row.parkName || row.campusName || "南山园区";
             const cabinetName = row.cabinetName || row.cabinetCode || row.relatedAsset || "机柜_" + building + "-" + floor + "-" + room;
             const cabinetLine = row.cabinetLine || row.rackRow || "A列";
+            const sameLocationCabinetRows = detailPage.viewId === VIEW_IDS.CABINET
+              ? this.getListRows(VIEW_IDS.CABINET).filter((item) => normalize(item.assetLocation) === locationLabel)
+              : [];
+            const cabinetPositionRows = detailPage.viewId === VIEW_IDS.CABINET
+              ? (() => {
+                const allCabinetRows = this.getListRows(VIEW_IDS.CABINET);
+                const sourceRows = sameLocationCabinetRows.some((item) => normalize(item.assetStatus) !== "空闲")
+                  ? sameLocationCabinetRows
+                  : allCabinetRows;
+                const currentIndex = sourceRows.findIndex((item) => item.id === row.id);
+                const pageStart = currentIndex > -1 ? Math.max(0, currentIndex - (currentIndex % 20)) : 0;
+                const rows = sourceRows.slice(pageStart, pageStart + 20);
+                while (rows.length < 20) {
+                  rows.push(null);
+                }
+                if (!rows.some((item) => item && item.id === row.id)) {
+                  rows[0] = row;
+                }
+                return rows;
+              })()
+              : [];
+            const nextCabinetLine = cabinetLine === "A列" ? "B列" : cabinetLine === "B列" ? "C列" : "B列";
+            const cabinetPositionColumns = detailPage.viewId === VIEW_IDS.CABINET
+              ? [cabinetLine || "A列", nextCabinetLine].map((title, columnIndex) => ({
+                title,
+                numberSide: columnIndex === 0 ? "right" : "left",
+                slots: Array.from({ length: 10 }, (_, slotIndex) => {
+                  const source = cabinetPositionRows[columnIndex * 10 + slotIndex];
+                  const isCurrent = Boolean(source && source.id === row.id);
+                  const isDeployed = Boolean(source && normalize(source.assetStatus) !== "空闲");
+                  return {
+                    id: source ? source.id : title + "-" + pad(slotIndex + 1, 2),
+                    number: pad(slotIndex + 1, 2),
+                    status: isCurrent ? "selected" : isDeployed ? "occupied" : "empty",
+                    code: source ? normalize(source.assetCode || source.serialCode || source.id) : "",
+                    name: source ? normalize(source.name || source.assetCode || source.id) : "",
+                    hasTooltip: Boolean(source && (isDeployed || isCurrent))
+                  };
+                })
+              }))
+              : [];
             const locationBreadcrumbPartsByView = {
               [VIEW_IDS.CABINET]: [park, building, floor, room, cabinetLine],
               [VIEW_IDS.STATION_FACILITY]: [park, building, floor, room],
@@ -12314,12 +13693,18 @@
                 { id: "slave", title: "从设备", subtitle: normalize(slaveRow.name || slaveRow.assetCode), left: "70%", top: "158px", primary: !!parentRow }
               ]
               : [];
+            const detailTabs = detailPage.viewId === VIEW_IDS.CABINET
+              ? [
+                ASSET_DETAIL_TABS.find((tab) => tab.id === "contains"),
+                ...ASSET_DETAIL_TABS.filter((tab) => tab.id !== "contains")
+              ].filter(Boolean)
+              : ASSET_DETAIL_TABS;
             return {
               title: titleMap[detailPage.viewId] || "资产详情",
               viewId: detailPage.viewId,
               row,
               activeTab: detailPage.activeTab,
-              tabs: ASSET_DETAIL_TABS,
+              tabs: detailTabs,
               historyRange: detailPage.historyRange || "全部",
               historyRanges: ["全部", "近7日", "近10日", "近15日"],
               historyEntries,
@@ -12340,13 +13725,16 @@
                 { label: "预占", tone: "reserved" },
                 { label: "禁用", tone: "removed" }
               ],
+              cabinetPositionColumns,
               topologyNodes,
               hasMasterSlaveRelation,
               containsColumns: ["资产编号", "名称", "序列号", "资产状态", "资产分类", "资产位置", "U高", "开始U位", "额定功率", "操作"],
               containsEmptyText: "没有找到匹配的记录",
               cabinetContains: {
-                relatedTitle: "关联资产",
+                relatedTitle: "上架设备",
                 relatedColumns: ["资产编号", "名称", "序列号", "资产状态", "资产分类", "资产位置", "U高", "开始U位", "额定供电功率", "操作"],
+                relatedColumnKeys: ["assetCode", "name", "serialNumber", "assetStatus", "assetCategory", "assetLocation", "uHeight", "startU", "ratedPower", "action"],
+                relatedRows: cabinetMountedDevices,
                 rackUnits: cabinetRackUnits,
                 uTitle: "U位管理",
                 batchActions: ["批量禁用", "批量启用"],
@@ -12370,7 +13758,11 @@
               return;
             }
             if (label === "批量初始化") {
-              this.pushToast("批量初始化", "已触发批量初始化任务，示例数据未批量写回。", "warning");
+              if (this.isPendingInitializationView(viewId)) {
+                this.openInitializationOperationPage(viewId, this.getSelectedRowIds(viewId));
+                return;
+              }
+              this.pushToast("批量初始化", "请先进入待初始化列表并勾选需要初始化的资产。", "warning");
               return;
             }
             this.pushToast(label, LIST_PAGE_META[viewId].title + " 已触发“" + label + "”演示动作。", "info");
@@ -12476,8 +13868,9 @@
             if (!meta) {
               return null;
             }
+            const sourceViewId = operationPage.sourceViewId || operationPage.viewId;
             const row = operationPage.rowId
-              ? this.getRowById(operationPage.viewId, operationPage.rowId)
+              ? this.getRowById(sourceViewId, operationPage.rowId)
               : null;
             if (operationPage.rowId && !row) {
               return null;
@@ -12525,7 +13918,7 @@
               hiddenColumnKeys.add("uHeight");
               hiddenColumnKeys.add("powerOnTime");
             }
-            const baseRequiredActions = new Set(["入库", "上架", "部署", "编辑", "迁出", "变动", "下架"]);
+            const baseRequiredActions = new Set(["入库", "上架", "部署", "编辑", "迁出", "变动", "下架", "初始化"]);
             const baseRequiredColumnKeys = new Set(["assetCode", "name", "uHeight", "assetCategory"]);
             const baseColumns = OPERATION_SHEET_COLUMNS
               .filter((column) => !hiddenColumnKeys.has(column.key))
@@ -12635,7 +14028,7 @@
             };
             const readonlyColumnKeys = getReadonlyColumnKeys();
             const selectedRows = Array.isArray(operationPage.selectedRowIds)
-              ? operationPage.selectedRowIds.map((rowId) => this.getRowById(operationPage.viewId, rowId)).filter(Boolean)
+              ? operationPage.selectedRowIds.map((rowId) => this.getRowById(sourceViewId, rowId)).filter(Boolean)
               : [];
             if (operationPage.selectedRowIds?.length && !selectedRows.length) {
               return null;
@@ -12680,6 +14073,7 @@
               ...meta,
               editableBlankRows,
               viewId: operationPage.viewId,
+              sourceViewId,
               rowId: operationPage.rowId,
               action: operationPage.action,
               source: operationPage.source || "",
@@ -12712,6 +14106,10 @@
               this.pushToast(page.title + "提交", "已提交批量" + page.title + "作业，原型中保留固定行数，不自动新增行。", "success");
               return;
             }
+            if (page.source === "pendingInit") {
+              this.completePendingInitialization(page);
+              return;
+            }
             const selectedCount = Array.isArray(page.selectedRows) ? page.selectedRows.length : 0;
             const subject = selectedCount > 0
               ? selectedCount + " 条资产"
@@ -12725,6 +14123,10 @@
             if (label === "上传本地数据") {
               this.downloadOperationLocalDataTemplate();
               this.openLocalDataUploadDialog();
+              return;
+            }
+            if (label === "选择资产") {
+              this.openOperationAssetDialog();
               return;
             }
             if (label === "上传作业模板") {
@@ -15487,6 +16889,7 @@
             const viewId = item.id || item.viewId;
             const inheritedVersions = {
               [VIEW_IDS.IT_FACILITY]: ["v1.1"],
+              [VIEW_IDS.PENDING_IT_ASSET]: ["v1.1"],
               [VIEW_IDS.STATION_FACILITY]: ["v1.1"],
               [VIEW_IDS.CABINET]: ["v1.1"],
               [VIEW_IDS.SPARE_PART]: ["v1.1"],
@@ -15661,6 +17064,7 @@
               case VIEW_IDS.ASSET_OVERVIEW:
                 return this.renderAssetOverviewPage(state);
               case VIEW_IDS.IT_FACILITY:
+              case VIEW_IDS.PENDING_IT_ASSET:
               case VIEW_IDS.STATION_FACILITY:
               case VIEW_IDS.PENDING_ASSET:
               case VIEW_IDS.CABINET:
@@ -15808,11 +17212,14 @@
                         <div class="version-req-groups">
                           ${VERSION_REQUIREMENT_TYPES.map((type) => {
                             const items = group.items.filter((item) => item.type === type);
+                            if (!items.length) {
+                              return "";
+                            }
                             return `
                               <div class="version-req-group">
                                 <div class="version-req-group-title">${escapeHtml(type)}</div>
                                 <div class="version-req-list">
-                                  ${items.length > 0 ? items.map(renderRequirementItem).join("") : `<div class="version-req-empty">本版本暂无${escapeHtml(type)}类需求</div>`}
+                                  ${items.map(renderRequirementItem).join("")}
                                 </div>
                               </div>
                             `;
@@ -15828,8 +17235,9 @@
 
           getVersionRequirementGoal(version) {
             const goals = {
-              "v1.1": "支持主从设备及电子表格优化",
-              "v1.2": "易用性需求优化"
+              "v1.1": "支持主从设备、IT设备初始化及电子表格优化",
+              "v1.2": "易用性需求优化",
+              "v1.3": "核心功能补齐"
             };
             return goals[version] || "版本需求规格范围";
           }
@@ -16153,6 +17561,64 @@
                 </div>
               `;
             }
+            if (detail.viewId === VIEW_IDS.CABINET && Array.isArray(detail.cabinetPositionColumns) && detail.cabinetPositionColumns.length) {
+              const cabinetLegends = [
+                { label: "占用", tone: "occupied" },
+                { label: "空位", tone: "empty" },
+                { label: "选中", tone: "selected" }
+              ];
+              const renderCabinetPositionSlot = (slot) => {
+                const ariaLabel = slot.hasTooltip
+                  ? "机柜位" + slot.number + "，编号" + slot.code + "，名称" + slot.name
+                  : "机柜位" + slot.number + "，空位";
+                return `
+                  <button
+                    class="cabinet-position-slot is-${escapeHtml(slot.status)} ${slot.hasTooltip ? "has-tooltip" : ""}"
+                    type="button"
+                    aria-label="${escapeHtml(ariaLabel)}"
+                  >
+                    ${slot.hasTooltip ? `
+                      <span class="cabinet-position-tooltip" role="tooltip">
+                        <span>编号：${escapeHtml(slot.code)}</span>
+                        <span>名称：${escapeHtml(slot.name)}</span>
+                      </span>
+                    ` : ""}
+                  </button>
+                `;
+              };
+              return `
+                <div class="asset-tab-panel">
+                  <div class="cabinet-position-layout">
+                    <div class="cabinet-position-legend" aria-label="机柜位图例">
+                      ${cabinetLegends.map((item) => `
+                        <div class="cabinet-position-legend-item">
+                          <span class="cabinet-position-swatch is-${escapeHtml(item.tone)}" aria-hidden="true"></span>
+                          <span>${escapeHtml(item.label)}</span>
+                        </div>
+                      `).join("")}
+                    </div>
+                    <div class="cabinet-position-stage">
+                      ${detail.cabinetPositionColumns.map((column) => `
+                        <section class="cabinet-position-column ${column.numberSide === "left" ? "is-number-left" : "is-number-right"}">
+                          <div class="cabinet-position-column-title">${escapeHtml(column.title)}</div>
+                          <div class="cabinet-position-slots">
+                            ${column.slots.map((slot) => {
+                              const slotNumber = `<span class="cabinet-position-no">${escapeHtml(slot.number)}</span>`;
+                              const slotButton = renderCabinetPositionSlot(slot);
+                              return `
+                                <div class="cabinet-position-slot-row">
+                                  ${column.numberSide === "left" ? slotNumber + slotButton : slotButton + slotNumber}
+                                </div>
+                              `;
+                            }).join("")}
+                          </div>
+                        </section>
+                      `).join("")}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
             return `
               <div class="asset-tab-panel">
                 <div class="asset-location-breadcrumb">${escapeHtml(detail.breadcrumb)}</div>
@@ -16343,14 +17809,137 @@
 
           renderCabinetDetailContains(detail) {
             const cabinet = detail.cabinetContains;
+            const relatedTableViewId = "cabinetContainsRelatedFit";
+            const uTableViewId = "cabinetContainsU";
+            const relatedColumns = (cabinet.relatedColumns || []).map((label, index) => ({
+              label,
+              key: (cabinet.relatedColumnKeys || [])[index] || "column" + index
+            }));
+            const relatedInitialWidths = {
+              assetCode: 108,
+              name: 130,
+              serialNumber: 64,
+              assetStatus: 70,
+              assetCategory: 190,
+              assetLocation: 156,
+              uHeight: 46,
+              startU: 58,
+              ratedPower: 72,
+              action: 72
+            };
+            const uInitialWidths = {
+              __select: 36,
+              uPositionName: 240,
+              uPositionStatus: 180,
+              uPositionAction: 72
+            };
+            const uColumns = [
+              { key: "__select", label: "" },
+              { key: "uPositionName", label: "U位名称" },
+              { key: "uPositionStatus", label: "U位状态" },
+              { key: "uPositionAction", label: "操作", className: "op-cell" }
+            ];
+            const getCabinetTableColumnWidth = (viewId, key) => {
+              const customizedWidth = this.store.state.ui.columnWidths?.[viewId]?.[key];
+              if (customizedWidth) {
+                return customizedWidth;
+              }
+              return (viewId === relatedTableViewId ? relatedInitialWidths : uInitialWidths)[key] || this.store.getColumnWidth(viewId, key);
+            };
+            const renderCabinetTableHeader = (viewId, column) => {
+              const width = getCabinetTableColumnWidth(viewId, column.key);
+              if (column.key === "__select") {
+                return `
+                  <th class="checkbox-cell" style="width:${width}px;">
+                    <span class="checkbox" aria-hidden="true"></span>
+                  </th>
+                `;
+              }
+              return `
+                <th class="${escapeHtml(column.className || "")}" title="${escapeHtml(column.label)}" style="width:${width}px;">
+                  <div class="th-content">
+                    <span class="th-label">${escapeHtml(column.label)}</span>
+                    <span class="col-resizer" data-action="resize-column" data-view="${escapeHtml(viewId)}" data-key="${escapeHtml(column.key)}" aria-hidden="true"></span>
+                  </div>
+                </th>
+              `;
+            };
+            const renderColgroup = (viewId, columns) => `
+              <colgroup>
+                ${columns.map((column) => `<col data-key="${escapeHtml(column.key)}" style="width:${getCabinetTableColumnWidth(viewId, column.key)}px;" />`).join("")}
+              </colgroup>
+            `;
+            const rackHeight = Math.max(...(cabinet.rackUnits || []).map((unit) => Number(unit.unit) || 0), 42);
+            const emptySlots = (cabinet.rackUnits || [])
+              .filter((unit) => unit.tone === "empty")
+              .map((unit) => ({
+                unit: unit.unit,
+                top: (((rackHeight - unit.unit) / rackHeight) * 100).toFixed(3),
+                height: (100 / rackHeight).toFixed(3)
+              }));
+            const mountedDevices = (cabinet.relatedRows || []).map((device, index) => {
+              const start = Math.max(1, Math.min(rackHeight, Number(device.startUNumber || device.startU) || 1));
+              const uHeight = Math.max(1, Math.min(rackHeight - start + 1, Number(device.uHeightNumber || device.uHeight) || 1));
+              const top = ((rackHeight - start - uHeight + 1) / rackHeight) * 100;
+              const height = (uHeight / rackHeight) * 100;
+              return {
+                code: device.assetCode || "-",
+                name: device.name || "-",
+                start,
+                uHeight,
+                top: top.toFixed(3),
+                height: height.toFixed(3),
+                bayCount: uHeight >= 4 ? 8 : 4,
+                portCount: uHeight >= 2 ? 6 : 3,
+                index
+              };
+            });
+            const renderMountedDevice = (device) => `
+              <div
+                class="cabinet-mounted-device"
+                tabindex="0"
+                style="top:${escapeHtml(device.top)}%;height:calc(${escapeHtml(device.height)}% - 2px);"
+                aria-label="上架设备，资产编号${escapeHtml(device.code)}，资产名称${escapeHtml(device.name)}"
+              >
+                <span class="cabinet-mounted-face" aria-hidden="true">
+                  <span class="cabinet-mounted-leds">
+                    <i></i><i></i><i></i><i></i>
+                  </span>
+                  <span class="cabinet-mounted-bays">
+                    ${Array.from({ length: device.bayCount }, () => "<span></span>").join("")}
+                  </span>
+                  <span class="cabinet-mounted-ports">
+                    ${Array.from({ length: device.portCount }, () => "<i></i>").join("")}
+                  </span>
+                </span>
+                <span class="cabinet-mounted-tooltip" role="tooltip">
+                  <span>资产编号：${escapeHtml(device.code)}</span>
+                  <span>资产名称：${escapeHtml(device.name)}</span>
+                </span>
+                <span class="cabinet-device-actions">
+                  <button class="cabinet-device-action-btn" type="button" data-action="open-cabinet-rack-off-shelf" data-unit="${escapeHtml(String(device.start))}" data-code="${escapeHtml(device.code)}" data-name="${escapeHtml(device.name)}" data-u-height="${escapeHtml(String(device.uHeight))}">下架</button>
+                  <button class="cabinet-device-action-btn is-danger" type="button" data-action="open-cabinet-rack-retire" data-unit="${escapeHtml(String(device.start))}" data-code="${escapeHtml(device.code)}" data-name="${escapeHtml(device.name)}" data-u-height="${escapeHtml(String(device.uHeight))}">迁出</button>
+                </span>
+              </div>
+            `;
             return `
               <div class="cabinet-contains-layout">
                 <div class="cabinet-contains-side">
-                  <div class="asset-rack">
+                  <div class="asset-rack cabinet-contains-rack">
                     <div class="rack-shell">
                       <div class="rack-frame">
                         <div class="rack-units">
                           ${cabinet.rackUnits.map((unit) => `<div class="rack-unit is-${escapeHtml(unit.tone)}" title="${escapeHtml(unit.label)}U"></div>`).join("")}
+                          <div class="cabinet-empty-layer">
+                            ${emptySlots.map((slot) => `
+                              <button class="cabinet-empty-slot" type="button" data-action="open-cabinet-rack-add" data-unit="${escapeHtml(String(slot.unit))}" style="top:${escapeHtml(slot.top)}%;height:${escapeHtml(slot.height)}%;" aria-label="第${escapeHtml(String(slot.unit))}U位添加设备">
+                                <span class="cabinet-empty-add">⊕ 添加设备</span>
+                              </button>
+                            `).join("")}
+                          </div>
+                          <div class="cabinet-mounted-layer">
+                            ${mountedDevices.map(renderMountedDevice).join("")}
+                          </div>
                         </div>
                       </div>
                       <div class="rack-feet" aria-hidden="true"></div>
@@ -16366,21 +17955,40 @@
                       <div class="cabinet-section-title">${escapeHtml(cabinet.relatedTitle)}</div>
                     </div>
                     <div class="cabinet-section-body">
-                      <table class="cabinet-inline-table">
+                      <table class="cabinet-inline-table table-resizable" data-view="${escapeHtml(relatedTableViewId)}">
+                        ${renderColgroup(relatedTableViewId, relatedColumns)}
                         <thead>
                           <tr>
-                            ${cabinet.relatedColumns.map((column, index) => `<th class="${index === cabinet.relatedColumns.length - 1 ? "op-cell" : ""}">${escapeHtml(column)}</th>`).join("")}
+                            ${relatedColumns.map((column) => renderCabinetTableHeader(relatedTableViewId, {
+                              ...column,
+                              className: column.key === "action" ? "op-cell" : ""
+                            })).join("")}
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td colspan="${cabinet.relatedColumns.length}">
-                              <div class="empty-state">
-                                <div class="empty-icon" aria-hidden="true"></div>
-                                <div>没有找到匹配的记录</div>
-                              </div>
-                            </td>
-                          </tr>
+                          ${cabinet.relatedRows?.length
+                            ? cabinet.relatedRows.map((row) => `
+                              <tr>
+                                ${relatedColumns.map((column) => {
+                                  const key = column.key;
+                                  const value = row[key] || "-";
+                                  if (key === "action") {
+                                    return `<td class="op-cell" title="${escapeHtml(value)}"><button class="cabinet-op-link" data-action="top-action" data-label="${escapeHtml(value)}">${escapeHtml(value)}</button></td>`;
+                                  }
+                                  return `<td title="${escapeHtml(value)}">${escapeHtml(value)}</td>`;
+                                }).join("")}
+                              </tr>
+                            `).join("")
+                            : `
+                              <tr>
+                                <td colspan="${cabinet.relatedColumns.length}">
+                                  <div class="empty-state">
+                                    <div class="empty-icon" aria-hidden="true"></div>
+                                    <div>没有找到匹配的记录</div>
+                                  </div>
+                                </td>
+                              </tr>
+                            `}
                         </tbody>
                       </table>
                     </div>
@@ -16393,22 +18001,20 @@
                       </div>
                     </div>
                     <div class="cabinet-section-body">
-                      <table class="cabinet-inline-table">
+                      <table class="cabinet-inline-table table-resizable" data-view="${escapeHtml(uTableViewId)}">
+                        ${renderColgroup(uTableViewId, uColumns)}
                         <thead>
                           <tr>
-                            <th class="checkbox-cell"><span class="checkbox" aria-hidden="true"></span></th>
-                            <th>U位名称</th>
-                            <th>U位状态</th>
-                            <th class="op-cell">操作</th>
+                            ${uColumns.map((column) => renderCabinetTableHeader(uTableViewId, column)).join("")}
                           </tr>
                         </thead>
                         <tbody>
                           ${cabinet.uRows.map((row) => `
                             <tr>
                               <td class="checkbox-cell"><span class="checkbox" aria-hidden="true"></span></td>
-                              <td>${escapeHtml(row.label)}</td>
-                              <td><span class="cabinet-u-status ${row.status === "占用" ? "is-occupied" : ""}">${escapeHtml(row.status)}</span></td>
-                              <td class="op-cell"><button class="cabinet-op-link" data-action="top-action" data-label="${escapeHtml(row.action)}">${escapeHtml(row.action)}</button></td>
+                              <td title="${escapeHtml(row.label)}">${escapeHtml(row.label)}</td>
+                              <td title="${escapeHtml(row.status)}"><span class="cabinet-u-status ${row.status === "占用" ? "is-occupied" : ""}">${escapeHtml(row.status)}</span></td>
+                              <td class="op-cell" title="${escapeHtml(row.action)}"><button class="cabinet-op-link" data-action="top-action" data-label="${escapeHtml(row.action)}">${escapeHtml(row.action)}</button></td>
                             </tr>
                           `).join("")}
                         </tbody>
@@ -16723,6 +18329,7 @@
             const renderTableTools = meta.showTools && viewId === VIEW_IDS.SPARE_PART;
             const hasSelection = this.store.getSelectedRowIds(viewId).length > 0;
             const viewMode = this.store.getListViewMode(viewId);
+            const renderCabinetSpaceView = viewId === VIEW_IDS.CABINET && viewMode === "space";
             return `
               <div class="page-surface list-page-surface">
                 ${this.renderMasterSlaveListAnnotations(meta)}
@@ -16739,20 +18346,24 @@
                     `}
                   </div>
                   <div class="toolbar-actions">
-                    ${viewId === VIEW_IDS.PENDING_ASSET ? "" : this.renderLedgerHierarchyControl(viewId, state)}
+                    ${this.store.isPendingInitializationView(viewId) ? "" : this.renderLedgerHierarchyControl(viewId, state)}
                     ${meta.actions.map((action) => this.renderHeaderAction(action, viewId)).join("")}
                     ${renderHeaderTools ? this.renderToolbarTools() : ""}
                   </div>
                 </div>
                 <div class="ledger-list-body ${viewMode === "space" ? "is-space-view" : ""}">
                   ${viewMode === "space" ? this.renderSpaceViewTree(viewId) : ""}
-                  <div class="table-panel">
-                    ${renderTableTools ? `<div class="table-panel-head">${this.renderToolbarTools()}</div>` : ""}
-                    <div class="table-wrap">
-                      ${this.renderListTable(viewId, rows)}
-                    </div>
-                    ${this.renderPagination(meta, viewId, pageMeta)}
-                  </div>
+                  ${renderCabinetSpaceView
+                    ? this.renderCabinetSpaceView(rows, filteredRows, pageMeta)
+                    : `
+                      <div class="table-panel">
+                        ${renderTableTools ? `<div class="table-panel-head">${this.renderToolbarTools()}</div>` : ""}
+                        <div class="table-wrap">
+                          ${this.renderListTable(viewId, rows)}
+                        </div>
+                        ${this.renderPagination(meta, viewId, pageMeta)}
+                      </div>
+                    `}
                 </div>
               </div>
             `;
@@ -16797,6 +18408,114 @@
                     : '<div class="ledger-space-tree-empty">未找到匹配的空间节点</div>'}
                 </div>
               </aside>
+            `;
+          }
+
+          getCabinetUsage(row, index = 0) {
+            return this.store.getCabinetUsage(row, index);
+          }
+
+          renderCabinetMiniRack(usage) {
+            const slots = 14;
+            const usedSlots = usage.usedU > 0 ? Math.max(1, Math.round((usage.usedU / usage.height) * slots)) : 0;
+            return `
+              <div class="cabinet-mini-rack" aria-hidden="true">
+                ${Array.from({ length: slots }, (_, index) => `
+                  <span class="cabinet-mini-rack-unit ${index >= slots - usedSlots ? "is-used" : ""}"></span>
+                `).join("")}
+              </div>
+            `;
+          }
+
+          renderCabinetSpaceView(rows, filteredRows, pageMeta) {
+            const meta = LIST_PAGE_META[VIEW_IDS.CABINET];
+            const statRows = filteredRows.length ? filteredRows : rows;
+            const stats = statRows.reduce((acc, row, index) => {
+              const usage = this.getCabinetUsage(row, index);
+              acc.cabinets += 1;
+              acc.devices += usage.deviceCount;
+              acc.usedU += usage.usedU;
+              acc.totalU += usage.height;
+              return acc;
+            }, { cabinets: 0, devices: 0, usedU: 0, totalU: 0 });
+            const usageRate = stats.totalU > 0 ? Math.round((stats.usedU / stats.totalU) * 100) : 0;
+            const cardRows = rows.length ? rows : statRows;
+            return `
+              <div class="cabinet-space-panel">
+                <div class="cabinet-space-stats">
+                  <section class="cabinet-space-stat">
+                    <div>
+                      <div class="cabinet-space-stat-title">机柜数</div>
+                      <div class="cabinet-space-stat-value">${stats.cabinets}</div>
+                      <div class="cabinet-space-stat-sub">当前筛选范围</div>
+                    </div>
+                    <div class="cabinet-space-stat-icon" aria-label="机柜数">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="7" y="3.5" width="10" height="17" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
+                        <path d="M10 7h4M10 10h4M10 13h4M10 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                      </svg>
+                    </div>
+                  </section>
+                  <section class="cabinet-space-stat">
+                    <div>
+                      <div class="cabinet-space-stat-title">设备数</div>
+                      <div class="cabinet-space-stat-value">${stats.devices}</div>
+                      <div class="cabinet-space-stat-sub">已占用设备统计</div>
+                    </div>
+                    <div class="cabinet-space-stat-icon" aria-label="设备数">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="5" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
+                        <path d="M8 18h8M12 14v4M8.5 8h7M8.5 11h4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                      </svg>
+                    </div>
+                  </section>
+                  <section class="cabinet-space-stat">
+                    <div>
+                      <div class="cabinet-space-stat-title">利用率</div>
+                      <div class="cabinet-space-stat-value">${usageRate}%</div>
+                      <div class="cabinet-space-stat-sub">已使用：${stats.usedU}U　未使用：${Math.max(0, stats.totalU - stats.usedU)}U</div>
+                    </div>
+                    <div class="cabinet-space-stat-icon" aria-label="利用率">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 18h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                        <path d="M7 15l3.2-3.2 2.5 2.5L17.8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M15.5 8h2.8v2.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </div>
+                  </section>
+                </div>
+                <div class="cabinet-space-content-head">
+                  <input class="cabinet-space-search" type="text" placeholder="请搜索机柜名称/编号" aria-label="请搜索机柜名称或编号" />
+                </div>
+                ${cardRows.length
+                  ? `<div class="cabinet-card-grid">
+                      ${cardRows.map((row, index) => {
+                        const usage = this.getCabinetUsage(row, index);
+                        const percent = Math.min(100, Math.max(0, usage.percent));
+                        const name = row.name || row.assetCode || "-";
+                        return `
+                          <button class="cabinet-visual-card" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.CABINET)}" data-id="${escapeHtml(row.id)}" data-label="查看">
+                            <div class="cabinet-visual-head">
+                              <span class="cabinet-visual-title" title="${escapeHtml(name)}">${escapeHtml(name)}</span>
+                              <span class="cabinet-visual-u">${escapeHtml(String(usage.height))}U</span>
+                            </div>
+                            ${this.renderCabinetMiniRack(usage)}
+                            <div class="cabinet-usage-line">
+                              <span>U位使用</span>
+                              <strong>${usage.usedU}/${usage.height}</strong>
+                            </div>
+                            <div class="cabinet-usage-bar">
+                              <span class="cabinet-usage-fill" style="width:${percent}%"></span>
+                            </div>
+                            <div class="cabinet-card-meta" title="${escapeHtml(row.assetLocation || "-")}">${escapeHtml(row.assetLocation || "-")}</div>
+                            <div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>
+                          </button>
+                        `;
+                      }).join("")}
+                    </div>`
+                  : `<div class="cabinet-space-empty">暂无机柜数据</div>`}
+                ${this.renderPagination(meta, VIEW_IDS.CABINET, pageMeta)}
+              </div>
             `;
           }
 
@@ -16927,9 +18646,17 @@
               more: ["回库", "变动", "纸质标签打印"]
             };
             const actionMap = {
+              [VIEW_IDS.PENDING_IT_ASSET]: {
+                primary: ["初始化"],
+                more: []
+              },
               [VIEW_IDS.IT_FACILITY]: {
                 primary: ["上架", "编辑", "迁出"],
                 more: ["变动", "下架", "纸质标签打印"]
+              },
+              [VIEW_IDS.PENDING_ASSET]: {
+                primary: ["初始化"],
+                more: []
               },
               [VIEW_IDS.STATION_FACILITY]: stationActions,
               [VIEW_IDS.CABINET]: stationActions,
@@ -16959,7 +18686,7 @@
                 ${primaryActions.map((action) => `
                   <button class="btn batch-pill-btn" type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getLedgerOperationDemandAttrs(action)}>${escapeHtml(action)}</button>
                 `).join("")}
-                <div class="batch-action-wrap">
+                ${moreActions.length ? `<div class="batch-action-wrap">
                   <button class="btn batch-pill-btn" type="button" data-action="${moreActions.length ? "toggle-batch-selection-menu" : "batch-selection-action"}" data-view="${escapeHtml(viewId)}" data-label="更多" aria-haspopup="${moreActions.length ? "menu" : "false"}" aria-expanded="${moreActions.length && menuOpen ? "true" : "false"}"${this.getMultiSelectMoreDemandAttrs()}>
                     更多
                     ${moreActions.length ? `
@@ -16975,7 +18702,7 @@
                       `).join("")}
                     </div>
                   ` : ""}
-                </div>
+                </div>` : ""}
               </div>
             `;
           }
@@ -18323,6 +20050,236 @@
             `;
           }
 
+          renderCabinetRackDialog(dialog) {
+            const unitText = dialog.unit ? "第" + dialog.unit + "U位" : "当前U位";
+            const deviceText = dialog.deviceName || dialog.deviceCode || "当前设备";
+            const deviceRows = this.store.getListRows(VIEW_IDS.IT_FACILITY)
+              .filter((row) => row.assetStatus === "空闲")
+              .slice(0, 8);
+            const fallbackDeviceRows = deviceRows.length ? deviceRows : this.store.getListRows(VIEW_IDS.IT_FACILITY).slice(0, 8);
+            const selectedDevice = fallbackDeviceRows.find((row) => row.id === dialog.selectedDeviceId) || null;
+            const listColumns = [
+              { key: "name", label: "名称" },
+              { key: "assetCode", label: "资产编号" },
+              { key: "assetStatus", label: "资产状态" },
+              { key: "assetCategory", label: "资产分类" },
+              { key: "assetLocation", label: "资产位置" },
+              { key: "serialCode", label: "序列号" }
+            ];
+            const shelfFields = [
+              ...OPERATION_SHEET_COLUMNS,
+              { key: "shelfLocation", label: "上架位置", width: 186, required: true },
+              { key: "operationStartU", label: "开始U位", width: 108, required: true }
+            ];
+            const renderSelectOptions = (key, value = "") => {
+              const optionMap = {
+                assetStatus: ["空闲", "在用", "待上架"],
+                assetCategory: OPERATION_SELECT_OPTIONS.assetCategory || [],
+                assetLocation: OPERATION_SELECT_OPTIONS.assetLocation || [],
+                shelfLocation: OPERATION_SELECT_OPTIONS.assetLocation || [],
+                operationStartU: OPERATION_SELECT_OPTIONS.operationStartU || []
+              };
+              const options = optionMap[key] || [];
+              if (!options.length) {
+                return "";
+              }
+              return options.map((item) => `<option value="${escapeHtml(item)}"${String(value) === String(item) ? " selected" : ""}>${escapeHtml(item)}</option>`).join("");
+            };
+            const renderFormField = (field) => {
+              const defaultValues = {
+                assetStatus: "待上架",
+                shelfLocation: "当前机柜 > " + unitText,
+                operationStartU: dialog.unit || "1"
+              };
+              const value = defaultValues[field.key] || "";
+              const hasOptions = Boolean(renderSelectOptions(field.key, value));
+              return `
+                <label class="${field.key === "description" ? "is-wide" : ""}">
+                  <span>${escapeHtml(field.label)}${field.required ? " *" : ""}</span>
+                  ${hasOptions
+                    ? `<select>${renderSelectOptions(field.key, value)}</select>`
+                    : `<input value="${escapeHtml(value)}" placeholder="请输入${escapeHtml(field.label)}" />`}
+                </label>
+              `;
+            };
+            let title = "添加设备";
+            let subtitle = unitText + " · 请选择添加方式";
+            let body = `
+              <div class="cabinet-rack-choice-grid">
+                <button class="cabinet-rack-choice" type="button" data-action="cabinet-rack-dialog-mode" data-mode="select">
+                  <strong>选择设备</strong>
+                  <span>从现有 IT 设备台账中选择待上架设备，并带入当前位置。</span>
+                </button>
+                <button class="cabinet-rack-choice" type="button" data-action="cabinet-rack-dialog-mode" data-mode="new">
+                  <strong>添加新设备</strong>
+                  <span>按 IT设备台账“上架”字段填写新设备信息。</span>
+                </button>
+              </div>
+            `;
+            let footer = `
+              <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
+            `;
+            let compact = false;
+
+            if (dialog.mode === "select") {
+              title = "选择设备";
+              subtitle = unitText + " · 选择可上架的 IT 设备";
+              body = `
+                <div class="cabinet-rack-device-list">
+                  <table class="cabinet-rack-dialog-table">
+                    <thead>
+                      <tr>${listColumns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join("")}</tr>
+                    </thead>
+                    <tbody>
+                      ${fallbackDeviceRows.map((row) => `
+                        <tr class="${row.id === dialog.selectedDeviceId ? "is-selected" : ""}" data-action="select-cabinet-rack-device" data-id="${escapeHtml(row.id)}" tabindex="0" aria-selected="${row.id === dialog.selectedDeviceId ? "true" : "false"}">
+                          ${listColumns.map((column) => {
+                            const value = row[column.key] || "-";
+                            return `<td title="${escapeHtml(value)}">${escapeHtml(value)}</td>`;
+                          }).join("")}
+                        </tr>
+                      `).join("")}
+                    </tbody>
+                  </table>
+                </div>
+              `;
+              footer = `
+                <span class="cabinet-rack-selected-text">${selectedDevice ? `已选择：${escapeHtml(selectedDevice.name || selectedDevice.assetCode || selectedDevice.id)}` : "请点击列表行选择设备"}</span>
+                <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
+                <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="选择设备" ${selectedDevice ? "" : "disabled"}>确认选择</button>
+              `;
+            } else if (dialog.mode === "new") {
+              title = "添加新设备";
+              subtitle = unitText + " · 字段与 IT设备台账-上架 保持一致";
+              body = `<div class="cabinet-rack-form">${shelfFields.map(renderFormField).join("")}</div>`;
+              footer = `
+                <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
+                <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="添加新设备">提交</button>
+              `;
+            } else if (dialog.mode === "retire") {
+              title = "迁出确认";
+              subtitle = deviceText + " · " + unitText;
+              compact = true;
+              body = `<div class="cabinet-confirm-message">确认将 <strong>${escapeHtml(deviceText)}</strong> 从当前机柜迁出吗？迁出后设备将进入迁出流程。</div>`;
+              footer = `
+                <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="迁出">确认迁出</button>
+              `;
+            } else if (dialog.mode === "offShelf") {
+              title = "下架";
+              subtitle = deviceText + " · " + unitText;
+              compact = true;
+              body = `
+                <div class="cabinet-off-shelf-form">
+                  <label>
+                    <span>下架后位置 *</span>
+                    <select>
+                      ${(OPERATION_SELECT_OPTIONS.assetLocation || []).map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join("")}
+                    </select>
+                  </label>
+                </div>
+              `;
+              footer = `
+                <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="下架">确认下架</button>
+              `;
+            }
+
+            return `
+              <div class="relation-modal-backdrop" data-action="close-cabinet-rack-dialog"></div>
+              <section class="relation-modal cabinet-rack-dialog ${compact ? "compact" : ""}" role="dialog" aria-modal="true" aria-labelledby="cabinetRackDialogTitle">
+                <header class="relation-modal-head">
+                  <div>
+                    <div class="relation-modal-title" id="cabinetRackDialogTitle">${escapeHtml(title)}</div>
+                    <div class="relation-modal-subtitle">${escapeHtml(subtitle)}</div>
+                  </div>
+                  <button class="relation-modal-close" type="button" data-action="close-cabinet-rack-dialog" aria-label="关闭">×</button>
+                </header>
+                <div class="relation-modal-body">${body}</div>
+                <footer class="relation-modal-footer">
+                  <div class="relation-modal-actions">${footer}</div>
+                </footer>
+              </section>
+            `;
+          }
+
+          renderOperationAssetDialog(dialog) {
+            const sourceViewId = dialog.sourceViewId || VIEW_IDS.PENDING_ASSET;
+            const sourceTitle = LIST_PAGE_META[sourceViewId]?.title || "资产列表";
+            const selected = new Set(dialog.selectedRowIds || []);
+            const rows = this.store.getFilteredRows(sourceViewId).slice(0, 60);
+            const renderCell = (value) => `<td title="${escapeHtml(value || "-")}"><span class="cell-ellipsis">${escapeHtml(value || "-")}</span></td>`;
+            return `
+              <div class="relation-modal-backdrop" data-action="close-operation-asset-dialog"></div>
+              <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="operationAssetDialogTitle" style="width:min(980px,calc(100vw - 48px));">
+                <header class="relation-modal-head">
+                  <div>
+                    <div class="relation-modal-title" id="operationAssetDialogTitle">选择资产</div>
+                    <div class="relation-modal-subtitle">从「${escapeHtml(sourceTitle)}」中选择需要带入电子表格的资产。</div>
+                  </div>
+                  <button class="relation-modal-close" type="button" data-action="close-operation-asset-dialog" aria-label="关闭">×</button>
+                </header>
+                <div class="relation-modal-body" style="max-height:520px;overflow:auto;">
+                  <table class="table-resizable" data-view="${escapeHtml(sourceViewId)}">
+                    <colgroup>
+                      <col style="width:44px;" />
+                      <col style="width:170px;" />
+                      <col style="width:150px;" />
+                      <col style="width:100px;" />
+                      <col style="width:210px;" />
+                      <col style="width:170px;" />
+                      <col style="width:140px;" />
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th title="名称"><div class="th-content"><span class="th-label">名称</span></div></th>
+                        <th title="资产编号"><div class="th-content"><span class="th-label">资产编号</span></div></th>
+                        <th title="资产状态"><div class="th-content"><span class="th-label">资产状态</span></div></th>
+                        <th title="资产分类"><div class="th-content"><span class="th-label">资产分类</span></div></th>
+                        <th title="资产位置"><div class="th-content"><span class="th-label">资产位置</span></div></th>
+                        <th title="序列号"><div class="th-content"><span class="th-label">序列号</span></div></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${rows.length ? rows.map((row) => `
+                        <tr class="${selected.has(row.id) ? "is-selected" : ""}">
+                          <td>
+                            <input type="checkbox" data-action="toggle-operation-asset-selection" data-id="${escapeHtml(row.id)}" aria-label="选择${escapeHtml(row.name || row.assetCode || "资产")}" ${selected.has(row.id) ? "checked" : ""} />
+                          </td>
+                          ${renderCell(row.name)}
+                          ${renderCell(row.assetCode)}
+                          ${renderCell(row.assetStatus)}
+                          ${renderCell(row.assetCategory)}
+                          ${renderCell(row.assetLocation)}
+                          ${renderCell(row.serialNumber || row.serialCode)}
+                        </tr>
+                      `).join("") : `
+                        <tr>
+                          <td colspan="7">
+                            <div class="empty-state">
+                              <div class="empty-icon" aria-hidden="true"></div>
+                              <div>没有可选择的资产</div>
+                            </div>
+                          </td>
+                        </tr>
+                      `}
+                    </tbody>
+                  </table>
+                </div>
+                <footer class="relation-modal-footer">
+                  <div class="relation-modal-note">已选择 ${selected.size} 条资产</div>
+                  <div class="relation-modal-actions">
+                    <button class="btn" type="button" data-action="close-operation-asset-dialog">取消</button>
+                    <button class="btn btn-primary" type="button" data-action="confirm-operation-asset-dialog">确认选择</button>
+                  </div>
+                </footer>
+              </section>
+            `;
+          }
+
           renderOverlay(state) {
             if (state.ui.assetOverviewDialog) {
               return this.renderAssetOverviewDialog(state.ui.assetOverviewDialog);
@@ -18332,6 +20289,12 @@
             }
             if (state.ui.requirementDescriptionDialog) {
               return this.renderRequirementDescriptionDialog(state.ui.requirementDescriptionDialog);
+            }
+            if (state.ui.cabinetRackDialog) {
+              return this.renderCabinetRackDialog(state.ui.cabinetRackDialog);
+            }
+            if (state.ui.operationAssetDialog) {
+              return this.renderOperationAssetDialog(state.ui.operationAssetDialog);
             }
             if (state.ui.relationDialog) {
               return this.renderRelationDialog(state.ui.relationDialog);
@@ -19530,6 +21493,46 @@
                 this.store.closeRequirementDescriptionDialog();
                 return;
               }
+              if (action === "open-cabinet-rack-add") {
+                this.store.openCabinetRackDialog("add", {
+                  unit: actionTarget.getAttribute("data-unit")
+                });
+                return;
+              }
+              if (action === "open-cabinet-rack-off-shelf") {
+                this.store.openCabinetRackDialog("offShelf", {
+                  unit: actionTarget.getAttribute("data-unit"),
+                  deviceCode: actionTarget.getAttribute("data-code"),
+                  deviceName: actionTarget.getAttribute("data-name"),
+                  uHeight: actionTarget.getAttribute("data-u-height")
+                });
+                return;
+              }
+              if (action === "open-cabinet-rack-retire") {
+                this.store.openCabinetRackDialog("retire", {
+                  unit: actionTarget.getAttribute("data-unit"),
+                  deviceCode: actionTarget.getAttribute("data-code"),
+                  deviceName: actionTarget.getAttribute("data-name"),
+                  uHeight: actionTarget.getAttribute("data-u-height")
+                });
+                return;
+              }
+              if (action === "cabinet-rack-dialog-mode") {
+                this.store.setCabinetRackDialogMode(actionTarget.getAttribute("data-mode"));
+                return;
+              }
+              if (action === "select-cabinet-rack-device") {
+                this.store.selectCabinetRackDevice(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "close-cabinet-rack-dialog") {
+                this.store.closeCabinetRackDialog();
+                return;
+              }
+              if (action === "confirm-cabinet-rack-action") {
+                this.store.confirmCabinetRackAction(actionTarget.getAttribute("data-label"));
+                return;
+              }
               if (action === "row-action") {
                 this.store.handleRowAction(
                   actionTarget.getAttribute("data-view"),
@@ -19676,6 +21679,18 @@
               }
               if (action === "operation-tool") {
                 this.store.handleOperationTool(actionTarget.getAttribute("data-label"));
+                return;
+              }
+              if (action === "close-operation-asset-dialog") {
+                this.store.closeOperationAssetDialog();
+                return;
+              }
+              if (action === "toggle-operation-asset-selection") {
+                this.store.toggleOperationAssetDialogSelection(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "confirm-operation-asset-dialog") {
+                this.store.confirmOperationAssetDialogSelection();
                 return;
               }
               if (action === "close-local-data-upload-dialog") {
