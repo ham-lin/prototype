@@ -1871,7 +1871,7 @@
               <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"弹出二次确认（蓝色提示框，说明学员加入方式及答题规则）→ 进行中（全部字段只读，考卷锁定）→ 点击"结束培训"弹出二次确认（红色警告框，提示不可逆操作）→ 已结束（不可逆）。</p>
               <p><strong>交互 — Tab 联动</strong>：详情面板内脑机/考试/附件三个 Tab 在同一面板切换，不重新请求培训基本信息；脑机 Tab 进入时自动建立推流连接，切出 Tab 或关闭面板时立即断开，避免空跑。</p>
               <p><strong>数据流 — 脑机指标</strong>：实时推送每位学员的注意力、情绪、疲劳度三个维度，每项附带状态标签（注意力：集中≥75 / 一般60~75 / 不集中&lt;60；情绪：良好≥75 / 一般60~75 / 不佳&lt;60；疲劳：不疲劳≥75 / 一般60~75 / 疲劳&lt;60）；综合得分按权重前端计算，折线图滚动展示最近 60 个数据点。</p>
-              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则在保存时一次性抽题生成快照；考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）及学员逐题答题详情（展示正确答案与学员作答对比）。</p>
+              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则随机抽题生成考卷快照；生成后在考试 Tab 的外侧考题列表调整每题分值，列表实时汇总试卷总分；总分必须等于 100 分才允许开始培训。考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）及学员逐题答题详情（展示正确答案与学员作答对比）。</p>
               <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。</p>
             </div>
           </div>
@@ -2191,10 +2191,10 @@
                   <div>
                     <h4 style="margin:0 0 10px;font-size:14px;">考试 Tab — 组卷规则</h4>
                     <div style="font-size:13px;color:var(--text-2);line-height:1.8;">
-                    · <strong>自动组卷</strong>：按标签和数量从题库随机抽题，支持设置时间限制（分钟），预览题目后可调整分值，总分需为 100 分才可确认组卷。<br>
+                    · <strong>自动组卷</strong>：按标签和数量从题库随机抽题，支持设置时间限制（分钟）；预览确认后回写到考试 Tab 的考题统计列表，每题分值在外侧列表调整，系统实时显示总分，默认按 100 分分配，总分必须等于 100 分才视为组卷有效。<br>
                     · <strong>手动选题</strong>：从题库筛选后逐题勾选加入考试。<br>
                     · 仅「待开始」状态可修改考卷；「进行中」考卷锁定只读。<br>
-                    · 重复作答限制：最多 N 次（管理员可配置），以最新成绩为准。</div>
+                    · 重复作答限制：固定 2 次答题机会；选择「重新测试」消耗 1 次机会；选择「提交成绩」后二次确认并锁定成绩，之后只能查看答题结果。</div>
                   </div>
                 </div>
               </div>
@@ -2300,11 +2300,11 @@
                     <thead><tr><th>步骤</th><th>交互说明</th><th>关键逻辑</th></tr></thead>
                     <tbody>
                       <tr><td>① 学员登录</td><td>用户名 + 密码，或 OA 统一认证</td><td>失败 3 次锁定 10 分钟</td></tr>
-                      <tr><td>② 培训编号</td><td>输入 4 位数字编号加入培训</td><td>服务端校验编号有效且培训为「进行中」</td></tr>
-                      <tr><td>③ 设备连接</td><td>蓝牙扫描 → 配对 → 检测佩戴 → 信号校准</td><td>连接成功后学员状态写入培训学员表</td></tr>
+                      <tr><td>② 培训编号</td><td>输入 4 位数字编号加入培训</td><td>校验编号有效并返回培训状态；待开始可先完成设备连接，已结束则关闭考试入口</td></tr>
+                      <tr><td>③ 设备连接</td><td>点击"搜索附近设备" → 授权附近设备权限 → 扫描列表 → 选择设备配对</td><td>连接成功后记录设备名称、信号强度和电量，并解锁培训大厅</td></tr>
                       <tr><td>④ 培训大厅</td><td>展示培训视频/课件；脑机数据实时采集</td><td>每 5 秒上报一次脑电指标（WebSocket）</td></tr>
-                      <tr><td>⑤ 考试答题</td><td>逐题作答，支持单选/多选/判断；进度条</td><td>倒计时由后端控制；前端超时自动提交</td></tr>
-                      <tr><td>⑥ 查看成绩</td><td>展示综合得分、正确率、答案解析</td><td>成绩实时写入数据库；支持重复作答（按配置）</td></tr>
+                      <tr><td>⑤ 考试答题</td><td>逐题作答，支持单选/多选/判断；展示题目分值、进度条和剩余答题次数</td><td>试卷满分默认 100 分；共 2 次答题机会，重新测试会消耗 1 次机会</td></tr>
+                      <tr><td>⑥ 查看成绩</td><td>展示当前得分、评级、提交成绩/重新测试说明；提交后展示答题详情和答案解析</td><td>提交成绩需二次确认；提交后成绩锁定，考试入口仅可查看答题结果</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -2622,7 +2622,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         <div style="font-size:13px;color:var(--muted);margin-top:3px;">管理员提供的 4 位数字编号</div>
       </div>
     </div>
-    <div class="req-panel" id="req-pad-code"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训编号需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：4 位纯数字编号，由管理员在后台创建培训时系统自动生成，学员凭此编号关联到具体培训。</p><p><strong>交互</strong>：4 个独立输入框，每格 1 位数字，输入后自动跳下一格；退格回到上一格；支持粘贴整串（自动分发各格）；"验证并进入"前端先校验是否填满 4 位。</p><p><strong>数据流</strong>：校验成功后将培训信息写入本地会话，Step 1 标记为已完成，返回首页自动更新徽标。</p><p><strong>异常处理</strong>：编号不存在 → "编号不存在，请确认后重试"；培训非进行中 → "该培训尚未开始或已结束"；未填满 → "请输入完整的 4 位培训编号"。</p></div></div>
+    <div class="req-panel" id="req-pad-code"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训编号需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：4 位纯数字编号，由管理员在后台创建培训时系统自动生成，学员凭此编号关联到具体培训。</p><p><strong>交互</strong>：4 个独立输入框，每格 1 位数字，输入后自动跳下一格；退格回到上一格；支持粘贴整串（自动分发各格）；"验证并进入"前端先校验是否填满 4 位。</p><p><strong>数据流</strong>：校验成功后将培训信息和培训状态写入本地会话，Step 1 标记为已完成，并引导进入设备连接；待开始培训允许先完成设备连接，考试入口等培训进行中后开放。</p><p><strong>异常处理</strong>：编号不存在 → "编号不存在，请确认后重试"；培训已结束 → "该培训已结束，考试已关闭"；未填满 → "请输入完整的 4 位培训编号"。</p></div></div>
     <div class="pad-code-box" style="gap:14px;margin:16px 0 24px;">
       <input class="pad-code-input" value="1" maxlength="1" style="height:68px;font-size:30px;">
       <input class="pad-code-input" value="1" maxlength="1" style="height:68px;font-size:30px;">
@@ -2643,7 +2643,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       <span id="pdStatusBadge" style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:100px;background:#F2F3F5;color:var(--muted);">未连接</span>
     </div>
     <p style="color:var(--muted);margin-bottom:12px;font-size:13px;">通过蓝牙搜索并连接脑机设备，连接后检测佩戴状态</p>
-    <div class="req-panel" id="req-pad-device"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 设备连接需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><table><tr><th>连接阶段</th><th>显示内容</th><th>操作</th></tr><tr><td>待搜索</td><td>"开始扫描"按钮</td><td>申请蓝牙权限后触发</td></tr><tr><td>扫描中</td><td>附近设备列表（名称/信号/电量）</td><td>点击设备发起配对</td></tr><tr><td>连接中</td><td>进度动画</td><td>可取消</td></tr><tr><td>已连接</td><td>设备名 + 绿色徽标 + 电量</td><td>可断开重连</td></tr></table><p><strong>交互</strong>：首次进入弹出蓝牙权限弹窗；拒绝权限则显示说明并退出流程；连接成功后自动进入佩戴检测（未佩戴/检测中/已佩戴），Step 2 标记完成。</p><p><strong>数据流</strong>：设备配对成功后将设备信息写入会话；佩戴检测由设备端上报信号，前端每 2 秒轮询刷新。</p><p><strong>异常处理</strong>：扫描超时（15 秒）→ "未找到附近设备，请确认设备已开机"；配对失败 → "连接失败，请靠近设备后重试"；佩戴检测超时（30 秒）→ 提示"未检测到佩戴，可跳过继续"。</p></div></div>
+    <div class="req-panel" id="req-pad-device"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 设备连接需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><table><tr><th>连接阶段</th><th>显示内容</th><th>操作</th></tr><tr><td>待搜索</td><td>"搜索附近设备"按钮</td><td>点击后申请附近设备/蓝牙权限，允许后开始扫描</td></tr><tr><td>扫描中</td><td>搜索动画 + 附近设备列表（名称/信号/电量）</td><td>可取消搜索；点击设备发起配对</td></tr><tr><td>连接中</td><td>连接动画 + 当前设备名称</td><td>等待系统完成配对</td></tr><tr><td>已连接</td><td>设备名 + 绿色徽标 + 电量</td><td>Step 2 标记完成，可返回首页或进入培训</td></tr></table><p><strong>交互</strong>：点击"搜索附近设备"后弹出权限说明；拒绝权限时停留在待搜索状态并提示需要授权；允许后展示搜索状态和设备列表，选择设备后进入连接中，连接成功后自动完成设备步骤。</p><p><strong>数据流</strong>：设备配对成功后将设备名称、信号强度、电量写入会话；培训大厅读取已连接设备并显示在顶部信息和脑机状态区域。</p><p><strong>异常处理</strong>：扫描超时（15 秒）→ "未找到附近设备，请确认设备已开机"；配对失败 → "连接失败，请靠近设备后重试"；设备断开后大厅显示断开提示并引导重新连接。</p></div></div>
     <!-- Permission overlay (Android style) -->
     <div id="pdPermOverlay" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.45);border-radius:inherit;z-index:10;align-items:center;justify-content:center;padding:24px;">
       <div style="background:var(--card);border-radius:14px;width:100%;max-width:320px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.2);">
@@ -2765,7 +2765,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
   </div>
 </section>
       <section class="pad-task" id="padExam"><div class="pad-card">
-        <div class="req-panel" id="req-pad-exam"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 考试流程需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：题目展示 题型标签 / 进度条 / 题目内容 / 选项列表 / 剩余答题次数；答题记录字段为 题目ID / 所选答案 / 是否正确 / 答题时间。</p><table><tr><th>规则</th><th>说明</th></tr><tr><td>答题次数</td><td>共 2 次答题机会，选择重新测试后剩余次数 -1；成绩正式提交后入口改为查看答题结果</td></tr><tr><td>切题</td><td>未作答直接切题时 toast"请先选择答案"</td></tr><tr><td>提交</td><td>最后一题"下一题"变为"提交"，提交前弹窗确认</td></tr><tr><td>成绩</td><td>后端计算总分和正确率，学员不可见正确答案</td></tr></table><p><strong>数据流</strong>：答题数据实时写入本地，提交时一次性上传；成绩由后端返回。</p><p><strong>异常处理</strong>：提交失败 toast"提交失败，请检查网络"并保留本地记录，支持重新提交。</p></div></div>
+        <div class="req-panel" id="req-pad-exam"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 考试流程需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：题目展示 题型标签 / 当前题号 / 题目分值 / 进度条 / 题目内容 / 选项列表 / 剩余答题次数；试卷满分默认 100 分。</p><table><tr><th>规则</th><th>说明</th></tr><tr><td>答题次数</td><td>共 2 次答题机会；从结果页确认"重新测试"后剩余次数 -1；成绩正式提交后入口改为查看答题结果</td></tr><tr><td>切题</td><td>未作答直接切题时 toast"请先选择答案"</td></tr><tr><td>提交</td><td>最后一题"下一题"变为"提交"，进入测试结果页后可选择提交成绩或重新测试，两个操作均需二次确认</td></tr><tr><td>成绩</td><td>按每题分值统计当前得分；提交成绩前为未锁定结果，提交成绩后锁定为正式成绩</td></tr></table><p><strong>数据流</strong>：答题选择先保存在本地会话；进入结果页时按试卷分值即时计算得分；确认提交成绩后保存最终结果并禁止再次进入考试。</p><p><strong>异常处理</strong>：倒计时结束自动进入结果页；成绩已提交后再次点击考试入口时跳转到答题结果；剩余次数为 0 时"重新测试"按钮置灰。</p></div></div>
         <div class="pad-exam-head">
           <div class="pad-exam-titles"><span class="pad-qtype single" id="padQType">单选题</span><h2 id="padQuestionTitle">第 1 / 8 题</h2><span id="padQScore" style="font-size:12px;font-weight:700;color:var(--primary);background:#e8f3ff;padding:3px 10px;border-radius:100px;white-space:nowrap;">10 分</span></div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
@@ -2784,12 +2784,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         </div>
       </div></section>
       <section class="pad-task" id="padResult"><div class="pad-card result-card">
-        <div class="req-panel" id="req-pad-result"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 测试结果需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：得分圆环（答对题数 / 总题数）/ 总得分百分比 / 评级标签 / 答题详情列表（题目序号 + 题目内容 + 正误标识）。</p><table><tr><th>得分区间</th><th>评级标签</th><th>颜色</th></tr><tr><td>≥ 90%</td><td>优秀</td><td>绿色</td></tr><tr><td>60% ~ 89%</td><td>良好</td><td>蓝色</td></tr><tr><td>&lt; 60%</td><td>需继续努力</td><td>红色</td></tr></table><p><strong>交互</strong>：「重新测试」重置答题记录并跳回第 1 题，剩余答题次数 -1；次数耗尽后按钮置灰；「返回培训」跳回培训大厅。</p><p><strong>数据流</strong>：成绩由前端统计答对题数后实时计算；提交时上报后端，后端以最新一次成绩为准。</p><p><strong>异常处理</strong>：提交失败 toast"成绩提交失败，请检查网络"并保留本地记录，支持重新提交。</p></div></div>
+        <div class="req-panel" id="req-pad-result"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 测试结果需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：得分圆环（当前得分 / 试卷总分）/ 得分文字 / 评级标签 / 操作说明 / 答题详情列表（提交后展示题目、作答、正确答案、解析）。</p><table><tr><th>得分区间</th><th>评级标签</th><th>颜色</th></tr><tr><td>≥ 90%</td><td>优秀</td><td>绿色</td></tr><tr><td>60% ~ 89%</td><td>良好</td><td>蓝色</td></tr><tr><td>&lt; 60%</td><td>需继续努力</td><td>红色</td></tr></table><p><strong>交互</strong>：「提交成绩」确认并保存为正式成绩，提交后不能再参加考试，只能查看答题结果；「重新测试」放弃当前未提交结果并消耗 1 次答题机会，确认后回到第 1 题；次数耗尽后按钮置灰。</p><p><strong>数据流</strong>：结果页先展示当前未提交得分；确认提交后展示答题详情并回写培训大厅考试卡片为"查看答题结果"。</p><p><strong>异常处理</strong>：重复提交时 toast"成绩已提交，不能重复提交"；成绩已提交后点击重新测试 toast"成绩已提交，不能重新测试"；无剩余次数时 toast"已无剩余重新测试次数"。</p></div></div>
         <div class="score-circle" id="padScoreCircle">0/0</div><h2>测试结果</h2><p>安全生产测试完成，您的得分为 <strong id="padScorePct" style="color:var(--danger);">0 分</strong></p><span class="tag red" id="padScoreTag">需继续努力</span><div id="padResultDetailWrap" style="text-align:left;margin-top:22px;display:none;"><h3>答题详情</h3><div class="event-list" id="padResultDetail"></div></div><div class="actions" style="margin-top:18px;" id="padResultActions"></div></div></section>
 
       <!-- ===== 培训大厅 ===== -->
       <section class="pad-task" id="padLobby">
-        <div style="max-width:720px;margin:0 auto;width:100%;"><div class="req-panel" id="req-pad-lobby"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训大厅需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：头部展示 培训名称 / 编号 / 时间段 / 已连接设备名；脑机状态条展示 注意力（0-100）/ 情绪状态 / 疲劳程度 / 综合得分。</p><table><tr><th>功能入口</th><th>可用条件</th><th>无内容时</th></tr><tr><td>开始答题</td><td>管理员已配置考卷且培训进行中</td><td>置灰 + toast 说明</td></tr><tr><td>培训资料</td><td>管理员已上传附件</td><td>显示"暂无资料"空态</td></tr><tr><td>培训视频</td><td>管理员已上传视频</td><td>显示"暂无视频"空态</td></tr><tr><td>系统公告</td><td>始终可用</td><td>显示"暂无公告"</td></tr></table><p><strong>交互</strong>：脑机状态条每 5 秒自动刷新；退出培训弹窗二次确认后清除会话并返回首页，步骤全部重置。</p><p><strong>异常处理</strong>：大厅内设备断开时脑机状态条显示"设备已断开"并停止刷新，提供"重新连接"按钮；网络中断时功能入口均置灰并 toast"网络连接异常"。</p></div></div></div>
+        <div style="max-width:720px;margin:0 auto;width:100%;"><div class="req-panel" id="req-pad-lobby"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训大厅需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：头部展示 培训名称 / 编号 / 时间段 / 已连接设备名；脑机状态条展示 注意力（0-100）/ 情绪状态 / 疲劳程度 / 设备电量。</p><table><tr><th>功能入口</th><th>可用条件</th><th>无内容时</th></tr><tr><td>参加考试 / 查看答题结果</td><td>管理员已配置满分 100 分考卷且培训进行中；成绩提交后入口切换为查看答题结果</td><td>置灰 + toast 说明</td></tr><tr><td>培训资料</td><td>管理员已上传附件</td><td>显示"暂无资料"空态</td></tr><tr><td>培训视频</td><td>管理员已上传视频</td><td>显示"暂无视频"空态</td></tr><tr><td>系统公告</td><td>始终可用</td><td>显示"暂无公告"</td></tr></table><p><strong>交互</strong>：脑机状态条每 5 秒自动刷新；考试卡片展示题目数、考试时长、满分 100 分和剩余答题次数；提交成绩后卡片显示已提交得分并仅允许查看答题结果。退出培训弹窗二次确认后清除会话并返回首页，步骤全部重置。</p><p><strong>异常处理</strong>：大厅内设备断开时脑机状态条显示"设备已断开"并停止刷新，提供"重新连接"按钮；网络中断时功能入口均置灰并 toast"网络连接异常"。</p></div></div></div>
         <div style="max-width:720px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px;">
 
           <!-- 培训信息头部 -->
@@ -5246,23 +5246,26 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     });
     document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
     // 需求说明 toggle
-    document.getElementById('padReqToggle').addEventListener('click', function() {
-      const on = document.body.classList.toggle('req-mode');
-      this.classList.toggle('req-btn-active', on);
-      document.getElementById('padReqLabel').textContent = on ? '关闭说明' : '需求说明';
-      // 同步管理端按钮状态
+    function syncReqToggleState(on) {
       const wb = document.getElementById('reqToggle');
-      if (wb) { wb.classList.toggle('req-btn-active', on); document.getElementById('reqLabel').textContent = on ? '关闭说明' : '需求说明'; }
+      const wl = document.getElementById('reqLabel');
+      const pb = document.getElementById('padReqToggle');
+      const pl = document.getElementById('padReqLabel');
+      if (wb) wb.classList.toggle('req-btn-active', on);
+      if (wl) wl.textContent = on ? '关闭说明' : '需求说明';
+      if (pb) pb.classList.toggle('req-btn-active', on);
+      if (pl) pl.textContent = on ? '关闭说明' : '需求说明';
+    }
+    document.getElementById('padReqToggle').addEventListener('click', function() {
+      syncReqToggleState(document.body.classList.toggle('req-mode'));
     });
     document.getElementById('reqToggle').addEventListener('click', function() {
-      const on = document.body.classList.toggle('req-mode');
-      this.classList.toggle('req-btn-active', on);
-      document.getElementById('reqLabel').textContent = on ? '关闭说明' : '需求说明';
+      syncReqToggleState(document.body.classList.toggle('req-mode'));
     });
     // req-panel collapse toggle (delegated)
     document.addEventListener('click', function(e) {
       const head = e.target.closest('.req-panel-head');
-      if (head) { head.closest('.req-panel').classList.toggle('collapsed'); }
+      if (head && !head.hasAttribute('onclick')) { head.closest('.req-panel').classList.toggle('collapsed'); }
     });
     document.querySelectorAll('[data-permission-tab]').forEach(b => b.addEventListener('click', function() {
       document.querySelectorAll('[data-permission-tab]').forEach(t => t.classList.remove('active'));
