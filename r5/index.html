@@ -1983,6 +1983,41 @@
         justify-content: flex-end;
       }
 
+      .export-dropdown-wrap {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .export-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        min-width: 132px;
+        padding: 6px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 12px 28px rgba(21, 41, 70, 0.16);
+        z-index: 32;
+      }
+
+      .export-dropdown-option {
+        width: 100%;
+        height: 32px;
+        padding: 0 10px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--text-primary);
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .export-dropdown-option:hover {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
       .toolbar-tools {
         display: flex;
         align-items: center;
@@ -8074,6 +8109,278 @@
         transition: width 0.24s ease;
       }
 
+      .export-progress-manager {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 382px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 12px 32px rgba(15, 33, 64, 0.2);
+        z-index: 82;
+      }
+
+      .export-progress-head {
+        height: 46px;
+        padding: 0 14px 0 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .export-progress-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .export-progress-icon-btn {
+        width: 24px;
+        height: 24px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--text-secondary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .export-progress-icon-btn:hover {
+        background: var(--surface-muted);
+        color: var(--primary);
+      }
+
+      .export-progress-body {
+        max-height: 328px;
+        overflow: auto;
+        padding: 8px 14px 10px;
+      }
+
+      .export-progress-task {
+        display: grid;
+        grid-template-columns: 34px 1fr auto;
+        gap: 8px 10px;
+        align-items: start;
+      }
+
+      .export-progress-task + .export-progress-task {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+      }
+
+      .export-task-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        background: #e8f3ff;
+        color: var(--primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .export-task-title {
+        color: var(--text-primary);
+        font-weight: 600;
+        line-height: 20px;
+        max-width: 238px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .export-task-subtitle {
+        margin-top: 1px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 17px;
+      }
+
+      .export-task-action {
+        min-width: 32px;
+        height: 24px;
+        padding: 0 2px;
+        border: 0;
+        background: transparent;
+        color: var(--primary);
+        cursor: pointer;
+        line-height: 22px;
+      }
+
+      .export-task-action:hover {
+        color: var(--primary-deep);
+      }
+
+      .export-task-progress {
+        grid-column: 2 / 4;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .export-task-progress-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+
+      .export-task-progress-track {
+        flex: 1;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e5e6eb;
+      }
+
+      .export-task-progress-percent {
+        width: 44px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        text-align: right;
+      }
+
+      .export-task-progress-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--primary), #00b42a);
+        transition: width 0.24s ease;
+      }
+
+      .export-progress-float {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 48px;
+        height: 48px;
+        border: 0;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(22, 93, 255, 0.32);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        overflow: visible;
+        z-index: 82;
+      }
+
+      .export-progress-float:hover {
+        background: var(--primary-deep);
+      }
+
+      .export-progress-float::after {
+        content: "进度管理器";
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 10px);
+        transform: translateY(-50%);
+        padding: 6px 10px;
+        border-radius: 4px;
+        background: rgba(15, 33, 64, 0.9);
+        color: #fff;
+        font-size: 13px;
+        line-height: 18px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.16s ease;
+      }
+
+      .export-progress-float::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 4px);
+        transform: translateY(-50%);
+        border: 6px solid transparent;
+        border-left-color: rgba(15, 33, 64, 0.9);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.16s ease;
+      }
+
+      .export-progress-float:hover::after,
+      .export-progress-float:hover::before,
+      .export-progress-float:focus-visible::after,
+      .export-progress-float:focus-visible::before {
+        opacity: 1;
+      }
+
+      .export-complete-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 33, 64, 0.28);
+        z-index: 90;
+      }
+
+      .export-complete-dialog {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 520px;
+        max-width: calc(100vw - 48px);
+        transform: translate(-50%, -50%);
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 18px 46px rgba(15, 33, 64, 0.22);
+        z-index: 91;
+      }
+
+      .export-complete-head {
+        height: 48px;
+        padding: 0 18px 0 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-primary);
+        font-size: 16px;
+      }
+
+      .export-complete-body {
+        padding: 62px 32px 44px;
+        text-align: center;
+      }
+
+      .export-complete-icon {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 14px;
+        border: 2px solid #00b42a;
+        border-radius: 50%;
+        color: #00b42a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .export-complete-title {
+        color: #00a870;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 14px;
+      }
+
+      .export-complete-desc {
+        color: var(--text-primary);
+        line-height: 22px;
+        margin-bottom: 14px;
+      }
+
       .master-slave-result-footer {
         justify-content: flex-end;
       }
@@ -10619,6 +10926,30 @@
             status: "已设计完成"
           },
           {
+            id: "V3R5-4868",
+            ticketId: "V3R5-4868",
+            version: "v1.2.1",
+            type: "新增",
+            title: "【导出】新增 导出进度管理器",
+            description: "新增 导出进度管理器",
+            scope: "导出",
+            targetView: VIEW_IDS.IT_FACILITY,
+            targetLabel: "导出进度管理器",
+            status: "已设计完成"
+          },
+          {
+            id: "V3R5-4662",
+            ticketId: "V3R5-4662",
+            version: "v1.2.1",
+            type: "优化",
+            title: "【资产管理】优化 资产表单设计及资产详情设计逻辑",
+            description: "优化 资产表单设计及资产详情设计逻辑",
+            scope: "资产管理",
+            targetView: VIEW_IDS.FORM_DESIGN,
+            targetLabel: "资产表单设计及资产详情设计",
+            status: "已设计完成"
+          },
+          {
             id: "V3R5-4419",
             ticketId: "V3R5-4419",
             version: "v1.3",
@@ -11180,6 +11511,9 @@
                 columnWidths: {},
                 listViewModes: {},
                 listViewModeMenuOpen: null,
+                exportMenuOpen: null,
+                exportProgressManager: null,
+                exportCompleteDialog: null,
                 spaceTrees: {},
                 listSelections: {},
                 batchSelectionMenuOpen: null,
@@ -11540,6 +11874,7 @@
           constructor() {
             this.bus = new EventBus();
             this.state = SeedFactory.create();
+            this.assetExportTaskTimers = {};
           }
 
           subscribe(listener) {
@@ -11576,6 +11911,7 @@
             this.state.ui.focusedRequirementId = null;
             this.state.ui.ledgerHierarchyMenuOpen = false;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.closeGuideMenu(false);
             this.emit();
@@ -11593,6 +11929,7 @@
             this.state.ui.focusedRequirementId = null;
             this.state.ui.ledgerHierarchyMenuOpen = false;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.closeGuideMenu(false);
             this.emit();
@@ -11826,6 +12163,7 @@
             }
             this.state.ui.batchSelectionMenuOpen = null;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.closeLedgerHierarchyMenu(false);
             this.emit();
@@ -12005,6 +12343,7 @@
             }
             this.state.ui.batchSelectionMenuOpen = null;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.state.ui.advancedSearch = null;
             this.closeRowMoreMenu(false);
             this.closeLedgerHierarchyMenu(false);
@@ -12038,6 +12377,7 @@
             }
             this.state.ui.batchSelectionMenuOpen = null;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.closeLedgerHierarchyMenu(false);
             this.pushToast("已重置筛选", LIST_PAGE_META[viewId].title + " 已恢复为默认筛选条件。", "info");
@@ -12053,6 +12393,7 @@
             this.state.ui.pagers[viewId] = target;
             this.state.ui.batchSelectionMenuOpen = null;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.pushToast("已切换页码", LIST_PAGE_META[viewId].title + " 已切换到第 " + target + " 页，已保留跨页勾选数据。", "info");
             this.emit();
@@ -12064,6 +12405,7 @@
 
           toggleListViewModeMenu(viewId) {
             this.state.ui.listViewModeMenuOpen = this.state.ui.listViewModeMenuOpen === viewId ? null : viewId;
+            this.state.ui.exportMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.closeBatchSelectionMenu(false);
             this.closeGuideMenu(false);
@@ -12090,6 +12432,7 @@
             }
             this.state.ui.listViewModes[viewId] = mode;
             this.state.ui.listViewModeMenuOpen = null;
+            this.state.ui.exportMenuOpen = null;
             this.state.ui.batchSelectionMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.emit();
@@ -13782,7 +14125,7 @@
           handleHeaderAction(label, viewId) {
             this.closeRowMoreMenu(false);
             if (label === "导出资产") {
-              this.exportAssetsWithChildren(viewId);
+              this.handleExportAction(viewId, "all");
               return;
             }
             if (label === "批量入库") {
@@ -13804,16 +14147,58 @@
             this.pushToast(label, LIST_PAGE_META[viewId].title + " 已触发“" + label + "”演示动作。", "info");
           }
 
-          exportAssetsWithChildren(viewId) {
-            const meta = LIST_PAGE_META[viewId];
-            if (!meta) {
-              this.pushToast("导出失败", "未识别的台账。", "warning");
+          toggleExportMenu(viewId) {
+            if (!LIST_PAGE_META[viewId]) {
               return;
             }
-            const rows = this.getFilteredRows(viewId) || [];
-            if (rows.length === 0) {
-              this.pushToast("导出失败", "当前筛选结果为空。", "warning");
+            this.state.ui.exportMenuOpen = this.state.ui.exportMenuOpen === viewId ? null : viewId;
+            this.state.ui.listViewModeMenuOpen = null;
+            this.closeRowMoreMenu(false);
+            this.closeBatchSelectionMenu(false);
+            this.closeGuideMenu(false);
+            this.emit();
+          }
+
+          closeExportMenu(shouldEmit = true) {
+            if (!this.state.ui.exportMenuOpen) {
+              return false;
+            }
+            this.state.ui.exportMenuOpen = null;
+            if (shouldEmit) {
+              this.emit();
+            }
+            return true;
+          }
+
+          handleExportAction(viewId, mode = "all") {
+            this.closeExportMenu(false);
+            const payload = this.buildAssetExportPayload(viewId, mode);
+            if (!payload.ok) {
+              this.pushToast(payload.title, payload.message, payload.tone || "warning");
               return;
+            }
+            this.startAssetExportTask(payload, mode);
+          }
+
+          exportAssetsWithChildren(viewId) {
+            this.handleExportAction(viewId, "all");
+          }
+
+          buildAssetExportPayload(viewId, mode = "all") {
+            const meta = LIST_PAGE_META[viewId];
+            if (!meta) {
+              return { ok: false, title: "导出失败", message: "未识别的台账。", tone: "warning" };
+            }
+            const rows = mode === "selected"
+              ? this.getSelectedRowIds(viewId).map((rowId) => this.getRowById(viewId, rowId)).filter(Boolean)
+              : (this.getFilteredRows(viewId) || []);
+            if (rows.length === 0) {
+              return {
+                ok: false,
+                title: "导出失败",
+                message: mode === "selected" ? "请先勾选需要导出的资产。" : "当前筛选结果为空。",
+                tone: "warning"
+              };
             }
             const fields = meta.columns.filter((column) => column.key !== "__select" && column.key !== "__actions");
             const relationColumn = { key: "__relation", label: "关系" };
@@ -13830,21 +14215,40 @@
             let parentCount = 0;
             let childCount = 0;
             let independentCount = 0;
+            const includedKeys = new Set();
+            const makeRowKey = (targetViewId, rowId) => targetViewId + "::" + rowId;
             const buildLine = (row, relationLabel) => exportColumns.map((column) => {
               if (column.key === "__relation") return relationLabel;
               return formatCell(row[column.key]);
             });
-            const topRows = rows.filter((row) => !this.findParentOf(viewId, row.id));
+            const pushLine = (targetViewId, row, relationLabel) => {
+              if (!row?.id) return false;
+              const rowKey = makeRowKey(targetViewId, row.id);
+              if (includedKeys.has(rowKey)) return false;
+              includedKeys.add(rowKey);
+              csvRows.push(buildLine(row, relationLabel));
+              return true;
+            };
+            const topRows = mode === "selected" ? rows : rows.filter((row) => !this.findParentOf(viewId, row.id));
             topRows.forEach((row) => {
+              const parent = this.findParentOf(viewId, row.id);
+              if (mode === "selected" && parent) {
+                if (pushLine(viewId, row, "从设备")) {
+                  childCount += 1;
+                }
+                return;
+              }
               const children = this.findChildrenOf(viewId, row.id);
               const isParent = children.length > 0;
-              if (isParent) parentCount += 1; else independentCount += 1;
-              csvRows.push(buildLine(row, isParent ? "主设备" : "独立设备"));
+              if (pushLine(viewId, row, isParent ? "主设备" : "独立设备")) {
+                if (isParent) parentCount += 1; else independentCount += 1;
+              }
               children.forEach((rel) => {
                 const childRow = this.getRowById(rel.childViewId, rel.childRowId);
                 if (!childRow) return;
-                childCount += 1;
-                csvRows.push(buildLine(childRow, "从设备"));
+                if (pushLine(rel.childViewId, childRow, "从设备")) {
+                  childCount += 1;
+                }
               });
             });
             const escapeCsv = (value) => {
@@ -13870,23 +14274,209 @@
               + " / 从设备 " + childCount
               + " / 独立设备 " + independentCount
               + " = 共 " + totalRows + " 行";
-            this.pushToast("正在生成", "导出 " + summary + "……", "info");
+            return {
+              ok: true,
+              viewId,
+              mode,
+              fileName,
+              csvText,
+              summary,
+              rowCount: totalRows
+            };
+          }
+
+          startAssetExportTask(payload, mode = "all") {
+            const taskId = "asset-export-" + Date.now() + "-" + Math.random().toString(16).slice(2, 7);
+            const manager = this.state.ui.exportProgressManager && Array.isArray(this.state.ui.exportProgressManager.tasks)
+              ? this.state.ui.exportProgressManager
+              : { collapsed: false, canClose: false, tasks: [] };
+            manager.collapsed = false;
+            manager.canClose = false;
+            manager.tasks.push({
+              id: taskId,
+              title: payload.fileName || "导出文件",
+              subtitle: mode === "selected" ? "正在生成选中资产文件" : "正在生成全部资产文件",
+              status: "running",
+              percent: 8,
+              fileName: payload.fileName,
+              csvText: payload.csvText,
+              summary: payload.summary,
+              rowCount: payload.rowCount
+            });
+            this.state.ui.exportProgressManager = manager;
+            this.emit();
+            this.runAssetExportProgress(taskId, payload, 0);
+          }
+
+          clearAssetExportTaskTimer(taskId = "") {
+            if (!this.assetExportTaskTimers) {
+              this.assetExportTaskTimers = {};
+            }
+            if (taskId) {
+              if (this.assetExportTaskTimers[taskId]) {
+                clearTimeout(this.assetExportTaskTimers[taskId]);
+                delete this.assetExportTaskTimers[taskId];
+              }
+              return;
+            }
+            Object.keys(this.assetExportTaskTimers).forEach((id) => {
+              clearTimeout(this.assetExportTaskTimers[id]);
+              delete this.assetExportTaskTimers[id];
+            });
+          }
+
+          getAssetExportTask(taskId = "") {
+            const manager = this.state.ui.exportProgressManager;
+            const tasks = Array.isArray(manager?.tasks)
+              ? manager.tasks
+              : (manager?.task ? [manager.task] : []);
+            if (!taskId) {
+              return tasks.find((task) => task.status === "running") || tasks[0] || null;
+            }
+            return tasks.find((task) => task.id === taskId) || null;
+          }
+
+          updateExportProgressCloseState() {
+            const manager = this.state.ui.exportProgressManager;
+            const tasks = Array.isArray(manager?.tasks)
+              ? manager.tasks
+              : (manager?.task ? [manager.task] : []);
+            if (!manager) {
+              return;
+            }
+            manager.canClose = tasks.length > 0 && tasks.every((task) => task.status !== "running");
+          }
+
+          runAssetExportProgress(taskId, payload, stepIndex = 0) {
+            const steps = [
+              { percent: 28, subtitle: "正在读取台账数据..." },
+              { percent: 56, subtitle: "正在生成文件..." },
+              { percent: 82, subtitle: "正在校验导出内容..." },
+              { percent: 100, subtitle: "文件生成成功", done: true }
+            ];
+            this.clearAssetExportTaskTimer(taskId);
+            this.assetExportTaskTimers[taskId] = setTimeout(() => {
+              const manager = this.state.ui.exportProgressManager;
+              const task = this.getAssetExportTask(taskId);
+              if (!manager || !task || task.id !== taskId || task.status !== "running") {
+                this.clearAssetExportTaskTimer(taskId);
+                return;
+              }
+              const step = steps[stepIndex];
+              if (!step) {
+                this.clearAssetExportTaskTimer(taskId);
+                return;
+              }
+              task.percent = step.percent;
+              task.subtitle = step.subtitle;
+              if (step.done) {
+                task.status = "done";
+                this.updateExportProgressCloseState();
+                this.state.ui.exportCompleteDialog = {
+                  taskId,
+                  fileName: payload.fileName,
+                  csvText: payload.csvText,
+                  summary: payload.summary,
+                  rowCount: payload.rowCount
+                };
+                this.clearAssetExportTaskTimer(taskId);
+                this.emit();
+                return;
+              }
+              this.emit();
+              this.runAssetExportProgress(taskId, payload, stepIndex + 1);
+            }, stepIndex === 0 ? 360 : 520);
+          }
+
+          collapseExportProgressManager() {
+            const manager = this.state.ui.exportProgressManager;
+            if (!manager) {
+              return;
+            }
+            manager.collapsed = true;
+            this.emit();
+          }
+
+          expandExportProgressManager() {
+            const manager = this.state.ui.exportProgressManager;
+            if (!manager) {
+              return;
+            }
+            manager.collapsed = false;
+            this.emit();
+          }
+
+          closeExportProgressManager() {
+            const manager = this.state.ui.exportProgressManager;
+            if (!manager) {
+              return;
+            }
+            if (!manager.canClose) {
+              this.pushToast("导出进行中", "导出任务完成后才可关闭进度管理器。", "info");
+              return;
+            }
+            this.clearAssetExportTaskTimer();
+            this.state.ui.exportProgressManager = null;
+            this.emit();
+          }
+
+          cancelAssetExportTask(taskId = "") {
+            const manager = this.state.ui.exportProgressManager;
+            const task = this.getAssetExportTask(taskId);
+            if (!manager || !task || task.status !== "running") {
+              return;
+            }
+            this.clearAssetExportTaskTimer(task.id);
+            task.status = "cancelled";
+            task.subtitle = "已取消";
+            task.percent = Math.max(task.percent || 0, 8);
+            this.updateExportProgressCloseState();
+            this.state.ui.exportCompleteDialog = null;
+            this.pushToast("已取消导出", "导出文件生成任务已取消。", "info");
+          }
+
+          closeExportCompleteDialog() {
+            this.state.ui.exportCompleteDialog = null;
+            this.emit();
+          }
+
+          downloadExportPayload(payload, closeDialog = false) {
+            if (!payload) {
+              return;
+            }
             try {
-              const blob = new Blob([csvText], { type: "text/csv;charset=utf-8;" });
+              const blob = new Blob([payload.csvText], { type: "text/csv;charset=utf-8;" });
               const url = URL.createObjectURL(blob);
               const link = document.createElement("a");
               link.href = url;
-              link.download = fileName;
+              link.download = payload.fileName;
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
               setTimeout(() => URL.revokeObjectURL(url), 0);
-              setTimeout(() => {
-                this.pushToast("导出完成", "已下载 " + fileName + "（" + summary + "）", "success");
-              }, 600);
+              if (closeDialog) {
+                this.state.ui.exportCompleteDialog = null;
+              }
+              this.pushToast("下载完成", "已下载 " + payload.fileName + "（" + payload.summary + "）", "success");
             } catch (error) {
               this.pushToast("导出失败", "浏览器拒绝了文件下载请求。", "warning");
             }
+          }
+
+          downloadExportTask(taskId = "") {
+            const task = this.getAssetExportTask(taskId);
+            if (!task || task.status !== "done") {
+              return;
+            }
+            this.downloadExportPayload(task, false);
+          }
+
+          downloadExportFile() {
+            const dialog = this.state.ui.exportCompleteDialog;
+            if (!dialog) {
+              return;
+            }
+            this.downloadExportPayload(dialog, true);
           }
 
           handleTinyTool(label) {
@@ -16791,7 +17381,7 @@
             this.nodes.topbar.innerHTML = this.renderTopbar(state);
             this.nodes.sidebar.innerHTML = this.renderSidebar(state);
             this.nodes.content.innerHTML = this.renderCurrentView(state);
-            this.nodes.overlay.innerHTML = this.renderOverlay(state);
+            this.nodes.overlay.innerHTML = this.renderOverlay(state) + this.renderPersistentOverlay(state);
             this.nodes.toast.innerHTML = this.renderToasts(state);
             this.mountOperationVTable();
             this.restoreRelationFieldFocus(focusSnapshot);
@@ -17366,6 +17956,7 @@
             const goals = {
               "v1.1": "支持主从设备、IT设备初始化及电子表格优化",
               "v1.2": "易用性需求优化",
+              "v1.2.1": "新增进度管理器及优化表单设计",
               "v1.3": "核心功能补齐"
             };
             return goals[version] || "版本需求规格范围";
@@ -18734,6 +19325,25 @@
           renderHeaderAction(action, viewId) {
             const isPrimary = action.indexOf("批量初始化") > -1 || action.indexOf("批量上架") > -1 || action.indexOf("批量入库") > -1;
             const demandAttrs = this.getLedgerOperationDemandAttrs(action);
+            if (action === "导出资产") {
+              const menuOpen = this.store.getState().ui.exportMenuOpen === viewId;
+              return `
+                <div class="export-dropdown-wrap" data-demand-version="v1.2.1" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：从台账导出入口发起导出任务，并通过进度管理器持续查看文件生成进度。||点击后行为：点击导出资产展开“导出全部”“导出选中”，选择后创建导出任务；任务在进度管理器中展示，可收起、取消，完成后支持下载。||状态限制：导出选中依赖当前已选资产；无选中数据时应提示或按业务规则拦截。||异常判断：导出任务生成失败、浏览器下载被拦截、任务被取消或数据为空时，应给出明确反馈。">
+                  <button class="btn" type="button" data-action="toggle-export-menu" data-view="${escapeHtml(viewId)}" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}">
+                    <span>${escapeHtml(action)}</span>
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </button>
+                  ${menuOpen ? `
+                    <div class="export-dropdown-menu" role="menu">
+                      <button class="export-dropdown-option" type="button" data-action="export-action" data-view="${escapeHtml(viewId)}" data-mode="all">导出全部</button>
+                      <button class="export-dropdown-option" type="button" data-action="export-action" data-view="${escapeHtml(viewId)}" data-mode="selected">导出选中</button>
+                    </div>
+                  ` : ""}
+                </div>
+              `;
+            }
             return `
               <button class="btn ${isPrimary ? "btn-primary" : ""}" type="button" data-action="header-action" data-label="${escapeHtml(action)}" data-view="${escapeHtml(viewId)}"${demandAttrs}>
                 <span>${escapeHtml(action)}</span>
@@ -20409,6 +21019,103 @@
             `;
           }
 
+          renderPersistentOverlay(state) {
+            return `
+              ${this.renderExportProgressManager(state)}
+              ${state.ui.exportCompleteDialog ? this.renderExportCompleteDialog(state.ui.exportCompleteDialog) : ""}
+            `;
+          }
+
+          renderExportProgressManager(state) {
+            const manager = state.ui.exportProgressManager;
+            const tasks = Array.isArray(manager?.tasks)
+              ? manager.tasks
+              : (manager?.task ? [manager.task] : []);
+            if (!manager || !tasks.length) {
+              return "";
+            }
+            if (manager.collapsed) {
+              return `
+                <button class="export-progress-float" type="button" data-action="expand-export-progress" aria-label="展开进度管理器" title="进度管理器">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 3h10M7 21h10M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9s8 5 8 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+              `;
+            }
+            const renderTask = (task) => {
+              const percent = Math.max(0, Math.min(100, Number(task.percent) || 0));
+              const action = task.status === "running"
+                ? `<button class="export-task-action" type="button" data-action="cancel-export-task" data-id="${escapeHtml(task.id)}">取消</button>`
+                : task.status === "done"
+                  ? `<button class="export-task-action" type="button" data-action="download-export-task" data-id="${escapeHtml(task.id)}">下载</button>`
+                  : `<span class="export-task-subtitle">已取消</span>`;
+              return `
+                <div class="export-progress-task">
+                  <span class="export-task-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M7 3h7l4 4v14H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+                      <path d="M14 3v5h5M12 10v6m0 0l-2.5-2.5M12 16l2.5-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </span>
+                  <div>
+                    <div class="export-task-title" title="${escapeHtml(task.title || task.fileName || "导出文件")}">${escapeHtml(task.title || task.fileName || "导出文件")}</div>
+                    <div class="export-task-subtitle">${escapeHtml(task.subtitle || "正在生成文件")}</div>
+                  </div>
+                  ${action}
+                  <div class="export-task-progress" aria-label="导出进度 ${percent}%">
+                    <div class="export-task-progress-track">
+                      <span class="export-task-progress-fill" style="width:${percent}%"></span>
+                    </div>
+                    <span class="export-task-progress-percent">${percent}%</span>
+                  </div>
+                </div>
+              `;
+            };
+            return `
+              <section class="export-progress-manager" role="status" aria-live="polite">
+                <header class="export-progress-head">
+                  <span>进度管理器</span>
+                  <span class="export-progress-actions">
+                    <button class="export-progress-icon-btn" type="button" data-action="collapse-export-progress" aria-label="收起进度管理器">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </button>
+                    ${manager.canClose ? `
+                      <button class="export-progress-icon-btn" type="button" data-action="close-export-progress" aria-label="关闭进度管理器">×</button>
+                    ` : ""}
+                  </span>
+                </header>
+                <div class="export-progress-body">
+                  ${tasks.map(renderTask).join("")}
+                </div>
+              </section>
+            `;
+          }
+
+          renderExportCompleteDialog(dialog) {
+            return `
+              <div class="export-complete-backdrop" data-action="close-export-complete-dialog"></div>
+              <section class="export-complete-dialog" role="dialog" aria-modal="true" aria-labelledby="exportCompleteTitle">
+                <header class="export-complete-head">
+                  <span id="exportCompleteTitle">导出文件</span>
+                  <button class="export-progress-icon-btn" type="button" data-action="close-export-complete-dialog" aria-label="关闭">×</button>
+                </header>
+                <div class="export-complete-body">
+                  <div class="export-complete-icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M6 12.4l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </div>
+                  <div class="export-complete-title">文件生成成功</div>
+                  <div class="export-complete-desc">点击下载「${escapeHtml(dialog.fileName || "导出文件.csv")}」</div>
+                  <button class="btn btn-primary" type="button" data-action="download-export-file">下载</button>
+                </div>
+              </section>
+            `;
+          }
+
           renderOverlay(state) {
             if (state.ui.assetOverviewDialog) {
               return this.renderAssetOverviewDialog(state.ui.assetOverviewDialog);
@@ -21485,6 +22192,7 @@
               const insideHierarchyMenu = event.target.closest(".ledger-hierarchy-wrap");
               const insideBatchSelectionMenu = event.target.closest(".batch-action-wrap");
               const insideListViewModeMenu = event.target.closest(".mode-chip-wrap");
+              const insideExportMenu = event.target.closest(".export-dropdown-wrap");
               const insideTemplateTree = event.target.closest(".template-tree-select");
               if (!actionTarget) {
                 if (!insideMoreMenu) {
@@ -21501,6 +22209,9 @@
                 }
                 if (!insideListViewModeMenu) {
                   this.store.closeListViewModeMenu();
+                }
+                if (!insideExportMenu) {
+                  this.store.closeExportMenu();
                 }
                 if (!insideTemplateTree) {
                   this.store.closeTemplateObjectTree();
@@ -21523,6 +22234,9 @@
               if (!insideListViewModeMenu && action !== "toggle-list-view-mode-menu") {
                 this.store.closeListViewModeMenu(action === "resize-column");
               }
+              if (!insideExportMenu && action !== "toggle-export-menu" && action !== "export-action") {
+                this.store.closeExportMenu(action === "resize-column");
+              }
               if (!insideTemplateTree && action !== "toggle-template-object-tree") {
                 this.store.closeTemplateObjectTree(action === "resize-column");
               }
@@ -21544,6 +22258,42 @@
               }
               if (action === "set-list-view-mode") {
                 this.store.setListViewMode(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-mode"));
+                return;
+              }
+              if (action === "toggle-export-menu") {
+                this.store.toggleExportMenu(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "export-action") {
+                this.store.handleExportAction(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-mode") || "all");
+                return;
+              }
+              if (action === "collapse-export-progress") {
+                this.store.collapseExportProgressManager();
+                return;
+              }
+              if (action === "expand-export-progress") {
+                this.store.expandExportProgressManager();
+                return;
+              }
+              if (action === "close-export-progress") {
+                this.store.closeExportProgressManager();
+                return;
+              }
+              if (action === "cancel-export-task") {
+                this.store.cancelAssetExportTask(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "download-export-task") {
+                this.store.downloadExportTask(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "close-export-complete-dialog") {
+                this.store.closeExportCompleteDialog();
+                return;
+              }
+              if (action === "download-export-file") {
+                this.store.downloadExportFile();
                 return;
               }
               if (action === "space-tree-node") {
