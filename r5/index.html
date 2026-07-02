@@ -8038,6 +8038,41 @@
         gap: 8px;
       }
 
+      .master-slave-download-progress {
+        flex: 1;
+        min-width: 280px;
+        max-width: 560px;
+      }
+
+      .master-slave-download-progress-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .master-slave-download-progress-percent {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      .master-slave-download-progress-track {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e5e6eb;
+      }
+
+      .master-slave-download-progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--primary), #3b82f6);
+        transition: width 0.24s ease;
+      }
+
       .master-slave-result-footer {
         justify-content: flex-end;
       }
@@ -10402,12 +10437,12 @@
             status: "已设计完成"
           },
           {
-            id: "V3R5-4820",
-            ticketId: "V3R5-4820",
+            id: "V3R5-4813",
+            ticketId: "V3R5-4813",
             version: "v1.1",
             type: "新增",
             title: "支持IT设备初始化",
-            description: "【IT设备】新增 支持IT设备初始化",
+            description: "新增 支持IT设备初始化",
             scope: "IT设备",
             targetView: VIEW_IDS.PENDING_IT_ASSET,
             targetLabel: "待初始化IT设备",
@@ -14785,12 +14820,14 @@
               scope: "all",
               ledgers: { ...(this.state.ui.templateConfig.masterSlaveTemplateLedgers || {}) },
               autoFillRules: [],
+              downloadProgress: null,
               ruleConfigOpen: false
             };
             this.emit();
           }
 
           closeMasterSlaveTemplateDialog() {
+            this.clearMasterSlaveTemplateDownloadTimer();
             this.state.ui.masterSlaveTemplateDialog = null;
             this.emit();
           }
@@ -15010,17 +15047,82 @@
             if (!dialog) {
               return;
             }
-            this.downloadMasterSlaveTemplate(dialog.scope, dialog.ledgers, this.getMasterSlaveTemplateDialogRules(dialog));
+            if (dialog.downloadProgress?.status === "running") {
+              return;
+            }
+            const plan = this.getMasterSlaveTemplateDownloadPlan(dialog.scope, dialog.ledgers, this.getMasterSlaveTemplateDialogRules(dialog));
+            if (!plan.ok) {
+              this.pushToast(plan.title, plan.message, plan.tone || "warning");
+              return;
+            }
+            dialog.downloadProgress = {
+              status: "running",
+              percent: 8,
+              message: "正在准备模板数据..."
+            };
+            this.emit();
+            this.runMasterSlaveTemplateDownloadProgress(plan, 0);
           }
 
-          downloadMasterSlaveTemplate(scope = "all", ledgers = {}, autoFillRules = []) {
+          clearMasterSlaveTemplateDownloadTimer() {
+            if (this.masterSlaveTemplateDownloadTimer) {
+              clearTimeout(this.masterSlaveTemplateDownloadTimer);
+              this.masterSlaveTemplateDownloadTimer = null;
+            }
+          }
+
+          cancelMasterSlaveTemplateDownload() {
+            const dialog = this.state.ui.masterSlaveTemplateDialog;
+            if (!dialog || !dialog.downloadProgress) {
+              return;
+            }
+            this.clearMasterSlaveTemplateDownloadTimer();
+            dialog.downloadProgress = null;
+            this.pushToast("已取消下载", "主从设备关系模板下载已取消。", "info");
+          }
+
+          runMasterSlaveTemplateDownloadProgress(plan, stepIndex = 0) {
+            const steps = [
+              { percent: 28, message: "正在读取台账数据..." },
+              { percent: 52, message: "正在生成主从关系字段..." },
+              { percent: 76, message: "正在写入模板内容..." },
+              { percent: 96, message: "正在准备下载文件..." },
+              { percent: 100, message: "准备完成，正在下载..." }
+            ];
+            this.clearMasterSlaveTemplateDownloadTimer();
+            this.masterSlaveTemplateDownloadTimer = setTimeout(() => {
+              const dialog = this.state.ui.masterSlaveTemplateDialog;
+              if (!dialog || dialog.downloadProgress?.status !== "running") {
+                this.clearMasterSlaveTemplateDownloadTimer();
+                return;
+              }
+              const step = steps[stepIndex];
+              if (step) {
+                dialog.downloadProgress = {
+                  ...dialog.downloadProgress,
+                  ...step
+                };
+                this.emit();
+                this.runMasterSlaveTemplateDownloadProgress(plan, stepIndex + 1);
+                return;
+              }
+              this.clearMasterSlaveTemplateDownloadTimer();
+              this.downloadMasterSlaveTemplateFromPlan(plan);
+            }, 360);
+          }
+
+          getMasterSlaveTemplateDownloadPlan(scope = "all", ledgers = {}, autoFillRules = []) {
             const ledgerOptions = this.getMasterSlaveTemplateLedgerOptions();
             const selectedLedgers = scope === "all"
               ? ledgerOptions
               : ledgerOptions.filter((item) => ledgers[item.viewId]);
             if (selectedLedgers.length === 0) {
-              this.pushToast("请选择台账", "部分台账数据至少需要选择一个台账范围。", "warning");
-              return;
+              return {
+                ok: false,
+                title: "请选择台账",
+                message: "部分台账数据至少需要选择一个台账范围。",
+                tone: "warning"
+              };
             }
             const headers = ["台账类型", "设备编号", "设备名称", "资产状态", "资产位置", "从设备编号"];
             const allEntries = this.getMasterSlaveTemplateDeviceEntries(selectedLedgers);
@@ -15036,23 +15138,49 @@
               ])
             );
             if (rows.length === 0) {
-              this.pushToast("下载失败", "所选台账暂无可导出的样例数据。", "warning");
+              return {
+                ok: false,
+                title: "下载失败",
+                message: "所选台账暂无可导出的样例数据。",
+                tone: "warning"
+              };
+            }
+            return {
+              ok: true,
+              scope,
+              selectedLedgers,
+              headers,
+              rows
+            };
+          }
+
+          downloadMasterSlaveTemplate(scope = "all", ledgers = {}, autoFillRules = []) {
+            const plan = this.getMasterSlaveTemplateDownloadPlan(scope, ledgers, autoFillRules);
+            if (!plan.ok) {
+              this.pushToast(plan.title, plan.message, plan.tone || "warning");
               return;
             }
-            const workbookText = this.buildMasterSlaveTemplateWorkbook(headers, rows, scope, selectedLedgers);
+            this.downloadMasterSlaveTemplateFromPlan(plan);
+          }
+
+          downloadMasterSlaveTemplateFromPlan(plan) {
+            const workbookText = this.buildMasterSlaveTemplateWorkbook(plan.headers, plan.rows, plan.scope, plan.selectedLedgers);
             try {
               const blob = new Blob([workbookText], { type: "application/vnd.ms-excel;charset=utf-8;" });
               const url = URL.createObjectURL(blob);
               const link = document.createElement("a");
               link.href = url;
-              link.download = "主从设备关系导入模板_" + (scope === "all" ? "全量台账" : "部分台账") + ".xls";
+              link.download = "主从设备关系导入模板_" + (plan.scope === "all" ? "全量台账" : "部分台账") + ".xls";
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
               setTimeout(() => URL.revokeObjectURL(url), 0);
               this.state.ui.masterSlaveTemplateDialog = null;
-              this.pushToast("模板已下载", "已下载包含" + selectedLedgers.length + "类台账数据的主从设备关系导入模板。", "success");
+              this.pushToast("模板已下载", "已下载包含" + plan.selectedLedgers.length + "类台账数据的主从设备关系导入模板。", "success");
             } catch (error) {
+              if (this.state.ui.masterSlaveTemplateDialog) {
+                this.state.ui.masterSlaveTemplateDialog.downloadProgress = null;
+              }
               this.pushToast("下载失败", "浏览器拒绝了模板下载请求。", "warning");
             }
             this.emit();
@@ -20798,6 +20926,10 @@
             const scope = dialog.scope || "all";
             const ledgers = dialog.ledgers || {};
             const rules = this.store.getMasterSlaveTemplateDialogRules(dialog);
+            const downloadProgress = dialog.downloadProgress || null;
+            const isDownloading = downloadProgress?.status === "running";
+            const progressPercent = Math.max(0, Math.min(100, Number(downloadProgress?.percent) || 0));
+            const disabledAttr = isDownloading ? " disabled" : "";
             const ruleOptions = [
               ["none", "不自动填充"],
               ["prefix", "前缀 + 主设备编号"],
@@ -20856,18 +20988,18 @@
                     <div class="relation-modal-title" id="masterSlaveTemplateDialogTitle">下载主从设备关系模板</div>
                     <div class="relation-modal-subtitle">请选择模板需要带出的台账数据范围。</div>
                   </div>
-                  <button class="relation-modal-close" type="button" data-action="close-master-slave-template-dialog" aria-label="关闭">×</button>
+                  <button class="relation-modal-close" type="button" data-action="close-master-slave-template-dialog" aria-label="关闭"${disabledAttr}>×</button>
                 </header>
                 <div class="relation-modal-body">
                   <div class="field-block" data-demand-title="模板导出范围" data-demand-text="交互目的：控制模板下载时带出全量台账或部分台账数据。||点击后行为：选择部分台账后启用台账勾选项。||异常判断：部分导出但未勾选任何台账、勾选台账无数据或台账范围与用户权限不匹配时，应提示不可下载。">
                     <span>导出范围</span>
                     <div class="inline-radios">
                       <label class="inline-radio">
-                        <input type="radio" name="downloadTemplateScope" data-role="master-slave-download-scope" value="all"${scope === "all" ? " checked" : ""} />
+                        <input type="radio" name="downloadTemplateScope" data-role="master-slave-download-scope" value="all"${scope === "all" ? " checked" : ""}${disabledAttr} />
                         <span>导出全量台账数据</span>
                       </label>
                       <label class="inline-radio">
-                        <input type="radio" name="downloadTemplateScope" data-role="master-slave-download-scope" value="partial"${scope === "partial" ? " checked" : ""} />
+                        <input type="radio" name="downloadTemplateScope" data-role="master-slave-download-scope" value="partial"${scope === "partial" ? " checked" : ""}${disabledAttr} />
                         <span>导出部分台账数据</span>
                       </label>
                     </div>
@@ -20877,7 +21009,7 @@
                     <div class="inline-radios">
                       ${ledgerOptions.map((item) => `
                         <label class="inline-checkbox ${scope === "all" ? "disabled" : ""}">
-                          <input type="checkbox" data-role="master-slave-download-ledger" data-view="${escapeHtml(item.viewId)}"${ledgers[item.viewId] ? " checked" : ""}${scope === "all" ? " disabled" : ""} />
+                          <input type="checkbox" data-role="master-slave-download-ledger" data-view="${escapeHtml(item.viewId)}"${ledgers[item.viewId] ? " checked" : ""}${scope === "all" || isDownloading ? " disabled" : ""} />
                           <span>${escapeHtml(item.label)}</span>
                         </label>
                       `).join("")}
@@ -20897,18 +21029,32 @@
                           </div>
                         </div>
                         <div class="template-action-row" style="margin:0;">
-                          ${autoFillSummary.enabledRulesCount > 0 ? '<button class="btn" type="button" data-action="clear-master-slave-template-rules">清空规则</button>' : ""}
-                          <button class="btn btn-primary" type="button" data-action="open-master-slave-rule-config">配置自动填充规则</button>
+                          ${autoFillSummary.enabledRulesCount > 0 ? `<button class="btn" type="button" data-action="clear-master-slave-template-rules"${disabledAttr}>清空规则</button>` : ""}
+                          <button class="btn btn-primary" type="button" data-action="open-master-slave-rule-config"${disabledAttr}>配置自动填充规则</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <footer class="relation-modal-footer">
-                  <div></div>
+                  ${isDownloading ? `
+                    <div class="master-slave-download-progress" aria-label="下载进度">
+                      <div class="master-slave-download-progress-head">
+                        <span>${escapeHtml(downloadProgress.message || "正在生成下载文件...")}</span>
+                        <span class="master-slave-download-progress-percent">${progressPercent}%</span>
+                      </div>
+                      <div class="master-slave-download-progress-track">
+                        <span class="master-slave-download-progress-fill" style="width:${progressPercent}%"></span>
+                      </div>
+                    </div>
+                  ` : "<div></div>"}
                   <div class="relation-modal-actions">
-                    <button class="btn" type="button" data-action="close-master-slave-template-dialog">取消</button>
-                    <button class="btn btn-primary" type="button" data-action="confirm-master-slave-template-download">确认下载</button>
+                    ${isDownloading ? `
+                      <button class="btn" type="button" data-action="cancel-master-slave-template-download">取消下载</button>
+                    ` : `
+                      <button class="btn" type="button" data-action="close-master-slave-template-dialog">取消</button>
+                      <button class="btn btn-primary" type="button" data-action="confirm-master-slave-template-download">确认下载</button>
+                    `}
                   </div>
                 </footer>
               </section>
@@ -21795,6 +21941,10 @@
               }
               if (action === "confirm-master-slave-template-download") {
                 this.store.confirmMasterSlaveTemplateDownload();
+                return;
+              }
+              if (action === "cancel-master-slave-template-download") {
+                this.store.cancelMasterSlaveTemplateDownload();
                 return;
               }
               if (action === "open-master-slave-rule-config") {
