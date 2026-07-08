@@ -16481,6 +16481,21 @@
               }
               return;
             }
+            if (requirement.id === "V3R5-4419") {
+              this.state.ui.currentTopNav = "运营管理";
+              this.state.ui.currentView = VIEW_IDS.CABINET;
+              this.state.ui.guidePage = null;
+              this.state.ui.operationPage = null;
+              this.state.ui.detailPage = null;
+              this.state.ui.drawer = null;
+              if (!this.state.ui.listViewModes) {
+                this.state.ui.listViewModes = {};
+              }
+              this.state.ui.listViewModes[VIEW_IDS.CABINET] = "space";
+              this.pushToast("已定位需求范围", "已跳转到“机柜层级可视化展示”，并切换到空间视图。", "success");
+              this.emit();
+              return;
+            }
             this.state.ui.currentTopNav = INTEGRATION_VIEW_IDS.has(requirement.targetView) ? "集成系统" : "运营管理";
             this.state.ui.currentView = requirement.targetView || VIEW_IDS.IT_FACILITY;
             if (requirement.id === "V3R5-4110") {
@@ -21421,7 +21436,7 @@
                 </nav>
               </div>
               <div class="topbar-right">
-                <button class="topbar-app-btn" type="button" data-action="open-mobile-app" title="打开移动端原型">
+                <button class="topbar-app-btn" type="button" data-action="open-mobile-app" title="打开移动端原型" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理入口" data-demand-text="需求来源：V3R5-4773。||交互目的：在Web原型中提供运维宝移动端入口，便于从资产管理模块快速查看移动端适配效果。||点击后行为：打开移动端交互原型弹窗，展示概览、台账、扫码等现场运维常用能力。||状态限制：当前为原型内嵌移动端样例，不影响Web端资产台账数据。||异常判断：移动端原型加载失败时应提示无法打开，并保留Web端当前页面状态。">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <rect x="7" y="2.5" width="10" height="19" rx="2.5" stroke="currentColor" stroke-width="1.6"></rect>
                     <path d="M10.5 18.5h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
@@ -23187,8 +23202,11 @@
           renderModeChip(viewId, viewMode, state) {
             const activeLabel = viewMode === "space" ? "空间视图" : "标准视图";
             const menuOpen = state.ui.listViewModeMenuOpen === viewId;
+            const demandAttrs = viewId === VIEW_IDS.CABINET
+              ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化入口" data-demand-text="需求来源：V3R5-4419。||交互目的：机柜台账支持从标准表格切换到空间/层级可视化视图，按位置范围直观看到机柜数量、设备数量和U位利用情况。||点击后行为：展开视图菜单，可切换“标准视图”和“空间视图”；选择空间视图后展示左侧空间树、顶部统计卡片和机柜可视化卡片。||状态限制：仅作用于机柜管理台账，不改变机柜或上架设备数据。||异常判断：空间节点无机柜、筛选无结果或当前用户无查看权限时，应展示空态或权限提示，不应出现空白页面。"'
+              : "";
             return `
-              <div class="mode-chip-wrap">
+              <div class="mode-chip-wrap"${demandAttrs}>
                 <button class="mode-chip" type="button" data-action="toggle-list-view-mode-menu" data-view="${escapeHtml(viewId)}" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}">
                   <span>${escapeHtml(activeLabel)}</span>
                   <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -23256,7 +23274,7 @@
             const usageRate = stats.totalU > 0 ? Math.round((stats.usedU / stats.totalU) * 100) : 0;
             const cardRows = rows.length ? rows : statRows;
             return `
-              <div class="cabinet-space-panel">
+              <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在机柜台账空间视图中以可视化卡片展示机柜层级、位置、设备数和U位使用情况，帮助用户快速识别机柜资源占用。||展示规则：顶部统计当前筛选范围内机柜数、设备数和利用率；下方每个机柜卡片展示机柜名称、U高、U位使用进度、资产位置和设备数；点击卡片进入机柜详情。||状态限制：卡片数据应跟当前筛选、分页和空间树节点保持一致。||异常判断：无机柜数据时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
                 <div class="cabinet-space-stats">
                   <section class="cabinet-space-stat">
                     <div>
@@ -25272,7 +25290,7 @@
                     <span class="mobile-app-toolbar-title">资产管理 App<span class="sub">移动端交互原型 · 概览 / 台账 / 扫码</span></span>
                     <button class="mobile-app-close" type="button" data-action="close-mobile-app" aria-label="关闭移动端原型">✕</button>
                   </div>
-                  <div class="mobile-app-frame-wrap">
+                  <div class="mobile-app-frame-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理模块适配" data-demand-text="需求来源：V3R5-4773。||交互目的：展示运维宝中资产管理模块的移动端适配，包括资产概览、资产台账、扫码查看和现场详情浏览。||展示规则：移动端原型以手机壳形式呈现，保留概览/扫一扫/资产等核心入口，重点验证现场用户快速定位资产和查看关键信息的路径。||状态限制：当前弹窗为移动端交互演示，真实系统需按移动端账号权限控制可见资产范围。||异常判断：扫码无匹配资产、资产已删除、无权限或移动端网络异常时，应给出清晰提示并保留返回路径。">
                     <iframe data-role="mobile-app-frame" title="资产管理移动端原型"></iframe>
                   </div>
                 </div>
