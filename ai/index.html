@@ -361,6 +361,19 @@
     .bm-tip-icon:hover::after { display:block; }
     .brain-metric.bm-composite .bm-bar { background:rgba(255,255,255,.2); }
     .brain-metric.bm-composite .bm-fill { background:rgba(255,255,255,.85) !important; }
+    .brain-conclusion-card { display:flex; gap:12px; align-items:flex-start; border:1px solid var(--line-soft); border-radius:10px; padding:12px 14px; background:linear-gradient(135deg,rgba(47,107,255,.08),var(--card)); margin-bottom:16px; }
+    .brain-conclusion-card.personal { background:linear-gradient(135deg,rgba(0,180,42,.08),var(--card)); margin-bottom:12px; }
+    .brain-conclusion-badge { flex-shrink:0; min-width:76px; border-radius:8px; padding:8px 10px; text-align:center; color:#fff; font-size:12px; font-weight:800; line-height:1.3; background:var(--primary); box-shadow:0 4px 12px rgba(47,107,255,.18); }
+    .brain-conclusion-title { font-size:13px; font-weight:800; color:var(--text); margin-bottom:5px; line-height:1.4; }
+    .brain-conclusion-text { font-size:12px; color:var(--text-2); line-height:1.8; }
+    .brain-conclusion-meta { font-size:11px; color:var(--muted); margin-top:6px; line-height:1.6; }
+    .state-pill { display:inline-flex; align-items:center; width:max-content; max-width:100%; border-radius:100px; padding:2px 7px; font-size:10px; font-weight:700; line-height:1.4; background:#e8f3ff; color:var(--primary); }
+    .state-pill.excellent { background:#e8fff0; color:var(--success); }
+    .state-pill.stable { background:#e8f3ff; color:var(--primary); }
+    .state-pill.wave { background:#f5efff; color:var(--purple); }
+    .state-pill.warning { background:#fff7e8; color:var(--warning); }
+    .state-pill.detached { background:#ffece8; color:var(--danger); }
+    .state-pill.insufficient { background:#f2f3f5; color:var(--muted); }
     .student-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
     .student-card { background:var(--card); border:1px solid var(--line-soft); border-radius:10px; padding:12px; cursor:pointer; transition:all .16s; }
     .student-card:hover { border-color:var(--primary); box-shadow:0 4px 14px rgba(47,107,255,.1); transform:translateY(-2px); }
@@ -617,9 +630,42 @@
       display: grid;
       grid-template-columns: 360px minmax(0, 1fr) 360px;
       gap: 16px;
-      align-items: start;
+      align-items: stretch;
+      height: var(--train-work-height, calc(100vh - 320px));
+      min-height: 420px;
+      overflow: hidden;
     }
-    .train-list { display: grid; gap: 10px; }
+    #trainCardView { min-height: 0; }
+    .train-panel,
+    .train-detail-card,
+    .train-side { min-height:0; height:100%; }
+    .train-panel,
+    .train-detail-card {
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .train-panel > .card-head,
+    .train-detail-card > .card-head { flex-shrink:0; }
+    .train-list { display:grid; gap:10px; flex:1; min-height:0; overflow-y:auto; padding-right:10px; align-content:start; }
+    .train-detail-card > .card-body { flex:1; min-height:0; display:flex; flex-direction:column; }
+    .train-detail-card .tabbar { flex-shrink:0; }
+    #trainingTabContent { flex:1; min-height:0; max-height:none !important; overflow-y:auto; padding-right:10px; }
+    .train-side { display:flex; flex-direction:column; gap:16px; overflow:hidden; }
+    .train-side .card { margin-bottom:0 !important; }
+    .train-video-card { flex:0 0 auto; min-height:0; overflow:hidden; }
+    .train-event-card { flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+    .train-event-card .card-head { flex-shrink:0; }
+    .train-event-list { flex:1; min-height:0; max-height:none; overflow-y:auto; padding-right:10px; align-content:start; }
+    .train-list::-webkit-scrollbar,
+    #trainingTabContent::-webkit-scrollbar,
+    .train-event-list::-webkit-scrollbar { width:6px; }
+    .train-list::-webkit-scrollbar-thumb,
+    #trainingTabContent::-webkit-scrollbar-thumb,
+    .train-event-list::-webkit-scrollbar-thumb { background:rgba(134,144,156,.45); border-radius:100px; }
+    .train-list::-webkit-scrollbar-track,
+    #trainingTabContent::-webkit-scrollbar-track,
+    .train-event-list::-webkit-scrollbar-track { background:transparent; }
     .train-card {
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -1871,8 +1917,9 @@
               <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"弹出二次确认（蓝色提示框，说明学员加入方式及答题规则）→ 进行中（全部字段只读，考卷锁定）→ 点击"结束培训"弹出二次确认（红色警告框，提示不可逆操作）→ 已结束（不可逆）。</p>
               <p><strong>交互 — Tab 联动</strong>：详情面板内脑机/考试/附件三个 Tab 在同一面板切换，不重新请求培训基本信息；脑机 Tab 进入时自动建立推流连接，切出 Tab 或关闭面板时立即断开，避免空跑。</p>
               <p><strong>数据流 — 脑机指标</strong>：实时推送每位学员的注意力、情绪、疲劳度三个维度，每项附带状态标签（注意力：集中≥75 / 一般60~75 / 不集中&lt;60；情绪：良好≥75 / 一般60~75 / 不佳&lt;60；疲劳：不疲劳≥75 / 一般60~75 / 疲劳&lt;60）；综合得分按权重前端计算，折线图滚动展示最近 60 个数据点。</p>
+              <p><strong>数据流 — 评分结论</strong>：综合评分结论展示在"综合脑机数据"下方，按综合得分分为 S/A/B/C/D 五档，用于概括整场培训效果；个人评分结论展示在"学员脑机数据"列表标签、右侧详情及学员脑机详情弹窗中，按注意力、情绪和精力状态分判定为卓越沉浸态、稳定吸收态、波动起伏态、精力预警态或游离懈怠态。</p>
               <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则随机抽题生成考卷快照；生成后在考试 Tab 的外侧考题列表调整每题分值，列表实时汇总试卷总分；总分必须等于 100 分才允许开始培训。考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）及学员逐题答题详情（展示正确答案与学员作答对比）。</p>
-              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。</p>
+              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；若某学员设备未连接或指标缺失，个人评分结论不参与综合判定并提示数据不足；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。</p>
             </div>
           </div>
           <div class="toolbar">
@@ -1889,11 +1936,11 @@
           </div>
           <div id="trainCardView">
           <div class="train-layout">
-            <div class="card">
+            <div class="card train-panel">
               <div class="card-head">培训管理 <span class="tag blue" id="trainingCount">5</span></div>
               <div class="card-body train-list" id="trainingCards"></div>
             </div>
-            <div class="card" style="min-width:0;overflow:hidden;">
+            <div class="card train-detail-card" style="min-width:0;overflow:hidden;">
               <div class="card-head" style="flex-wrap:wrap;gap:8px;">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
                   <span id="trainingTitle" style="font-size:15px;font-weight:800;">培训名称</span>
@@ -1911,7 +1958,7 @@
               </div>
             </div>
             <div class="train-side">
-              <div class="card" style="margin-bottom:16px;">
+              <div class="card train-video-card" style="margin-bottom:16px;">
                 <div class="card-head">培训视频</div>
                 <div class="card-body" id="videoPanel">
                   <div class="upload-zone" data-modal="uploadVideo" style="text-align:center;padding:24px 12px;border:2px dashed var(--line);border-radius:8px;cursor:pointer;">
@@ -1921,9 +1968,9 @@
                   </div>
                 </div>
               </div>
-              <div class="card">
+              <div class="card train-event-card">
                 <div class="card-head">事件提示 <span style="font-size:11px;color:var(--muted);font-weight:400;">系统自动记录</span></div>
-                <div class="card-body event-list" id="eventList"></div>
+                <div class="card-body event-list train-event-list" id="eventList"></div>
               </div>
             </div>
           </div>
@@ -2185,6 +2232,8 @@
                     <div style="font-size:13px;color:var(--text-2);line-height:1.8;">展示所有已连接设备学员的实时/历史脑电指标。每个学员卡片包含：<br>
                     · <strong>综合得分</strong>（0-100）= 学习曲线×30% + 注意力×30% + 情绪×20% + (100-疲劳度)×20%<br>
                     · <strong>注意力</strong>（0-100%）、<strong>情绪</strong>（0-100%）、<strong>疲劳度</strong>（0-100%）<br>
+                    · <strong>综合评分结论</strong>：按整场培训综合得分输出 S/A/B/C/D 等级及文字结论，展示在综合脑机数据下方，用于快速判断本场培训效果。<br>
+                    · <strong>个人评分结论</strong>：按单个学员注意力、情绪、精力状态分输出学习状态标签和文字结论，展示在学员列表、学员详情右侧和学员脑机详情弹窗中。<br>
                     · 学员脑机数据折线图（30秒滚动窗口）<br>
                     · 事件流（设备连接/断开、异常提醒），进行中培训每 5 秒注入一条实时事件</div>
                   </div>
@@ -3065,7 +3114,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       questionDetail: ['试题详情', '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;"><span class="tag blue">单选题</span><span class="tag orange">消防安全</span><span class="tag">电气安全</span><span style="margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;">题号 Q-001</span></div><div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">以下哪种灭火器适用于电气火灾？</div><div style="display:grid;gap:9px;margin-bottom:18px;"><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">A</span><span style="font-size:14px;color:var(--text-2);">泡沫灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #00B42A;border-radius:6px;background:#E8FFEA;"><span style="width:28px;height:28px;border-radius:50%;background:#00B42A;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">B</span><span style="font-size:14px;font-weight:600;color:#00B42A;flex:1;">二氧化碳灭火器</span><span style="font-size:12px;color:#fff;font-weight:700;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">C</span><span style="font-size:14px;color:var(--text-2);">水基型灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">D</span><span style="font-size:14px;color:var(--text-2);">清水灭火器</span></div></div><div style="background:var(--line-soft);border-radius:6px;padding:13px 15px;margin-bottom:18px;"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;letter-spacing:.3px;">答案解析</div><div style="font-size:13px;line-height:1.8;color:var(--text-2);">电气火灾应优先使用 <strong>二氧化碳灭火器</strong> 或干粉灭火器。泡沫、水基型及清水灭火器均含水，导电会造成触电危险，不适用于带电设备火灾。</div></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;"><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div><div style="font-size:24px;font-weight:800;color:#00B42A;">92%</div><div class="progress green" style="margin-top:8px;"><span style="width:92%"></span></div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">使用次数</div><div style="font-size:24px;font-weight:800;color:var(--primary);">125</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">关联 8 场培训</div></div></div></div>'],
       uploadAttach: ['上传附件', '<div class="upload-zone">拖拽或选择附件上传</div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>上传</button></div>'],
       uploadVideo: ['上传培训视频', '<div class="upload-zone">上传培训视频<br><button class="btn primary" data-close style="margin-top:10px;">选择文件</button></div>'],
-      reportExport: ['报告导出', '<p>导出当前培训的综合得分、学习曲线、注意力、情绪、疲劳度、考试结果与事件记录。</p><div class="actions"><button class="btn">预览报告</button><button class="btn primary" data-close>导出 PDF</button></div>'],
+      reportExport: ['报告导出', '<p>导出当前培训的综合得分、综合评分结论、学员个人评分结论、学习曲线、注意力、情绪、疲劳度、考试结果与事件记录。</p><div class="actions"><button class="btn">预览报告</button><button class="btn primary" data-close>导出 PDF</button></div>'],
       scoreConfig: ['综合得分配置', '<p style="margin:0 0 16px;font-size:13px;color:var(--muted);line-height:1.6;">设置各脑机指标在综合得分中的占比权重。学习曲线作为辅助参考指标，不纳入权重计算。</p><div class="form-grid"><div class="field"><label>注意力权重</label><input id="sc-attention" type="number" min="0" max="100" value="30" oninput="calcScoreTotal()"></div><div class="field"><label>情绪权重</label><input id="sc-emotion" type="number" min="0" max="100" value="20" oninput="calcScoreTotal()"></div><div class="field"><label>疲劳度权重</label><input id="sc-fatigue" type="number" min="0" max="100" value="20" oninput="calcScoreTotal()"></div><div class="field"><label>已分配合计</label><input id="sc-total" value="70%" readonly style="background:#f2f7ff;color:var(--primary);font-weight:700;cursor:not-allowed;"></div></div><div id="sc-error" style="color:var(--danger);font-size:12px;margin-top:10px;display:none;">⚠ 权重合计必须等于 100%，当前合计不足或超出。</div><div style="display:flex;justify-content:flex-end;margin-top:24px;"><button class="btn primary" onclick="saveScoreConfig()">保存配置</button></div>'],
       noticeForm: ['系统公告', '<div class="form-grid"><div class="field wide"><label>公告内容</label><input id="noticeTitle" placeholder="请输入公告内容"></div><div class="field wide"><label>公告类型</label><select id="noticeType"><option value="">普通（蓝色）</option><option value="green">正常（绿色）</option><option value="red">紧急（红色）</option></select></div></div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn primary" onclick="saveNotice()">保存发布</button></div></div>'],
       shareAttach: ['分享附件', '<p>生成附件分享链接，可发送给本培训学员或项目管理员。</p><div class="field"><label>分享范围</label><select><option>本培训学员</option><option>本项目管理员</option></select></div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>生成分享链接</button></div>'],
@@ -3169,6 +3218,15 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const collapsed = shell.classList.toggle('sidebar-collapsed');
       btn.textContent = collapsed ? '▶' : '◀';
     }
+    function updateTrainWorkHeight() {
+      const layout = document.querySelector('#trainCardView:not(.hidden) .train-layout');
+      if (!layout) return;
+      const main = document.querySelector('.main');
+      const padBottom = main ? (parseFloat(getComputedStyle(main).paddingBottom) || 22) : 22;
+      const top = layout.getBoundingClientRect().top;
+      const height = Math.max(420, Math.floor(window.innerHeight - top - padBottom));
+      layout.style.setProperty('--train-work-height', height + 'px');
+    }
     function switchView(id) {
       document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
       document.querySelectorAll('.nav-item[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === id));
@@ -3182,7 +3240,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       }
       if (id === 'student') renderStudents();
       if (id === 'project') renderProjects();
-      if (id === 'training') { renderTrainings(); renderTrainingDetail(); }
+      if (id === 'training') { renderTrainings(); renderTrainingDetail(); requestAnimationFrame(updateTrainWorkHeight); }
       if (id === 'device') renderDevices();
     }
 
@@ -3518,6 +3576,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (cardView) cardView.classList.toggle('hidden', mode==='list');
       if (listView) listView.classList.toggle('hidden', mode==='card');
       renderTrainings(document.getElementById('trainingStatusFilter').value);
+      if (mode === 'card') requestAnimationFrame(updateTrainWorkHeight);
     }
     function renderTrainings(filter = 'all') {
       const list = filter === 'all' ? trainings : trainings.filter(t => t.status === filter);
@@ -3636,6 +3695,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (activeTrainTab === 'brain') tc.innerHTML = renderBrainTab(t);
       else if (activeTrainTab === 'exam') tc.innerHTML = renderExamTab(t);
       else tc.innerHTML = renderAttachTab(t);
+      requestAnimationFrame(updateTrainWorkHeight);
     }
     // ── 培训进行时长计时器 ───────────────────────────────────────────
     var trElapsedInterval = null;
@@ -3721,6 +3781,69 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       if (type === 'fatigue')   return val < 60 ? '疲劳'   : val < 75 ? '一般' : '不疲劳';
       return '';
     }
+    const personalScoreConclusions = {
+      excellent: {
+        name: '卓越沉浸态',
+        className: 'excellent',
+        color: 'var(--success)',
+        text: '该学员目前状态极佳，全神贯注于培训内容，展现出极高的学习热情与饱满精力，建议保持当前节奏。'
+      },
+      stable: {
+        name: '稳定吸收态',
+        className: 'stable',
+        color: 'var(--primary)',
+        text: '该学员目前状态良好，注意力集中，情绪稳定，精神饱满，能够跟上培训进度，继续保持当前的听课状态即可。'
+      },
+      wave: {
+        name: '波动起伏态',
+        className: 'wave',
+        color: 'var(--purple)',
+        text: '监测到该学员状态存在波动，注意力偶尔分散或情绪起伏较大，建议适当调整呼吸或稍作休息，重新聚焦课程内容。'
+      },
+      warning: {
+        name: '精力预警态',
+        className: 'warning',
+        color: 'var(--warning)',
+        text: '检测到该学员出现明显的精力下降迹象，虽然仍在努力维持注意力，但身体已显疲态，建议进行短暂的放松或互动环节以恢复状态。'
+      },
+      detached: {
+        name: '游离懈怠态',
+        className: 'detached',
+        color: 'var(--danger)',
+        text: '该学员目前处于游离状态，注意力涣散且缺乏参与感，可能已错过关键知识点，建议课后及时复习或寻求助教帮助。'
+      },
+      insufficient: {
+        name: '数据不足',
+        className: 'insufficient',
+        color: 'var(--muted)',
+        text: '该学员当前设备未连接或脑机数据不足，暂无法生成有效学习状态结论，请确认设备佩戴和数据采集状态。'
+      }
+    };
+    const compositeScoreConclusions = [
+      { min:80, level:'S级：标杆优秀', short:'S级', className:'excellent', color:'var(--success)', text:'本次培训效果优秀！学员积极参与，90%以上学员注意力保持在高水平，对核心知识掌握扎实。' },
+      { min:70, level:'A级：表现良好', short:'A级', className:'stable', color:'var(--primary)', text:'本次培训效果良好。学员参与度较高，整体表现不错，对相关内容有了较全面的了解。' },
+      { min:60, level:'B级：合格达标', short:'B级', className:'wave', color:'var(--warning)', text:'本次培训效果合格。大部分学员能够掌握基础内容，但在培训过程中，部分学员的注意力集中度及情绪投入度存在一定波动。' },
+      { min:40, level:'C级：需要关注', short:'C级', className:'warning', color:'var(--warning)', text:'本次培训效果不佳。多项指标低于及格线，对核心流程与关键知识点的掌握不够熟练。' },
+      { min:0,  level:'D级：严重异常', short:'D级', className:'detached', color:'var(--danger)', text:'本次培训未达预期。监测数据显示学员长期处于非学习状态（如极度疲劳或完全游离），未能有效吸收培训内容。请务必重视并安排补训，确保学习效果。' }
+    ];
+    function studentEnergyScore(s) {
+      return Math.max(0, Math.min(100, Math.round(100 - (Number(s.fatigue) || 0))));
+    }
+    function getPersonalConclusion(s) {
+      if (!s || !s.wearing) return personalScoreConclusions.insufficient;
+      const attention = Number(s.attention) || 0;
+      const emotion = Number(s.emotion) || 0;
+      const energy = studentEnergyScore(s);
+      if (energy < 40) return personalScoreConclusions.warning;
+      if (attention < 50 && emotion < 50) return personalScoreConclusions.detached;
+      if (attention >= 85 && emotion >= 75 && energy >= 85) return personalScoreConclusions.excellent;
+      if (attention >= 60 && attention < 85 && emotion >= 60 && energy >= 60 && energy < 85) return personalScoreConclusions.stable;
+      return personalScoreConclusions.wave;
+    }
+    function getCompositeConclusion(score) {
+      score = Number(score) || 0;
+      return compositeScoreConclusions.find(function(item) { return score >= item.min; }) || compositeScoreConclusions[compositeScoreConclusions.length - 1];
+    }
     function renderBrainTab(t) {
       const vc = v => v>=80?'var(--success)':v>=60?'var(--warning)':'var(--danger)';
       const pendingConnCount = t.status === 'pending' ? studentBrainData.filter(s => s.wearing && s.id !== 's3').length : null;
@@ -3792,15 +3915,23 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '</div>';
       } else {
         const live = t.status === 'running';
+        const compositeScore = 82;
+        const compositeConclusion = getCompositeConclusion(compositeScore);
         html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">'
           + '<div style="font-weight:700;font-size:13px;">综合脑机数据' + (live?'<span style="margin-left:8px;font-size:11px;color:var(--success);font-weight:400;">● 实时更新</span>':'') + '</div>'
           + (t.status === 'pending' ? '<button class="btn" data-modal="scoreConfig" style="font-size:12px;">设置综合得分</button>' : '')
           + '</div>'
           + '<div class="brain-metrics">'
-          + '<div class="brain-metric bm-composite"><div class="bm-val">82</div><div class="bm-label">综合得分<i class="bm-tip-icon" data-tip="情绪×30% + 注意力×40% + 疲劳×30%">ⓘ</i></div><div class="bm-bar"><div class="bm-fill" style="width:82%;"></div></div></div>'
+          + '<div class="brain-metric bm-composite"><div class="bm-val">' + compositeScore + '</div><div class="bm-label">综合得分<i class="bm-tip-icon" data-tip="情绪×30% + 注意力×40% + 疲劳×30%">ⓘ</i></div><div class="bm-bar"><div class="bm-fill" style="width:' + compositeScore + '%;"></div></div></div>'
           + '<div class="brain-metric"><div class="bm-val" style="color:var(--warning);">82</div><div class="bm-label">注意力 · <span style="color:var(--warning);">' + metricStatus('attention',82) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:82%;background:var(--warning);"></div></div></div>'
           + '<div class="brain-metric"><div class="bm-val" style="color:var(--purple);">85</div><div class="bm-label">情绪 · <span style="color:var(--purple);">' + metricStatus('emotion',85) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:85%;background:var(--purple);"></div></div></div>'
           + '<div class="brain-metric"><div class="bm-val" style="color:var(--success);">78</div><div class="bm-label">疲劳度 · <span style="color:var(--success);">' + metricStatus('fatigue',78) + '</span></div><div class="bm-bar"><div class="bm-fill" style="width:22%;background:var(--success);"></div></div></div>'
+          + '</div>'
+          + '<div class="brain-conclusion-card">'
+          + '<div class="brain-conclusion-badge" style="background:' + compositeConclusion.color + ';">' + compositeConclusion.short + '<br><span style="font-size:10px;font-weight:600;">' + compositeScore + ' 分</span></div>'
+          + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">综合评分结论 · <span style="color:' + compositeConclusion.color + ';">' + compositeConclusion.level + '</span></div>'
+          + '<div class="brain-conclusion-text">' + compositeConclusion.text + '</div>'
+          + '<div class="brain-conclusion-meta">判定依据：综合得分 ' + compositeScore + ' 分；用于快速判断本场培训的整体学习投入和吸收效果。</div></div>'
           + '</div>'
           + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'
           + '<div style="font-weight:700;font-size:13px;">学习曲线分析</div>'
@@ -4071,6 +4202,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       }
       list.innerHTML = filtered.map(function(s){
         var isActive = sbdActiveId === s.id;
+        var personalConclusion = getPersonalConclusion(s);
         return '<div class="sbd-student-item' + (isActive?' active':'') + '" onclick="sbdSelect(\'' + s.id + '\')">'
           + '<div class="si-name">'
           + '<span style="width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block;flex-shrink:0;"></span>'
@@ -4083,7 +4215,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '<span>情 <strong style="color:var(--purple);">' + s.emotion + '</strong></span>'
           + '<span>疲 <strong style="color:' + vc(100-s.fatigue) + ';">' + s.fatigue + '</strong></span>'
           + '<span>分 <strong style="color:var(--primary);">' + s.score + '</strong></span>'
-          + '</div></div>';
+          + '</div>'
+          + '<span class="state-pill ' + personalConclusion.className + '">' + personalConclusion.name + '</span>'
+          + '</div>';
       }).join('');
     }
 
@@ -4100,6 +4234,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       var at = s.attention;
       var em = s.emotion;
       var ft = s.fatigue;
+      var personalConclusion = getPersonalConclusion(s);
       // Learning curve SVG path (smooth upward)
       var p1y = 100 - cv*0.45;
       var p2y = 100 - cv*0.55;
@@ -4126,6 +4261,11 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<span style="font-size:11px;color:var(--success);">已连接</span>'
         + '<span style="font-size:11px;color:var(--muted);margin-left:2px;">' + s.device + '</span>'
         + '<span style="margin-left:auto;font-size:12px;color:var(--muted);">得分 <strong style="color:var(--primary);font-size:16px;">' + s.score + '</strong></span>'
+        + '</div>'
+        + '<div class="brain-conclusion-card personal ' + personalConclusion.className + '">'
+        + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
+        + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
+        + '</div>'
         + '</div>'
         + '<div class="sbd-chart-label">学习曲线分析'
         + '<div class="sbd-legend"><span><span style="width:10px;height:2px;background:#2f6bff;display:inline-block;"></span>综合得分</span></div>'
@@ -4238,7 +4378,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     function openStudentDetail(sid) {
       const s = studentBrainData.find(x => x.id === sid); if (!s) return;
       const vc = v => v>=80?'var(--success)':v>=60?'var(--warning)':'var(--danger)';
-      document.getElementById('modalTitle').textContent = s.name + ' — 脑机数据详情';
+      const energyScore = studentEnergyScore(s);
+      const personalConclusion = getPersonalConclusion(s);
+      document.getElementById('modalTitle').textContent = s.name + ' - 脑机数据详情';
       document.getElementById('modalBody').innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">'
         + '<div class="td-info-cell"><div class="k">综合得分</div><div class="v" style="font-size:22px;color:var(--primary);">' + s.score + '</div></div>'
         + '<div class="td-info-cell"><div class="k">学习曲线</div><div class="v" style="font-size:22px;">' + s.curve + '</div></div>'
@@ -4253,11 +4395,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<path d="M0 90 C60 70 100 55 160 50 C220 45 280 38 340 32 C400 26 450 24 500 20" stroke="var(--primary)" stroke-width="2" fill="none"/>'
         + '<path d="M0 100 C60 115 100 80 160 95 C220 110 280 70 340 85 C400 100 450 70 500 75" stroke="var(--success)" stroke-width="2" fill="none"/>'
         + '</svg></div>'
-        + '<div style="font-size:12px;color:var(--muted);line-height:1.7;padding:10px 12px;background:var(--bg);border-radius:8px;">'
-        + '<strong>学习状态分析：</strong>'
-        + '该学员注意力' + (s.attention>=80?'保持良好，专注度较高':'波动较大，需关注') + '；'
-        + '情绪' + (s.emotion>=80?'状态稳定，学习积极性高':'需要关注，可能存在焦虑情绪') + '；'
-        + '疲劳度' + (s.fatigue<30?'较低，精力充沛':'偏高，建议适当休息') + '。'
+        + '<div class="brain-conclusion-card personal ' + personalConclusion.className + '" style="margin-bottom:0;">'
+        + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
+        + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
+        + '</div>'
         + '</div>'
         + '<div class="actions"><button class="btn" data-close="modal">关闭</button></div>';
       const body2 = document.getElementById('modalBody');
@@ -5245,6 +5386,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       } else { clearInterval(videoTimer); }
     });
     document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+    window.addEventListener('resize', updateTrainWorkHeight);
     // 需求说明 toggle
     function syncReqToggleState(on) {
       const wb = document.getElementById('reqToggle');
