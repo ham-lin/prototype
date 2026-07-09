@@ -631,8 +631,8 @@
       grid-template-columns: 360px minmax(0, 1fr) 360px;
       gap: 16px;
       align-items: stretch;
-      height: var(--train-work-height, calc(100vh - 320px));
-      min-height: 420px;
+      height: var(--train-work-height, calc(100vh - 220px));
+      min-height: 760px;
       overflow: hidden;
     }
     #trainCardView { min-height: 0; }
@@ -3224,7 +3224,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const main = document.querySelector('.main');
       const padBottom = main ? (parseFloat(getComputedStyle(main).paddingBottom) || 22) : 22;
       const top = layout.getBoundingClientRect().top;
-      const height = Math.max(420, Math.floor(window.innerHeight - top - padBottom));
+      const height = Math.max(760, Math.floor(window.innerHeight - top - padBottom + 120));
       layout.style.setProperty('--train-work-height', height + 'px');
     }
     function switchView(id) {
