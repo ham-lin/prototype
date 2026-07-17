@@ -3070,6 +3070,18 @@
         color: var(--primary);
       }
 
+      .export-dropdown-option.is-demo-failure {
+        margin-top: 4px;
+        border-top: 1px solid var(--border);
+        border-radius: 0 0 6px 6px;
+        color: #d14343;
+      }
+
+      .export-dropdown-option.is-demo-failure:hover {
+        background: #fff1f0;
+        color: #c62828;
+      }
+
       .toolbar-tools {
         display: flex;
         align-items: center;
@@ -9857,7 +9869,8 @@
       .toast-root {
         position: fixed;
         right: 18px;
-        bottom: 18px;
+        top: calc(var(--topbar-h) + 14px);
+        bottom: auto;
         z-index: 60;
         display: flex;
         flex-direction: column;
@@ -9865,9 +9878,10 @@
       }
 
       .toast {
+        position: relative;
         min-width: 240px;
         max-width: 340px;
-        padding: 12px 14px;
+        padding: 12px 38px 12px 14px;
         border-radius: 8px;
         color: #fff;
         box-shadow: 0 12px 24px rgba(16, 33, 51, 0.18);
@@ -9885,6 +9899,10 @@
         background: linear-gradient(135deg, #e0a128 0%, #d18c15 100%);
       }
 
+      .toast.error {
+        background: linear-gradient(135deg, #e5484d 0%, #c9363e 100%);
+      }
+
       .toast strong {
         display: block;
         margin-bottom: 3px;
@@ -9894,6 +9912,35 @@
       .toast span {
         display: block;
         opacity: 0.92;
+      }
+
+      .toast-close {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        width: 24px;
+        height: 24px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: rgba(255, 255, 255, .9);
+        font-size: 17px;
+        line-height: 22px;
+        cursor: pointer;
+      }
+
+      .toast-close:hover { background: rgba(255, 255, 255, .16); }
+
+      .toast-action {
+        margin-top: 8px;
+        padding: 0;
+        border: 0;
+        border-bottom: 1px solid currentColor;
+        background: transparent;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
       }
       .demand-anchor {
         position: relative;
@@ -10275,6 +10322,24 @@
         width: min(720px, calc(100vw - 48px));
         height: fit-content;
         max-height: min(760px, calc(100vh - 48px));
+      }
+
+      .relation-modal.asset-operation-view-dialog {
+        width: min(480px, calc(100vw - 48px));
+        height: fit-content;
+        min-height: 0;
+        max-height: calc(100vh - 48px);
+      }
+
+      .relation-modal.asset-operation-view-dialog .relation-modal-head,
+      .relation-modal.asset-operation-view-dialog .relation-modal-footer {
+        flex: 0 0 auto;
+      }
+
+      .relation-modal.asset-operation-view-dialog .relation-modal-body {
+        flex: 0 0 auto;
+        min-height: 0;
+        overflow: visible;
       }
 
       .asset-board-save-options {
@@ -11019,6 +11084,58 @@
         border-top: 1px solid var(--border);
       }
 
+      .export-progress-task.is-done .export-task-icon {
+        background: #e8f7ef;
+        color: #21a366;
+      }
+
+      .export-progress-task.is-done .export-task-subtitle { color: #168653; }
+
+      .export-progress-task.is-failed .export-task-icon {
+        background: #fff0f0;
+        color: #d14343;
+      }
+
+      .export-progress-task.is-failed .export-task-subtitle,
+      .export-progress-task.is-failed .export-task-progress-percent { color: #c9363e; }
+
+      .export-progress-task.is-failed .export-task-progress-fill {
+        background: linear-gradient(90deg, #f06a6a, #d14343);
+      }
+
+      .export-progress-task.is-result-attention {
+        margin-left: -8px;
+        margin-right: -8px;
+        padding: 8px;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        animation: export-task-result-attention .82s ease-in-out 4;
+      }
+
+      .export-progress-task.is-failed.is-result-attention {
+        animation-name: export-task-failed-attention;
+      }
+
+      @keyframes export-task-result-attention {
+        0%, 100% {
+          border-color: transparent;
+          background: transparent;
+          box-shadow: 0 0 0 0 rgba(33, 163, 102, 0);
+          transform: translateX(0);
+        }
+        45% {
+          border-color: #22a864;
+          background: #dff7e9;
+          box-shadow: 0 0 0 4px rgba(33, 163, 102, .24), 0 6px 18px rgba(33, 163, 102, .18);
+          transform: translateX(-2px);
+        }
+      }
+
+      @keyframes export-task-failed-attention {
+        0%, 100% { border-color: transparent; background: transparent; box-shadow: 0 0 0 0 rgba(209, 67, 67, 0); }
+        45% { border-color: #d14343; background: #fff0f0; box-shadow: 0 0 0 4px rgba(209, 67, 67, .22); }
+      }
+
       .export-task-icon {
         width: 28px;
         height: 28px;
@@ -11123,6 +11240,120 @@
 
       .export-progress-float:hover {
         background: var(--primary-deep);
+      }
+
+      .export-progress-collapsed {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        z-index: 82;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .export-progress-collapsed .export-progress-float {
+        position: relative;
+        right: auto;
+        bottom: auto;
+      }
+
+      .export-progress-complete-notice {
+        min-width: 238px;
+        min-height: 54px;
+        padding: 9px 14px 9px 12px;
+        border: 1px solid #b7e3c9;
+        border-radius: 5px;
+        background: #f2fbf6;
+        color: #254438;
+        box-shadow: 0 10px 28px rgba(20, 92, 55, .16);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        cursor: pointer;
+        animation: export-complete-notice-in .24s ease-out;
+      }
+
+      .export-progress-complete-notice-icon {
+        flex: 0 0 30px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #21a366;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .export-progress-complete-notice-copy { min-width: 0; flex: 1; }
+      .export-progress-complete-notice-copy strong { display: block; color: #17663f; font-size: 13px; }
+      .export-progress-complete-notice-copy span { display: block; margin-top: 2px; color: #587568; font-size: 12px; }
+
+      .export-progress-float.has-unread {
+        background: #21a366;
+        box-shadow: 0 0 0 0 rgba(33, 163, 102, .4), 0 10px 24px rgba(21, 117, 72, .28);
+        animation: export-progress-complete-pulse 1.2s ease-out 3;
+      }
+
+      .export-progress-complete-notice.is-failed {
+        border-color: #f2b8b5;
+        background: #fff4f3;
+        color: #6f2428;
+        box-shadow: 0 10px 28px rgba(170, 45, 52, .16);
+      }
+
+      .export-progress-complete-notice.is-failed .export-progress-complete-notice-icon {
+        background: #d14343;
+      }
+
+      .export-progress-complete-notice.is-failed .export-progress-complete-notice-copy strong { color: #a92f35; }
+      .export-progress-complete-notice.is-failed .export-progress-complete-notice-copy span { color: #8c5a5d; }
+
+      .export-progress-float.has-failed {
+        background: #d14343;
+        box-shadow: 0 0 0 0 rgba(209, 67, 67, .4), 0 10px 24px rgba(170, 45, 52, .28);
+        animation: export-progress-failed-pulse 1.2s ease-out 3;
+      }
+
+      .export-progress-unread-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 5px;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        background: #f53f3f;
+        color: #fff;
+        font-size: 11px;
+        line-height: 16px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .export-progress-collapsed.has-complete .export-progress-float::before,
+      .export-progress-collapsed.has-complete .export-progress-float::after,
+      .export-progress-collapsed.has-failed .export-progress-float::before,
+      .export-progress-collapsed.has-failed .export-progress-float::after { display: none; }
+
+      @keyframes export-progress-complete-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(33, 163, 102, .42), 0 10px 24px rgba(21, 117, 72, .28); }
+        75% { box-shadow: 0 0 0 12px rgba(33, 163, 102, 0), 0 10px 24px rgba(21, 117, 72, .28); }
+        100% { box-shadow: 0 0 0 0 rgba(33, 163, 102, 0), 0 10px 24px rgba(21, 117, 72, .28); }
+      }
+
+      @keyframes export-progress-failed-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(209, 67, 67, .42), 0 10px 24px rgba(170, 45, 52, .28); }
+        75% { box-shadow: 0 0 0 12px rgba(209, 67, 67, 0), 0 10px 24px rgba(170, 45, 52, .28); }
+        100% { box-shadow: 0 0 0 0 rgba(209, 67, 67, 0), 0 10px 24px rgba(170, 45, 52, .28); }
+      }
+
+      @keyframes export-complete-notice-in {
+        from { opacity: 0; transform: translateX(12px); }
+        to { opacity: 1; transform: translateX(0); }
       }
 
       .export-progress-float::after {
@@ -16615,7 +16846,7 @@
           "V3R5-4422": { role: "资产管理员", need: "使用与在线电子表格字段一致的本地文件导入资产", value: "避免模板字段不一致导致重复整理和导入失败", scenario: "离线整理批量作业数据后，需要上传本地文件继续办理。", rules: ["本地文件模板字段、顺序和必填规则与在线表格一致。", "导入前校验模板版本、字段和值格式。"], boundary: "模板过期、字段缺失或数据非法时不得写入，并提供错误明细。" },
           "V3R5-4421": { role: "系统管理员", need: "通过表单配置控制台账厂商字段的显示", value: "保持表单、台账和详情的字段口径一致", scenario: "不同资产分类不需要展示厂商字段时，通过配置统一隐藏。", rules: ["表单启用厂商字段时台账可展示厂商列。", "表单隐藏厂商字段时台账同步隐藏。"], boundary: "配置缺失时使用产品默认规则，不得导致台账渲染失败。" },
           "V3R5-4418": { role: "资产管理员", need: "在高级搜索中按厂商筛选资产", value: "快速定位指定来源或品牌的设备", scenario: "处理维保、替换或批次问题时，需要查询同厂商资产。", rules: ["高级搜索默认提供厂商条件。", "厂商选项来自当前台账可见数据并去重。"], boundary: "无厂商数据时保留请选择状态，不影响其他条件查询。" },
-          "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时给出明确反馈。" },
+          "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗；展开状态更新任务行并提示，收起状态通过完成提示、数量角标和强调动画触达用户。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时给出明确反馈。" },
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
           "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目", scenario: "不同项目或不同业务活动需要在流程审批与台账直接办理之间切换。", rules: ["仅 IT设备和场地设施纳入配置，台账业务入口文案保持稳定。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口。" },
           "V3R5-4931": { role: "机房管理员", need: "在设备预占的包含设备页签中识别对应机柜", value: "确认预占设备与机柜资源之间的关系", scenario: "设备尚未正式上架但已预占机柜位置时，需要查看关联机柜。", rules: ["包含设备列表展示预占设备及其关联机柜。", "预占关系与正式上架关系使用不同状态标识。"], boundary: "预占取消、机柜失效或位置冲突时及时更新并提示。" },
@@ -17271,7 +17502,6 @@
                   ]
                 },
                 exportProgressManager: null,
-                exportCompleteDialog: null,
                 spaceTrees: {},
                 listSelections: {},
                 batchSelectionMenuOpen: null,
@@ -17746,7 +17976,11 @@
                 if (!task?.id) return false;
                 const referenceTime = Number(task.finishedAt || task.updatedAt || task.createdAt || now);
                 return task.status === "running" || now - referenceTime <= EXPORT_TASK_RETENTION_MS;
-              });
+              }).map((task) => ({
+                ...task,
+                fileName: String(task.fileName || "").replace(/^R5_/, ""),
+                title: String(task.title || task.fileName || "导出文件").replace(/^R5_/, "")
+              }));
             } catch (error) {
               return [];
             }
@@ -17755,7 +17989,7 @@
           restoreExportProgressManager() {
             const tasks = this.readPersistedExportTasks();
             if (!tasks.length) return;
-            this.state.ui.exportProgressManager = { collapsed: false, canClose: false, tasks };
+            this.state.ui.exportProgressManager = { collapsed: false, canClose: false, unreadDoneCount: 0, unreadFailedCount: 0, lastCompletedTaskId: "", lastFailedTaskId: "", tasks };
             let changed = false;
             let completedOnRestore = null;
             tasks.forEach((task) => {
@@ -17766,13 +18000,7 @@
             });
             this.updateExportProgressCloseState();
             if (completedOnRestore) {
-              this.state.ui.exportCompleteDialog = {
-                taskId: completedOnRestore.id,
-                fileName: completedOnRestore.fileName,
-                workbookRows: completedOnRestore.workbookRows,
-                summary: completedOnRestore.summary,
-                rowCount: completedOnRestore.rowCount
-              };
+              this.notifyAssetExportTaskCompleted(completedOnRestore);
             }
             if (changed) this.persistExportProgressManager(false);
           }
@@ -17803,32 +18031,29 @@
             const previousStatus = new Map((this.state.ui.exportProgressManager?.tasks || []).map((task) => [task.id, task.status]));
             this.clearAssetExportTaskTimer();
             const currentCollapsed = Boolean(this.state.ui.exportProgressManager?.collapsed);
+            const currentUnreadDoneCount = Number(this.state.ui.exportProgressManager?.unreadDoneCount) || 0;
+            const currentUnreadFailedCount = Number(this.state.ui.exportProgressManager?.unreadFailedCount) || 0;
+            const currentLastCompletedTaskId = this.state.ui.exportProgressManager?.lastCompletedTaskId || "";
+            const currentLastFailedTaskId = this.state.ui.exportProgressManager?.lastFailedTaskId || "";
             const now = Date.now();
             const tasks = (Array.isArray(snapshot.tasks) ? snapshot.tasks : []).filter((task) => {
               if (!task?.id) return false;
               const referenceTime = Number(task.finishedAt || task.updatedAt || task.createdAt || now);
               return task.status === "running" || now - referenceTime <= EXPORT_TASK_RETENTION_MS;
-            }).map((task) => ({ ...task }));
+            }).map((task) => ({
+              ...task,
+              fileName: String(task.fileName || "").replace(/^R5_/, ""),
+              title: String(task.title || task.fileName || "导出文件").replace(/^R5_/, "")
+            }));
             this.state.ui.exportProgressManager = tasks.length
-              ? { collapsed: currentCollapsed, canClose: false, tasks }
+              ? { collapsed: currentCollapsed, canClose: false, unreadDoneCount: currentUnreadDoneCount, unreadFailedCount: currentUnreadFailedCount, lastCompletedTaskId: currentLastCompletedTaskId, lastFailedTaskId: currentLastFailedTaskId, tasks }
               : null;
-            if (!tasks.length) this.state.ui.exportCompleteDialog = null;
             if (tasks.length) {
               tasks.forEach((task) => this.refreshAssetExportTaskFromClock(task));
               this.updateExportProgressCloseState();
-              const completedTask = tasks.find((task) => task.status === "done" && previousStatus.get(task.id) === "running");
-              if (completedTask) {
-                this.state.ui.exportCompleteDialog = {
-                  taskId: completedTask.id,
-                  fileName: completedTask.fileName,
-                  workbookRows: completedTask.workbookRows,
-                  summary: completedTask.summary,
-                  rowCount: completedTask.rowCount
-                };
-              }
-              const activeDialogTask = this.state.ui.exportCompleteDialog?.taskId;
-              if (activeDialogTask && !tasks.some((task) => task.id === activeDialogTask && task.status === "done")) {
-                this.state.ui.exportCompleteDialog = null;
+              const finishedTask = tasks.find((task) => ["done", "failed"].includes(task.status) && previousStatus.get(task.id) === "running");
+              if (finishedTask) {
+                this.notifyAssetExportTaskCompleted(finishedTask);
               }
               tasks.filter((task) => task.status === "running").forEach((task) => this.runAssetExportProgress(task.id));
             }
@@ -20689,7 +20914,8 @@
 
           handleExportAction(viewId, mode = "all") {
             this.closeExportMenu(false);
-            const payload = this.buildAssetExportPayload(viewId, mode);
+            const payloadMode = mode === "failure" ? "all" : mode;
+            const payload = this.buildAssetExportPayload(viewId, payloadMode);
             if (!payload.ok) {
               this.pushToast(payload.title, payload.message, payload.tone || "warning");
               return;
@@ -20776,7 +21002,7 @@
               + pad(now.getHours())
               + pad(now.getMinutes())
               + pad(now.getSeconds());
-            const fileName = "R5_" + meta.title + "_" + stamp + ".xlsx";
+            const fileName = meta.title + "_" + stamp + ".xlsx";
             const totalRows = parentCount + independentCount + childCount;
             const summary = "主设备 " + parentCount
               + " / 从设备 " + childCount
@@ -20798,13 +21024,17 @@
             const now = Date.now();
             const manager = this.state.ui.exportProgressManager && Array.isArray(this.state.ui.exportProgressManager.tasks)
               ? this.state.ui.exportProgressManager
-              : { collapsed: false, canClose: false, tasks: [] };
+              : { collapsed: false, canClose: false, unreadDoneCount: 0, unreadFailedCount: 0, lastCompletedTaskId: "", lastFailedTaskId: "", tasks: [] };
             manager.collapsed = false;
             manager.canClose = false;
+            manager.unreadDoneCount = 0;
+            manager.unreadFailedCount = 0;
+            manager.lastCompletedTaskId = "";
+            manager.lastFailedTaskId = "";
             manager.tasks.push({
               id: taskId,
               title: payload.fileName || "导出文件",
-              subtitle: mode === "selected" ? "正在生成选中资产文件" : "正在生成全部资产文件",
+              subtitle: mode === "selected" ? "正在生成选中资产文件" : mode === "failure" ? "正在生成文件（异常演示）" : "正在生成全部资产文件",
               status: "running",
               percent: 8,
               fileName: payload.fileName,
@@ -20814,7 +21044,9 @@
               createdAt: now,
               startedAt: now,
               updatedAt: now,
-              durationMs: 4200,
+              durationMs: mode === "failure" ? 3200 : 4200,
+              simulateFailure: mode === "failure",
+              retryCount: 0,
               ownerTabId: this.exportTabId
             });
             this.state.ui.exportProgressManager = manager;
@@ -20862,11 +21094,63 @@
             manager.canClose = tasks.length > 0 && tasks.every((task) => task.status !== "running");
           }
 
+          notifyAssetExportTaskCompleted(task) {
+            const manager = this.state.ui.exportProgressManager;
+            if (!manager || !task) return;
+            task.attentionUntil = Date.now() + 3600;
+            if (task.status === "failed") {
+              manager.lastFailedTaskId = task.id;
+              if (manager.collapsed) {
+                manager.unreadFailedCount = Math.max(0, Number(manager.unreadFailedCount) || 0) + 1;
+              }
+              if (!manager.collapsed) this.focusExportTaskResult(task.id);
+              this.clearExportTaskAttentionLater(task.id);
+              return;
+            }
+            manager.lastCompletedTaskId = task.id;
+            if (manager.collapsed) {
+              manager.unreadDoneCount = Math.max(0, Number(manager.unreadDoneCount) || 0) + 1;
+              this.emit();
+              this.clearExportTaskAttentionLater(task.id);
+              return;
+            }
+            this.focusExportTaskResult(task.id);
+            this.clearExportTaskAttentionLater(task.id);
+          }
+
+          focusExportTaskResult(taskId) {
+            setTimeout(() => {
+              const taskRow = Array.from(document.querySelectorAll("[data-export-task-id]")).find((node) => node.getAttribute("data-export-task-id") === taskId);
+              if (taskRow instanceof HTMLElement) {
+                taskRow.scrollIntoView({ block: "nearest", behavior: "smooth" });
+              }
+            }, 80);
+          }
+
+          clearExportTaskAttentionLater(taskId) {
+            setTimeout(() => {
+              const task = this.getAssetExportTask(taskId);
+              if (!task || !task.attentionUntil || Date.now() < Number(task.attentionUntil)) return;
+              task.attentionUntil = 0;
+              this.persistExportProgressManager();
+              this.emit();
+            }, 3800);
+          }
+
           refreshAssetExportTaskFromClock(task, now = Date.now()) {
             if (!task || task.status !== "running") return false;
             task.startedAt = Number(task.startedAt || task.createdAt || now);
             task.durationMs = Math.max(1200, Number(task.durationMs) || 4200);
             const ratio = Math.max(0, Math.min(1, (now - task.startedAt) / task.durationMs));
+            if (task.simulateFailure && ratio >= 0.68) {
+              task.percent = 68;
+              task.status = "failed";
+              task.errorMessage = "导出服务暂时不可用，请稍后重试";
+              task.subtitle = "文件生成失败：" + task.errorMessage;
+              task.finishedAt = now;
+              task.updatedAt = now;
+              return true;
+            }
             if (ratio >= 1) {
               task.percent = 100;
               task.subtitle = "文件生成成功";
@@ -20897,11 +21181,16 @@
             const tasks = Array.isArray(manager?.tasks) ? manager.tasks : [];
             if (!tasks.length) return;
             let changed = false;
+            let completedTask = null;
             tasks.forEach((task) => {
               if (task.status !== "running") return;
-              if (this.refreshAssetExportTaskFromClock(task)) changed = true;
+              if (this.refreshAssetExportTaskFromClock(task)) {
+                changed = true;
+                completedTask ||= task;
+              }
             });
             this.updateExportProgressCloseState();
+            if (completedTask) this.notifyAssetExportTaskCompleted(completedTask);
             if (changed) this.persistExportProgressManager();
             tasks.filter((task) => task.status === "running").forEach((task) => this.runAssetExportProgress(task.id));
             this.bus.emit();
@@ -20919,13 +21208,7 @@
               const completed = this.refreshAssetExportTaskFromClock(task);
               if (completed) {
                 this.updateExportProgressCloseState();
-                this.state.ui.exportCompleteDialog = {
-                  taskId,
-                  fileName: task.fileName,
-                  workbookRows: task.workbookRows,
-                  summary: task.summary,
-                  rowCount: task.rowCount
-                };
+                this.notifyAssetExportTaskCompleted(task);
                 this.persistExportProgressManager();
                 this.clearAssetExportTaskTimer(taskId);
                 this.emit();
@@ -20951,8 +21234,48 @@
             if (!manager) {
               return;
             }
+            const focusTaskId = manager.lastFailedTaskId || manager.lastCompletedTaskId || "";
+            const focusTask = focusTaskId ? this.getAssetExportTask(focusTaskId) : null;
+            if (focusTask) {
+              focusTask.attentionUntil = Date.now() + 3600;
+            }
             manager.collapsed = false;
+            manager.unreadDoneCount = 0;
+            manager.unreadFailedCount = 0;
+            manager.lastCompletedTaskId = "";
+            manager.lastFailedTaskId = "";
             this.emit();
+            if (focusTaskId) {
+              this.focusExportTaskResult(focusTaskId);
+              this.clearExportTaskAttentionLater(focusTaskId);
+            }
+          }
+
+          retryAssetExportTask(taskId) {
+            const manager = this.state.ui.exportProgressManager;
+            const task = this.getAssetExportTask(taskId);
+            if (!manager || !task || task.status !== "failed") {
+              return;
+            }
+            const now = Date.now();
+            task.status = "running";
+            task.percent = 8;
+            task.subtitle = "正在重新生成文件...";
+            task.errorMessage = "";
+            task.simulateFailure = false;
+            task.retryCount = Math.max(0, Number(task.retryCount) || 0) + 1;
+            task.startedAt = now;
+            task.updatedAt = now;
+            task.finishedAt = 0;
+            task.durationMs = 3200;
+            manager.collapsed = false;
+            manager.canClose = false;
+            manager.unreadFailedCount = 0;
+            manager.lastFailedTaskId = "";
+            this.persistExportProgressManager();
+            this.pushToast("已重新发起导出", `${task.fileName || task.title || "导出文件"} 正在重新生成。`, "info");
+            this.emit();
+            this.runAssetExportProgress(task.id);
           }
 
           closeExportProgressManager() {
@@ -20983,18 +21306,12 @@
             task.finishedAt = Date.now();
             task.updatedAt = task.finishedAt;
             this.updateExportProgressCloseState();
-            this.state.ui.exportCompleteDialog = null;
             this.persistExportProgressManager();
             this.pushToast("已取消导出", "导出文件生成任务已取消。", "info");
             this.emit();
           }
 
-          closeExportCompleteDialog() {
-            this.state.ui.exportCompleteDialog = null;
-            this.emit();
-          }
-
-          downloadExportPayload(payload, closeDialog = false) {
+          downloadExportPayload(payload) {
             if (!payload) {
               return;
             }
@@ -21008,9 +21325,6 @@
               link.click();
               document.body.removeChild(link);
               setTimeout(() => URL.revokeObjectURL(url), 0);
-              if (closeDialog) {
-                this.state.ui.exportCompleteDialog = null;
-              }
               this.pushToast("下载完成", "已下载 " + payload.fileName + "（" + payload.summary + "）", "success");
             } catch (error) {
               this.pushToast("导出失败", error?.message || "浏览器拒绝了文件下载请求。", "warning");
@@ -21022,15 +21336,7 @@
             if (!task || task.status !== "done") {
               return;
             }
-            this.downloadExportPayload(task, false);
-          }
-
-          downloadExportFile() {
-            const dialog = this.state.ui.exportCompleteDialog;
-            if (!dialog) {
-              return;
-            }
-            this.downloadExportPayload(dialog, true);
+            this.downloadExportPayload(task);
           }
 
           handleTinyTool(label) {
@@ -24342,12 +24648,15 @@
             this.pushToast("标签配置已保存", "标签模板、尺寸和绑定字段已保存到当前原型。", "success");
           }
 
-          pushToast(title, message, tone = "success") {
+          pushToast(title, message, tone = "success", options = {}) {
             const toast = {
               id: "toast-" + Date.now() + "-" + Math.random().toString(16).slice(2, 7),
               title,
               message,
-              tone
+              tone,
+              action: options.action || "",
+              actionLabel: options.actionLabel || "",
+              taskId: options.taskId || ""
             };
             this.state.ui.toasts = [toast, ...this.state.ui.toasts].slice(0, 4);
             this.emit();
@@ -24357,7 +24666,15 @@
               if (before !== this.state.ui.toasts.length) {
                 this.emit();
               }
-            }, 2600);
+            }, Math.max(2600, Number(options.durationMs) || 2600));
+          }
+
+          dismissToast(toastId) {
+            const before = this.state.ui.toasts.length;
+            this.state.ui.toasts = this.state.ui.toasts.filter((item) => item.id !== toastId);
+            if (before !== this.state.ui.toasts.length) {
+              this.emit();
+            }
           }
 
           findNodeLabel(nodes, targetId) {
@@ -28135,8 +28452,9 @@
             const demandAttrs = this.getLedgerOperationDemandAttrs(action);
             if (action === "导出资产") {
               const menuOpen = this.store.getState().ui.exportMenuOpen === viewId;
+              const demandModeEnabled = Boolean(this.store.getState().ui.demandExplainEnabled);
               return `
-                <div class="export-dropdown-wrap" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：从台账导出入口发起导出任务，并通过进度管理器持续查看文件生成进度。||触发方式：鼠标悬停或键盘聚焦“导出资产”即展示“导出全部”“导出选中”；点击按钮也可保持菜单展开。||点击后行为：选择导出方式后创建导出任务；任务在进度管理器中展示，可收起、取消，完成后支持下载。||状态限制：导出选中依赖当前已选资产；无选中数据时应提示或按业务规则拦截。||异常判断：导出任务生成失败、浏览器下载被拦截、任务被取消或数据为空时，应给出明确反馈。">
+                <div class="export-dropdown-wrap" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：从台账导出入口发起导出任务，并通过进度管理器持续查看文件生成进度。||触发方式：鼠标悬停或键盘聚焦“导出资产”即展示“导出全部”“导出选中”；需求说明开启时额外展示“模拟导出失败（原型）”，用于评审失败与重试交互。||点击后行为：选择导出方式后创建导出任务；任务在进度管理器中展示，可收起、取消，完成后支持下载，失败后支持重试。||结果提示：不在右上角展示导出成功或失败提示；进度管理器展开时自动定位并闪烁对应任务行，收起时保留结果数量提醒，展开后定位任务。||状态限制：导出选中依赖当前已选资产；无选中数据时应提示或按业务规则拦截。||异常判断：文件生成失败时任务行展示失败原因与重试入口；收起状态累计失败数量并使用红色提醒。">
                   <button class="btn ${menuOpen ? "is-open" : ""}" type="button" data-action="toggle-export-menu" data-view="${escapeHtml(viewId)}" aria-haspopup="menu" aria-expanded="${menuOpen ? "true" : "false"}">
                     <span>${escapeHtml(action)}</span>
                     <svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -28146,6 +28464,7 @@
                   <div class="export-dropdown-menu ${menuOpen ? "is-open" : ""}" role="menu">
                     <button class="export-dropdown-option" type="button" data-action="export-action" data-view="${escapeHtml(viewId)}" data-mode="all">导出全部</button>
                     <button class="export-dropdown-option" type="button" data-action="export-action" data-view="${escapeHtml(viewId)}" data-mode="selected">导出选中</button>
+                    ${demandModeEnabled ? `<button class="export-dropdown-option is-demo-failure" type="button" data-action="export-action" data-view="${escapeHtml(viewId)}" data-mode="failure">模拟导出失败（原型）</button>` : ""}
                   </div>
                 </div>
               `;
@@ -30084,7 +30403,6 @@
           renderPersistentOverlay(state) {
             return `
               ${this.renderExportProgressManager(state)}
-              ${state.ui.exportCompleteDialog ? this.renderExportCompleteDialog(state.ui.exportCompleteDialog) : ""}
               ${state.ui.mobileAppOpen ? this.renderMobileAppOverlay() : ""}
             `;
           }
@@ -30128,23 +30446,35 @@
               return "";
             }
             if (manager.collapsed) {
+              const unreadDoneCount = Math.max(0, Number(manager.unreadDoneCount) || 0);
+              const unreadFailedCount = Math.max(0, Number(manager.unreadFailedCount) || 0);
+              const hasFailedNotice = unreadFailedCount > 0;
+              const hasCompletedNotice = unreadDoneCount > 0;
+              const hasUnreadNotice = hasFailedNotice || hasCompletedNotice;
+              const noticeCount = hasFailedNotice ? unreadFailedCount : unreadDoneCount;
               return `
-                <button class="export-progress-float" type="button" data-action="expand-export-progress" aria-label="展开进度管理器" title="进度管理器">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M7 3h10M7 21h10M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9s8 5 8 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                  </svg>
-                </button>
+                <div class="export-progress-collapsed ${hasFailedNotice ? "has-failed" : hasCompletedNotice ? "has-complete" : ""}" role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="收起状态任务结果提醒" data-demand-text="需求来源：V3R5-4868。||触发条件：进度管理器处于收起状态时，有导出任务完成或失败。||展示规则：不弹出阻断弹窗；成功使用绿色提醒，失败使用红色提醒，并累计未读任务数量。||点击后行为：展开进度管理器、清除未读数量；成功任务保留下载入口，失败任务保留失败原因与重试入口。||多任务规则：失败提醒优先于成功提醒，避免用户错过异常结果。">
+                  ${hasUnreadNotice ? `<button class="export-progress-complete-notice ${hasFailedNotice ? "is-failed" : ""}" type="button" data-action="expand-export-progress"><span class="export-progress-complete-notice-icon" aria-hidden="true">${hasFailedNotice ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 7v6m0 4h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>` : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 12.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`}</span><span class="export-progress-complete-notice-copy"><strong>${noticeCount} 个导出任务${hasFailedNotice ? "失败" : "已完成"}</strong><span>${hasFailedNotice ? "点击展开查看原因并重试" : "点击展开并下载文件"}</span></span></button>` : ""}
+                  <button class="export-progress-float ${hasFailedNotice ? "has-failed" : hasCompletedNotice ? "has-unread" : ""}" type="button" data-action="expand-export-progress" aria-label="${hasUnreadNotice ? `${noticeCount} 个导出任务${hasFailedNotice ? "失败" : "已完成"}，展开进度管理器` : "展开进度管理器"}" title="进度管理器">
+                    ${hasUnreadNotice
+                      ? `${hasFailedNotice ? `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 6v7m0 4h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 12.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`}<span class="export-progress-unread-badge">${noticeCount > 99 ? "99+" : noticeCount}</span>`
+                      : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3h10M7 21h10M8 3c0 4 8 5 8 9s-8 5-8 9M16 3c0 4-8 5-8 9s8 5 8 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>`}
+                  </button>
+                </div>
               `;
             }
             const renderTask = (task, index) => {
               const percent = Math.max(0, Math.min(100, Number(task.percent) || 0));
+              const needsAttention = Number(task.attentionUntil) > Date.now();
               const action = task.status === "running"
                 ? `<button class="export-task-action" type="button" data-action="cancel-export-task" data-id="${escapeHtml(task.id)}">取消</button>`
                 : task.status === "done"
                   ? `<button class="export-task-action" type="button" data-action="download-export-task" data-id="${escapeHtml(task.id)}">下载</button>`
-                  : `<span class="export-task-subtitle">已取消</span>`;
+                  : task.status === "failed"
+                    ? `<button class="export-task-action" type="button" data-action="retry-export-task" data-id="${escapeHtml(task.id)}">重试</button>`
+                    : `<span class="export-task-subtitle">已取消</span>`;
               return `
-                <div class="export-progress-task" ${index === 0 ? 'data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出任务进度与操作" data-demand-text="需求来源：V3R5-4868。||展示规则：每个导出任务显示 xlsx 文件名、当前阶段、进度条和百分比。||操作规则：生成中支持取消；完成后支持下载；已取消任务保留状态但不能下载。||异常判断：文件生成失败、任务取消或下载失败时，应展示明确状态和反馈。"' : ""}>
+                <div class="export-progress-task ${task.status === "done" ? "is-done" : task.status === "failed" ? "is-failed" : ""} ${needsAttention ? "is-result-attention" : ""}" data-export-task-id="${escapeHtml(task.id)}" ${index === 0 ? 'data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出任务进度与操作" data-demand-text="需求来源：V3R5-4868。||展示规则：每个导出任务显示 xlsx 文件名、当前阶段、进度条和百分比；完成任务使用成功色并展示下载入口，失败任务使用红色并展示失败原因。||操作规则：生成中支持取消；完成后支持下载；失败后支持重试；已取消任务保留状态但不能下载。||结果触达：不展示右上角导出结果提示；进度管理器展开时自动定位并闪烁对应任务行，收起时保留成功/失败数量提醒，展开后定位任务。||异常判断：文件生成失败时保留失败任务；重试后重新执行生成流程，成功后恢复下载入口。"' : ""}>
                   <span class="export-task-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                       <path d="M7 3h7l4 4v14H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
@@ -30166,7 +30496,7 @@
               `;
             };
             return `
-              <section class="export-progress-manager" role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：集中查看一个或多个资产导出任务的文件生成进度。||展示规则：任务按创建顺序展示，文件格式统一为 xlsx；同源新页签和页面刷新后自动恢复任务及当前进度。||跨页签规则：任务状态、取消和完成结果在页签间同步；任一页签观察到任务从进行中变为已完成时均弹出一次下载弹窗，重复同步不重复弹出；管理器展开或收起状态由各页签独立保存。||状态限制：收起或切换页签不影响文件生成；全部任务结束后才允许关闭。||异常判断：任务失败、取消、存储受限或组件加载异常时需保留可识别状态并给出提示。">
+              <section class="export-progress-manager" role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：集中查看一个或多个资产导出任务的文件生成进度。||展示规则：进度管理器及其收起入口固定在页面右下角，任务按创建顺序展示，文件格式统一为 xlsx；同源新页签和页面刷新后自动恢复任务及当前进度。||完成触达：任务完成不弹窗；页面右上角展示全局成功提示，右下角进度管理器中的任务同步变为可下载状态；收起状态入口展示完成数量、成功色和强调动画。||跨页签规则：任务状态、取消和完成结果在页签间同步，重复同步不重复累计；管理器展开或收起状态由各页签独立保存。||状态限制：收起或切换页签不影响文件生成；全部任务结束后才允许关闭。||异常判断：任务失败、取消、存储受限或组件加载异常时需保留可识别状态并给出提示。">
                 <header class="export-progress-head">
                   <span>进度管理器</span>
                   <span class="export-progress-actions" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="进度管理器收起与关闭" data-demand-text="需求来源：V3R5-4868。||点击后行为：收起后任务继续生成，可通过悬浮入口重新展开；全部任务结束后显示关闭按钮。||跨页签规则：收起状态仅作用于当前页签；关闭已完成任务列表后，其他同源页签同步清空。||状态限制：存在进行中任务时不允许关闭进度管理器。">
@@ -30182,28 +30512,6 @@
                 </header>
                 <div class="export-progress-body">
                   ${tasks.map((task, index) => renderTask(task, index)).join("")}
-                </div>
-              </section>
-            `;
-          }
-
-          renderExportCompleteDialog(dialog) {
-            return `
-              <div class="export-complete-backdrop" data-action="close-export-complete-dialog"></div>
-              <section class="export-complete-dialog" role="dialog" aria-modal="true" aria-labelledby="exportCompleteTitle" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出文件下载" data-demand-text="需求来源：V3R5-4868。||触发条件：当前页签观察到导出任务由进行中变为已完成，包括本页签发起任务和其他同源页签同步任务。||点击后行为：点击下载获取 xlsx 文件；关闭弹窗不删除进度管理器中的已完成任务，仍可再次下载。||防重复规则：同一任务在同一页签只在首次完成时弹出，刷新已经完成的任务不重复弹出。||异常判断：Excel 组件不可用或浏览器阻止下载时，应提示失败原因。">
-                <header class="export-complete-head">
-                  <span id="exportCompleteTitle">导出文件</span>
-                  <button class="export-progress-icon-btn" type="button" data-action="close-export-complete-dialog" aria-label="关闭">×</button>
-                </header>
-                <div class="export-complete-body">
-                  <div class="export-complete-icon" aria-hidden="true">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M6 12.4l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                  </div>
-                  <div class="export-complete-title">文件生成成功</div>
-                  <div class="export-complete-desc">点击下载「${escapeHtml(dialog.fileName || "导出文件.xlsx")}」</div>
-                  <button class="btn btn-primary" type="button" data-action="download-export-file">下载</button>
                 </div>
               </section>
             `;
@@ -31480,9 +31788,11 @@
 
           renderToasts(state) {
             return state.ui.toasts.map((toast) => `
-              <div class="toast ${escapeHtml(toast.tone)}">
+              <div class="toast ${escapeHtml(toast.tone)}" role="status">
+                <button class="toast-close" type="button" data-action="dismiss-toast" data-id="${escapeHtml(toast.id)}" aria-label="关闭提示">×</button>
                 <strong>${escapeHtml(toast.title)}</strong>
                 <span>${escapeHtml(toast.message)}</span>
+                ${toast.action ? `<button class="toast-action" type="button" data-action="${escapeHtml(toast.action)}" data-id="${escapeHtml(toast.taskId || "")}">${escapeHtml(toast.actionLabel || "查看")}</button>` : ""}
               </div>
             `).join("");
           }
@@ -31703,6 +32013,10 @@
                 this.store.toggleExportMenu(actionTarget.getAttribute("data-view"));
                 return;
               }
+              if (action === "dismiss-toast") {
+                this.store.dismissToast(actionTarget.getAttribute("data-id"));
+                return;
+              }
               if (action === "export-action") {
                 this.store.handleExportAction(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-mode") || "all");
                 return;
@@ -31723,16 +32037,12 @@
                 this.store.cancelAssetExportTask(actionTarget.getAttribute("data-id"));
                 return;
               }
+              if (action === "retry-export-task") {
+                this.store.retryAssetExportTask(actionTarget.getAttribute("data-id"));
+                return;
+              }
               if (action === "download-export-task") {
                 this.store.downloadExportTask(actionTarget.getAttribute("data-id"));
-                return;
-              }
-              if (action === "close-export-complete-dialog") {
-                this.store.closeExportCompleteDialog();
-                return;
-              }
-              if (action === "download-export-file") {
-                this.store.downloadExportFile();
                 return;
               }
               if (action === "space-tree-node") {
