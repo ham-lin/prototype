@@ -672,6 +672,7 @@
       .workspace.is-fixed-content-view > #content {
         flex: 1 1 auto;
         min-height: 0;
+        overflow: hidden;
       }
 
       .page-surface {
@@ -1727,7 +1728,10 @@
       }
 
       .operation-print-page {
-        padding: 12px 16px 16px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
       }
 
       .operation-print-head {
@@ -1735,6 +1739,32 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+        min-height: 58px;
+        padding: 0 18px;
+        border-bottom: 1px solid #e4ebf3;
+        background: #fff;
+      }
+
+      .operation-print-head-main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .operation-print-head-main strong {
+        color: #173652;
+        font-size: 17px;
+      }
+
+      .operation-print-count {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 0 9px;
+        border-radius: 12px;
+        background: #eef6ff;
+        color: #1f78ff;
+        font-size: 12px;
       }
 
       .operation-print-close {
@@ -1746,29 +1776,126 @@
         line-height: 1;
       }
 
-      .operation-print-stage {
-        min-height: 600px;
+      .operation-print-body {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 310px minmax(0, 1fr);
+        background: #f5f8fc;
+      }
+
+      .operation-print-settings {
+        min-height: 0;
+        overflow: auto;
+        padding: 18px;
+        border-right: 1px solid #e2eaf3;
+        background: #fff;
+      }
+
+      .operation-print-section + .operation-print-section {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #edf1f6;
+      }
+
+      .operation-print-section-title {
+        margin-bottom: 12px;
+        color: #183a59;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .operation-print-field {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .operation-print-field > span {
+        color: #5d7288;
+        font-size: 12px;
+      }
+
+      .operation-print-field select,
+      .operation-print-field input {
+        width: 100%;
+        height: 34px;
+        border: 1px solid #d5e0ec;
+        border-radius: 4px;
+        padding: 0 10px;
+        background: #fff;
+        color: #25445f;
+      }
+
+      .operation-print-tip {
+        padding: 10px 12px;
+        border-radius: 5px;
+        background: #f3f8fe;
+        color: #668097;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      .operation-print-preview {
+        min-width: 0;
+        min-height: 0;
+        overflow: auto;
+        padding: 18px 22px 28px;
+      }
+
+      .operation-print-preview-head {
         display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding-top: 42px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .operation-print-preview-head strong {
+        color: #193a58;
+        font-size: 14px;
+      }
+
+      .operation-print-preview-head span {
+        color: #7a8ea3;
+        font-size: 12px;
+      }
+
+      .operation-print-sheet {
+        min-height: 520px;
+        padding: 30px;
+        border: 1px solid #dfe7f0;
+        border-radius: 6px;
+        background-color: #fff;
+        background-image: linear-gradient(#f1f4f8 1px, transparent 1px), linear-gradient(90deg, #f1f4f8 1px, transparent 1px);
+        background-size: 20px 20px;
+        box-shadow: 0 8px 24px rgba(31, 57, 91, 0.06);
+      }
+
+      .operation-print-label-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 22px;
+        align-items: start;
       }
 
       .operation-print-label {
-        width: 102px;
-        min-height: 60px;
-        padding: 8px 9px;
-        border: 1px solid #e6edf5;
+        min-width: 0;
+        min-height: 112px;
+        padding: 14px;
+        border: 1px solid #cad7e5;
+        border-radius: 4px;
         background: #fff;
-        box-shadow: 0 4px 10px rgba(40, 65, 92, 0.06);
-        display: inline-flex;
+        box-shadow: 0 4px 12px rgba(40, 65, 92, 0.08);
+        display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 14px;
       }
 
       .operation-print-qr {
-        width: 24px;
-        height: 24px;
+        flex: none;
+        width: 68px;
+        height: 68px;
         background:
           linear-gradient(90deg, #111 50%, transparent 50%) 0 0 / 6px 6px,
           linear-gradient(#111 50%, transparent 50%) 0 0 / 6px 6px,
@@ -1786,16 +1913,56 @@
       }
 
       .operation-print-brand strong {
-        color: #2c517d;
-        font-size: 10px;
-        letter-spacing: 0.03em;
+        color: #173b61;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
       }
 
       .operation-print-brand span {
-        color: #6a7f95;
-        font-size: 9px;
+        color: #5f7489;
+        font-size: 11px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .operation-print-brand em {
+        color: #8a9bad;
+        font-size: 10px;
+        font-style: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .operation-print-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 58px;
+        padding: 0 18px;
+        border-top: 1px solid #e2eaf3;
+        background: #fff;
+      }
+
+      .operation-print-footer-note {
+        color: #71869a;
+        font-size: 12px;
+      }
+
+      .operation-print-footer-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      @media (max-width: 1050px) {
+        .operation-print-body {
+          grid-template-columns: 260px minmax(0, 1fr);
+        }
       }
 
       .guide-page {
@@ -2214,12 +2381,43 @@
       .version-req-status {
         display: inline-flex;
         align-items: center;
+        gap: 5px;
         height: 20px;
         padding: 0 8px;
+        border: 1px solid #c9daf5;
         border-radius: 999px;
         background: #eef5ff;
         color: #2f6edb;
         font-weight: 700;
+      }
+
+      .version-req-status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .version-req-status.is-designing {
+        border-color: #ffd08a;
+        background: #fff5e5;
+        color: #c66a00;
+      }
+
+      .version-req-status.is-complete {
+        border-color: #a8dfbf;
+        background: #eaf8f0;
+        color: #168653;
+      }
+
+      .version-req-item.is-designing {
+        border-left: 3px solid #f59a23;
+        background: linear-gradient(90deg, #fffaf2 0, #fff 88px);
+      }
+
+      .version-req-item.is-complete {
+        border-left: 3px solid #28a86b;
       }
 
       .version-req-status.is-paused {
@@ -2651,6 +2849,23 @@
         gap: 12px;
       }
 
+      .cabinet-space-selection {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 32px;
+        color: #536b82;
+        font-size: 12px;
+      }
+
+      .cabinet-space-selection input,
+      .cabinet-visual-head input {
+        width: 14px;
+        height: 14px;
+        margin: 0;
+        accent-color: var(--primary);
+      }
+
       .cabinet-space-search {
         width: 320px;
         max-width: 100%;
@@ -2677,11 +2892,17 @@
         background: #fff;
         color: inherit;
         text-align: left;
-        cursor: pointer;
+        cursor: default;
         display: flex;
         flex-direction: column;
         gap: 10px;
         box-shadow: 0 4px 14px rgba(31, 57, 91, 0.04);
+      }
+
+      .cabinet-visual-card.is-selected {
+        border-color: #4b9dff;
+        background: #f4f9ff;
+        box-shadow: 0 0 0 2px rgba(31, 120, 255, 0.12), 0 8px 22px rgba(31, 120, 255, 0.1);
       }
 
       .cabinet-visual-card:hover {
@@ -2698,6 +2919,7 @@
       }
 
       .cabinet-visual-title {
+        flex: 1;
         min-width: 0;
         font-size: 13px;
         font-weight: 700;
@@ -2712,6 +2934,37 @@
         color: #1f78ff;
         font-size: 12px;
         font-weight: 700;
+      }
+
+      .cabinet-visual-main {
+        width: 100%;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .cabinet-visual-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 28px;
+        margin: 0 -12px -12px;
+        padding: 7px 12px;
+        border-top: 1px solid #e8eef6;
+        background: rgba(248, 251, 255, 0.88);
+        border-radius: 0 0 8px 8px;
+      }
+
+      .cabinet-visual-actions .action-links {
+        justify-content: flex-end;
       }
 
       .cabinet-mini-rack {
@@ -6291,7 +6544,8 @@
       .asset-detail-page {
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - var(--topbar-h) - 20px);
+        height: 100%;
+        min-height: 0;
         background: #fff;
       }
 
@@ -8230,6 +8484,39 @@
         pointer-events: none;
       }
 
+      .cabinet-reserved-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        pointer-events: none;
+      }
+
+      .cabinet-reserved-device {
+        position: absolute;
+        left: 3px;
+        right: 3px;
+        min-height: 13px;
+        border: 1px dashed #16b7c9;
+        border-radius: 2px;
+        background: repeating-linear-gradient(135deg, rgba(30, 204, 218, 0.68) 0 5px, rgba(15, 127, 158, 0.78) 5px 10px);
+        box-shadow: 0 0 0 1px rgba(137, 242, 250, 0.28) inset, 0 0 8px rgba(32, 200, 217, 0.5);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: auto;
+        cursor: default;
+      }
+
+      .cabinet-reserved-device span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .cabinet-empty-layer {
         position: absolute;
         inset: 0;
@@ -8690,10 +8977,78 @@
         min-width: 0;
         min-height: 0;
         display: grid;
-        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1.15fr) minmax(0, .85fr);
         gap: 14px;
         height: 100%;
         overflow: hidden;
+      }
+
+      .cabinet-capacity-summary {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(90px, 1fr));
+        gap: 8px;
+      }
+
+      .cabinet-capacity-item {
+        min-width: 0;
+        padding: 9px 11px;
+        border: 1px solid #dce7f2;
+        border-radius: 5px;
+        background: #f8fbff;
+      }
+
+      .cabinet-capacity-item.is-reserved {
+        border-color: #ace8ed;
+        background: #effcfd;
+      }
+
+      .cabinet-capacity-label {
+        display: block;
+        color: #73879c;
+        font-size: 11px;
+      }
+
+      .cabinet-capacity-value {
+        display: block;
+        margin-top: 4px;
+        color: #183b61;
+        font-size: 18px;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .cabinet-capacity-item.is-reserved .cabinet-capacity-value {
+        color: #078b9a;
+      }
+
+      .cabinet-section-title-note {
+        margin-left: 8px;
+        color: #7c8fa4;
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      .cabinet-occupancy-tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 11px;
+        background: #edf3f9;
+        color: #49647d;
+        font-size: 12px;
+      }
+
+      .cabinet-occupancy-tag.is-reserved {
+        background: #e5fbfc;
+        color: #087e8b;
+        border: 1px solid #a7e8ed;
+      }
+
+      @media (max-width: 1350px) {
+        .cabinet-capacity-summary { grid-template-columns: repeat(3, minmax(90px, 1fr)); }
       }
 
       .cabinet-section {
@@ -11016,7 +11371,8 @@
 
       .export-progress-manager {
         position: fixed;
-        right: 24px;
+        left: calc(var(--sidebar-w) + 24px);
+        right: auto;
         bottom: 24px;
         width: 382px;
         border: 1px solid var(--border);
@@ -11024,6 +11380,10 @@
         background: #fff;
         box-shadow: 0 12px 32px rgba(15, 33, 64, 0.2);
         z-index: 82;
+      }
+
+      body:has(.app-sidebar.is-collapsed) .export-progress-manager {
+        left: 80px;
       }
 
       .export-progress-manager > .demand-badge { top: -8px; right: -8px; z-index: 84; }
@@ -11233,7 +11593,9 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
         overflow: visible;
         z-index: 82;
       }
@@ -11242,14 +11604,26 @@
         background: var(--primary-deep);
       }
 
+      .export-progress-float.is-dragging {
+        cursor: grabbing;
+        transform: scale(1.06);
+        box-shadow: 0 14px 34px rgba(22, 93, 255, .38);
+      }
+
       .export-progress-collapsed {
         position: fixed;
-        right: 24px;
+        left: calc(var(--sidebar-w) + 24px);
+        right: auto;
         bottom: 24px;
         z-index: 82;
         display: flex;
+        flex-direction: row-reverse;
         align-items: center;
         gap: 10px;
+      }
+
+      body:has(.app-sidebar.is-collapsed) .export-progress-collapsed {
+        left: 80px;
       }
 
       .export-progress-collapsed .export-progress-float {
@@ -16184,6 +16558,7 @@
         const DEFAULT_ASSET_TREE_EXPANDED_IDS = ["model_collection_root", "82252f72-2581-4341-bf7f-b62482281c36", "5aa28a7a-26bf-42d9-9fe4-8dd15725f639", "62e3ec13-c698-42ff-ae80-038453b37398", "a30768d3-3461-452c-9ba0-4138b99e8ec1", "7db53914-1e69-4d4a-b485-f28708c65641", "9fbd5af1-dfb9-45d3-8c47-02dd3d187f37", "6b0b3980-a6af-4525-a00f-752c7bb8f0fd", "cb5c635b-d6df-4c2e-b7a9-a04528cadf1f", "529d5c9f-be04-4c40-9cdf-fe649922d377", "1c81a690-f4dd-4e99-bbcf-aec4359f64cb", "0035e5fd-a772-496c-af1a-4f3f60bda7b2", "ceaad380-316e-473d-b48a-2a7278c3173d", "5b028f99-fb17-4136-8341-1fb38134802f", "8e4987d5-0337-455d-bc6a-c93f97a750f5", "2dbe7e18-2254-4634-9cd3-c8cebba967c4", "c75a590b-74ea-4a10-a19c-ce33879f4f36", "648faa68-bedb-45f8-b633-788a0167e602", "e20f991a-76ca-417a-9709-a6028084bbe6", "49a5a3cf-abc7-4e93-8e86-250d42ea137f", "dtdl:component:CentralProcessingUnit", "dtdl:component:OpticalModule", "dtdl:component:OpticalToElectricalModule", "dtdl:component:WavelengthConversionBoard", "dtdl:component:ActiveOpticalCable", "dtdl:component:KVMSwitch", "dtdl:component:MemoryModule", "dtdl:component:NetworkInterfaceCard"];
 
         const ROW_MORE_MENU_ITEMS = ["上架", "编辑", "迁出", "变动", "下架", "关联设备", "纸质标签打印"];
+        const CABINET_ROW_MORE_MENU_ITEMS = ["部署", "编辑", "报废", "变动", "回库", "关联设备", "纸质标签打印"];
         const SPARE_PART_ROW_MORE_MENU_ITEMS = ["出库", "编辑", "调拨", "报废", "纸质标签打印"];
 
         const RELATION_TYPE_PARENT = "parent";
@@ -16771,7 +17146,7 @@
             scope: "机柜管理",
             targetView: VIEW_IDS.CABINET,
             targetLabel: "包含设备-设备预占",
-            status: "设计中"
+            status: "设计完成"
           },
           {
             id: "V3R5-4890",
@@ -16846,10 +17221,10 @@
           "V3R5-4422": { role: "资产管理员", need: "使用与在线电子表格字段一致的本地文件导入资产", value: "避免模板字段不一致导致重复整理和导入失败", scenario: "离线整理批量作业数据后，需要上传本地文件继续办理。", rules: ["本地文件模板字段、顺序和必填规则与在线表格一致。", "导入前校验模板版本、字段和值格式。"], boundary: "模板过期、字段缺失或数据非法时不得写入，并提供错误明细。" },
           "V3R5-4421": { role: "系统管理员", need: "通过表单配置控制台账厂商字段的显示", value: "保持表单、台账和详情的字段口径一致", scenario: "不同资产分类不需要展示厂商字段时，通过配置统一隐藏。", rules: ["表单启用厂商字段时台账可展示厂商列。", "表单隐藏厂商字段时台账同步隐藏。"], boundary: "配置缺失时使用产品默认规则，不得导致台账渲染失败。" },
           "V3R5-4418": { role: "资产管理员", need: "在高级搜索中按厂商筛选资产", value: "快速定位指定来源或品牌的设备", scenario: "处理维保、替换或批次问题时，需要查询同厂商资产。", rules: ["高级搜索默认提供厂商条件。", "厂商选项来自当前台账可见数据并去重。"], boundary: "无厂商数据时保留请选择状态，不影响其他条件查询。" },
-          "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗；展开状态更新任务行并提示，收起状态通过完成提示、数量角标和强调动画触达用户。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时给出明确反馈。" },
+          "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗且不展示右上角提示；进度管理器展开时自动定位并闪烁对应任务行，收起时通过结果数量和强调动画触达，展开后定位任务。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时，应在任务列表中保留可识别状态和后续操作。" },
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
-          "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目", scenario: "不同项目或不同业务活动需要在流程审批与台账直接办理之间切换。", rules: ["仅 IT设备和场地设施纳入配置，台账业务入口文案保持稳定。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口。" },
-          "V3R5-4931": { role: "机房管理员", need: "在设备预占的包含设备页签中识别对应机柜", value: "确认预占设备与机柜资源之间的关系", scenario: "设备尚未正式上架但已预占机柜位置时，需要查看关联机柜。", rules: ["包含设备列表展示预占设备及其关联机柜。", "预占关系与正式上架关系使用不同状态标识。"], boundary: "预占取消、机柜失效或位置冲突时及时更新并提示。" },
+          "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时先提示并进入流程发起页，带入机柜、U位及设备信息；审核同意后进入待执行，执行人点击“执行完成”后才更新资产数据。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
+          "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在包含设备页签查看设备、来源单据和有效期。", rules: ["包含设备列表合并展示已上架和预占中设备，并用不同状态与视觉样式区分。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "预占记录展示U位范围、来源流程单、预占人、预占时间和有效期，并支持进入流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
           "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项错误说明", value: "快速识别失败资产并继续处理可执行资产", scenario: "一次选择多条状态不同的资产执行批量活动时，部分资产可能不满足条件。", rules: ["执行前校验每条资产的状态、位置和权限。", "结果区分成功、失败和跳过，并展示具体原因。"], boundary: "不得用单一失败提示掩盖具体资产错误，也不得错误处理不符合条件的资产。" },
           "V3R5-4419": { role: "机房管理员", need: "通过机柜层级和U位可视化查看设备占用", value: "直观掌握机柜容量并快速定位设备", scenario: "规划上架位置或核对机柜资源时，需要查看U位使用情况。", rules: ["空间视图展示机柜数、设备数和利用率。", "机柜卡片展示U高、已用/空闲U位并支持进入详情。"], boundary: "U位数据缺失、重叠或超出机柜高度时应提示异常。" },
           "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产并扫码进入详情", value: "在现场无需返回PC即可完成资产核对", scenario: "巡检或故障处理现场，需要快速识别标签并查看资产信息。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "二维码无效、资产不存在或无权限时给出明确提示。" },
@@ -17476,7 +17851,7 @@
                 listViewModeMenuOpen: null,
                 assetActivityMenuOpen: null,
                 processConfig: {
-                  it: { inbound: false, rack: true, change: true, offShelf: true, edit: true, moveOut: true },
+                  it: { inbound: false, rack: true, change: true, offShelf: false, edit: true, moveOut: false },
                   station: { inbound: true, deploy: true, change: true, return: true, edit: true, retire: true }
                 },
                 processConfigMode: "itemized",
@@ -17502,6 +17877,7 @@
                   ]
                 },
                 exportProgressManager: null,
+                exportProgressPosition: null,
                 spaceTrees: {},
                 listSelections: {},
                 batchSelectionMenuOpen: null,
@@ -19187,6 +19563,48 @@
             this.emit();
           }
 
+          requestCabinetDetailActivity(mode, payload = {}) {
+            const activityMap = {
+              add: "上架",
+              offShelf: "下架",
+              retire: "迁出"
+            };
+            const activityLabel = activityMap[mode];
+            const config = activityLabel ? this.getProcessFlowActivity(VIEW_IDS.IT_FACILITY, activityLabel) : null;
+            if (!config || !this.isProcessFlowEnabled(config.activity.flowViewId)) {
+              this.openCabinetRackDialog(mode, payload);
+              return;
+            }
+            const detailPage = this.state.ui.detailPage;
+            const cabinetRow = detailPage?.viewId === VIEW_IDS.CABINET
+              ? this.getRowById(VIEW_IDS.CABINET, detailPage.rowId)
+              : null;
+            const deviceRow = payload.deviceCode
+              ? this.getListRows(VIEW_IDS.IT_FACILITY).find((row) => String(row.assetCode || "") === String(payload.deviceCode))
+              : null;
+            const cabinetName = cabinetRow?.name || cabinetRow?.assetCode || "当前机柜";
+            this.state.ui.cabinetRackDialog = null;
+            this.state.ui.processRouteDialog = {
+              sourceViewId: VIEW_IDS.IT_FACILITY,
+              flowViewId: config.activity.flowViewId,
+              groupLabel: config.group.label,
+              activityLabel,
+              selectedRowIds: deviceRow?.id ? [deviceRow.id] : [],
+              entrySource: "cabinetDetail",
+              cabinetContext: {
+                cabinetId: cabinetRow?.id || "",
+                cabinetName,
+                cabinetLocation: cabinetRow?.assetLocation || "",
+                unit: payload.unit || payload.startU || "",
+                uHeight: payload.uHeight || "",
+                deviceId: deviceRow?.id || "",
+                deviceCode: payload.deviceCode || deviceRow?.assetCode || "",
+                deviceName: payload.deviceName || deviceRow?.name || ""
+              }
+            };
+            this.emit();
+          }
+
           openCabinetRackDialog(mode, payload = {}) {
             this.state.ui.cabinetRackDialog = {
               mode: mode || "add",
@@ -19220,13 +19638,133 @@
             this.emit();
           }
 
+          ensureCabinetActivityOverride(cabinetId) {
+            const bag = this.state.data.cabinetActivityOverrides || (this.state.data.cabinetActivityOverrides = {});
+            return bag[cabinetId] || (bag[cabinetId] = { removedCodes: [], removedCount: 0, addedDevices: [] });
+          }
+
+          applyItAssetLifecycleResult(action, asset = {}, context = {}) {
+            const itRows = this.state.data.lists[VIEW_IDS.IT_FACILITY] || (this.state.data.lists[VIEW_IDS.IT_FACILITY] = []);
+            const retiredRows = this.state.data.lists[VIEW_IDS.RETIRED_ASSET] || (this.state.data.lists[VIEW_IDS.RETIRED_ASSET] = []);
+            let target = asset.id ? itRows.find((row) => row.id === asset.id) : null;
+            if (!target && asset.assetCode) {
+              target = itRows.find((row) => String(row.assetCode || "") === String(asset.assetCode));
+            }
+            const cabinetName = context.cabinetName || "当前机柜";
+            const startU = String(context.unit || asset.startU || "");
+            if (action === "上架") {
+              if (!target) {
+                const nextNumber = itRows.reduce((max, row) => Math.max(max, Number(String(row.id || "").replace(/\D/g, "")) || 0), 0) + 1;
+                target = {
+                  id: "IT-" + pad(nextNumber, 3),
+                  name: asset.name || "新上架设备-" + pad(nextNumber, 2),
+                  assetCode: asset.assetCode || "IT-RACK-" + pad(nextNumber, 6),
+                  serialCode: asset.serialCode || pad(nextNumber, 3),
+                  assetCategory: asset.assetCategory || asset.assetType || "管理分类>IT设施>计算设备>机架式服务器",
+                  vendor: asset.vendor || "待补录",
+                  ratedPower: asset.ratedPower || "-",
+                  portCount: asset.portCount || asset.ports || "-"
+                };
+                itRows.unshift(target);
+              }
+              target.assetStatus = "在用";
+              target.assetSummary = "已上架";
+              target.assetLocation = [cabinetName, startU ? startU + "U" : ""].filter(Boolean).join(" > ");
+              target.startU = startU;
+              target.uHeight = String(context.uHeight || asset.uHeight || target.uHeight || "1");
+              if (context.cabinetId) {
+                const override = this.ensureCabinetActivityOverride(context.cabinetId);
+                if (override.removedCodes.includes(target.assetCode)) {
+                  override.removedCount = Math.max(0, Number(override.removedCount || 0) - 1);
+                }
+                override.removedCodes = override.removedCodes.filter((code) => code !== target.assetCode);
+                override.addedDevices = override.addedDevices.filter((item) => item.assetCode !== target.assetCode);
+                override.addedDevices.push({ ...target });
+              }
+              return { action, target, message: `${target.name || target.assetCode} 已上架至 ${target.assetLocation}` };
+            }
+            if (!target && ["下架", "迁出"].includes(action) && (asset.assetCode || asset.name)) {
+              const nextNumber = itRows.reduce((max, row) => Math.max(max, Number(String(row.id || "").replace(/\D/g, "")) || 0), 0) + 1;
+              target = {
+                ...asset,
+                id: "IT-" + pad(nextNumber, 3),
+                name: asset.name || asset.assetCode,
+                assetCode: asset.assetCode || "IT-ASSET-" + pad(nextNumber, 6),
+                assetCategory: asset.assetCategory || asset.assetType || "管理分类>IT设施>计算设备>机架式服务器"
+              };
+              if (action === "下架") itRows.unshift(target);
+            }
+            if (!target) {
+              return { action, target: null, message: "未找到需要更新的 IT设备。" };
+            }
+            if (action === "下架") {
+              target.assetStatus = "空闲";
+              target.assetSummary = "已下架";
+              target.assetLocation = context.destination || asset.warehouse || "2号楼-B1层-IT备件库A区";
+              target.startU = "";
+              if (context.cabinetId) {
+                const override = this.ensureCabinetActivityOverride(context.cabinetId);
+                if (!override.removedCodes.includes(target.assetCode)) {
+                  override.removedCodes.push(target.assetCode);
+                  override.removedCount = Number(override.removedCount || 0) + 1;
+                }
+                override.addedDevices = override.addedDevices.filter((item) => item.assetCode !== target.assetCode);
+              }
+              return { action, target, message: `${target.name || target.assetCode} 已下架并更新至 IT设备台账` };
+            }
+            if (action === "迁出") {
+              const index = itRows.indexOf(target);
+              if (index > -1) itRows.splice(index, 1);
+              const nextNumber = retiredRows.reduce((max, row) => Math.max(max, Number(String(row.id || "").replace(/\D/g, "")) || 0), 0) + 1;
+              const retiredRow = {
+                ...target,
+                id: "RT-" + pad(nextNumber, 3),
+                assetStatus: "迁出",
+                assetSummary: "已迁出",
+                retiredAt: "2026-07-20 10:30:00",
+                retiredReason: "设备迁出"
+              };
+              retiredRows.unshift(retiredRow);
+              if (context.cabinetId) {
+                const override = this.ensureCabinetActivityOverride(context.cabinetId);
+                if (!override.removedCodes.includes(retiredRow.assetCode)) {
+                  override.removedCodes.push(retiredRow.assetCode);
+                  override.removedCount = Number(override.removedCount || 0) + 1;
+                }
+                override.addedDevices = override.addedDevices.filter((item) => item.assetCode !== retiredRow.assetCode);
+              }
+              return { action, target: retiredRow, message: `${retiredRow.name || retiredRow.assetCode} 已迁出，并进入“已迁出/已废弃”` };
+            }
+            return { action, target, message: "资产状态已更新。" };
+          }
+
           confirmCabinetRackAction(label) {
             const dialog = this.state.ui.cabinetRackDialog;
             const unitText = dialog?.unit ? "第" + dialog.unit + "U位" : "当前U位";
             const selectedDevice = dialog?.selectedDeviceId ? this.getRowById(VIEW_IDS.IT_FACILITY, dialog.selectedDeviceId) : null;
             const deviceText = selectedDevice?.name || dialog?.deviceName || dialog?.deviceCode || "当前设备";
+            const detailPage = this.state.ui.detailPage;
+            const cabinetRow = detailPage?.viewId === VIEW_IDS.CABINET ? this.getRowById(VIEW_IDS.CABINET, detailPage.rowId) : null;
+            const action = dialog?.mode === "offShelf" ? "下架" : dialog?.mode === "retire" ? "迁出" : "上架";
+            const asset = selectedDevice || {
+              name: dialog?.deviceName || (dialog?.mode === "new" ? "新建机架式服务器" : ""),
+              assetCode: dialog?.deviceCode || "",
+              uHeight: dialog?.uHeight || "1"
+            };
+            const result = this.applyItAssetLifecycleResult(action, asset, {
+              cabinetId: cabinetRow?.id || "",
+              cabinetName: cabinetRow?.name || cabinetRow?.assetCode || "当前机柜",
+              unit: dialog?.unit || dialog?.startU || "",
+              uHeight: dialog?.uHeight || asset.uHeight || "1",
+              destination: "2号楼-B1层-IT备件库A区"
+            });
             this.state.ui.cabinetRackDialog = null;
-            this.pushToast(label || "操作完成", unitText + " · " + deviceText + " 已完成原型操作反馈。", "success");
+            if (!result.target) {
+              this.pushToast("操作失败", result.message, "warning");
+              return;
+            }
+            this.pushToast(label || action + "完成", `${unitText} · ${result.message}`, "success");
+            this.emit();
           }
 
           isPendingInitializationView(viewId) {
@@ -19593,6 +20131,19 @@
                 this.state.ui.detailPage.activeTab = "position";
                 this.state.ui.detailPage.positionViewMode = "3d";
                 this.pushToast("已定位需求范围", "已跳转到“" + requirement.targetLabel + "”，并切换到3D视图。", "success");
+                this.emit();
+              }
+              return;
+            }
+            if (requirement.id === "V3R5-4931") {
+              const sampleRow = this.getListRows(VIEW_IDS.CABINET)[0];
+              if (sampleRow) {
+                this.openDetailPage(VIEW_IDS.CABINET, sampleRow.id);
+                this.state.ui.versionRequirementFilter = requirement.version || "all";
+                this.state.ui.focusedRequirementId = requirement.id;
+                this.state.ui.demandExplainEnabled = true;
+                this.state.ui.detailPage.activeTab = "contains";
+                this.pushToast("已定位需求范围", "已跳转到机柜详情“包含设备”，可查看预占设备与U位容量。", "success");
                 this.emit();
               }
               return;
@@ -20571,7 +21122,7 @@
             const mountedSeed = Number(String(row.id || "").replace(/\D/g, "")) || cabinetRowIndex + 1 || 1;
             let remainingMountedU = cabinetUsage.usedU;
             let nextMountedU = 1 + (mountedSeed % 3);
-            const cabinetMountedDevices = Array.from({ length: cabinetUsage.deviceCount }, (_, index) => {
+            let cabinetMountedDevices = Array.from({ length: cabinetUsage.deviceCount }, (_, index) => {
               const source = mountedSourceRows.length ? mountedSourceRows[(mountedSeed + index) % mountedSourceRows.length] : {};
               const slotsLeft = cabinetUsage.deviceCount - index - 1;
               const preferredUHeight = Math.max(1, Number(source.uHeight) || 2);
@@ -20596,30 +21147,114 @@
                 action: "查看"
               };
             });
+            if (detailPage.viewId === VIEW_IDS.CABINET) {
+              const override = this.state.data.cabinetActivityOverrides?.[row.id];
+              if (override) {
+                const removedCodes = new Set(override.removedCodes || []);
+                cabinetMountedDevices = cabinetMountedDevices.filter((device) => !removedCodes.has(device.assetCode));
+                const retainedSyntheticCount = Math.max(0, cabinetUsage.deviceCount - Number(override.removedCount || 0));
+                cabinetMountedDevices = cabinetMountedDevices.slice(0, retainedSyntheticCount);
+                (override.addedDevices || []).forEach((device) => {
+                  cabinetMountedDevices = cabinetMountedDevices.filter((item) => item.assetCode !== device.assetCode);
+                  const deviceStartU = Math.max(1, Number(device.startU) || 1);
+                  const deviceUHeight = Math.max(1, Number(device.uHeight) || 1);
+                  cabinetMountedDevices.push({
+                    assetCode: device.assetCode || "-",
+                    name: device.name || device.assetCode || "上架设备",
+                    serialNumber: device.serialNumber || device.serialCode || "-",
+                    assetStatus: device.assetStatus || "在用",
+                    assetCategory: device.assetCategory || "管理分类>IT设施>计算设备>机架式服务器",
+                    assetLocation: device.assetLocation || `${normalize(row.assetLocation)} > ${deviceStartU}U`,
+                    uHeight: String(deviceUHeight),
+                    uHeightNumber: deviceUHeight,
+                    startU: String(deviceStartU),
+                    startUNumber: deviceStartU,
+                    ratedPower: device.ratedPower || "-",
+                    action: "查看"
+                  });
+                });
+                cabinetMountedDevices.sort((first, second) => first.startUNumber - second.startUNumber);
+              }
+            }
             const cabinetOccupiedStatusSlots = new Set();
+            cabinetMountedDevices = cabinetMountedDevices.map((device) => ({
+              ...device,
+              occupancyStatus: "已上架",
+              uRange: `${device.startUNumber}U-${device.startUNumber + device.uHeightNumber - 1}U`,
+              sourceOrder: "-",
+              reservedBy: "-",
+              reservedAt: "-",
+              expireAt: "-"
+            }));
             cabinetMountedDevices.forEach((device) => {
               for (let unit = device.startUNumber; unit < device.startUNumber + device.uHeightNumber && unit <= cabinetHeight; unit += 1) {
                 cabinetOccupiedStatusSlots.add(unit);
               }
+            });
+            const reservedSourceRows = this.getListRows(VIEW_IDS.IT_FACILITY).filter((item) => item.assetStatus === "空闲");
+            const cabinetReservedStatusSlots = new Set();
+            const cabinetReservedDevices = [];
+            const reservationHeights = [2, 1];
+            const canReserveRange = (start, height) => {
+              if (start < 1 || start + height - 1 > cabinetHeight) return false;
+              for (let unit = start; unit < start + height; unit += 1) {
+                if (cabinetOccupiedStatusSlots.has(unit) || cabinetReservedStatusSlots.has(unit)) return false;
+              }
+              return true;
+            };
+            reservationHeights.forEach((height, reservationIndex) => {
+              let start = Math.max(1, cabinetHeight - 8 - (reservationIndex * 5));
+              while (start >= 1 && !canReserveRange(start, height)) start -= 1;
+              if (!canReserveRange(start, height)) return;
+              const source = reservedSourceRows.length
+                ? reservedSourceRows[(mountedSeed + reservationIndex + 3) % reservedSourceRows.length]
+                : {};
+              for (let unit = start; unit < start + height; unit += 1) cabinetReservedStatusSlots.add(unit);
+              cabinetReservedDevices.push({
+                assetCode: source.assetCode || `IT-RES-${pad(mountedSeed)}-${pad(reservationIndex + 1)}`,
+                name: source.name || `待上架设备-${pad(reservationIndex + 1)}`,
+                serialNumber: source.serialNumber || source.serialCode || `SN-RES-${pad(mountedSeed)}${pad(reservationIndex + 1)}`,
+                assetStatus: "预占中",
+                occupancyStatus: "预占中",
+                assetCategory: source.assetCategory || "管理分类>IT设施>计算设备>机架式服务器",
+                assetLocation: `${normalize(row.assetLocation)} > ${start}U（预占）`,
+                uHeight: String(height),
+                uHeightNumber: height,
+                startU: String(start),
+                startUNumber: start,
+                uRange: `${start}U-${start + height - 1}U`,
+                ratedPower: source.ratedPower || "2",
+                sourceOrder: `ITSJ202607${String((cabinetRowIndex + 1) * 10 + reservationIndex + 1).padStart(5, "0")}`,
+                reservedBy: reservationIndex ? "陈浩" : "张伟",
+                reservedAt: reservationIndex ? "2026-07-20 10:18" : "2026-07-20 09:36",
+                expireAt: reservationIndex ? "2026-07-24 23:59" : "2026-07-23 23:59",
+                reservationStatus: "审批中",
+                action: "查看流程单"
+              });
             });
             const cabinetRackUnits = Array.from({ length: cabinetHeight }, (_, index) => {
               const unit = cabinetHeight - index;
               return {
                 unit,
                 label: pad(unit, 2),
-                tone: cabinetOccupiedStatusSlots.has(unit) ? "occupied" : "empty"
+                tone: cabinetOccupiedStatusSlots.has(unit) ? "occupied" : cabinetReservedStatusSlots.has(unit) ? "reserved" : "empty"
               };
             });
             const cabinetUPositionRows = Array.from({ length: cabinetHeight }, (_, index) => {
               const slot = index + 1;
               const occupied = cabinetOccupiedStatusSlots.has(slot);
+              const reserved = cabinetReservedStatusSlots.has(slot);
               return {
                 id: "U-" + pad(slot, 2),
                 label: "第" + slot + "U位",
-                status: occupied ? "占用" : "空闲",
+                status: occupied ? "占用" : reserved ? "预占" : "空闲",
                 action: "禁用"
               };
             }).filter((item) => item.status === "空闲");
+            const cabinetUsedU = cabinetMountedDevices.reduce((total, device) => total + device.uHeightNumber, 0);
+            const cabinetReservedU = cabinetReservedDevices.reduce((total, device) => total + device.uHeightNumber, 0);
+            const cabinetRelatedDevices = [...cabinetMountedDevices, ...cabinetReservedDevices]
+              .sort((first, second) => first.startUNumber - second.startUNumber);
             const basicFields = [
               { label: "资产编号", value: normalize(row.assetCode) },
               { label: "名称", value: normalize(row.name) },
@@ -20852,10 +21487,20 @@
               containsColumns: ["资产编号", "名称", "序列号", "资产状态", "资产分类", "资产位置", "U高", "开始U位", "额定功率", "操作"],
               containsEmptyText: "没有找到匹配的记录",
               cabinetContains: {
-                relatedTitle: "上架设备",
-                relatedColumns: ["资产编号", "名称", "序列号", "资产状态", "资产分类", "资产位置", "U高", "开始U位", "额定供电功率", "操作"],
-                relatedColumnKeys: ["assetCode", "name", "serialNumber", "assetStatus", "assetCategory", "assetLocation", "uHeight", "startU", "ratedPower", "action"],
-                relatedRows: cabinetMountedDevices,
+                relatedTitle: "包含设备",
+                relatedColumns: ["资产编号", "名称", "占用状态", "资产分类", "U位范围", "来源单据", "预占人", "预占时间", "有效期", "操作"],
+                relatedColumnKeys: ["assetCode", "name", "occupancyStatus", "assetCategory", "uRange", "sourceOrder", "reservedBy", "reservedAt", "expireAt", "action"],
+                relatedRows: cabinetRelatedDevices,
+                mountedRows: cabinetMountedDevices,
+                reservedRows: cabinetReservedDevices,
+                summary: {
+                  totalU: cabinetHeight,
+                  usedU: cabinetUsedU,
+                  reservedU: cabinetReservedU,
+                  availableU: Math.max(0, cabinetHeight - cabinetUsedU - cabinetReservedU),
+                  mountedCount: cabinetMountedDevices.length,
+                  reservedCount: cabinetReservedDevices.length
+                },
                 rackUnits: cabinetRackUnits,
                 uTitle: "U位管理",
                 batchActions: ["批量禁用", "批量启用"],
@@ -21229,6 +21874,13 @@
             this.emit();
           }
 
+          setExportProgressPosition(left, bottom) {
+            const safeLeft = Math.max(12, Number(left) || 12);
+            const safeBottom = Math.max(12, Number(bottom) || 12);
+            this.state.ui.exportProgressPosition = { left: safeLeft, bottom: safeBottom };
+            this.emit();
+          }
+
           expandExportProgressManager() {
             const manager = this.state.ui.exportProgressManager;
             if (!manager) {
@@ -21435,9 +22087,10 @@
               return;
             }
             const inbound = this.ensureItInboundState();
+            const terminalStatuses = new Set(["已完成", "已拒绝", "已撤销", "已终止"]);
             inbound.mode = "process";
             inbound.activeId = orderId;
-            inbound.readonly = Boolean(readonly || order.status !== "待审核");
+            inbound.readonly = Boolean(readonly || terminalStatuses.has(order.status));
             this.emit();
           }
 
@@ -21555,8 +22208,8 @@
             order.processOpinion = opinion;
             order.processFiles = Array.isArray(dialog.files) ? [...dialog.files] : [];
             if (dialog.decision === "agree") {
-              order.status = "已完成";
-              this.pushToast("已同意", dialog.consumableViewId ? "耗材流程单审核通过，库存业务将按单据执行。" : dialog.workflowViewId ? "流程单审核通过，资产流程状态已更新。" : "入库单审核通过，资产将写入 IT硬件台账。", "success");
+              order.status = dialog.workflowViewId ? "待执行" : "已完成";
+              this.pushToast("已同意", dialog.consumableViewId ? "耗材流程单审核通过，库存业务将按单据执行。" : dialog.workflowViewId ? "流程单审核通过，已进入“执行完成”节点，尚未更新资产台账。" : "入库单审核通过，资产将写入 IT硬件台账。", "success");
             } else if (dialog.decision === "reject") {
               order.status = "待审核";
               this.pushToast("已驳回", "入库单已退回发起人补充处理意见。", "warning");
@@ -21573,7 +22226,7 @@
             } else if (dialog.workflowViewId) {
               const workflow = this.ensureItAssetWorkflowState(dialog.workflowViewId);
               workflow.mode = "list";
-              workflow.tab = dialog.decision === "agree" ? "processed" : "all";
+              workflow.tab = dialog.decision === "agree" ? "pending" : "all";
               workflow.activeId = "";
               workflow.readonly = false;
             } else {
@@ -21739,12 +22392,12 @@
           openProcessOrders(flowViewId, onlyUnfinished = false) {
             if (flowViewId === VIEW_IDS.IT_INBOUND) {
               const inbound = this.ensureItInboundState();
-              inbound.tab = "all";
+              inbound.tab = onlyUnfinished ? "pending" : "all";
               inbound.onlyUnfinished = Boolean(onlyUnfinished);
             } else {
               const workflow = this.ensureItAssetWorkflowState(flowViewId);
               if (!workflow) return;
-              workflow.tab = "all";
+              workflow.tab = onlyUnfinished ? "pending" : "all";
               workflow.onlyUnfinished = Boolean(onlyUnfinished);
             }
             this.state.ui.currentTopNav = "运营管理";
@@ -21802,6 +22455,10 @@
             const dialog = this.state.ui.processRouteDialog;
             if (!dialog) return;
             this.state.ui.processRouteDialog = null;
+            if (dialog.entrySource === "cabinetDetail") {
+              this.state.ui.detailPage = null;
+              this.state.ui.cabinetRackDialog = null;
+            }
             this.state.ui.currentTopNav = "运营管理";
             this.state.ui.currentView = dialog.flowViewId;
             if (dialog.flowViewId === VIEW_IDS.IT_INBOUND) {
@@ -21812,8 +22469,9 @@
             const config = this.getItAssetWorkflowConfig(dialog.flowViewId);
             this.openItAssetWorkflowForm(dialog.flowViewId);
             const rows = (dialog.selectedRowIds || []).map((id) => this.getRowById(dialog.sourceViewId, id)).filter(Boolean);
-            if (workflow && config && rows.length) {
-              workflow.draftAssets = rows.map((row, index) => ({
+            const cabinetContext = dialog.cabinetContext || null;
+            if (workflow && config && (rows.length || cabinetContext)) {
+              let draftRows = rows.map((row, index) => ({
                 ...this.buildItAssetWorkflowAsset(config, index),
                 name: row.name || "",
                 assetCode: row.assetCode || "",
@@ -21825,6 +22483,41 @@
                 serialCode: row.serialCode || "",
                 serialNumber: row.serialNumber || ""
               }));
+              if (!draftRows.length && cabinetContext?.deviceCode) {
+                draftRows = [{
+                  ...this.buildItAssetWorkflowAsset(config, 0),
+                  name: cabinetContext.deviceName || "",
+                  assetCode: cabinetContext.deviceCode || ""
+                }];
+              }
+              if (!draftRows.length && cabinetContext) {
+                draftRows = [{
+                  ...this.buildItAssetWorkflowAsset(config, 0),
+                  name: "",
+                  assetCode: "",
+                  serialCode: "",
+                  serialNumber: ""
+                }];
+              }
+              if (cabinetContext) {
+                const cabinetPosition = [cabinetContext.cabinetName, cabinetContext.unit ? cabinetContext.unit + "U" : ""].filter(Boolean).join(" > ");
+                draftRows = draftRows.map((row) => ({
+                  ...row,
+                  assetLocation: cabinetPosition || cabinetContext.cabinetLocation || row.assetLocation || "",
+                  rackPosition: cabinetContext.cabinetName || row.rackPosition || "",
+                  startU: cabinetContext.unit || row.startU || "",
+                  uHeight: cabinetContext.uHeight || row.uHeight || ""
+                }));
+                workflow.sourceContext = {
+                  source: "机柜详情",
+                  cabinetId: cabinetContext.cabinetId,
+                  cabinetName: cabinetContext.cabinetName,
+                  unit: cabinetContext.unit,
+                  uHeight: cabinetContext.uHeight,
+                  activityLabel: dialog.activityLabel
+                };
+              }
+              workflow.draftAssets = draftRows;
               this.emit();
             }
           }
@@ -21840,7 +22533,9 @@
             }
             const bag = this.state.ui.itAssetWorkflows || (this.state.ui.itAssetWorkflows = {});
             if (!bag[viewId]) {
-              const statuses = ["待审核", "已完成", "待执行", "已拒绝", "已完成"];
+              const statuses = viewId === VIEW_IDS.IT_RACK
+                ? ["待审核", "已完成", "已完成", "已拒绝", "已完成"]
+                : ["待审核", "已完成", "待执行", "已拒绝", "已完成"];
               const scenario = ASSET_WORKFLOW_SCENARIOS[viewId] || {};
               const names = scenario.orderNames || ["核心设备", "机房设备", "业务设备", "网络设备", "测试设备"];
               const formAssetIndexes = scenario.assetIndexes?.length ? scenario.assetIndexes : [0];
@@ -21908,6 +22603,7 @@
             workflow.mode = "form";
             workflow.activeId = "";
             workflow.readonly = false;
+            workflow.sourceContext = null;
             workflow.draftAssets = (scenario.assetIndexes?.length ? scenario.assetIndexes : [0])
               .map((assetIndex) => this.buildItAssetWorkflowAsset(config, assetIndex));
             this.emit();
@@ -21952,6 +22648,41 @@
             this.emit();
           }
 
+          completeItAssetWorkflowExecution(viewId) {
+            const workflow = this.ensureItAssetWorkflowState(viewId);
+            const order = this.getItAssetWorkflowOrder(viewId, workflow?.activeId);
+            const config = this.getItAssetWorkflowConfig(viewId);
+            if (!workflow || !order || !config || order.status !== "待执行") return;
+            const actionByKey = { rack: "上架", offShelf: "下架", moveOut: "迁出" };
+            const action = actionByKey[config.key];
+            if (action) {
+              const assets = Array.isArray(order.assets) ? order.assets : [];
+              const executionAssets = assets.length ? assets : [{}];
+              const results = executionAssets.map((asset) => this.applyItAssetLifecycleResult(action, asset, {
+                cabinetId: order.sourceContext?.cabinetId || "",
+                cabinetName: order.sourceContext?.cabinetName || asset.rackPosition || "当前机柜",
+                unit: order.sourceContext?.unit || asset.startU || "",
+                uHeight: order.sourceContext?.uHeight || asset.uHeight || "1",
+                destination: asset.warehouse || "2号楼-B1层-IT备件库A区"
+              }));
+              const failed = results.filter((item) => !item.target);
+              if (failed.length) {
+                this.pushToast("执行失败", failed[0].message, "warning");
+                return;
+              }
+              order.executionResult = results.map((item) => item.message).join("；");
+            }
+            order.status = "已完成";
+            order.executedAt = "2026-07-20 10:30:00";
+            order.executionNode = "执行完成";
+            workflow.mode = "list";
+            workflow.tab = "processed";
+            workflow.activeId = "";
+            workflow.readonly = false;
+            this.pushToast("执行完成", order.executionResult || `${config.title}已执行完成，资产台账已更新。`, "success");
+            this.emit();
+          }
+
           submitItAssetWorkflow(viewId) {
             const config = this.getItAssetWorkflowConfig(viewId);
             const workflow = this.ensureItAssetWorkflowState(viewId);
@@ -21971,12 +22702,14 @@
               approver: String(approverInput?.value || scenario.approver || "资产管理员"),
               executor: String(executorInput?.value || scenario.executor || "现场运维人员"),
               description: String(descriptionInput?.value || config.title + "流程单据。").trim(),
+              sourceContext: workflow.sourceContext ? { ...workflow.sourceContext } : null,
               assets: this.getItAssetWorkflowDraftAssets(viewId)
                 .filter((asset) => !asset.__blank)
                 .map((asset) => ({ ...asset }))
             });
             workflow.tab = "mine";
             workflow.mode = "list";
+            workflow.sourceContext = null;
             workflow.activeId = "";
             this.pushToast("提交成功", config.title + "已提交，等待审核人处理。", "success");
             this.emit();
@@ -22608,7 +23341,15 @@
               rowCount: editableBlankRows ? 20 : Math.max(21, sheetRows.length),
               focusColumnKey: operationPage.focusColumnKey || "",
               labelCode: sourceRows[0] ? normalize(sourceRows[0].assetCode) : "",
-              labelName: sourceRows[0] ? normalize(sourceRows[0].name) : ""
+              labelName: sourceRows[0] ? normalize(sourceRows[0].name) : "",
+              labelRows: sourceRows.map((sourceRow) => ({
+                id: sourceRow.id || "",
+                name: normalize(sourceRow.name),
+                assetCode: normalize(sourceRow.assetCode),
+                serialCode: normalize(sourceRow.serialCode || sourceRow.serialNumber),
+                assetLocation: normalize(sourceRow.assetLocation),
+                assetCategory: normalize(sourceRow.assetCategory)
+              }))
             };
           }
 
@@ -22650,6 +23391,17 @@
             }
             if (label === "上传本地文件") {
               this.pushToast("上传本地文件", "已打开“" + title + "”本地文件上传入口，原型中不接入真实文件。", "info");
+              return;
+            }
+            if (label === "打印测试页") {
+              this.pushToast("测试页已发送", "已将 1 张测试标签发送至默认标签打印机。", "success");
+              return;
+            }
+            if (label === "开始打印") {
+              const copiesInput = document.querySelector('[data-role="operation-print-copies"]');
+              const copies = copiesInput instanceof HTMLInputElement ? Math.max(1, Number(copiesInput.value) || 1) : 1;
+              const count = Math.max(1, Number(page?.labelRows?.length) || 1) * copies;
+              this.pushToast("打印任务已提交", `已将 ${count} 张纸质标签发送至标签打印机。`, "success");
               return;
             }
             this.pushToast(label, "已触发“" + title + "”页中的“" + label + "”操作。", "info");
@@ -25878,7 +26630,7 @@
             const workspace = this.nodes.content.closest(".workspace");
             const isProcessConfigView = state.ui.currentView === VIEW_IDS.PROCESS_CONFIG;
             const isContainedGuidePage = ["versionRequirements", "requirementSpec"].includes(state.ui.guidePage);
-            const isFixedContentView = isProcessConfigView || isContainedGuidePage;
+            const isFixedContentView = isProcessConfigView || isContainedGuidePage || Boolean(state.ui.detailPage);
             workspace?.classList.toggle("is-fixed-content-view", isFixedContentView);
             if (workspace && isFixedContentView) workspace.scrollTop = 0;
             this.nodes.sidebar.classList.toggle("is-collapsed", Boolean(state.ui.sidebarCollapsed));
@@ -25936,7 +26688,17 @@
             if (!workflow || workflow.mode !== "process" || workflow.readonly) return;
             const actions = this.nodes.content.querySelector(".inbound-process-actions");
             const actionName = isConsumableWorkflow ? "decide-consumable-workflow" : "decide-it-asset-workflow";
-            if (!actions || actions.querySelector(`[data-action="${actionName}"]`)) return;
+            if (!actions) return;
+            if (isAssetWorkflow) {
+              const order = this.store.getItAssetWorkflowOrder(viewId, workflow.activeId);
+              if (order?.status === "待执行") {
+                if (!actions.querySelector('[data-action="complete-it-asset-workflow"]')) {
+                  actions.insertAdjacentHTML("beforeend", `<button class="btn btn-primary" type="button" data-action="complete-it-asset-workflow" data-view="${escapeHtml(viewId)}">执行完成</button>`);
+                }
+                return;
+              }
+            }
+            if (actions.querySelector(`[data-action="${actionName}"]`)) return;
             actions.insertAdjacentHTML("beforeend", `<button class="btn btn-primary" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="agree">同意</button><button class="btn" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="reject">驳回</button><button class="btn" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="decline">拒绝</button>`);
           }
 
@@ -26476,11 +27238,18 @@
               .filter((group) => group.items.length > 0);
             const renderRequirementItem = (item) => {
               const isPaused = item.status === "挂起";
+              const statusClass = isPaused
+                ? "is-paused"
+                : item.status === "设计中"
+                  ? "is-designing"
+                  : item.status === "设计完成"
+                    ? "is-complete"
+                    : "";
               return `
-              <article class="version-req-item ${isPaused ? "is-paused" : ""}">
+              <article class="version-req-item ${statusClass}">
                 <div class="version-req-item-head">
                   <button class="version-req-item-title-button" type="button" data-action="open-version-req-target" data-id="${escapeHtml(item.id)}">${escapeHtml(item.description)}</button>
-                  <span class="version-req-status ${isPaused ? "is-paused" : ""}">${escapeHtml(item.status)}</span>
+                  <span class="version-req-status ${statusClass}">${escapeHtml(item.status)}</span>
                 </div>
                 <div class="version-req-item-meta-row">
                   <div class="version-req-item-meta">
@@ -26731,7 +27500,7 @@
             const tabs = [["all", "全部"], ["pending", "待我处理"], ["cc", "抄送我的"], ["processed", "已处理"], ["mine", "我发起的"], ["department", "部门工单"], ["shift", "班组工单"], ["draft", "草稿"]];
             const terminalStatuses = new Set(["已完成", "已拒绝", "已撤销", "已终止"]);
             const orders = inbound.onlyUnfinished ? (inbound.orders || []).filter((item) => !terminalStatuses.has(item.status)) : (inbound.orders || []);
-            const tabRows = inbound.tab === "pending" ? orders.filter((item) => item.status === "待审核")
+            const tabRows = inbound.tab === "pending" ? orders.filter((item) => !terminalStatuses.has(item.status))
               : inbound.tab === "processed" ? orders.filter((item) => item.status === "已完成" || item.status === "已拒绝")
               : inbound.tab === "mine" ? orders.filter((item) => item.creator === "系统管理员")
               : inbound.tab === "cc" || inbound.tab === "draft" ? []
@@ -26750,7 +27519,7 @@
                 <div class="inbound-list-body">
                   <div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="it-inbound-search" value="${escapeHtml(inbound.keyword || "")}" placeholder="请输入单号/标题" aria-label="搜索入库单" /></label><button class="inbound-text-action" type="button" data-action="it-inbound-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="it-inbound-tool" data-label="快捷查询">快捷查询</button><span style="flex:1 1 auto;"></span><div class="inbound-toolbar-actions">${this.store.isProcessFlowEnabled(VIEW_IDS.IT_INBOUND) ? `<button class="btn btn-primary" type="button" data-action="open-it-inbound-form">新建</button>` : ""}<button class="btn" type="button" data-action="it-inbound-tool" data-label="导出">导出</button></div></div>
                   <div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th style="width:48px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:210px;">入库单号</th><th>入库单名称</th><th style="width:150px;">创建人</th><th style="width:210px;">创建时间</th><th style="width:130px;">状态</th><th style="width:150px;">操作</th></tr></thead><tbody>
-                    ${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</td><td>${escapeHtml(order.creator)}</td><td>${escapeHtml(order.createdAt)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td><button class="inbound-link-btn" type="button" data-action="view-it-inbound" data-id="${escapeHtml(order.id)}">查看</button>${inbound.tab === "pending" && order.status === "待审核" ? `<button class="inbound-link-btn" type="button" data-action="process-it-inbound" data-id="${escapeHtml(order.id)}">处理</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="8" style="height:180px;text-align:center;color:#91a3b5;">暂无${keyword ? "匹配" : activeTabLabel}入库单</td></tr>`}
+                    ${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</td><td>${escapeHtml(order.creator)}</td><td>${escapeHtml(order.createdAt)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td><button class="inbound-link-btn" type="button" data-action="view-it-inbound" data-id="${escapeHtml(order.id)}">查看</button>${inbound.tab === "pending" && !terminalStatuses.has(order.status) ? `<button class="inbound-link-btn" type="button" data-action="process-it-inbound" data-id="${escapeHtml(order.id)}">处理</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="8" style="height:180px;text-align:center;color:#91a3b5;">暂无${keyword ? "匹配" : activeTabLabel}入库单</td></tr>`}
                   </tbody></table></div><div class="inbound-pager"><span>共 ${rows.length} 条</span><span>20条/页</span><span>‹　1　›</span></div>
                 </div>
               </div>`;
@@ -26909,14 +27678,14 @@
             const keyword = String(workflow.keyword || "").trim().toLowerCase();
             const terminalStatuses = new Set(["已完成", "已拒绝", "已撤销", "已终止"]);
             const sourceOrders = workflow.onlyUnfinished ? workflow.orders.filter((item) => !terminalStatuses.has(item.status)) : workflow.orders;
-            const tabRows = workflow.tab === "pending" ? sourceOrders.filter((item) => item.status === "待审核")
+            const tabRows = workflow.tab === "pending" ? sourceOrders.filter((item) => !terminalStatuses.has(item.status))
               : workflow.tab === "processed" ? sourceOrders.filter((item) => item.status === "已完成" || item.status === "已拒绝")
               : workflow.tab === "mine" ? sourceOrders.filter((item) => item.creator === "系统管理员")
               : workflow.tab === "cc" || workflow.tab === "draft" ? []
               : sourceOrders;
             const rows = keyword ? tabRows.filter((item) => [item.id, item.name, item.creator, item.status].join(" ").toLowerCase().includes(keyword)) : tabRows;
-            const statusClass = (status) => status === "已完成" ? "is-done" : status === "待审核" ? "is-pending" : status === "已拒绝" ? "is-rejected" : "";
-            return `<div class="page-surface inbound-list-page"><div class="inbound-list-head"><h1>${escapeHtml(config.title)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-it-asset-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="it-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" aria-label="搜索${escapeHtml(config.orderLabel)}" /></label><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="快捷查询">快捷查询</button><span style="flex:1 1 auto;"></span><div class="inbound-toolbar-actions">${this.store.isProcessFlowEnabled(viewId) ? `<button class="btn btn-primary" type="button" data-action="open-it-asset-workflow-form" data-view="${escapeHtml(viewId)}">新建</button>` : ""}<button class="btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="导出">导出</button></div></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th style="width:48px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:220px;">${escapeHtml(config.orderLabel)}号</th><th>${escapeHtml(config.orderLabel)}名称</th><th style="width:150px;">创建人</th><th style="width:210px;">创建时间</th><th style="width:130px;">状态</th><th style="width:150px;">操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</td><td>${escapeHtml(order.creator)}</td><td>${escapeHtml(order.createdAt)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td><button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" && order.status === "待审核" ? `<button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="8" style="height:180px;text-align:center;color:#91a3b5;">暂无${keyword ? "匹配" : ""}${escapeHtml(config.orderLabel)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            const statusClass = (status) => status === "已完成" ? "is-done" : ["待审核", "待执行"].includes(status) ? "is-pending" : status === "已拒绝" ? "is-rejected" : "";
+            return `<div class="page-surface inbound-list-page"><div class="inbound-list-head"><h1>${escapeHtml(config.title)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-it-asset-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="it-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" aria-label="搜索${escapeHtml(config.orderLabel)}" /></label><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="快捷查询">快捷查询</button><span style="flex:1 1 auto;"></span><div class="inbound-toolbar-actions">${this.store.isProcessFlowEnabled(viewId) ? `<button class="btn btn-primary" type="button" data-action="open-it-asset-workflow-form" data-view="${escapeHtml(viewId)}">新建</button>` : ""}<button class="btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="导出">导出</button></div></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th style="width:48px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:220px;">${escapeHtml(config.orderLabel)}号</th><th>${escapeHtml(config.orderLabel)}名称</th><th style="width:150px;">创建人</th><th style="width:210px;">创建时间</th><th style="width:130px;">状态</th><th style="width:150px;">操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</td><td>${escapeHtml(order.creator)}</td><td>${escapeHtml(order.createdAt)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td><button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" && !terminalStatuses.has(order.status) ? `<button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="8" style="height:180px;text-align:center;color:#91a3b5;">暂无${keyword ? "匹配" : ""}${escapeHtml(config.orderLabel)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
           }
 
           renderItAssetWorkflowAssetTable(config, assets, editable = false) {
@@ -26956,7 +27725,10 @@
           renderItAssetWorkflowProcess(viewId, workflow, config) {
             const order = this.store.getItAssetWorkflowOrder(viewId, workflow.activeId);
             if (!order) return this.renderItAssetWorkflowList(viewId, workflow, config);
-            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见..."></textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(config.title)}审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            const isExecutionNode = order.status === "待执行";
+            const currentNode = isExecutionNode ? "执行完成" : order.status === "已完成" ? "流程结束" : config.title + "审核";
+            const assignee = isExecutionNode ? order.executor : order.approver;
+            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || order.executionResult || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(currentNode)}</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>${order.status === "已完成" ? `完成时间：${escapeHtml(order.executedAt || "-")}` : `待办人：${escapeHtml(assignee)}`}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
 
           renderConsumableLedger() {
@@ -27093,21 +27865,84 @@
           }
 
           renderPrintOperationPage(page) {
+            const labels = Array.isArray(page.labelRows) && page.labelRows.length
+              ? page.labelRows
+              : [{ name: page.labelName || "当前资产", assetCode: page.labelCode || "-", serialCode: "-", assetLocation: "-", assetCategory: "-" }];
             return `
               <div class="page-surface operation-page operation-print-page">
                 <div class="operation-print-head">
-                  <button class="btn btn-light" type="button" data-action="operation-tool" data-label="打印">打印</button>
+                  <div class="operation-print-head-main">
+                    <button class="btn btn-light" type="button" data-action="close-operation-page">← 返回台账</button>
+                    <strong>打印纸质标签</strong>
+                    <span class="operation-print-count">共 ${labels.length} 个打印对象</span>
+                  </div>
                   <button class="operation-print-close" type="button" data-action="close-operation-page" aria-label="关闭">×</button>
                 </div>
-                <div class="operation-print-stage">
-                  <div class="operation-print-label">
-                    <div class="operation-print-qr" aria-hidden="true"></div>
-                    <div class="operation-print-brand">
-                      <strong>R5资产管理原型</strong>
-                      <span>${escapeHtml(page.labelCode)}</span>
+                <div class="operation-print-body">
+                  <aside class="operation-print-settings">
+                    <section class="operation-print-section">
+                      <div class="operation-print-section-title">打印设置</div>
+                      <label class="operation-print-field">
+                        <span>标签模板</span>
+                        <select aria-label="选择标签模板">
+                          <option>资产通用标签（70 × 30 mm）</option>
+                          <option>机柜标签（100 × 50 mm）</option>
+                          <option>小型设备标签（50 × 25 mm）</option>
+                        </select>
+                      </label>
+                      <label class="operation-print-field">
+                        <span>打印设备</span>
+                        <select aria-label="选择打印设备">
+                          <option>Brother QL-820NWB（默认）</option>
+                          <option>Zebra ZD421</option>
+                          <option>导出 PDF 后打印</option>
+                        </select>
+                      </label>
+                      <label class="operation-print-field">
+                        <span>每项打印份数</span>
+                        <input data-role="operation-print-copies" type="number" min="1" max="99" value="1" aria-label="每项打印份数" />
+                      </label>
+                    </section>
+                    <section class="operation-print-section">
+                      <div class="operation-print-section-title">标签内容</div>
+                      <label class="inline-radio"><input type="checkbox" checked /><span>资产名称</span></label>
+                      <label class="inline-radio"><input type="checkbox" checked /><span>资产编号</span></label>
+                      <label class="inline-radio"><input type="checkbox" checked /><span>二维码</span></label>
+                      <label class="inline-radio"><input type="checkbox" checked /><span>资产位置</span></label>
+                    </section>
+                    <section class="operation-print-section">
+                      <div class="operation-print-tip">打印前请确认打印机在线、标签纸尺寸与当前模板一致。批量打印将按照当前预览顺序依次输出。</div>
+                    </section>
+                  </aside>
+                  <main class="operation-print-preview">
+                    <div class="operation-print-preview-head">
+                      <strong>标签预览</strong>
+                      <span>预览比例 100% · ${labels.length} 张</span>
                     </div>
-                  </div>
+                    <div class="operation-print-sheet">
+                      <div class="operation-print-label-grid">
+                        ${labels.map((label, index) => `
+                          <div class="operation-print-label" title="第 ${index + 1} 张：${escapeHtml(label.name)}">
+                            <div class="operation-print-qr" aria-label="${escapeHtml(label.assetCode)}二维码"></div>
+                            <div class="operation-print-brand">
+                              <strong>${escapeHtml(label.name)}</strong>
+                              <span>${escapeHtml(label.assetCode)}</span>
+                              <em>${escapeHtml(label.assetLocation)}</em>
+                            </div>
+                          </div>
+                        `).join("")}
+                      </div>
+                    </div>
+                  </main>
                 </div>
+                <footer class="operation-print-footer">
+                  <div class="operation-print-footer-note">预计打印 ${labels.length} 张；调整份数后以实际提交数量为准。</div>
+                  <div class="operation-print-footer-actions">
+                    <button class="btn" type="button" data-action="close-operation-page">取消</button>
+                    <button class="btn btn-light" type="button" data-action="operation-tool" data-label="打印测试页">打印测试页</button>
+                    <button class="btn btn-primary" type="button" data-action="operation-tool" data-label="开始打印">开始打印</button>
+                  </div>
+                </footer>
               </div>
             `;
           }
@@ -27604,14 +28439,14 @@
             const relatedInitialWidths = {
               assetCode: 108,
               name: 130,
-              serialNumber: 64,
-              assetStatus: 70,
+              occupancyStatus: 78,
               assetCategory: 190,
-              assetLocation: 156,
-              uHeight: 46,
-              startU: 58,
-              ratedPower: 72,
-              action: 72
+              uRange: 76,
+              sourceOrder: 116,
+              reservedBy: 64,
+              reservedAt: 126,
+              expireAt: 126,
+              action: 86
             };
             const uInitialWidths = {
               __select: 36,
@@ -27663,7 +28498,7 @@
                 top: (((rackHeight - unit.unit) / rackHeight) * 100).toFixed(3),
                 height: (100 / rackHeight).toFixed(3)
               }));
-            const mountedDevices = (cabinet.relatedRows || []).map((device, index) => {
+            const mountedDevices = (cabinet.mountedRows || []).map((device, index) => {
               const start = Math.max(1, Math.min(rackHeight, Number(device.startUNumber || device.startU) || 1));
               const uHeight = Math.max(1, Math.min(rackHeight - start + 1, Number(device.uHeightNumber || device.uHeight) || 1));
               const top = ((rackHeight - start - uHeight + 1) / rackHeight) * 100;
@@ -27680,6 +28515,20 @@
                 index
               };
             });
+            const reservedDevices = (cabinet.reservedRows || []).map((device) => {
+              const start = Math.max(1, Math.min(rackHeight, Number(device.startUNumber || device.startU) || 1));
+              const uHeight = Math.max(1, Math.min(rackHeight - start + 1, Number(device.uHeightNumber || device.uHeight) || 1));
+              return {
+                code: device.assetCode || "-",
+                name: device.name || "-",
+                orderNo: device.sourceOrder || "-",
+                start,
+                uHeight,
+                top: (((rackHeight - start - uHeight + 1) / rackHeight) * 100).toFixed(3),
+                height: ((uHeight / rackHeight) * 100).toFixed(3)
+              };
+            });
+            const summary = cabinet.summary || { totalU: rackHeight, usedU: 0, reservedU: 0, availableU: rackHeight, mountedCount: 0, reservedCount: 0 };
             const renderMountedDevice = (device) => `
               <div
                 class="cabinet-mounted-device"
@@ -27709,7 +28558,7 @@
               </div>
             `;
             return `
-              <div class="cabinet-contains-layout">
+              <div class="cabinet-contains-layout" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情设备活动流程判断" data-demand-text="需求来源：V3R5-4997。||交互目的：机柜详情中的上架、下架、迁出入口与 IT设备台账使用同一套流程开关，避免从不同入口绕过审批。||入口文案：空闲U位入口统一显示“上架设备”。||判断规则：上架读取 IT设备上架流程开关，下架读取 IT设备下架流程开关，迁出读取 IT设备迁出流程开关。||流程开启：点击入口先提示需通过流程办理，确认后进入对应 IT设备流程发起页；审核同意后进入待执行，只有点击“执行完成”才写回台账。||流程关闭：继续使用机柜详情现有直接办理弹窗，确认后立即更新资产数据。||数据结果：上架更新设备机柜与U位；下架清除机柜U位并更新IT设备台账位置和状态；迁出从IT设备台账移除并进入“已迁出/已废弃”。||范围限制：不为机柜资产本身新增流程，机柜和备件仍不纳入表单流程配置。">
                 <div class="cabinet-contains-side">
                   <div class="asset-rack cabinet-contains-rack">
                     <div class="rack-shell">
@@ -27718,13 +28567,20 @@
                           ${cabinet.rackUnits.map((unit) => `<div class="rack-unit is-${escapeHtml(unit.tone)}" title="${escapeHtml(unit.label)}U"></div>`).join("")}
                           <div class="cabinet-empty-layer">
                             ${emptySlots.map((slot) => `
-                              <button class="cabinet-empty-slot" type="button" data-action="open-cabinet-rack-add" data-unit="${escapeHtml(String(slot.unit))}" style="top:${escapeHtml(slot.top)}%;height:${escapeHtml(slot.height)}%;" aria-label="第${escapeHtml(String(slot.unit))}U位添加设备">
-                                <span class="cabinet-empty-add">⊕ 添加设备</span>
+                              <button class="cabinet-empty-slot" type="button" data-action="open-cabinet-rack-add" data-unit="${escapeHtml(String(slot.unit))}" style="top:${escapeHtml(slot.top)}%;height:${escapeHtml(slot.height)}%;" aria-label="第${escapeHtml(String(slot.unit))}U位上架设备">
+                                <span class="cabinet-empty-add">⊕ 上架设备</span>
                               </button>
                             `).join("")}
                           </div>
                           <div class="cabinet-mounted-layer">
                             ${mountedDevices.map(renderMountedDevice).join("")}
+                          </div>
+                          <div class="cabinet-reserved-layer">
+                            ${reservedDevices.map((device) => `
+                              <div class="cabinet-reserved-device" style="top:${escapeHtml(device.top)}%;height:calc(${escapeHtml(device.height)}% - 2px);" title="预占设备：${escapeHtml(device.name)}；U位：${escapeHtml(String(device.start))}U-${escapeHtml(String(device.start + device.uHeight - 1))}U；流程单：${escapeHtml(device.orderNo)}">
+                                <span>预占 ${escapeHtml(String(device.start))}U</span>
+                              </div>
+                            `).join("")}
                           </div>
                         </div>
                       </div>
@@ -27736,9 +28592,17 @@
                   </div>
                 </div>
                 <div class="cabinet-contains-main">
+                  <div class="cabinet-capacity-summary" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="设备预占机柜展示" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情“包含设备”页签同时识别正式上架设备和预占设备，避免机柜容量被重复分配。||容量口径：总U位=已使用U位+预占U位+剩余可分配U位；预占U位占用可分配容量，但不计入正式设备数和正式利用率。||展示规则：正式上架使用深色设备块和“已上架”状态；预占使用青色虚线设备块和“预占中”状态，并展示来源流程单、预占人、预占时间和有效期。||状态流转：草稿不占用U位；流程提交后生成预占；流程驳回、取消或超期释放预占；执行完成后预占转为正式上架。||异常判断：预占与正式占用冲突、U位超出机柜高度、机柜失效或流程单状态异常时，应阻止提交并明确提示。">
+                    <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">机柜总U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.totalU))}U</strong></div>
+                    <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">已使用U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.usedU))}U</strong></div>
+                    <div class="cabinet-capacity-item is-reserved"><span class="cabinet-capacity-label">预占U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.reservedU))}U</strong></div>
+                    <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">剩余可分配</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.availableU))}U</strong></div>
+                    <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">已上架设备</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.mountedCount))}台</strong></div>
+                    <div class="cabinet-capacity-item is-reserved"><span class="cabinet-capacity-label">预占设备</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.reservedCount))}台</strong></div>
+                  </div>
                   <section class="cabinet-section cabinet-related-panel">
                     <div class="cabinet-section-head">
-                      <div class="cabinet-section-title">${escapeHtml(cabinet.relatedTitle)}</div>
+                      <div class="cabinet-section-title">${escapeHtml(cabinet.relatedTitle)}<span class="cabinet-section-title-note">已上架 ${escapeHtml(String(summary.mountedCount))} 台 · 预占 ${escapeHtml(String(summary.reservedCount))} 台</span></div>
                     </div>
                     <div class="cabinet-section-body">
                       <table class="cabinet-inline-table table-resizable" data-view="${escapeHtml(relatedTableViewId)}">
@@ -27756,11 +28620,19 @@
                             ? cabinet.relatedRows.map((row) => `
                               <tr>
                                 ${relatedColumns.map((column) => {
-                                  const key = column.key;
-                                  const value = row[key] || "-";
-                                  if (key === "action") {
-                                    return `<td class="op-cell" title="${escapeHtml(value)}"><button class="cabinet-op-link" data-action="top-action" data-label="${escapeHtml(value)}">${escapeHtml(value)}</button></td>`;
-                                  }
+                                   const key = column.key;
+                                   const value = row[key] || "-";
+                                   if (key === "action") {
+                                     return row.occupancyStatus === "预占中"
+                                       ? `<td class="op-cell" title="${escapeHtml(value)}"><button class="cabinet-op-link" data-action="open-work-order" data-no="${escapeHtml(row.sourceOrder || "")}">${escapeHtml(value)}</button></td>`
+                                       : `<td class="op-cell" title="${escapeHtml(value)}"><button class="cabinet-op-link" data-action="top-action" data-label="${escapeHtml(value)}">${escapeHtml(value)}</button></td>`;
+                                   }
+                                   if (key === "occupancyStatus") {
+                                     return `<td><span class="cabinet-occupancy-tag ${value === "预占中" ? "is-reserved" : ""}">${escapeHtml(value)}</span></td>`;
+                                   }
+                                   if (key === "sourceOrder" && value !== "-") {
+                                     return `<td title="${escapeHtml(value)}"><button class="cabinet-op-link" data-action="open-work-order" data-no="${escapeHtml(value)}">${escapeHtml(value)}</button></td>`;
+                                   }
                                   return `<td title="${escapeHtml(value)}">${escapeHtml(value)}</td>`;
                                 }).join("")}
                               </tr>
@@ -28285,8 +29157,10 @@
             }, { cabinets: 0, devices: 0, usedU: 0, totalU: 0 });
             const usageRate = stats.totalU > 0 ? Math.round((stats.usedU / stats.totalU) * 100) : 0;
             const cardRows = rows.length ? rows : statRows;
+            const selectedIds = this.store.getSelectedRowIds(VIEW_IDS.CABINET);
+            const allCardsSelected = cardRows.length > 0 && cardRows.every((row) => selectedIds.includes(row.id));
             return `
-              <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在机柜台账空间视图中以可视化卡片展示机柜层级、位置、设备数和U位使用情况，帮助用户快速识别机柜资源占用。||展示规则：顶部统计当前筛选范围内机柜数、设备数和利用率；下方每个机柜卡片展示机柜名称、U高、U位使用进度、资产位置和设备数；点击卡片进入机柜详情。||状态限制：卡片数据应跟当前筛选、分页和空间树节点保持一致。||异常判断：无机柜数据时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
+              <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在机柜台账空间视图中以可视化卡片展示机柜层级、位置、设备数和U位使用情况，帮助用户快速识别机柜资源占用。||展示规则：顶部统计当前筛选范围内机柜数、设备数和利用率；下方每个机柜卡片展示机柜名称、U高、U位使用进度、资产位置和设备数；空间视图与标准视图共用顶部查询和台账操作，卡片支持勾选、跨视图保留选择、查看详情和更多操作。||操作规则：机柜业务活动使用部署、编辑、报废、变动和回库等场地类生命周期文案；选中卡片后顶部展示与标准视图一致的批量操作栏。||状态限制：卡片数据应跟当前筛选、分页和空间树节点保持一致。||异常判断：无机柜数据时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
                 <div class="cabinet-space-stats">
                   <section class="cabinet-space-stat">
                     <div>
@@ -28330,7 +29204,10 @@
                   </section>
                 </div>
                 <div class="cabinet-space-content-head">
-                  <input class="cabinet-space-search" type="text" placeholder="请搜索机柜名称/编号" aria-label="请搜索机柜名称或编号" />
+                  <label class="cabinet-space-selection">
+                    <input type="checkbox" data-action="toggle-list-page-selection" data-view="${escapeHtml(VIEW_IDS.CABINET)}" ${allCardsSelected ? "checked" : ""} />
+                    <span>全选当前页${selectedIds.length ? `（已选 ${selectedIds.length} 条）` : ""}</span>
+                  </label>
                 </div>
                 ${cardRows.length
                   ? `<div class="cabinet-card-grid">
@@ -28338,23 +29215,30 @@
                         const usage = this.getCabinetUsage(row, index);
                         const percent = Math.min(100, Math.max(0, usage.percent));
                         const name = row.name || row.assetCode || "-";
+                        const selected = selectedIds.includes(row.id);
                         return `
-                          <button class="cabinet-visual-card" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.CABINET)}" data-id="${escapeHtml(row.id)}" data-label="查看">
+                          <article class="cabinet-visual-card ${selected ? "is-selected" : ""}">
                             <div class="cabinet-visual-head">
+                              <input type="checkbox" data-action="toggle-list-row-selection" data-view="${escapeHtml(VIEW_IDS.CABINET)}" data-id="${escapeHtml(row.id)}" aria-label="选择${escapeHtml(name)}" ${selected ? "checked" : ""} />
                               <span class="cabinet-visual-title" title="${escapeHtml(name)}">${escapeHtml(name)}</span>
                               <span class="cabinet-visual-u">${escapeHtml(String(usage.height))}U</span>
                             </div>
-                            ${this.renderCabinetMiniRack(usage)}
-                            <div class="cabinet-usage-line">
-                              <span>U位使用</span>
-                              <strong>${usage.usedU}/${usage.height}</strong>
+                            <button class="cabinet-visual-main" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.CABINET)}" data-id="${escapeHtml(row.id)}" data-label="查看">
+                              ${this.renderCabinetMiniRack(usage)}
+                              <div class="cabinet-usage-line">
+                                <span>U位使用</span>
+                                <strong>${usage.usedU}/${usage.height}</strong>
+                              </div>
+                              <div class="cabinet-usage-bar">
+                                <span class="cabinet-usage-fill" style="width:${percent}%"></span>
+                              </div>
+                              <div class="cabinet-card-meta" title="${escapeHtml(row.assetLocation || "-")}">${escapeHtml(row.assetLocation || "-")}</div>
+                              <div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>
+                            </button>
+                            <div class="cabinet-visual-actions">
+                              ${this.renderRowActions(VIEW_IDS.CABINET, row)}
                             </div>
-                            <div class="cabinet-usage-bar">
-                              <span class="cabinet-usage-fill" style="width:${percent}%"></span>
-                            </div>
-                            <div class="cabinet-card-meta" title="${escapeHtml(row.assetLocation || "-")}">${escapeHtml(row.assetLocation || "-")}</div>
-                            <div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>
-                          </button>
+                          </article>
                         `;
                       }).join("")}
                     </div>`
@@ -28855,7 +29739,11 @@
           }
 
           renderRowMoreMenu(viewId, rowId, options = {}) {
-            const actions = viewId === VIEW_IDS.SPARE_PART ? SPARE_PART_ROW_MORE_MENU_ITEMS : ROW_MORE_MENU_ITEMS;
+            const actions = viewId === VIEW_IDS.SPARE_PART
+              ? SPARE_PART_ROW_MORE_MENU_ITEMS
+              : viewId === VIEW_IDS.CABINET
+                ? CABINET_ROW_MORE_MENU_ITEMS
+                : ROW_MORE_MENU_ITEMS;
             return `
               <div class="action-more-menu" role="menu" aria-label="更多操作">
                 ${actions.map((action) => {
@@ -30158,8 +31046,8 @@
                 </label>
               `;
             };
-            let title = "添加设备";
-            let subtitle = unitText + " · 请选择添加方式";
+            let title = "上架设备";
+            let subtitle = unitText + " · 请选择上架方式";
             let body = `
               <div class="cabinet-rack-choice-grid">
                 <button class="cabinet-rack-choice" type="button" data-action="cabinet-rack-dialog-mode" data-mode="select">
@@ -30167,7 +31055,7 @@
                   <span>从现有 IT 设备台账中选择待上架设备，并带入当前位置。</span>
                 </button>
                 <button class="cabinet-rack-choice" type="button" data-action="cabinet-rack-dialog-mode" data-mode="new">
-                  <strong>添加新设备</strong>
+                  <strong>新建设备并上架</strong>
                   <span>按 IT设备台账“上架”字段填写新设备信息。</span>
                 </button>
               </div>
@@ -30203,22 +31091,22 @@
                 <span class="cabinet-rack-selected-text">${selectedDevice ? `已选择：${escapeHtml(selectedDevice.name || selectedDevice.assetCode || selectedDevice.id)}` : "请点击列表行选择设备"}</span>
                 <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
                 <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
-                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="选择设备" ${selectedDevice ? "" : "disabled"}>确认选择</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备" ${selectedDevice ? "" : "disabled"}>确认选择</button>
               `;
             } else if (dialog.mode === "new") {
-              title = "添加新设备";
+              title = "新建设备并上架";
               subtitle = unitText + " · 字段与 IT设备台账-上架 保持一致";
               body = `<div class="cabinet-rack-form">${shelfFields.map(renderFormField).join("")}</div>`;
               footer = `
                 <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
                 <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
-                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="添加新设备">提交</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备">提交</button>
               `;
             } else if (dialog.mode === "retire") {
               title = "迁出确认";
               subtitle = deviceText + " · " + unitText;
               compact = true;
-              body = `<div class="cabinet-confirm-message">确认将 <strong>${escapeHtml(deviceText)}</strong> 从当前机柜迁出吗？迁出后设备将进入迁出流程。</div>`;
+              body = `<div class="cabinet-confirm-message">确认将 <strong>${escapeHtml(deviceText)}</strong> 从当前机柜迁出吗？当前迁出流程未启用，确认后将直接办理。</div>`;
               footer = `
                 <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
                 <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="迁出">确认迁出</button>
@@ -30375,11 +31263,17 @@
 
           renderProcessRouteDialog(dialog) {
             const selectedCount = Array.isArray(dialog.selectedRowIds) ? dialog.selectedRowIds.length : 0;
+            const cabinetContext = dialog.cabinetContext || null;
+            const cabinetContextText = cabinetContext
+              ? dialog.activityLabel === "上架"
+                ? `本次操作来源于机柜详情，将预填 <strong>${escapeHtml(cabinetContext.cabinetName || "当前机柜")}</strong>${cabinetContext.unit ? ` 的 <strong>${escapeHtml(String(cabinetContext.unit))}U</strong>` : ""}。`
+                : `本次操作来源于机柜详情，将为设备 <strong>${escapeHtml(cabinetContext.deviceName || cabinetContext.deviceCode || "当前设备")}</strong> 发起流程，并带入当前机柜与U位信息。`
+              : "";
             return `
               <div class="relation-modal-backdrop" data-action="close-process-route-dialog"></div>
-              <section class="relation-modal process-route-dialog" role="dialog" aria-modal="true" aria-labelledby="processRouteDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程办理提示" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从台账点击已启用流程的资产活动。||点击后行为：确认后进入对应流程发起页；已选择资产时自动带入，未选择资产的批量上架可直接进入发起页后再选择资产；取消后停留在台账且不生成流程单。||权限限制：无流程发起权限时不得绕过提示进入直接办理页面。">
+              <section class="relation-modal process-route-dialog" role="dialog" aria-modal="true" aria-labelledby="processRouteDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程办理提示" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从台账或机柜详情点击已启用流程的 IT设备资产活动。||点击后行为：确认后进入对应流程发起页；台账已选资产自动带入；机柜详情发起上架时带入机柜和目标U位，发起下架或迁出时同时带入当前设备。||直接办理：对应流程关闭时不展示本提示，继续使用当前入口的直接办理表单。||权限限制：无流程发起权限时不得绕过提示进入直接办理页面。">
                 <header class="relation-modal-head"><div class="relation-modal-title" id="processRouteDialogTitle">需通过流程办理</div><button class="relation-modal-close" type="button" data-action="close-process-route-dialog" aria-label="关闭">×</button></header>
-                <div class="process-route-dialog-body">当前“<strong>${escapeHtml(dialog.groupLabel + dialog.activityLabel)}</strong>”已启用流程管理，${selectedCount ? `将为已选择的 <strong>${selectedCount}</strong> 条资产发起流程。` : "本次操作需要通过流程单办理。"}是否前往发起？</div>
+                <div class="process-route-dialog-body">当前“<strong>${escapeHtml(dialog.groupLabel + dialog.activityLabel)}</strong>”已启用流程管理，${cabinetContextText || (selectedCount ? `将为已选择的 <strong>${selectedCount}</strong> 条资产发起流程。` : "本次操作需要通过流程单办理。")}是否前往发起？</div>
                 <footer class="relation-modal-footer"><div class="relation-modal-actions"><button class="btn" type="button" data-action="close-process-route-dialog">取消</button><button class="btn btn-primary" type="button" data-action="confirm-process-route-dialog">前往发起</button></div></footer>
               </section>
             `;
@@ -30439,6 +31333,15 @@
 
           renderExportProgressManager(state) {
             const manager = state.ui.exportProgressManager;
+            const savedPosition = state.ui.exportProgressPosition;
+            const collapsedPositionStyle = savedPosition
+              ? ` style="left:${Math.max(12, Number(savedPosition.left) || 12)}px;right:auto;bottom:${Math.max(12, Number(savedPosition.bottom) || 12)}px;top:auto;"`
+              : "";
+            const managerLeft = savedPosition ? Math.min(Math.max(12, Number(savedPosition.left) || 12), Math.max(12, window.innerWidth - 394)) : 0;
+            const managerBottom = savedPosition ? Math.min(Math.max(12, Number(savedPosition.bottom) || 12), Math.max(12, window.innerHeight - 410)) : 0;
+            const managerPositionStyle = savedPosition
+              ? ` style="left:${managerLeft}px;right:auto;bottom:${managerBottom}px;top:auto;"`
+              : "";
             const tasks = Array.isArray(manager?.tasks)
               ? manager.tasks
               : (manager?.task ? [manager.task] : []);
@@ -30453,7 +31356,7 @@
               const hasUnreadNotice = hasFailedNotice || hasCompletedNotice;
               const noticeCount = hasFailedNotice ? unreadFailedCount : unreadDoneCount;
               return `
-                <div class="export-progress-collapsed ${hasFailedNotice ? "has-failed" : hasCompletedNotice ? "has-complete" : ""}" role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="收起状态任务结果提醒" data-demand-text="需求来源：V3R5-4868。||触发条件：进度管理器处于收起状态时，有导出任务完成或失败。||展示规则：不弹出阻断弹窗；成功使用绿色提醒，失败使用红色提醒，并累计未读任务数量。||点击后行为：展开进度管理器、清除未读数量；成功任务保留下载入口，失败任务保留失败原因与重试入口。||多任务规则：失败提醒优先于成功提醒，避免用户错过异常结果。">
+                <div class="export-progress-collapsed ${hasFailedNotice ? "has-failed" : hasCompletedNotice ? "has-complete" : ""}"${collapsedPositionStyle} role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="收起状态任务结果提醒" data-demand-text="需求来源：V3R5-4868。||触发条件：进度管理器处于收起状态时，有导出任务完成或失败。||展示规则：不弹出阻断弹窗；成功使用绿色提醒，失败使用红色提醒，并累计未读任务数量。||拖拽规则：悬浮图标支持拖拽并限制在页面可视区域内；拖动不触发展开，点击仍可展开，展开列表沿用当前拖拽锚点。||点击后行为：展开进度管理器、清除未读数量；成功任务保留下载入口，失败任务保留失败原因与重试入口。||多任务规则：失败提醒优先于成功提醒，避免用户错过异常结果。">
                   ${hasUnreadNotice ? `<button class="export-progress-complete-notice ${hasFailedNotice ? "is-failed" : ""}" type="button" data-action="expand-export-progress"><span class="export-progress-complete-notice-icon" aria-hidden="true">${hasFailedNotice ? `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 7v6m0 4h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>` : `<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 12.5l4 4 8-9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`}</span><span class="export-progress-complete-notice-copy"><strong>${noticeCount} 个导出任务${hasFailedNotice ? "失败" : "已完成"}</strong><span>${hasFailedNotice ? "点击展开查看原因并重试" : "点击展开并下载文件"}</span></span></button>` : ""}
                   <button class="export-progress-float ${hasFailedNotice ? "has-failed" : hasCompletedNotice ? "has-unread" : ""}" type="button" data-action="expand-export-progress" aria-label="${hasUnreadNotice ? `${noticeCount} 个导出任务${hasFailedNotice ? "失败" : "已完成"}，展开进度管理器` : "展开进度管理器"}" title="进度管理器">
                     ${hasUnreadNotice
@@ -30474,7 +31377,7 @@
                     ? `<button class="export-task-action" type="button" data-action="retry-export-task" data-id="${escapeHtml(task.id)}">重试</button>`
                     : `<span class="export-task-subtitle">已取消</span>`;
               return `
-                <div class="export-progress-task ${task.status === "done" ? "is-done" : task.status === "failed" ? "is-failed" : ""} ${needsAttention ? "is-result-attention" : ""}" data-export-task-id="${escapeHtml(task.id)}" ${index === 0 ? 'data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出任务进度与操作" data-demand-text="需求来源：V3R5-4868。||展示规则：每个导出任务显示 xlsx 文件名、当前阶段、进度条和百分比；完成任务使用成功色并展示下载入口，失败任务使用红色并展示失败原因。||操作规则：生成中支持取消；完成后支持下载；失败后支持重试；已取消任务保留状态但不能下载。||结果触达：不展示右上角导出结果提示；进度管理器展开时自动定位并闪烁对应任务行，收起时保留成功/失败数量提醒，展开后定位任务。||异常判断：文件生成失败时保留失败任务；重试后重新执行生成流程，成功后恢复下载入口。"' : ""}>
+                <div class="export-progress-task ${task.status === "done" ? "is-done" : task.status === "failed" ? "is-failed" : ""} ${needsAttention ? "is-result-attention" : ""}" data-export-task-id="${escapeHtml(task.id)}" ${index === 0 ? 'data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出任务进度与操作" data-demand-text="需求来源：V3R5-4868。||展示规则：每个导出任务显示文件名、当前阶段、进度条和百分比；完成任务使用成功色并展示下载入口，失败任务使用红色并展示失败原因。||操作规则：生成中支持取消；完成后支持下载；失败后支持重试；已取消任务保留状态但不能下载。||完成触达：不弹窗、不展示右上角导出提示；进度管理器展开时自动定位并以绿色闪烁对应完成任务行，失败任务使用红色闪烁。||收起状态：保留成功/失败数量提醒，用户展开后自动定位并闪烁对应任务行。||异常判断：文件生成失败时保留失败任务；重试后重新执行生成流程，成功后恢复下载入口。"' : ""}>
                   <span class="export-task-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                       <path d="M7 3h7l4 4v14H7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
@@ -30496,7 +31399,7 @@
               `;
             };
             return `
-              <section class="export-progress-manager" role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：集中查看一个或多个资产导出任务的文件生成进度。||展示规则：进度管理器及其收起入口固定在页面右下角，任务按创建顺序展示，文件格式统一为 xlsx；同源新页签和页面刷新后自动恢复任务及当前进度。||完成触达：任务完成不弹窗；页面右上角展示全局成功提示，右下角进度管理器中的任务同步变为可下载状态；收起状态入口展示完成数量、成功色和强调动画。||跨页签规则：任务状态、取消和完成结果在页签间同步，重复同步不重复累计；管理器展开或收起状态由各页签独立保存。||状态限制：收起或切换页签不影响文件生成；全部任务结束后才允许关闭。||异常判断：任务失败、取消、存储受限或组件加载异常时需保留可识别状态并给出提示。">
+              <section class="export-progress-manager"${managerPositionStyle} role="status" aria-live="polite" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="导出进度管理器" data-demand-text="需求来源：V3R5-4868。||交互目的：集中查看一个或多个资产导出任务的文件生成进度。||展示规则：进度管理器及其收起入口默认位于主内容区左下角，收起图标拖拽后列表沿用对应锚点；任务按创建顺序展示，同源新页签和页面刷新后自动恢复任务及当前进度。||完成触达：任务完成不弹窗，也不展示页面右上角提示；管理器展开时自动滚动定位当前完成任务，并以明显的绿色闪烁提示，任务同时变为可下载状态。||收起状态：入口展示完成或失败数量及对应状态色，用户展开管理器后自动定位并闪烁对应任务行。||跨页签规则：任务状态、取消和完成结果在页签间同步，重复同步不重复累计；管理器展开或收起状态由各页签独立保存。||状态限制：收起或切换页签不影响文件生成；全部任务结束后才允许关闭。||异常判断：任务失败时在列表内以红色状态和闪烁定位，保留失败原因与重试入口；取消、存储受限或组件加载异常时保留可识别状态。">
                 <header class="export-progress-head">
                   <span>进度管理器</span>
                   <span class="export-progress-actions" data-demand-version="v1.2" data-demand-req-id="V3R5-4868" data-demand-title="进度管理器收起与关闭" data-demand-text="需求来源：V3R5-4868。||点击后行为：收起后任务继续生成，可通过悬浮入口重新展开；全部任务结束后显示关闭按钮。||跨页签规则：收起状态仅作用于当前页签；关闭已完成任务列表后，其他同源页签同步清空。||状态限制：存在进行中任务时不允许关闭进度管理器。">
@@ -31806,6 +32709,8 @@
             this.designTreeResizeState = null;
             this.designSideResizeState = null;
             this.detailFieldDragState = null;
+            this.exportProgressDragState = null;
+            this.suppressExportProgressClickUntil = 0;
           }
 
           init() {
@@ -31815,6 +32720,60 @@
           }
 
           bindEvents() {
+            document.addEventListener("pointerdown", (event) => {
+              const button = event.target instanceof Element ? event.target.closest(".export-progress-float") : null;
+              const wrapper = button?.closest(".export-progress-collapsed");
+              if (!(button instanceof HTMLElement) || !(wrapper instanceof HTMLElement)) return;
+              const rect = wrapper.getBoundingClientRect();
+              this.exportProgressDragState = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height,
+                wrapper,
+                button,
+                moved: false
+              };
+              button.setPointerCapture?.(event.pointerId);
+            });
+
+            document.addEventListener("pointermove", (event) => {
+              const drag = this.exportProgressDragState;
+              if (!drag || drag.pointerId !== event.pointerId) return;
+              const deltaX = event.clientX - drag.startX;
+              const deltaY = event.clientY - drag.startY;
+              if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
+              drag.moved = true;
+              drag.button.classList.add("is-dragging");
+              const maxLeft = Math.max(12, window.innerWidth - drag.width - 12);
+              const maxTop = Math.max(60, window.innerHeight - drag.height - 12);
+              const nextLeft = Math.min(maxLeft, Math.max(12, drag.left + deltaX));
+              const nextTop = Math.min(maxTop, Math.max(60, drag.top + deltaY));
+              drag.wrapper.style.left = nextLeft + "px";
+              drag.wrapper.style.right = "auto";
+              drag.wrapper.style.top = nextTop + "px";
+              drag.wrapper.style.bottom = "auto";
+              event.preventDefault();
+            }, { passive: false });
+
+            const finishExportProgressDrag = (event) => {
+              const drag = this.exportProgressDragState;
+              if (!drag || drag.pointerId !== event.pointerId) return;
+              drag.button.classList.remove("is-dragging");
+              drag.button.releasePointerCapture?.(event.pointerId);
+              if (drag.moved) {
+                const rect = drag.wrapper.getBoundingClientRect();
+                this.suppressExportProgressClickUntil = Date.now() + 450;
+                this.store.setExportProgressPosition(rect.left, Math.max(12, window.innerHeight - rect.bottom));
+              }
+              this.exportProgressDragState = null;
+            };
+            document.addEventListener("pointerup", finishExportProgressDrag);
+            document.addEventListener("pointercancel", finishExportProgressDrag);
+
             document.addEventListener("wheel", (event) => {
               const target = event.target instanceof Element ? event.target : null;
               const page = target?.closest(".process-config-page");
@@ -32026,6 +32985,10 @@
                 return;
               }
               if (action === "expand-export-progress") {
+                if (Date.now() < this.suppressExportProgressClickUntil) {
+                  event.preventDefault();
+                  return;
+                }
                 this.store.expandExportProgressManager();
                 return;
               }
@@ -32230,6 +33193,10 @@
                 this.store.decideItAssetWorkflowOrder(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-decision"));
                 return;
               }
+              if (action === "complete-it-asset-workflow") {
+                this.store.completeItAssetWorkflowExecution(actionTarget.getAttribute("data-view"));
+                return;
+              }
               if (action === "open-it-asset-workflow-process") {
                 this.store.openItAssetWorkflowProcess(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-id"), actionTarget.getAttribute("data-process") !== "true");
                 return;
@@ -32343,13 +33310,13 @@
                 return;
               }
               if (action === "open-cabinet-rack-add") {
-                this.store.openCabinetRackDialog("add", {
+                this.store.requestCabinetDetailActivity("add", {
                   unit: actionTarget.getAttribute("data-unit")
                 });
                 return;
               }
               if (action === "open-cabinet-rack-off-shelf") {
-                this.store.openCabinetRackDialog("offShelf", {
+                this.store.requestCabinetDetailActivity("offShelf", {
                   unit: actionTarget.getAttribute("data-unit"),
                   deviceCode: actionTarget.getAttribute("data-code"),
                   deviceName: actionTarget.getAttribute("data-name"),
@@ -32358,7 +33325,7 @@
                 return;
               }
               if (action === "open-cabinet-rack-retire") {
-                this.store.openCabinetRackDialog("retire", {
+                this.store.requestCabinetDetailActivity("retire", {
                   unit: actionTarget.getAttribute("data-unit"),
                   deviceCode: actionTarget.getAttribute("data-code"),
                   deviceName: actionTarget.getAttribute("data-name"),
