@@ -17507,6 +17507,7 @@
           { id: "basic", label: "基本信息" },
           { id: "position", label: "位置信息" },
           { id: "history", label: "履历信息" },
+          { id: "workOrders", label: "关联工单" },
           { id: "relation", label: "关系拓扑" },
           { id: "contains", label: "包含设备" }
         ];
@@ -35815,6 +35816,37 @@
   .tl-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
   .tl-user { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
 
+  .mobile-work-order-list { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+  .mobile-work-order-card {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(42, 72, 110, .04);
+  }
+  .mobile-work-order-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mobile-work-order-type {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: #eef5ff;
+    color: var(--primary);
+    font-size: 11px;
+  }
+  .mobile-work-order-type.is-incident { background: #fff1e8; color: #c65b12; }
+  .mobile-work-order-type.is-problem { background: #f3edff; color: #7451b8; }
+  .mobile-work-order-status { font-size: 11px; color: #18a058; }
+  .mobile-work-order-title { margin-top: 9px; color: var(--text); font-size: 13px; font-weight: 700; line-height: 1.4; }
+  .mobile-work-order-no { margin-top: 4px; color: var(--primary); font-size: 12px; }
+  .mobile-work-order-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 7px; color: var(--text-tertiary); font-size: 11px; }
+  .mobile-work-order-summary { margin-top: 7px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+
   /* 关系拓扑 */
   .topo-stage {
     position: relative;
@@ -36864,6 +36896,33 @@
     return html;
   }
 
+  function mobileWorkOrdersOf(a) {
+    var typePrefix = a.type === "station" ? "SF" : a.type === "cabinet" ? "JG" : a.type === "spare" ? "SP" : "IT";
+    return [
+      { type: "事件", status: "已完成", operator: "王强", time: "2026-07-13 09:42", title: a.name + "运行告警处置", no: "INC2026071300186", summary: "监控告警处理中关联资产 " + a.code + "，用于辅助定位影响对象。" },
+      { type: "变更", status: "已完成", operator: "陈浩", time: "2026-07-11 21:10", title: typePrefix + "设备维护窗口调整", no: "CHG2026071100042", summary: "实施变更时将当前资产纳入影响范围，可进入工单查看完整处理记录。" },
+      { type: "问题", status: "处理中", operator: "李敏", time: "2026-07-08 15:26", title: "同类设备间歇性异常根因分析", no: "PRB2026070800015", summary: "问题调查过程中关联当前资产作为分析样本，记录工单与资产的关联事实。" }
+    ];
+  }
+
+  function renderDetailWorkOrders(a) {
+    var orders = mobileWorkOrdersOf(a);
+    var html = '<div class="field-group"><div class="fg-title">关联工单（' + orders.length + '）</div>';
+    html += '<div class="mobile-work-order-list">';
+    orders.forEach(function (order) {
+      var typeClass = order.type === "事件" ? "is-incident" : order.type === "问题" ? "is-problem" : "";
+      html += '<button class="mobile-work-order-card" data-action="open-mobile-work-order" data-no="' + esc(order.no) + '">';
+      html += '<div class="mobile-work-order-head"><span class="mobile-work-order-type ' + typeClass + '">' + esc(order.type) + '</span><span class="mobile-work-order-status">' + esc(order.status) + '</span></div>';
+      html += '<div class="mobile-work-order-title">' + esc(order.title) + '</div>';
+      html += '<div class="mobile-work-order-no">' + esc(order.no) + ' ›</div>';
+      html += '<div class="mobile-work-order-meta"><span>操作人：' + esc(order.operator) + '</span><span>' + esc(order.time) + '</span></div>';
+      html += '<div class="mobile-work-order-summary">' + esc(order.summary) + '</div>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+    return html;
+  }
+
   function topoNodeHtml(asset, role, isCurrent) {
     return '<button class="topo-node ' + (isCurrent ? "current" : "") + '" data-action="open-detail" data-id="' + esc(asset.id) + '">' +
       '<div class="tn-role">' + role + (isCurrent ? "（当前）" : "") + '</div>' +
@@ -36916,6 +36975,7 @@
       { id: "basic", label: "基本信息" },
       { id: "position", label: "位置信息" },
       { id: "history", label: "履历信息" },
+      { id: "workOrders", label: "关联工单" },
       { id: "relation", label: "关系拓扑" }
     ];
     if (a.type === "cabinet") tabs.splice(1, 0, { id: "contains", label: "包含设备" });
@@ -36956,6 +37016,7 @@
     if (state.detailTab === "basic") html += renderDetailBasic(a);
     else if (state.detailTab === "position") html += renderDetailPosition(a);
     else if (state.detailTab === "history") html += renderDetailHistory(a);
+    else if (state.detailTab === "workOrders") html += renderDetailWorkOrders(a);
     else if (state.detailTab === "relation") html += renderDetailRelation(a);
     else if (state.detailTab === "contains") html += renderDetailContains(a);
     html += '</div>';
@@ -37238,6 +37299,8 @@
     } else if (action === "set-history-range") {
       state.historyRange = el.getAttribute("data-range");
       render();
+    } else if (action === "open-mobile-work-order") {
+      showToast("已打开工单 " + (el.getAttribute("data-no") || ""));
     } else if (action === "sim-scan") {
       simScan(el.getAttribute("data-id"));
     }
