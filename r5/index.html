@@ -18268,31 +18268,33 @@
 
           static createRetiredAssets() {
             const base = [
-              ["无线AP接入交换机_ST1-ISW-1F-02", "ST1-ISW-1F-02", "从头交换机"],
-              ["中压配电柜_DE2-MDA2-1F-3", "20250604153433-4213", "高压馈线柜"],
-              ["帮配水器_D1-WT-1F-1", "20250623162745-51565", "流量传感器"],
-              ["智慧水表_D1-WT-1F-2", "20250623162745-51566", "流量传感器"],
-              ["舱里计_D1T-EM-1F-1", "20250623162745-51567", "能量传感器"],
-              ["舱里计_D1T-EM-1F-10", "20250623162745-51568", "能量传感器"],
-              ["舱里计_D1T-EM-1F-11", "20250623162745-51569", "能量传感器"],
-              ["舱里计_D1T-EM-1F-2", "20250623162745-51570", "能量传感器"],
-              ["舱里计_D1T-EM-1F-3", "20250623162745-51571", "能量传感器"],
-              ["舱里计_D1T-EM-1F-4", "20250623162745-51572", "能量传感器"],
-              ["舱里计_D1T-EM-1F-5", "20250623162745-51573", "能量传感器"],
-              ["舱里计_D1T-EM-1F-6", "20250623162745-51574", "能量传感器"],
-              ["舱里计_D1T-EM-1F-7", "20250623162745-51575", "能量传感器"],
-              ["舱里计_D1T-EM-1F-8", "20250623162745-51576", "能量传感器"],
-              ["舱里计_D1T-EM-1F-9", "20250623162745-51577", "能量传感器"],
-              ["舱里计_D1T-EM-2F-10", "20250623163027-51578", "能量传感器"]
+              ["核心业务数据库服务器-01", "DC-A1-SRV-DB-001", "CNWSR760A001", "设备分类>IT硬件>服务器>机架式服务器", "迁出", "戴尔", "PowerEdge R760"],
+              ["虚拟化计算节点-07", "DC-A1-SRV-VIRT-007", "CNWSR750V007", "设备分类>IT硬件>服务器>机架式服务器", "报废", "戴尔", "PowerEdge R750"],
+              ["全闪存储阵列-01", "DC-A1-STO-AFA-001", "2102353XYZ10A001", "设备分类>IT硬件>存储设备>全闪存阵列", "迁出", "华为", "OceanStor Dorado 5000 V6"],
+              ["备份存储一体机-02", "DC-A1-STO-BAK-002", "CNBK5240B002", "设备分类>IT硬件>存储设备>备份一体机", "报废", "浪潮", "DP1000G6"],
+              ["数据中心核心交换机-01", "DC-A1-NET-CORE-001", "H3C12508X001", "设备分类>IT硬件>网络设备>核心交换机", "迁出", "新华三", "S12508X-AF"],
+              ["服务器接入交换机-03", "DC-A1-NET-TOR-003", "HWCE6865T003", "设备分类>IT硬件>网络设备>数据中心交换机", "报废", "华为", "CloudEngine 6865"],
+              ["SAN光纤交换机-02", "DC-A1-NET-SAN-002", "BRG620SAN002", "设备分类>IT硬件>网络设备>光纤交换机", "迁出", "博科", "G620"],
+              ["互联网边界防火墙-01", "DC-A1-SEC-FW-001", "NSG5000FW001", "设备分类>IT硬件>安全设备>防火墙", "报废", "绿盟", "NFNX3-HDB3280"],
+              ["模块化UPS主机-01", "DC-B1-PWR-UPS-001", "UPS93PR001", "设备分类>场地设施>供配电设备>UPS主机", "迁出", "伊顿", "93PR 200kVA"],
+              ["低压配电柜-2AA03", "DC-B1-PWR-LV-003", "LV2AA032021", "设备分类>场地设施>供配电设备>低压配电柜", "报废", "施耐德", "Blokset"],
+              ["智能列头柜-A01", "DC-A1-PWR-RPP-001", "RPPAPC001", "设备分类>场地设施>供配电设备>智能列头柜", "迁出", "施耐德", "PDPM277H"],
+              ["房间级精密空调-03", "DC-A1-HVAC-CRAC-003", "STULZCRAC003", "设备分类>场地设施>制冷设备>精密空调", "报废", "世图兹", "CyberAir 3PRO"],
+              ["冷冻水型列间空调-05", "DC-A1-HVAC-ROW-005", "VRCWROW005", "设备分类>场地设施>制冷设备>列间空调", "迁出", "维谛", "CRV4 CW"],
+              ["机房温湿度传感器-18", "DC-A1-ENV-TH-018", "HWTHS018", "设备分类>场地设施>动环设备>温湿度传感器", "报废", "华为", "ECC800-Pro TH"],
+              ["定位式漏水控制器-04", "DC-A1-ENV-LEAK-004", "TTDM128004", "设备分类>场地设施>动环设备>漏水控制器", "迁出", "瑞侃", "TTDM-128"],
+              ["标准服务器机柜-A1-03", "DC-A1-CAB-003", "CAB42UA103", "设备分类>机柜>服务器机柜>42U标准机柜", "报废", "威图", "TS IT 42U"]
             ];
 
             const rows = expandRows(base, 220, (item, index, round) => ({
               id: "RT-" + pad(index + 1, 3),
               name: item[0] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
-              serialNumber: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
-              assetStatus: index % 2 === 0 ? "迁出" : "报废",
-              assetCategory: item[2]
+              serialNumber: item[2] + (round > 0 ? "-" + pad(round + 1) : ""),
+              assetStatus: item[4],
+              assetCategory: item[3],
+              vendor: item[5],
+              model: item[6]
             }));
             return disambiguateNames(rows);
           }
@@ -29061,7 +29063,7 @@
                     `}
                   </div>
                   <div class="toolbar-actions">
-                    ${this.store.isPendingInitializationView(viewId) ? "" : this.renderLedgerHierarchyControl(viewId, state)}
+                    ${this.store.isPendingInitializationView(viewId) || viewId === VIEW_IDS.RETIRED_ASSET ? "" : this.renderLedgerHierarchyControl(viewId, state)}
                     ${meta.actions.map((action) => this.renderHeaderAction(action, viewId)).join("")}
                     ${renderHeaderTools ? this.renderToolbarTools() : ""}
                   </div>
@@ -31321,10 +31323,10 @@
               <div class="mobile-app-mask" data-action="close-mobile-app">
                 <div class="mobile-app-dialog" data-action="mobile-app-noop">
                   <div class="mobile-app-toolbar">
-                    <span class="mobile-app-toolbar-title">资产管理 App<span class="sub">移动端交互原型 · 概览 / 台账 / 扫码</span></span>
+                    <span class="mobile-app-toolbar-title">运维宝 App<span class="sub">移动端交互原型 · 首页 / 待办 / 资产管理 / 扫码</span></span>
                     <button class="mobile-app-close" type="button" data-action="close-mobile-app" aria-label="关闭移动端原型">✕</button>
                   </div>
-                  <div class="mobile-app-frame-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理模块适配" data-demand-text="需求来源：V3R5-4773。||交互目的：展示运维宝中资产管理模块的移动端适配，包括资产概览、资产台账、扫码查看和现场详情浏览。||展示规则：移动端原型以手机壳形式呈现，保留概览/扫一扫/资产等核心入口，重点验证现场用户快速定位资产和查看关键信息的路径。||状态限制：当前弹窗为移动端交互演示，真实系统需按移动端账号权限控制可见资产范围。||异常判断：扫码无匹配资产、资产已删除、无权限或移动端网络异常时，应给出清晰提示并保留返回路径。">
+                  <div class="mobile-app-frame-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理模块适配" data-demand-text="需求来源：V3R5-4773。||交互目的：从运维宝首页的功能模块进入资产管理，并支持在资产管理内返回首页；通过底部待办入口集中处理流程任务。||展示规则：首页固定一屏且不产生内容滚动，资产管理作为重点入口高亮展示，其他模块与下方信息区弱化处理；待办页顶部分类和底部导航固定，仅任务列表滚动；点击去处理后任务转入已处理。||联动规则：点击资产管理进入资产概览、资产台账、扫码与详情浏览，内页顶部始终提供返回首页入口；首页与待办通过底部导航互相切换。||状态限制：当前弹窗为移动端交互演示，真实系统需按移动端账号权限控制可见模块、待办和资产范围。||异常判断：无待办时展示空态；模块无权限、扫码无匹配资产、资产已删除或移动端网络异常时，应给出清晰提示并保留返回路径。">
                     <iframe data-role="mobile-app-frame" title="资产管理移动端原型"></iframe>
                   </div>
                 </div>
@@ -35240,6 +35242,289 @@
   .card.tappable { transition: transform .12s ease, box-shadow .12s ease; }
   .card.tappable:active { transform: scale(0.985); box-shadow: 0 1px 5px rgba(21,48,84,.08); }
 
+  /* ===== 运维宝首页 ===== */
+  .app-home {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: #f1f4f7;
+  }
+  .home-topbar {
+    height: 48px;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 44px 1fr 70px;
+    align-items: center;
+    padding: 0 8px;
+    background: #fff;
+    border-bottom: 1px solid #e8edf3;
+    color: #2d61d7;
+  }
+  .home-topbar-title { text-align: center; font-size: 17px; font-weight: 700; }
+  .home-topbar-action { display: inline-flex; align-items: center; justify-content: center; color: #3f6fdc; }
+  .home-topbar-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+  .home-scroll { flex: 1; min-height: 0; overflow: hidden; }
+  .home-scroll::-webkit-scrollbar { width: 0; }
+  .home-section { margin-bottom: 8px; background: #fff; border-top: 1px solid #edf1f6; border-bottom: 1px solid #e3e9f0; }
+  .home-section-title {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    color: #2e3d50;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .home-section-title::before { content: ""; width: 3px; height: 17px; margin-right: 7px; border-radius: 2px; background: #3977ed; }
+  .home-section-title > span:first-child { display: flex; align-items: center; flex: 1; }
+  .home-section-title small { font-size: 11px; font-weight: 400; color: #98a5b5; }
+  .home-recent-grid { display: grid; grid-template-columns: repeat(5, 1fr); min-height: 82px; border-top: 1px solid #f1f4f7; }
+  .home-module-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid #eef2f6; }
+  .home-module {
+    position: relative;
+    min-height: 82px;
+    padding: 10px 3px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    border-right: 1px solid #f0f3f7;
+    border-bottom: 1px solid #f0f3f7;
+    color: #37465a;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .home-module:nth-child(5n) { border-right: 0; }
+  .home-module-icon {
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: #edf3ff;
+    color: #4a78df;
+  }
+  .home-module.is-focus {
+    z-index: 2;
+    color: #0d58cb;
+    font-weight: 700;
+    background: linear-gradient(180deg, #f4f8ff 0%, #fff 100%);
+    box-shadow: inset 0 0 0 2px #4d87ef, 0 5px 16px rgba(22, 119, 255, .18);
+  }
+  .home-module.is-focus .home-module-icon {
+    color: #fff;
+    background: linear-gradient(145deg, #2f83f5, #1769db);
+    box-shadow: 0 5px 12px rgba(22,119,255,.28);
+  }
+  .home-module.is-muted { opacity: .38; filter: blur(.55px) grayscale(.2); cursor: default; }
+  .home-module.is-muted .home-module-icon { background: #f0f3f7; color: #8291a5; }
+  .home-summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); padding: 10px 8px 14px; gap: 6px; }
+  .home-summary-item { text-align: center; color: #63758b; font-size: 10px; }
+  .home-summary-circle {
+    width: 46px;
+    height: 46px;
+    margin: 0 auto 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 11px;
+    background: linear-gradient(145deg, #5c8ff0, #396dd4);
+    box-shadow: 0 4px 10px rgba(44, 93, 187, .2);
+  }
+  .home-muted-panel { filter: blur(1.2px); opacity: .42; pointer-events: none; }
+  .home-pue { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; padding: 12px 14px 18px; min-height: 122px; }
+  .home-pue-gauge { position: relative; height: 92px; overflow: hidden; }
+  .home-pue-gauge::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 24px;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    border: 12px solid #d7e1ec;
+    border-top-color: #39cb75;
+    border-right-color: #ffd737;
+    transform: rotate(-45deg);
+  }
+  .home-pue-gauge strong { position: absolute; left: 49px; top: 61px; color: #45596f; }
+  .home-energy { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; font-size: 10px; color: #66798e; }
+  .home-energy div { padding: 8px 5px; border: 1px solid #e8eef5; border-radius: 6px; background: #fbfdff; }
+  .home-energy b { display: block; margin-top: 3px; color: #23b8c7; font-size: 13px; }
+  .home-tabbar {
+    height: 58px;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    background: rgba(255,255,255,.98);
+    border-top: 1px solid #e5ebf2;
+  }
+  .home-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: #9aa7b7;
+    font-size: 10px;
+  }
+  .home-tab svg { width: 20px; height: 20px; }
+  .home-tab.is-active { color: #3476e5; font-weight: 700; }
+  .home-tab.is-blurred {
+    color: #9ca8b6;
+    opacity: .42;
+    filter: blur(.65px) grayscale(.35);
+    pointer-events: none;
+  }
+
+  /* ===== 应用页 ===== */
+  .apps-page { flex: 1; min-height: 0; display: flex; flex-direction: column; background: #f1f3f6; }
+  .apps-scroll { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .apps-scroll::-webkit-scrollbar { width: 0; }
+  .apps-section { margin-bottom: 7px; background: #fff; border-bottom: 1px solid #e1e7ee; }
+  .apps-section-title {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 9px;
+    color: #2c3b4f;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .apps-section-title::before { content: ""; width: 3px; height: 18px; border-radius: 2px; background: #3978e9; }
+  .apps-section-title::after { content: ""; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #27384c; }
+  .apps-grid { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid #eef2f6; }
+  .app-entry {
+    min-height: 94px;
+    padding: 11px 3px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 7px;
+    border-right: 1px solid #edf1f5;
+    border-bottom: 1px solid #edf1f5;
+    color: #26374a;
+    font-size: 11px;
+    line-height: 1.45;
+    text-align: center;
+  }
+  .app-entry:nth-child(5n) { border-right: 0; }
+  .app-entry-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #20aef3;
+    border-radius: 50%;
+    color: #11a4ed;
+    background: #f8fdff;
+  }
+  .app-entry-label { min-height: 32px; display: flex; align-items: flex-start; justify-content: center; }
+  .app-entry.is-asset {
+    color: #075fcb;
+    font-weight: 700;
+    background: #f5f9ff;
+  }
+  .app-entry.is-asset .app-entry-icon { color: #fff; background: #1677ff; border-color: #1677ff; box-shadow: 0 4px 10px rgba(22,119,255,.22); }
+
+  /* ===== 待办页 ===== */
+  .todo-page { flex: 1; min-height: 0; display: flex; flex-direction: column; background: #f2f4f7; }
+  .todo-tabs {
+    height: 43px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #fff;
+    border-bottom: 1px solid #dfe6ef;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-x;
+    scroll-behavior: smooth;
+  }
+  .todo-tabs.is-dragging { cursor: grabbing; scroll-behavior: auto; }
+  .todo-tabs::-webkit-scrollbar { display: none; }
+  .todo-tab {
+    position: relative;
+    min-width: 66px;
+    padding: 0 9px;
+    flex-shrink: 0;
+    color: #35465b;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .todo-tab.is-active { color: #236be1; font-weight: 700; }
+  .todo-tab.is-active::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; background: #236be1; }
+  .todo-count {
+    position: absolute;
+    right: 1px;
+    top: 2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: #e71928;
+    color: #fff;
+    font-size: 9px;
+    line-height: 1;
+  }
+  .todo-list { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
+  .todo-list::-webkit-scrollbar { width: 0; }
+  .todo-card { position: relative; padding: 12px 12px 10px 15px; margin-bottom: 6px; background: #fff; border-bottom: 1px solid #e5eaf0; box-shadow: 0 2px 5px rgba(29,55,86,.05); }
+  .todo-card::before { content: ""; position: absolute; left: 8px; top: 13px; width: 3px; height: 17px; background: #3979e8; }
+  .todo-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .todo-card-title { padding-left: 3px; font-size: 14px; font-weight: 700; color: #25364a; }
+  .todo-type { flex-shrink: 0; padding: 2px 7px; border: 1px solid #5485df; border-radius: 4px; color: #3e72ce; font-size: 11px; background: #f8fbff; }
+  .todo-info { display: grid; grid-template-columns: 92px 1fr; align-items: center; row-gap: 7px; color: #2d3d50; font-size: 12px; }
+  .todo-info-label { display: inline-flex; align-items: center; gap: 5px; color: #3b4958; }
+  .todo-info-label svg { width: 15px; height: 15px; color: #53677c; }
+  .todo-node { color: #1470d2; }
+  .todo-handle {
+    position: absolute;
+    right: 15px;
+    top: 68px;
+    min-width: 80px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 18px;
+    color: #fff;
+    font-size: 12px;
+    background: linear-gradient(100deg, #4d82ec, #ba75e9);
+    box-shadow: 0 5px 12px rgba(92,94,213,.25);
+  }
+  .todo-handle:active { transform: scale(.97); }
+  .todo-empty { margin: 80px 24px 0; padding: 34px 12px; text-align: center; color: #95a3b3; background: #fff; border-radius: 12px; }
+
+  /* ===== 资产管理内页返回首页 ===== */
+  .asset-app-bar {
+    height: 42px;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 92px 1fr 92px;
+    align-items: center;
+    padding: 0 10px;
+    background: #fff;
+    border-bottom: 1px solid #e5ebf2;
+    color: #1f3652;
+  }
+  .asset-app-bar-title { text-align: center; font-size: 16px; font-weight: 700; }
+  .asset-home-back { display: inline-flex; align-items: center; gap: 3px; color: #1677ff; font-size: 13px; }
+  .asset-app-bar-spacer { width: 100%; }
+
   /* ===== 概览页 ===== */
   .ov-hero {
     background: linear-gradient(135deg, #0e85ff 0%, #0d6ef4 78%);
@@ -36358,6 +36643,8 @@
   /* ===================== 状态 ===================== */
 
   var state = {
+    shell: "home",           /* home | todo | apps | asset，App 默认进入运维宝首页 */
+    todoTab: "待处理",
     tab: "overview",          /* overview | scan | assets */
     page: "main",             /* main | detail */
     detailId: null,
@@ -36375,6 +36662,21 @@
   };
   var scanTimer = null;
   var toastTimer = null;
+  var todoTabsDrag = null;
+  var suppressTodoTabClick = false;
+
+  var TODO_ITEMS = [
+    { id: "TD-001", category: "待处理", title: "sj_01", type: "IT设备上架", time: "2026-07-22 11:02:07", no: "ITSJ2026072200001", creator: "系统管理员", node: "上架审核" },
+    { id: "TD-002", category: "待处理", title: "rk-01", type: "IT设备入库", time: "2026-07-22 10:54:50", no: "ITRK2026072200001", creator: "系统管理员", node: "入库审核" },
+    { id: "TD-003", category: "待处理", title: "II入库单1", type: "工具仪表-入库", time: "2026-07-22 10:12:06", no: "2026072200003", creator: "系统管理员", node: "资产入库" },
+    { id: "TD-004", category: "待处理", title: "ccccss", type: "IT设备入库", time: "2026-07-21 16:42:48", no: "ITRK2026072100007", creator: "系统管理员", node: "入库审核" },
+    { id: "TD-005", category: "已处理", title: "核心服务器变动", type: "IT设备变动", time: "2026-07-21 14:26:18", no: "ITBD2026072100002", creator: "张伟", node: "执行完成" },
+    { id: "TD-006", category: "已处理", title: "精密空调部署", type: "场地设施部署", time: "2026-07-20 09:35:41", no: "SFBS2026072000001", creator: "李婷", node: "执行完成" },
+    { id: "TD-007", category: "抄送我", title: "网络设备批量入库", type: "IT设备入库", time: "2026-07-22 08:42:10", no: "ITRK2026072200008", creator: "王强", node: "入库审核" },
+    { id: "TD-008", category: "我发起", title: "D7机房服务器上架", type: "IT设备上架", time: "2026-07-21 19:18:32", no: "ITSJ2026072100005", creator: "系统管理员", node: "上架审核" },
+    { id: "TD-009", category: "离线数据", title: "移动端离线盘点", type: "资产盘点", time: "2026-07-20 18:06:21", no: "PD2026072000006", creator: "赵敏", node: "等待同步" },
+    { id: "TD-010", category: "草稿", title: "备件入库草稿", type: "备件入库", time: "2026-07-19 15:36:08", no: "BJRK-DRAFT-001", creator: "系统管理员", node: "草稿" }
+  ];
 
   /* ===================== 需求说明（默认开启，可关闭） ===================== */
 
@@ -37119,6 +37421,115 @@
 
   /* ===================== 渲染：Tab 栏与根渲染 ===================== */
 
+  function homeModuleIcon(kind) {
+    var icons = {
+      asset: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="5" rx="1.5"/><rect x="4" y="10" width="16" height="5" rx="1.5"/><rect x="4" y="17" width="16" height="4" rx="1.5"/><path d="M8 5.5h.01M8 12.5h.01M8 19h.01"/></svg>',
+      clock: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 2v5M16 2v5M8 11h8M12 12v4l3 1"/></svg>',
+      chart: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V7M4 20h17M8 16l3-5 3 3 5-8"/><path d="M17 6h2v2"/></svg>',
+      tool: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7a5 5 0 0 0-7-4l3 3-4 4-3-3a5 5 0 0 0 6 7l6 6a2 2 0 0 0 3-3l-6-6a5 5 0 0 0 2-4Z"/></svg>',
+      note: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M8 10h8M8 14h6"/></svg>',
+      flow: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.5 8.5l5 6M17 7v4M15 9h4"/></svg>',
+      video: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg>'
+    };
+    return icons[kind] || icons.note;
+  }
+
+  function renderHomeModule(label, kind, focus) {
+    return '<button class="home-module ' + (focus ? 'is-focus' : 'is-muted') + '" type="button" ' + (focus ? 'data-action="enter-asset-module"' : 'aria-disabled="true" tabindex="-1"') + '>' +
+      '<span class="home-module-icon">' + homeModuleIcon(kind) + '</span><span>' + esc(label) + '</span></button>';
+  }
+
+  function renderHomeTabbar(active) {
+    var homeIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11.2 12 3l9 8.2v9.3a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5v-9.3Z"/></svg>';
+    var monitorIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+    var bellIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9a6 6 0 0 1 12 0c0 7 3 7 3 8H3c0-1 3-1 3-8Z"/><path d="M10 20h4"/></svg>';
+    var todoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
+    var appIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>';
+    return '<div class="home-tabbar"><button class="home-tab ' + (active === 'home' ? 'is-active' : '') + '" data-action="open-app-home">' + homeIcon + '<span>首页</span></button><button class="home-tab is-blurred" tabindex="-1" aria-disabled="true">' + monitorIcon + '<span>监控</span></button><button class="home-tab is-blurred" tabindex="-1" aria-disabled="true">' + bellIcon + '<span>告警</span></button><button class="home-tab ' + (active === 'todo' ? 'is-active' : '') + '" data-action="open-app-todo">' + todoIcon + '<span>待办</span></button><button class="home-tab ' + (active === 'apps' ? 'is-active' : '') + '" data-action="open-apps-page">' + appIcon + '<span>应用</span></button></div>';
+  }
+
+  function renderAppHome() {
+    var html = '<div class="app-home">';
+    html += '<div class="home-topbar"><button class="home-topbar-action" type="button" aria-label="菜单"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="home-topbar-title">首页</div><div class="home-topbar-right"><span class="home-topbar-action"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></span><span class="home-topbar-action">•••</span></div></div>';
+    html += '<div class="home-scroll">';
+    html += '<section class="home-section home-muted-panel"><div class="home-section-title"><span>最近使用⌄</span></div><div class="home-recent-grid">' + renderHomeModule('即时台账', 'clock', false) + '</div></section>';
+    html += '<section class="home-section"><div class="home-section-title"><span>功能模块⌄</span></div><div class="home-module-grid">';
+    html += renderHomeModule('资产管理', 'asset', true);
+    html += renderHomeModule('值班管理', 'clock', false);
+    html += renderHomeModule('容量管理', 'chart', false);
+    html += renderHomeModule('维保对象', 'note', false);
+    html += renderHomeModule('维保计划', 'tool', false);
+    html += renderHomeModule('租户概览', 'tool', false);
+    html += renderHomeModule('事件处理', 'note', false);
+    html += renderHomeModule('施工管理', 'note', false);
+    html += renderHomeModule('变更管理', 'flow', false);
+    html += renderHomeModule('问题管理', 'note', false);
+    html += renderHomeModule('视频管理', 'video', false);
+    html += '</div></section>';
+    html += '<section class="home-section home-muted-panel"><div class="home-section-title"><span>机房概要信息⌄</span><small>机房于2012年12月投产</small></div><div class="home-summary-grid"><div class="home-summary-item"><div class="home-summary-circle">㎡</div>面积(m²)</div><div class="home-summary-item"><div class="home-summary-circle">柜</div>机柜(个)</div><div class="home-summary-item"><div class="home-summary-circle">kW</div>容量(kW)</div><div class="home-summary-item"><div class="home-summary-circle">间</div>空间(台)</div><div class="home-summary-item"><div class="home-summary-circle">UPS</div>UPS(台)</div></div></section>';
+    html += '<section class="home-section home-muted-panel"><div class="home-section-title"><span>园区PUE信息⌄</span></div><div class="home-pue"><div class="home-pue-gauge"><strong>PUE</strong></div><div class="home-energy"><div>昨日总能耗<b>-kWh</b></div><div>昨日IT能耗<b>-kWh</b></div><div>当年总能耗<b>-kWh</b></div><div>当年IT能耗<b>-kWh</b></div></div></div></section>';
+    html += '</div>' + renderHomeTabbar('home') + '</div>';
+    return html;
+  }
+
+  function renderTodoPage() {
+    var tabs = ["待处理", "已处理", "抄送我", "我发起", "离线数据", "草稿"];
+    var counts = {
+      "待处理": TODO_ITEMS.filter(function (item) { return item.category === "待处理"; }).length,
+      "已处理": 15 + TODO_ITEMS.filter(function (item) { return item.category === "已处理"; }).length,
+      "抄送我": 0,
+      "我发起": 17,
+      "离线数据": 0,
+      "草稿": 0
+    };
+    var rows = TODO_ITEMS.filter(function (item) { return item.category === state.todoTab; });
+    var clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+    var order = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>';
+    var user = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-4 3.4-6 8-6s7.3 2 8 6"/></svg>';
+    var html = '<div class="todo-page">';
+    html += '<div class="home-topbar"><button class="home-topbar-action" type="button" aria-label="菜单"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="home-topbar-title">待办</div><div class="home-topbar-right"><button class="home-topbar-action" type="button" aria-label="全屏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button><button class="home-topbar-action" type="button" aria-label="筛选"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18l-7 8v6.5l-4 2V12L3 4Z"/></svg></button><button class="home-topbar-action" type="button" aria-label="通知"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6 6 0 0 0-6 6v3.7c0 1.4-.5 2.8-1.5 3.8L3 17h18l-1.5-1.5a5.4 5.4 0 0 1-1.5-3.8V8a6 6 0 0 0-6-6Zm-2 17a2 2 0 0 0 4 0h-4Z"/></svg></button></div></div>';
+    html += '<div class="todo-tabs">' + tabs.map(function (tab) { var count = counts[tab] || 0; return '<button class="todo-tab ' + (state.todoTab === tab ? 'is-active' : '') + '" type="button" data-action="switch-todo-tab" data-tab="' + tab + '">' + tab + (count ? '<span class="todo-count">' + count + '</span>' : '') + '</button>'; }).join('') + '</div>';
+    html += '<div class="todo-list">';
+    if (!rows.length) {
+      html += '<div class="todo-empty">当前分类暂无待办数据</div>';
+    } else {
+      rows.forEach(function (item) {
+        html += '<article class="todo-card"><div class="todo-card-head"><span class="todo-card-title">' + esc(item.title) + '</span><span class="todo-type">' + esc(item.type) + '</span></div>';
+        html += '<div class="todo-info"><span class="todo-info-label">' + clock + '创建时间：</span><span>' + esc(item.time) + '</span><span class="todo-info-label">' + order + '单号：</span><span>' + esc(item.no) + '</span><span class="todo-info-label">' + user + '创建人：</span><span>' + esc(item.creator) + '</span><span class="todo-info-label">当前节点：</span><span class="todo-node">' + esc(item.node) + '</span></div>';
+        if (item.category === '待处理') html += '<button class="todo-handle" type="button" data-action="handle-todo" data-id="' + item.id + '">去处理 ▶</button>';
+        html += '</article>';
+      });
+    }
+    html += '</div>' + renderHomeTabbar('todo') + '</div>';
+    return html;
+  }
+
+  function renderAppEntry(label, action, asset) {
+    var shield = '<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 6v5c0 5-3.2 8.4-8 10-4.8-1.6-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>';
+    return '<button class="app-entry ' + (asset ? 'is-asset' : '') + '" type="button" data-action="' + (action || 'app-placeholder') + '"><span class="app-entry-icon">' + shield + '</span><span class="app-entry-label">' + esc(label) + '</span></button>';
+  }
+
+  function renderAppsPage() {
+    var sections = [
+      { title: '工具仪表', items: ['工具仪表-资产履历', '工具仪表-资产分类编码', '工具仪表-台账', '工具仪表-入库', '工具仪表-盘点', '工具仪表-领用', '工具仪表-归还', '工具仪表-调拨', '工具仪表-报修', '工具仪表报废'] },
+      { title: '场地设施', items: ['场地设施入库', '场地设施回库', '场地设施部署', '场地设施变动', '场地设施编辑', '场地设施报废'] },
+      { title: 'IT设备', items: ['IT设备下架', 'IT设备上架', 'IT设备入库', 'IT设备迁出', 'IT设备变动', 'IT设备编辑'] }
+    ];
+    var html = '<div class="apps-page">';
+    html += '<div class="home-topbar"><button class="home-topbar-action" type="button" aria-label="菜单"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="home-topbar-title">应用</div><div class="home-topbar-right"><button class="home-topbar-action" type="button" aria-label="全屏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button><button class="home-topbar-action" type="button" aria-label="搜索"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button><span class="home-topbar-action"><svg width="48" height="26" viewBox="0 0 48 26"><rect x="1" y="1" width="46" height="24" rx="12" fill="#e9eef5" stroke="#4b77da"/><circle cx="14" cy="13" r="9" fill="#4c74d3"/></svg></span></div></div>';
+    html += '<div class="apps-scroll">';
+    sections.forEach(function (section) {
+      html += '<section class="apps-section"><div class="apps-section-title">' + esc(section.title) + '</div><div class="apps-grid">';
+      section.items.forEach(function (label) {
+        var isAsset = label.indexOf('IT设备') === 0;
+        html += renderAppEntry(label, isAsset ? 'enter-asset-from-app' : 'app-placeholder', isAsset);
+      });
+      html += '</div></section>';
+    });
+    html += '</div>' + renderHomeTabbar('apps') + '</div>';
+    return html;
+  }
+
   var ICONS = {
     overview: '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="9" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="5.5" rx="1.5"/><rect x="13.5" y="12" width="7.5" height="9" rx="1.5"/><rect x="3" y="15.5" width="7.5" height="5.5" rx="1.5"/></svg>',
     assets: '<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11L12 2Z"/><path d="M4.2 6.8L12 11l7.8-4.2M12 11v10.5"/></svg>',
@@ -37143,19 +37554,30 @@
     var statusBar = document.getElementById("statusBar");
     var html = '';
 
-    if (state.page === "detail") {
-      html += '<div class="page active">' + renderDetail() + '</div>';
+    if (state.shell === "home") {
+      html += renderAppHome();
+      statusBar.classList.remove("on-dark");
+    } else if (state.shell === "todo") {
+      html += renderTodoPage();
+      statusBar.classList.remove("on-dark");
+    } else if (state.shell === "apps") {
+      html += renderAppsPage();
       statusBar.classList.remove("on-dark");
     } else {
-      html += '<div class="page ' + (state.tab === "overview" ? "active" : "") + '">' + (state.tab === "overview" ? renderOverview() : "") + '</div>';
-      html += '<div class="page ' + (state.tab === "assets" ? "active" : "") + '">' + (state.tab === "assets" ? renderAssetList() : "") + '</div>';
-      html += '<div class="page page-scan ' + (state.tab === "scan" ? "active" : "") + '">' + (state.tab === "scan" ? renderScan() : "") + '</div>';
-      html += renderTabbar();
-      statusBar.classList.toggle("on-dark", state.tab === "scan");
-      if (state.locSheet && state.tab === "overview") html += renderLocSheet();
+      html += '<div class="asset-app-bar"><button class="asset-home-back" type="button" data-action="back-app-home"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>返回首页</button><div class="asset-app-bar-title">资产管理</div><span class="asset-app-bar-spacer"></span></div>';
+      if (state.page === "detail") {
+        html += '<div class="page active">' + renderDetail() + '</div>';
+        statusBar.classList.remove("on-dark");
+      } else {
+        html += '<div class="page ' + (state.tab === "overview" ? "active" : "") + '">' + (state.tab === "overview" ? renderOverview() : "") + '</div>';
+        html += '<div class="page ' + (state.tab === "assets" ? "active" : "") + '">' + (state.tab === "assets" ? renderAssetList() : "") + '</div>';
+        html += '<div class="page page-scan ' + (state.tab === "scan" ? "active" : "") + '">' + (state.tab === "scan" ? renderScan() : "") + '</div>';
+        html += renderTabbar();
+        statusBar.classList.toggle("on-dark", state.tab === "scan");
+        if (state.locSheet && state.tab === "overview") html += renderLocSheet();
+      }
+      html += '<button class="demand-fab ' + (state.demandMode ? "is-on" : "") + '" data-action="toggle-demand-mode" title="需求说明：' + (state.demandMode ? "开" : "关") + '" aria-label="切换需求说明">需</button>';
     }
-
-    html += '<button class="demand-fab ' + (state.demandMode ? "is-on" : "") + '" data-action="toggle-demand-mode" title="需求说明：' + (state.demandMode ? "开" : "关") + '" aria-label="切换需求说明">需</button>';
 
     if (state.toast) html += '<div class="toast">' + esc(state.toast) + '</div>';
     screen.innerHTML = html;
@@ -37211,7 +37633,58 @@
     if (!el) return;
     var action = el.getAttribute("data-action");
 
-    if (action === "switch-tab") {
+    if (action === "switch-todo-tab" && suppressTodoTabClick) {
+      ev.preventDefault();
+      suppressTodoTabClick = false;
+      return;
+    }
+
+    if (action === "open-app-home") {
+      state.shell = "home";
+      render();
+    } else if (action === "open-app-todo") {
+      state.shell = "todo";
+      render();
+    } else if (action === "open-apps-page") {
+      state.shell = "apps";
+      render();
+    } else if (action === "enter-asset-from-app") {
+      state.shell = "asset";
+      state.page = "main";
+      state.tab = "assets";
+      state.list.type = "it";
+      state.list.search = "";
+      state.list.drill = null;
+      render();
+    } else if (action === "app-placeholder") {
+      showToast("当前原型重点展示资产管理模块");
+    } else if (action === "switch-todo-tab") {
+      state.todoTab = el.getAttribute("data-tab") || "待处理";
+      render();
+    } else if (action === "handle-todo") {
+      var todoId = el.getAttribute("data-id");
+      var todoItem = TODO_ITEMS.find(function (item) { return item.id === todoId; });
+      if (todoItem) {
+        todoItem.category = "已处理";
+        todoItem.node = "执行完成";
+        state.todoTab = "已处理";
+        render();
+        showToast("已处理：" + todoItem.title);
+      }
+    } else if (action === "enter-asset-module") {
+      state.shell = "asset";
+      state.page = "main";
+      state.tab = "overview";
+      render();
+    } else if (action === "back-app-home") {
+      state.shell = "home";
+      state.page = "main";
+      state.detailId = null;
+      state.locSheet = false;
+      state.scan = { status: "idle" };
+      clearTimeout(scanTimer);
+      render();
+    } else if (action === "switch-tab") {
       var tab = el.getAttribute("data-tab");
       state.tab = tab;
       state.page = "main";
@@ -37305,6 +37778,39 @@
       simScan(el.getAttribute("data-id"));
     }
   });
+
+  /* 待办顶部 Tab：触屏保持原生横滑，桌面端支持按住鼠标拖动 */
+  document.addEventListener("pointerdown", function (ev) {
+    var tabs = ev.target.closest && ev.target.closest(".todo-tabs");
+    if (!tabs || ev.pointerType === "touch" || ev.button !== 0) return;
+    todoTabsDrag = { el: tabs, pointerId: ev.pointerId, startX: ev.clientX, startLeft: tabs.scrollLeft, moved: false };
+    tabs.classList.add("is-dragging");
+    if (tabs.setPointerCapture) tabs.setPointerCapture(ev.pointerId);
+  });
+
+  document.addEventListener("pointermove", function (ev) {
+    if (!todoTabsDrag || ev.pointerId !== todoTabsDrag.pointerId) return;
+    var delta = ev.clientX - todoTabsDrag.startX;
+    if (Math.abs(delta) > 4) todoTabsDrag.moved = true;
+    todoTabsDrag.el.scrollLeft = todoTabsDrag.startLeft - delta;
+    if (todoTabsDrag.moved) ev.preventDefault();
+  });
+
+  function finishTodoTabsDrag(ev) {
+    if (!todoTabsDrag || ev.pointerId !== todoTabsDrag.pointerId) return;
+    var tabs = todoTabsDrag.el;
+    var moved = todoTabsDrag.moved;
+    tabs.classList.remove("is-dragging");
+    if (tabs.releasePointerCapture && tabs.hasPointerCapture && tabs.hasPointerCapture(ev.pointerId)) tabs.releasePointerCapture(ev.pointerId);
+    todoTabsDrag = null;
+    if (moved) {
+      suppressTodoTabClick = true;
+      setTimeout(function () { suppressTodoTabClick = false; }, 80);
+    }
+  }
+
+  document.addEventListener("pointerup", finishTodoTabsDrag);
+  document.addEventListener("pointercancel", finishTodoTabsDrag);
 
   document.addEventListener("input", function (ev) {
     var el = ev.target;
