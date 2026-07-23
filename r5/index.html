@@ -4990,6 +4990,7 @@
       .process-config-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 14px; }
       .process-config-head h1 { margin: 0; color: #183653; font-size: 18px; }
       .process-config-head p { margin: 6px 0 0; color: #71869c; font-size: 12px; }
+      .process-config-head-actions { display: flex; flex: none; align-items: center; gap: 8px; }
       .process-config-mode { display: inline-flex; flex: none; align-items: center; padding: 3px; border: 1px solid #d8e3ef; border-radius: 5px; background: #eef3f8; }
       .process-config-mode button { height: 30px; padding: 0 14px; border: 0; border-radius: 3px; background: transparent; color: #5e7389; font-size: 12px; cursor: pointer; }
       .process-config-mode button.is-active { background: #fff; color: var(--primary); box-shadow: 0 1px 4px rgba(27, 64, 101, .14); font-weight: 600; }
@@ -5039,7 +5040,7 @@
       .process-route-dialog { width: min(560px, calc(100vw - 48px)); height: auto; min-height: 0; max-height: calc(100vh - 48px); display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: hidden; }
       .process-route-dialog-body { padding: 24px 26px; color: #38536d; line-height: 1.8; }
       .process-route-dialog-body strong { color: #173b60; }
-      @media (max-width: 900px) { .process-config-head { flex-direction: column; } .process-config-summary { grid-template-columns: 1fr; } .process-config-unified { align-items: flex-start; flex-direction: column; } }
+      @media (max-width: 900px) { .process-config-head { flex-direction: column; } .process-config-head-actions { width: 100%; flex-wrap: wrap; } .process-config-summary { grid-template-columns: 1fr; } .process-config-unified { align-items: flex-start; flex-direction: column; } }
 
       .relation-modal.master-slave-import-dialog {
         width: min(584px, calc(100vw - 48px));
@@ -12724,6 +12725,16 @@
         text-overflow: ellipsis;
       }
 
+      .consumable-page .inbound-order-table th:first-child,
+      .consumable-page .inbound-order-table td:first-child {
+        width: 48px;
+        padding-right: 0;
+        padding-left: 0;
+        overflow: visible;
+        text-align: center;
+        text-overflow: clip;
+      }
+
       .consumable-page .inbound-order-table th:nth-last-child(2),
       .consumable-page .inbound-order-table td:nth-last-child(2) {
         width: 250px;
@@ -14033,6 +14044,15 @@
           CONSUMABLE_INVENTORY: "consumableInventory",
           CONSUMABLE_ADJUSTMENT: "consumableAdjustment",
           CONSUMABLE_HISTORY: "consumableHistory",
+          TOOL_LEDGER: "toolLedger",
+          TOOL_INBOUND: "toolInbound",
+          TOOL_ISSUE: "toolIssue",
+          TOOL_RETIRE: "toolRetire",
+          TOOL_REPAIR: "toolRepair",
+          TOOL_RETURN: "toolReturn",
+          TOOL_TRANSFER: "toolTransfer",
+          TOOL_INVENTORY: "toolInventory",
+          TOOL_HISTORY: "toolHistory",
           RETIRED_ASSET: "retiredAsset",
           TEMPLATE_CONFIG: "templateConfig",
           FORM_DESIGN: "formDesign",
@@ -14174,6 +14194,47 @@
           [VIEW_IDS.CONSUMABLE_INVENTORY]: Object.freeze({ title: "7月耗材库月度盘点", creator: "刘婷", approver: "周明", assignee: "刘婷", department: "仓储管理组", remark: "盘点范围：耗材库A区、B区；核对账面库存与实物库存。", materialIndexes: [0, 1, 2, 3, 4] }),
           [VIEW_IDS.CONSUMABLE_ADJUSTMENT]: Object.freeze({ title: "机柜螺丝包盘亏调整", creator: "刘婷", approver: "周明", assignee: "刘婷", department: "仓储管理组", reason: "盘亏", remark: "盘点发现2包包装破损无法继续使用，申请库存减损。", materialIndexes: [3] })
         });
+        const TOOL_WORKFLOW_CONFIG = Object.freeze({
+          [VIEW_IDS.TOOL_INBOUND]: Object.freeze({ key: "inbound", title: "工具仪表-入库", listTitle: "入库列表", codePrefix: "TIRK", actionLabel: "发起", sectionTitle: "资产信息" }),
+          [VIEW_IDS.TOOL_ISSUE]: Object.freeze({ key: "issue", title: "工具仪表-领用", listTitle: "领用列表", codePrefix: "TILY", actionLabel: "新建", sectionTitle: "资产信息" }),
+          [VIEW_IDS.TOOL_RETIRE]: Object.freeze({ key: "retire", title: "工具仪表-报废", listTitle: "报废列表", codePrefix: "TIBF", actionLabel: "新建", sectionTitle: "报废资产" }),
+          [VIEW_IDS.TOOL_REPAIR]: Object.freeze({ key: "repair", title: "工具仪表-报修", listTitle: "报修列表", codePrefix: "TIBX", actionLabel: "新建", sectionTitle: "报修资产" }),
+          [VIEW_IDS.TOOL_RETURN]: Object.freeze({ key: "return", title: "工具仪表-归还", listTitle: "归还列表", codePrefix: "TIGH", actionLabel: "新建", sectionTitle: "归还详情" }),
+          [VIEW_IDS.TOOL_TRANSFER]: Object.freeze({ key: "transfer", title: "工具仪表-调拨", listTitle: "调拨列表", codePrefix: "TIDB", actionLabel: "新建", sectionTitle: "资产信息" }),
+          [VIEW_IDS.TOOL_INVENTORY]: Object.freeze({ key: "inventory", title: "工具仪表-盘点", listTitle: "盘点列表", codePrefix: "TIPD", actionLabel: "新建", sectionTitle: "盘点清单" })
+        });
+        const TOOL_WORKFLOW_VIEW_IDS = new Set(Object.keys(TOOL_WORKFLOW_CONFIG));
+        const TOOL_ASSETS = Object.freeze([
+          Object.freeze({ id: "TL-001", assetCode: "TOOL-202607-001", name: "光纤熔接机", category: "测试仪表>光纤测试>熔接机", brandModel: "藤仓 90S+", amount: "68000", unit: "台", supplier: "北京光联科技", status: "空闲", location: "2号楼-B1层-工具仪表库A区", user: "-", contact: "张三", phone: "15236363232", purchaseDate: "2026-06-18", description: "光纤链路施工与抢修", serviceLife: "8年" }),
+          Object.freeze({ id: "TL-002", assetCode: "TOOL-202607-002", name: "数字万用表", category: "测试仪表>电气测试>万用表", brandModel: "Fluke 289C", amount: "6200", unit: "台", supplier: "福禄克仪器", status: "领用中", location: "2号楼-B1层-工具仪表库A区", user: "王强", contact: "李工", phone: "13800138002", purchaseDate: "2026-05-12", description: "配电设备巡检", serviceLife: "6年" }),
+          Object.freeze({ id: "TL-003", assetCode: "TOOL-202607-003", name: "红外热像仪", category: "测试仪表>热成像>红外热像仪", brandModel: "Fluke Ti480 PRO", amount: "98000", unit: "台", supplier: "福禄克仪器", status: "空闲", location: "2号楼-B1层-工具仪表库A区", user: "-", contact: "李工", phone: "13800138002", purchaseDate: "2026-04-08", description: "配电柜与UPS温升检测", serviceLife: "8年" }),
+          Object.freeze({ id: "TL-004", assetCode: "TOOL-202607-004", name: "网络测试仪", category: "测试仪表>网络测试>链路分析仪", brandModel: "Fluke DSX-8000", amount: "126000", unit: "台", supplier: "上海网络仪器", status: "领用中", location: "2号楼-B1层-工具仪表库B区", user: "陈浩", contact: "赵敏", phone: "13900139003", purchaseDate: "2026-03-22", description: "铜缆链路认证测试", serviceLife: "8年" }),
+          Object.freeze({ id: "TL-005", assetCode: "TOOL-202607-005", name: "电动螺丝刀", category: "运维工具>安装工具>电动螺丝刀", brandModel: "Bosch GO 3", amount: "520", unit: "套", supplier: "博世工具", status: "空闲", location: "2号楼-B1层-工具仪表库B区", user: "-", contact: "周师傅", phone: "13600136004", purchaseDate: "2026-02-15", description: "机柜设备安装", serviceLife: "5年" }),
+          Object.freeze({ id: "TL-006", assetCode: "TOOL-202607-006", name: "绝缘电阻测试仪", category: "测试仪表>电气测试>绝缘测试", brandModel: "Megger MIT420", amount: "11800", unit: "台", supplier: "梅格仪器", status: "空闲", location: "2号楼-B1层-工具仪表库A区", user: "-", contact: "刘工", phone: "13500135005", purchaseDate: "2026-01-20", description: "电气绝缘性能测试", serviceLife: "8年" }),
+          Object.freeze({ id: "TL-007", assetCode: "TOOL-202607-007", name: "标签打印机", category: "运维工具>标识工具>标签打印机", brandModel: "Brother PT-E850TKW", amount: "7600", unit: "台", supplier: "兄弟商业", status: "维修中", location: "维修中心-待修区", user: "-", contact: "孙工", phone: "13300133006", purchaseDate: "2025-12-18", description: "资产与线缆标签打印", serviceLife: "6年" }),
+          Object.freeze({ id: "TL-008", assetCode: "TOOL-202607-008", name: "手持巡检终端", category: "运维工具>移动终端>手持终端", brandModel: "Zebra TC53", amount: "13800", unit: "台", supplier: "斑马技术", status: "领用中", location: "2号楼-B1层-工具仪表库B区", user: "刘婷", contact: "吴经理", phone: "13200132007", purchaseDate: "2025-11-09", description: "资产盘点与巡检", serviceLife: "5年" }),
+          Object.freeze({ id: "TL-009", assetCode: "TOOL-202607-009", name: "激光测距仪", category: "测试仪表>测量工具>激光测距", brandModel: "Leica D2", amount: "2300", unit: "台", supplier: "徕卡测量", status: "空闲", location: "2号楼-B1层-工具仪表库B区", user: "-", contact: "何工", phone: "13100131008", purchaseDate: "2025-10-17", description: "空间尺寸测量", serviceLife: "6年" }),
+          Object.freeze({ id: "TL-010", assetCode: "TOOL-202607-010", name: "钳形电流表", category: "测试仪表>电气测试>钳形表", brandModel: "Fluke 376 FC", amount: "4800", unit: "台", supplier: "福禄克仪器", status: "空闲", location: "2号楼-B1层-工具仪表库A区", user: "-", contact: "李工", phone: "13800138002", purchaseDate: "2025-09-06", description: "配电回路电流检测", serviceLife: "6年" }),
+          Object.freeze({ id: "TL-011", assetCode: "TOOL-202607-011", name: "接地电阻测试仪", category: "测试仪表>电气测试>接地测试", brandModel: "Hioki FT6031", amount: "9200", unit: "台", supplier: "日置仪器", status: "空闲", location: "2号楼-B1层-工具仪表库A区", user: "-", contact: "郑工", phone: "13000130009", purchaseDate: "2025-08-12", description: "机房接地系统检测", serviceLife: "8年" }),
+          Object.freeze({ id: "TL-012", assetCode: "TOOL-202607-012", name: "光功率计", category: "测试仪表>光纤测试>光功率计", brandModel: "EXFO PPM-350D", amount: "15600", unit: "台", supplier: "光迅仪器", status: "领用中", location: "2号楼-B1层-工具仪表库A区", user: "赵磊", contact: "钱工", phone: "13700137010", purchaseDate: "2025-07-25", description: "光纤链路功率检测", serviceLife: "7年" }),
+          Object.freeze({ id: "TL-013", assetCode: "TOOL-202607-013", name: "工业吸尘器", category: "运维工具>清洁工具>工业吸尘器", brandModel: "Karcher NT 30/1", amount: "5600", unit: "台", supplier: "凯驰清洁", status: "空闲", location: "2号楼-B1层-工具仪表库C区", user: "-", contact: "冯工", phone: "13400134011", purchaseDate: "2025-06-13", description: "机房设备除尘清洁", serviceLife: "6年" })
+        ]);
+        const TOOL_HISTORY_ROWS = Object.freeze([
+          Object.freeze({ orderNo: "TIRK202607180001", assetCode: "TOOL-202607-001", assetName: "光纤熔接机", operator: "刘婷", time: "2026-07-18 10:22:18", action: "入库", remark: "验收合格入工具仪表库A区" }),
+          Object.freeze({ orderNo: "TILY202607190001", assetCode: "TOOL-202607-002", assetName: "数字万用表", operator: "王强", time: "2026-07-19 09:15:36", action: "领用", remark: "配电室季度巡检领用" }),
+          Object.freeze({ orderNo: "TIBX202607200001", assetCode: "TOOL-202607-007", assetName: "标签打印机", operator: "刘婷", time: "2026-07-20 14:08:10", action: "报修", remark: "打印头走纸异常，送维修中心" }),
+          Object.freeze({ orderNo: "TIGH202607210001", assetCode: "TOOL-202607-004", assetName: "网络测试仪", operator: "陈浩", time: "2026-07-21 17:35:10", action: "归还", remark: "网络改造测试完成归还" }),
+          Object.freeze({ orderNo: "TIPD202607220001", assetCode: "TOOL-202607-008", assetName: "手持巡检终端", operator: "刘婷", time: "2026-07-22 16:20:05", action: "盘点", remark: "月度盘点账实一致" })
+        ]);
+        const TOOL_WORKFLOW_SCENARIOS = Object.freeze({
+          [VIEW_IDS.TOOL_INBOUND]: Object.freeze({ title: "7月工具仪表到货入库", creator: "系统管理员", assignee: "刘婷", approver: "李敏", executor: "刘婷", remark: "采购批次PO-202607-026验收合格后入工具仪表库。", assetIndexes: [0, 1, 2] }),
+          [VIEW_IDS.TOOL_ISSUE]: Object.freeze({ title: "配电系统季度巡检工具领用", creator: "系统管理员", assignee: "王强", approver: "李敏", executor: "王强", remark: "计划用于配电室季度巡检，预计7月30日前归还。", assetIndexes: [1, 9] }),
+          [VIEW_IDS.TOOL_RETIRE]: Object.freeze({ title: "老旧测试仪表报废申请", creator: "系统管理员", assignee: "刘婷", approver: "周明", executor: "刘婷", remark: "设备超过使用年限且维修费用高，申请报废。", assetIndexes: [5] }),
+          [VIEW_IDS.TOOL_REPAIR]: Object.freeze({ title: "标签打印机故障报修", creator: "系统管理员", assignee: "孙杰", approver: "李敏", executor: "孙杰", remark: "打印头走纸异常，需送维修中心检测。", assetIndexes: [6] }),
+          [VIEW_IDS.TOOL_RETURN]: Object.freeze({ title: "网络改造工具归还", creator: "系统管理员", assignee: "陈浩", approver: "李敏", executor: "刘婷", remark: "项目使用完成，外观及配件检查正常后归还。", assetIndexes: [3] }),
+          [VIEW_IDS.TOOL_TRANSFER]: Object.freeze({ title: "工具仪表库区调拨", creator: "系统管理员", assignee: "刘婷", approver: "周明", executor: "刘婷", remark: "将巡检工具由A区调拨至B区，便于现场班组领用。", assetIndexes: [8, 9] }),
+          [VIEW_IDS.TOOL_INVENTORY]: Object.freeze({ title: "7月工具仪表月度盘点", creator: "系统管理员", assignee: "刘婷", approver: "周明", executor: "刘婷", remark: "盘点工具仪表库A区、B区在库及领用中资产。", assetIndexes: [0, 1, 2, 3, 4] })
+        });
         const SIDEBAR_MENU = [
           { type: "static", id: "deviceOverview", viewId: VIEW_IDS.ASSET_OVERVIEW, label: "资产概览" },
           {
@@ -14218,6 +14279,17 @@
             { id: VIEW_IDS.CONSUMABLE_INVENTORY, label: "盘点" },
             { id: VIEW_IDS.CONSUMABLE_ADJUSTMENT, label: "增减损" },
             { id: VIEW_IDS.CONSUMABLE_HISTORY, label: "履历" }
+          ] },
+          { type: "group", id: "toolInstrument", label: "工具仪表", children: [
+            { id: VIEW_IDS.TOOL_LEDGER, label: "台账" },
+            { id: VIEW_IDS.TOOL_INBOUND, label: "入库" },
+            { id: VIEW_IDS.TOOL_ISSUE, label: "领用" },
+            { id: VIEW_IDS.TOOL_RETIRE, label: "报废" },
+            { id: VIEW_IDS.TOOL_REPAIR, label: "报修" },
+            { id: VIEW_IDS.TOOL_RETURN, label: "归还" },
+            { id: VIEW_IDS.TOOL_TRANSFER, label: "调拨" },
+            { id: VIEW_IDS.TOOL_INVENTORY, label: "盘点" },
+            { id: VIEW_IDS.TOOL_HISTORY, label: "履历" }
           ] },
           {
             type: "group",
@@ -17825,6 +17897,7 @@
                   spare: true,
                   retired: true,
                   consumable: true,
+                  toolInstrument: true,
                   assetConfig: true,
                   assetDetection: true,
                   deviceOverview: true
@@ -17892,6 +17965,14 @@
                   historyKeyword: "",
                   workflows: {},
                   decisionDialog: null
+                },
+                toolInstrument: {
+                  ledgerMode: "list",
+                  ledgerKeyword: "",
+                  ledgerTab: "detail",
+                  activeAssetId: "",
+                  historyKeyword: "",
+                  workflows: {}
                 },
                 itInbound: {
                   tab: "all",
@@ -18520,6 +18601,18 @@
               const consumable = this.ensureConsumableState();
               consumable.ledgerMode = "list";
               consumable.activeMaterialId = "";
+            }
+            if (TOOL_WORKFLOW_VIEW_IDS.has(viewId)) {
+              const workflow = this.ensureToolWorkflowState(viewId);
+              workflow.mode = "list";
+              workflow.activeId = "";
+              workflow.readonly = false;
+            }
+            if (viewId === VIEW_IDS.TOOL_LEDGER) {
+              const tool = this.ensureToolInstrumentState();
+              tool.ledgerMode = "list";
+              tool.activeAssetId = "";
+              tool.ledgerTab = "detail";
             }
             if (viewId === VIEW_IDS.IT_INBOUND && this.state.ui.itInbound) {
               this.state.ui.itInbound.mode = "list";
@@ -20455,8 +20548,8 @@
               this.pushToast("无法导出", "当前筛选条件下没有可导出的操作记录。", "warning");
               return;
             }
-            const header = ["发生时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "执行人", "来源", "关联单据", "结果"];
-            const workbookRows = [header, ...rows.map((event) => [event.time, event.action, event.assetCode, event.assetName, event.assetType, event.operator, event.executor, event.source, event.orderNo, event.result])];
+            const header = ["发生时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "来源", "关联单据", "结果"];
+            const workbookRows = [header, ...rows.map((event) => [event.time, event.action, event.assetCode, event.assetName, event.assetType, event.operator, event.source, event.orderNo, event.result])];
             try {
               this.downloadXlsxRows(workbookRows, "资产操作记录_" + new Date().toISOString().slice(0, 10) + ".xlsx", "操作记录");
               this.pushToast("导出成功", `已按当前筛选条件导出 ${rows.length} 条操作记录。`, "success");
@@ -22303,6 +22396,11 @@
             this.emit();
           }
 
+          saveProcessConfig() {
+            this.state.ui.processConfigSavedAt = new Date().toISOString();
+            this.pushToast("保存成功", "当前表单流程配置已保存并生效。", "success");
+          }
+
           toggleAllProcessFlows() {
             const activities = PROCESS_FLOW_GROUPS.flatMap((group) => group.activities.map((activity) => ({ group, activity })));
             const allEnabled = activities.every(({ activity }) => this.isProcessFlowEnabled(activity.flowViewId));
@@ -23112,6 +23210,271 @@
               "快捷查询": "已执行耗材常用快捷查询。"
             };
             this.pushToast(label, messages[label] || "耗材管理操作已执行。", "info");
+          }
+
+          ensureToolInstrumentState() {
+            const tool = this.state.ui.toolInstrument || (this.state.ui.toolInstrument = {});
+            if (!Array.isArray(tool.assets)) tool.assets = TOOL_ASSETS.map((item) => ({ ...item }));
+            if (!tool.workflows) tool.workflows = {};
+            if (typeof tool.ledgerKeyword !== "string") tool.ledgerKeyword = "";
+            if (typeof tool.historyKeyword !== "string") tool.historyKeyword = "";
+            if (!tool.ledgerMode) tool.ledgerMode = "list";
+            if (!tool.ledgerTab) tool.ledgerTab = "detail";
+            return tool;
+          }
+
+          getToolWorkflowConfig(viewId) {
+            return TOOL_WORKFLOW_CONFIG[viewId] || null;
+          }
+
+          buildToolWorkflowItem(assetIndex, config, sequence = 0) {
+            const asset = { ...TOOL_ASSETS[assetIndex % TOOL_ASSETS.length] };
+            return {
+              ...asset,
+              rowId: `${config.key}-asset-${sequence}-${asset.id}`,
+              inventoryStatus: config.key === "inventory" ? (sequence % 3 === 1 ? "盘亏" : "正常") : "",
+              remark: config.key === "inventory" && sequence % 3 === 1 ? "配件盒待补充" : asset.description
+            };
+          }
+
+          ensureToolWorkflowState(viewId) {
+            const config = this.getToolWorkflowConfig(viewId);
+            if (!config) return null;
+            const tool = this.ensureToolInstrumentState();
+            if (!tool.workflows[viewId]) {
+              const scenario = TOOL_WORKFLOW_SCENARIOS[viewId] || {};
+              const statuses = ["待审核", "已完成", "待执行", "草稿"];
+              const suffixes = ["", "（已完成）", "（待执行）", "（草稿）"];
+              tool.workflows[viewId] = {
+                tab: "all",
+                keyword: "",
+                mode: "list",
+                activeId: "",
+                readonly: false,
+                draftItems: (scenario.assetIndexes || [0]).map((index, sequence) => this.buildToolWorkflowItem(index, config, sequence)),
+                orders: statuses.map((status, index) => ({
+                  id: `${config.codePrefix}202607${String(23 - index).padStart(2, "0")}${String(index + 1).padStart(4, "0")}`,
+                  title: `${scenario.title || config.title}${suffixes[index]}`,
+                  creator: scenario.creator || "系统管理员",
+                  createdAt: `2026-07-${String(23 - index).padStart(2, "0")} ${String(10 + index).padStart(2, "0")}:${String(12 + index * 9).padStart(2, "0")}:20`,
+                  status,
+                  assignee: scenario.assignee || "刘婷",
+                  approver: scenario.approver || "李敏",
+                  executor: scenario.executor || "刘婷",
+                  remark: scenario.remark || "按工具仪表管理规范办理。",
+                  plannedReturnDate: "2026-07-30",
+                  retireDate: "2026-07-30",
+                  repairDate: "2026-07-30",
+                  planStartDate: "2026-07-23",
+                  planEndDate: config.key === "inventory" ? "2026-07-31" : "2026-07-29",
+                  actualStartDate: config.key === "inventory" && index === 1 ? "2026-07-24" : "",
+                  actualEndDate: "",
+                  sourceLocation: "2号楼-B1层-工具仪表库A区",
+                  targetLocation: "2号楼-B1层-工具仪表库B区",
+                  returnLocation: "2号楼-B1层-工具仪表库A区",
+                  items: (scenario.assetIndexes || [0]).map((assetIndex, sequence) => this.buildToolWorkflowItem(assetIndex, config, sequence))
+                }))
+              };
+            }
+            return tool.workflows[viewId];
+          }
+
+          getToolWorkflowOrder(viewId, orderId) {
+            return this.ensureToolWorkflowState(viewId)?.orders.find((item) => item.id === orderId) || null;
+          }
+
+          setToolWorkflowTab(viewId, tab) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            if (!workflow) return;
+            workflow.tab = tab;
+            workflow.keyword = "";
+            this.emit();
+          }
+
+          setToolWorkflowKeyword(viewId, keyword, shouldEmit = true) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            if (!workflow) return;
+            workflow.keyword = String(keyword || "");
+            if (shouldEmit) this.emit();
+          }
+
+          openToolWorkflowForm(viewId) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            const config = this.getToolWorkflowConfig(viewId);
+            const scenario = TOOL_WORKFLOW_SCENARIOS[viewId] || {};
+            if (!workflow || !config) return;
+            workflow.mode = "form";
+            workflow.activeId = "";
+            workflow.readonly = false;
+            workflow.draftItems = (scenario.assetIndexes || [0]).map((index, sequence) => this.buildToolWorkflowItem(index, config, sequence));
+            this.emit();
+          }
+
+          openToolWorkflowProcess(viewId, orderId, readonly = true) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            if (!workflow || !this.getToolWorkflowOrder(viewId, orderId)) return;
+            workflow.mode = "process";
+            workflow.activeId = orderId;
+            workflow.readonly = readonly;
+            this.emit();
+          }
+
+          backToToolWorkflowList(viewId) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            if (!workflow) return;
+            workflow.mode = "list";
+            workflow.activeId = "";
+            workflow.readonly = false;
+            this.emit();
+          }
+
+          saveToolWorkflow(viewId) {
+            const config = this.getToolWorkflowConfig(viewId);
+            if (config) this.pushToast("保存成功", `${config.title}当前内容已保存。`, "success");
+          }
+
+          submitToolWorkflow(viewId) {
+            const config = this.getToolWorkflowConfig(viewId);
+            const workflow = this.ensureToolWorkflowState(viewId);
+            const scenario = TOOL_WORKFLOW_SCENARIOS[viewId] || {};
+            if (!config || !workflow) return;
+            const sequence = workflow.orders.length + 1;
+            workflow.orders.unshift({
+              id: `${config.codePrefix}20260723${String(sequence).padStart(4, "0")}`,
+              title: String(document.getElementById("toolWorkflowTitle")?.value || scenario.title || config.title),
+              creator: "系统管理员",
+              createdAt: "2026-07-23 14:36:20",
+              status: "待审核",
+              assignee: scenario.assignee || "刘婷",
+              approver: scenario.approver || "李敏",
+              executor: scenario.executor || "刘婷",
+              remark: String(document.getElementById("toolWorkflowRemark")?.value || scenario.remark || ""),
+              plannedReturnDate: "2026-07-30",
+              retireDate: "2026-07-30",
+              repairDate: "2026-07-30",
+              planStartDate: "2026-07-23",
+              planEndDate: config.key === "inventory" ? "2026-07-31" : "2026-07-29",
+              sourceLocation: "2号楼-B1层-工具仪表库A区",
+              targetLocation: "2号楼-B1层-工具仪表库B区",
+              returnLocation: "2号楼-B1层-工具仪表库A区",
+              items: (workflow.draftItems || []).map((item) => ({ ...item }))
+            });
+            workflow.mode = "list";
+            workflow.tab = "mine";
+            workflow.activeId = "";
+            this.pushToast("提交成功", `${config.title}已提交，等待审核。`, "success");
+            this.emit();
+          }
+
+          decideToolWorkflow(viewId, decision) {
+            const config = this.getToolWorkflowConfig(viewId);
+            const workflow = this.ensureToolWorkflowState(viewId);
+            const order = this.getToolWorkflowOrder(viewId, workflow?.activeId);
+            if (!config || !workflow || !order) return;
+            const nextStatus = decision === "同意" ? "已完成" : decision === "驳回" ? "已驳回" : "已拒绝";
+            order.status = nextStatus;
+            if (decision === "同意") {
+              const tool = this.ensureToolInstrumentState();
+              const orderAssetIds = new Set((order.items || []).map((item) => item.id));
+              tool.assets.forEach((asset) => {
+                if (!orderAssetIds.has(asset.id)) return;
+                if (config.key === "issue") {
+                  asset.status = "领用中";
+                  asset.user = order.executor || order.assignee || "-";
+                } else if (config.key === "return" || config.key === "inbound") {
+                  asset.status = "空闲";
+                  asset.user = "-";
+                  asset.location = order.returnLocation || asset.location;
+                } else if (config.key === "repair") {
+                  asset.status = "维修中";
+                  asset.location = "维修中心-待修区";
+                  asset.user = "-";
+                } else if (config.key === "retire") {
+                  asset.status = "已报废";
+                  asset.user = "-";
+                } else if (config.key === "transfer") {
+                  asset.location = order.targetLocation || asset.location;
+                }
+              });
+            }
+            workflow.mode = "list";
+            workflow.activeId = "";
+            workflow.readonly = false;
+            workflow.tab = "processed";
+            this.pushToast(`${decision}成功`, `${config.title}单据已${nextStatus}。`, decision === "同意" ? "success" : "info");
+            this.emit();
+          }
+
+          addToolWorkflowItem(viewId) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            const config = this.getToolWorkflowConfig(viewId);
+            if (!workflow || !config) return;
+            const used = new Set((workflow.draftItems || []).map((item) => item.id));
+            const nextIndex = TOOL_ASSETS.findIndex((item) => !used.has(item.id));
+            workflow.draftItems.push(this.buildToolWorkflowItem(nextIndex >= 0 ? nextIndex : 0, config, workflow.draftItems.length));
+            this.pushToast("添加成功", "工具仪表已加入当前单据。", "success");
+            this.emit();
+          }
+
+          removeToolWorkflowItem(viewId, rowId) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            if (!workflow) return;
+            workflow.draftItems = (workflow.draftItems || []).filter((item) => item.rowId !== rowId);
+            this.emit();
+          }
+
+          updateToolInventoryStatus(viewId, rowId, value) {
+            const workflow = this.ensureToolWorkflowState(viewId);
+            const item = (workflow?.draftItems || []).find((row) => row.rowId === rowId);
+            if (!item) return;
+            item.inventoryStatus = String(value || "正常");
+          }
+
+          openToolLedgerDetail(assetId) {
+            const tool = this.ensureToolInstrumentState();
+            if (!tool.assets.some((item) => item.id === assetId)) return;
+            tool.ledgerMode = "detail";
+            tool.activeAssetId = assetId;
+            tool.ledgerTab = "detail";
+            this.emit();
+          }
+
+          backToToolLedger() {
+            const tool = this.ensureToolInstrumentState();
+            tool.ledgerMode = "list";
+            tool.activeAssetId = "";
+            this.emit();
+          }
+
+          setToolLedgerTab(tab) {
+            const tool = this.ensureToolInstrumentState();
+            tool.ledgerTab = tab === "history" ? "history" : "detail";
+            this.emit();
+          }
+
+          setToolLedgerKeyword(keyword, shouldEmit = true) {
+            const tool = this.ensureToolInstrumentState();
+            tool.ledgerKeyword = String(keyword || "");
+            if (shouldEmit) this.emit();
+          }
+
+          setToolHistoryKeyword(keyword, shouldEmit = true) {
+            const tool = this.ensureToolInstrumentState();
+            tool.historyKeyword = String(keyword || "");
+            if (shouldEmit) this.emit();
+          }
+
+          handleToolInstrumentAction(label) {
+            const messages = {
+              "导出二维码": "已生成当前工具仪表二维码导出任务。",
+              "导入": "已打开工具仪表导入入口。",
+              "导出": "已创建工具仪表导出任务。",
+              "打印": "已打开工具仪表标签打印预览。",
+              "高级查询": "已打开高级查询条件面板。",
+              "快捷查询": "已执行常用快捷查询。",
+              "查看流程": "已打开流程节点图。"
+            };
+            this.pushToast(label, messages[label] || "工具仪表操作已执行。", "info");
           }
           getOperationPageData() {
             const operationPage = this.state.ui.operationPage;
@@ -26647,6 +27010,7 @@
               if (containedScroller instanceof HTMLElement) containedScroller.scrollTop = containedScrollTop;
             }
             this.decorateAssetWorkflowProcessActions(state);
+            this.decorateWorkflowListColumnResizers(state);
             this.nodes.overlay.innerHTML = this.renderOverlay(state) + this.renderPersistentOverlay(state);
             this.hydrateMobileAppFrame();
             this.nodes.toast.innerHTML = this.renderToasts(state);
@@ -26703,6 +27067,46 @@
             }
             if (actions.querySelector(`[data-action="${actionName}"]`)) return;
             actions.insertAdjacentHTML("beforeend", `<button class="btn btn-primary" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="agree">同意</button><button class="btn" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="reject">驳回</button><button class="btn" type="button" data-action="${actionName}" data-view="${escapeHtml(viewId)}" data-decision="decline">拒绝</button>`);
+          }
+
+          decorateWorkflowListColumnResizers(state) {
+            const viewId = state.ui.currentView;
+            const tables = this.nodes.content.querySelectorAll(".inbound-list-page .inbound-order-table");
+            tables.forEach((table, tableIndex) => {
+              if (!(table instanceof HTMLTableElement) || table.dataset.resizableReady === "true") return;
+              const headers = Array.from(table.querySelectorAll(":scope > thead > tr > th"));
+              if (!headers.length) return;
+              const tableViewId = `${viewId}:workflow-list:${tableIndex}`;
+              table.classList.add("table-resizable");
+              table.setAttribute("data-view", tableViewId);
+              const colgroup = document.createElement("colgroup");
+              headers.forEach((th, index) => {
+                const key = index === 0 ? "__select" : index === headers.length - 1 ? "__actions" : `column-${index}`;
+                const width = key === "__select"
+                  ? Math.max(48, this.store.getColumnWidth(tableViewId, key))
+                  : this.store.getColumnWidth(tableViewId, key);
+                const col = document.createElement("col");
+                col.setAttribute("data-key", key);
+                col.style.width = `${width}px`;
+                colgroup.appendChild(col);
+                th.style.width = `${width}px`;
+                const content = document.createElement("div");
+                content.className = "th-content";
+                while (th.firstChild) content.appendChild(th.firstChild);
+                if (key !== "__select") {
+                  const resizer = document.createElement("span");
+                  resizer.className = "col-resizer";
+                  resizer.setAttribute("data-action", "resize-column");
+                  resizer.setAttribute("data-view", tableViewId);
+                  resizer.setAttribute("data-key", key);
+                  resizer.setAttribute("aria-hidden", "true");
+                  content.appendChild(resizer);
+                }
+                th.appendChild(content);
+              });
+              table.insertBefore(colgroup, table.firstChild);
+              table.dataset.resizableReady = "true";
+            });
           }
 
           mountOperationVTable() {
@@ -27138,6 +27542,18 @@
                 return this.renderConsumableWorkflow(state, state.ui.currentView);
               case VIEW_IDS.CONSUMABLE_HISTORY:
                 return this.renderConsumableHistory(state);
+              case VIEW_IDS.TOOL_LEDGER:
+                return this.renderToolLedger(state);
+              case VIEW_IDS.TOOL_INBOUND:
+              case VIEW_IDS.TOOL_ISSUE:
+              case VIEW_IDS.TOOL_RETIRE:
+              case VIEW_IDS.TOOL_REPAIR:
+              case VIEW_IDS.TOOL_RETURN:
+              case VIEW_IDS.TOOL_TRANSFER:
+              case VIEW_IDS.TOOL_INVENTORY:
+                return this.renderToolWorkflow(state, state.ui.currentView);
+              case VIEW_IDS.TOOL_HISTORY:
+                return this.renderToolHistory(state);
               case VIEW_IDS.IT_FACILITY:
               case VIEW_IDS.PENDING_IT_ASSET:
               case VIEW_IDS.STATION_FACILITY:
@@ -27480,8 +27896,10 @@
                       : tab.id === "relation"
                         ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                         : tab.id === "history"
-                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；每条记录展示操作时间、操作类型、来源、操作人、执行人、结果、关联工单及字段新旧值。||数据口径：资产详情仅展示已成功生效且实际改变资产数据的事件；失败或未生效记录统一在全局操作记录中查看。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
-                          : "";
+                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；每条记录展示操作时间、操作类型、来源、操作人、结果、关联工单及字段新旧值，不展示执行人字段。||数据口径：资产详情仅展示已成功生效且实际改变资产数据的事件；失败或未生效记录统一在全局操作记录中查看。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
+                          : tab.id === "workOrders"
+                            ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产关联工单" data-demand-text="需求来源：V3R5-4112。||交互目的：集中查看事件、问题、变更等工单与当前资产的关联关系，补充资产操作记录的业务上下文。||展示规则：列表展示工单类型、操作人、操作时间、工单标题和工单编号；工单编号和查看按钮均可进入对应工单。||数据口径：仅展示明确关联当前资产的工单，不把工单处理过程重复写入资产操作记录。||异常判断：关联工单已删除、无权限或数据缺失时给出明确提示；无关联数据时展示空态。"'
+                            : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
                   `;
@@ -27665,7 +28083,7 @@
             const order = (inbound.orders || []).find((item) => item.id === inbound.activeId);
             if (!order) return this.renderItInboundList(inbound);
             const decisions = inbound.readonly ? "" : `<button class="btn btn-primary" type="button" data-action="decide-it-inbound" data-decision="agree">同意</button><button class="btn" type="button" data-action="decide-it-inbound" data-decision="reject">驳回</button><button class="btn" type="button" data-action="decide-it-inbound" data-decision="decline">拒绝</button>`;
-            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-process-actions"><button class="btn" type="button" data-action="save-it-inbound">保存</button>${decisions}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">入库单名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>入库资产列表</strong><span style="color:#6e8499;font-size:12px;">共 ${order.assets.length} 条待入库资产</span></div>${this.renderItWorkflowSheet("入库", order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea ${inbound.readonly ? "readonly" : ""} placeholder="请输入意见...">${inbound.readonly ? "审核处理完成。" : ""}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-inbound-tool" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：入库审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-process-actions">${inbound.readonly ? "" : `<button class="btn" type="button" data-action="save-it-inbound">保存</button>`}${decisions}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">入库单名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>入库资产列表</strong><span style="color:#6e8499;font-size:12px;">共 ${order.assets.length} 条待入库资产</span></div>${this.renderItWorkflowSheet("入库", order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea ${inbound.readonly ? "readonly" : ""} placeholder="请输入意见...">${inbound.readonly ? "审核处理完成。" : ""}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-inbound-tool" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：入库审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
           renderItAssetWorkflow(state, viewId) {
             const workflow = this.store.ensureItAssetWorkflowState(viewId);
@@ -27731,7 +28149,7 @@
             const isExecutionNode = order.status === "待执行";
             const currentNode = isExecutionNode ? "执行完成" : order.status === "已完成" ? "流程结束" : config.title + "审核";
             const assignee = isExecutionNode ? order.executor : order.approver;
-            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || order.executionResult || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(currentNode)}</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>${order.status === "已完成" ? `完成时间：${escapeHtml(order.executedAt || "-")}` : `待办人：${escapeHtml(assignee)}`}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions">${workflow.readonly ? "" : `<button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button>`}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || order.executionResult || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(currentNode)}</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>${order.status === "已完成" ? `完成时间：${escapeHtml(order.executedAt || "-")}` : `待办人：${escapeHtml(assignee)}`}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
 
           renderConsumableLedger() {
@@ -27797,7 +28215,7 @@
           renderConsumableWorkflowProcess(viewId, workflow, config) {
             const order = this.store.getConsumableWorkflowOrder(viewId, workflow.activeId);
             if (!order) return this.renderConsumableWorkflowList(viewId, workflow, config);
-            return `<div class="page-surface inbound-process-page consumable-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-consumable-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions"><button class="btn" type="button" data-action="save-consumable-workflow" data-view="${escapeHtml(viewId)}">保存</button></div></div><div class="inbound-form-body"><section class="consumable-form-section"><div class="consumable-section-title">基本信息</div><div class="consumable-form-grid">${this.renderConsumableFormFields(config, order, true)}</div></section><section class="consumable-form-section"><div class="consumable-section-title">${escapeHtml(config.sectionTitle)}</div><div class="consumable-subtitle">${escapeHtml(config.itemTitle)}</div>${this.renderConsumableItemTable(viewId, config, order.items || [], false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label>处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(config.title)}审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            return `<div class="page-surface inbound-process-page consumable-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-consumable-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions">${workflow.readonly ? "" : `<button class="btn" type="button" data-action="save-consumable-workflow" data-view="${escapeHtml(viewId)}">保存</button>`}</div></div><div class="inbound-form-body"><section class="consumable-form-section"><div class="consumable-section-title">基本信息</div><div class="consumable-form-grid">${this.renderConsumableFormFields(config, order, true)}</div></section><section class="consumable-form-section"><div class="consumable-section-title">${escapeHtml(config.sectionTitle)}</div><div class="consumable-subtitle">${escapeHtml(config.itemTitle)}</div>${this.renderConsumableItemTable(viewId, config, order.items || [], false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label>处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(config.title)}审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
 
           renderConsumableHistory() {
@@ -27805,6 +28223,87 @@
             const keyword = String(consumable.historyKeyword || "").trim().toLowerCase();
             const rows = keyword ? CONSUMABLE_HISTORY_ROWS.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : CONSUMABLE_HISTORY_ROWS;
             return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>耗材履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-history-search" value="${escapeHtml(consumable.historyKeyword || "")}" placeholder="请输入物料编码/操作类型" /></label><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="consumable-ledger-tool" data-label="导入">导入</button><button class="btn" type="button" data-action="consumable-ledger-tool" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>物料编码</th><th>操作类型</th><th>发生时间</th><th>数量变更</th><th>备注</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.materialCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.change)}</td><td>${escapeHtml(row.remark)}</td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+          }
+
+          renderToolLedger() {
+            const tool = this.store.ensureToolInstrumentState();
+            if (tool.ledgerMode === "detail") return this.renderToolLedgerDetail(tool);
+            const keyword = String(tool.ledgerKeyword || "").trim().toLowerCase();
+            const rows = keyword ? tool.assets.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : tool.assets;
+            const statusClass = (status) => status === "空闲" ? "is-done" : status === "维修中" ? "is-rejected" : "is-pending";
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表台账</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-ledger-search" value="${escapeHtml(tool.ledgerKeyword || "")}" placeholder="请输入资产编号/资产名称" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="tool-instrument-action" data-label="导出二维码">导出二维码</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导入">导入</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table consumable-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>资产名称</th><th>资产编号</th><th>资产品牌型号分类</th><th>购置金额（含税）</th><th>单位</th><th>供应商名称</th><th>资产状态</th><th>资产位置</th><th>当前领用人员</th><th>操作</th></tr></thead><tbody>${rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.name)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.category + " / " + item.brandModel)}">${escapeHtml(item.category)} / ${escapeHtml(item.brandModel)}</td><td>${escapeHtml(item.amount)}</td><td>${escapeHtml(item.unit)}</td><td>${escapeHtml(item.supplier)}</td><td><span class="inbound-status ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td><td title="${escapeHtml(item.location)}">${escapeHtml(item.location)}</td><td>${escapeHtml(item.user)}</td><td class="consumable-actions"><button type="button" data-action="open-tool-ledger-detail" data-id="${escapeHtml(item.id)}">查看</button><button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+          }
+
+          renderToolLedgerDetail(tool) {
+            const item = tool.assets.find((row) => row.id === tool.activeAssetId) || tool.assets[0];
+            const histories = TOOL_HISTORY_ROWS.filter((row) => row.assetCode === item.assetCode);
+            const field = (label, value, wide = false) => `<label class="${wide ? "is-wide" : ""}"><span>${escapeHtml(label)}</span><input value="${escapeHtml(value ?? "-")}" readonly /></label>`;
+            const detailContent = `<section class="consumable-form-section"><div class="consumable-section-title">资产详情</div><div class="consumable-form-grid">${field("资产编号", item.assetCode)}${field("资产名称", item.name)}${field("资产品牌型号分类", item.category)}${field("品牌型号", item.brandModel)}${field("购置金额（含税）", item.amount)}${field("单位", item.unit)}${field("供应商名称", item.supplier)}${field("联系人", item.contact)}${field("联系人电话", item.phone)}${field("购置时间", item.purchaseDate)}${field("资产位置", item.location, true)}${field("描述", item.description, true)}${field("创建时间", "2026-07-23 09:35:49")}${field("资产状态", item.status)}${field("当前领用人员", item.user)}${field("报废日期", "-")}${field("使用年限", item.serviceLife)}</div></section>`;
+            const historyContent = `<section class="consumable-form-section"><div class="consumable-section-title">资产履历</div><div class="consumable-table-scroll"><table class="consumable-detail-table"><thead><tr><th>序号</th><th>操作单号</th><th>资产名称</th><th>操作人</th><th>操作时间</th><th>资产编号</th><th>操作类型</th><th>备注</th><th>操作</th></tr></thead><tbody>${histories.length ? histories.map((row, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(row.orderNo)}</td><td>${escapeHtml(row.assetName)}</td><td>${escapeHtml(row.operator)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.assetCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.remark)}</td><td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无资产履历</td></tr>`}</tbody></table></div></section>`;
+            return `<div class="page-surface inbound-form-page consumable-detail-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-tool-ledger">← 返回台账</button><h1 class="inbound-form-heading">工具仪表-台账</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="tool-instrument-action" data-label="打印">打印</button></div></div><div class="inbound-form-body"><div class="consumable-simple-tabs"><button class="${tool.ledgerTab === "detail" ? "is-active" : ""}" type="button" data-action="tool-ledger-tab" data-tab="detail">资产详情</button><button class="${tool.ledgerTab === "history" ? "is-active" : ""}" type="button" data-action="tool-ledger-tab" data-tab="history">资产履历</button></div>${tool.ledgerTab === "history" ? historyContent : detailContent}</div></div>`;
+          }
+
+          renderToolWorkflow(state, viewId) {
+            const workflow = this.store.ensureToolWorkflowState(viewId);
+            const config = this.store.getToolWorkflowConfig(viewId);
+            if (!workflow || !config) return "";
+            if (workflow.mode === "form") return this.renderToolWorkflowForm(viewId, workflow, config);
+            if (workflow.mode === "process") return this.renderToolWorkflowProcess(viewId, workflow, config);
+            return this.renderToolWorkflowList(viewId, workflow, config);
+          }
+
+          renderToolWorkflowList(viewId, workflow, config) {
+            const tabs = [["all", "全部"], ["pending", "待我处理"], ["cc", "抄送我的"], ["processed", "已处理"], ["mine", "我发起的"], ["department", "部门工单"], ["shift", "班组工单"], ["draft", "草稿"]];
+            const keyword = String(workflow.keyword || "").trim().toLowerCase();
+            const tabRows = workflow.tab === "pending" ? workflow.orders.filter((item) => ["待审核", "待执行"].includes(item.status)) : workflow.tab === "processed" ? workflow.orders.filter((item) => item.status === "已完成") : workflow.tab === "draft" ? workflow.orders.filter((item) => item.status === "草稿") : workflow.tab === "cc" ? [] : workflow.orders;
+            const rows = keyword ? tabRows.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : tabRows;
+            const specialDateLabel = config.key === "retire" ? "报废时间" : config.key === "repair" ? "维修时间" : config.key === "transfer" ? "计划开始时间 / 计划结束时间" : config.key === "inventory" ? "计划开始时间 / 计划结束时间" : "创建时间";
+            const specialDateValue = (order) => config.key === "retire" ? order.retireDate : config.key === "repair" ? order.repairDate : ["transfer", "inventory"].includes(config.key) ? `${order.planStartDate} / ${order.planEndDate}` : order.createdAt;
+            const statusClass = (status) => status === "已完成" ? "is-done" : status === "待审核" ? "is-pending" : "";
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>${escapeHtml(config.listTitle)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-tool-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="open-tool-workflow-form" data-view="${escapeHtml(viewId)}">${escapeHtml(config.actionLabel)}</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>标题</th><th>单据号</th><th>待办人</th><th>创建人</th><th>业务状态</th><th>${escapeHtml(specialDateLabel)}</th><th>操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(order.title)}</td><td>${escapeHtml(order.id)}</td><td>${escapeHtml(order.assignee)}</td><td>${escapeHtml(order.creator)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td>${escapeHtml(specialDateValue(order))}</td><td class="consumable-actions"><button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" ? `<button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}<button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无${keyword ? "匹配" : ""}${escapeHtml(config.listTitle)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+          }
+
+          renderToolWorkflowFields(viewId, config, data, readonly = false) {
+            const scenario = TOOL_WORKFLOW_SCENARIOS[viewId] || {};
+            const value = (key, fallback = "") => escapeHtml(data?.[key] ?? scenario[key] ?? fallback);
+            const ro = readonly ? "readonly" : "";
+            const disabled = readonly ? "disabled" : "";
+            const text = (label, key, fallback = "", wide = false, required = false) => `<label class="${wide ? "is-wide" : ""}"><span class="${required ? "is-required" : ""}">${escapeHtml(label)}</span><input ${key === "title" ? 'id="toolWorkflowTitle"' : ""} value="${value(key, fallback)}" ${ro} /></label>`;
+            const select = (label, key, fallback, options = []) => `<label><span>${escapeHtml(label)}</span><select ${disabled}><option>${value(key, fallback)}</option>${options.map((item) => `<option>${escapeHtml(item)}</option>`).join("")}</select></label>`;
+            let extra = "";
+            if (config.key === "inbound") extra = select("审核人", "approver", scenario.approver || "李敏") + select("入库人", "executor", scenario.executor || "刘婷");
+            if (config.key === "issue") extra = select("领用人", "executor", scenario.executor || "王强") + text("计划归还时间", "plannedReturnDate", "2026-07-30");
+            if (config.key === "retire") extra = select("库房位置", "sourceLocation", "2号楼-B1层-工具仪表库A区") + text("报废时间", "retireDate", "2026-07-30");
+            if (config.key === "repair") extra = select("报修人", "executor", scenario.executor || "孙杰") + text("维修时间", "repairDate", "2026-07-30");
+            if (config.key === "return") extra = select("归还人", "executor", scenario.executor || "陈浩") + select("归还库存位置", "returnLocation", "2号楼-B1层-工具仪表库A区");
+            if (config.key === "transfer") extra = select("执行人", "executor", scenario.executor || "刘婷") + text("计划开始时间", "planStartDate", "2026-07-23") + text("计划结束时间", "planEndDate", "2026-07-29") + select("源库房", "sourceLocation", "2号楼-B1层-工具仪表库A区") + select("目标库房", "targetLocation", "2号楼-B1层-工具仪表库B区");
+            if (config.key === "inventory") extra = select("盘点人", "executor", scenario.executor || "刘婷") + select("库存位置盘点", "sourceLocation", "2号楼-B1层-工具仪表库A区") + text("计划开始时间", "planStartDate", "2026-07-23") + text("计划结束时间", "planEndDate", "2026-07-31") + text("实际盘点时间", "actualStartDate", "-") + text("实际盘点结束时间", "actualEndDate", "-");
+            return select("业务状态", "status", readonly ? "待审核" : "草稿", ["待审核", "待执行", "已完成"]) + select("待办人", "assignee", scenario.assignee || "刘婷") + text("标题", "title", scenario.title || config.title, false, true) + text("单据号", "id", `${config.codePrefix}202607230001`) + text("创建人", "creator", scenario.creator || "系统管理员") + text("创建时间", "createdAt", "2026-07-23 12:02:43") + extra + `<label class="is-wide"><span>描述</span><textarea id="toolWorkflowRemark" ${ro}>${value("remark", scenario.remark || "")}</textarea></label>`;
+          }
+
+          renderToolAssetTable(viewId, config, items, editable) {
+            const isInbound = config.key === "inbound";
+            const isInventory = config.key === "inventory";
+            const columns = isInbound ? [["category", "资产品牌型号分类"], ["assetCode", "资产编号"], ["name", "资产名称"], ["amount", "购置金额（含税）"], ["unit", "单位"], ["purchaseDate", "购置时间"], ["location", "资产位置"], ["contact", "联系人"], ["phone", "联系人电话"], ["supplier", "供应商名称"], ["description", "描述"]] : [["assetCode", "资产编号"], ["name", "资产名称"], ["category", "资产品牌型号分类"], ["unit", "单位"], ["location", "资产位置"]];
+            return `<div class="consumable-item-toolbar"><label class="consumable-item-search"><input placeholder="请输入资产编号/名称搜索" /></label>${editable ? `<button class="btn" type="button" data-action="add-tool-workflow-item" data-view="${escapeHtml(viewId)}">添加</button>` : ""}</div><div class="consumable-table-scroll"><table class="consumable-detail-table"><thead><tr><th>序号</th>${columns.map(([, label]) => `<th>${escapeHtml(label)}</th>`).join("")}${isInventory ? "<th>盘点状态</th>" : ""}<th>操作</th></tr></thead><tbody>${items.length ? items.map((item, index) => `<tr><td>${index + 1}</td>${columns.map(([key]) => `<td title="${escapeHtml(item[key] ?? "-")}">${escapeHtml(item[key] ?? "-")}</td>`).join("")}${isInventory ? `<td><select data-role="tool-inventory-status" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(item.rowId)}" ${editable ? "" : "disabled"}><option ${item.inventoryStatus === "正常" ? "selected" : ""}>正常</option><option ${item.inventoryStatus === "盘亏" ? "selected" : ""}>盘亏</option><option ${item.inventoryStatus === "盘盈" ? "selected" : ""}>盘盈</option></select></td>` : ""}<td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button>${editable ? `<button class="consumable-link-btn" type="button" data-action="remove-tool-workflow-item" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(item.rowId)}">删除</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="${columns.length + (isInventory ? 3 : 2)}" class="consumable-empty">暂无工具仪表，请点击“添加”选择资产</td></tr>`}</tbody></table></div>`;
+          }
+
+          renderToolWorkflowForm(viewId, workflow, config) {
+            return `<div class="page-surface inbound-form-page consumable-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-tool-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-tool-workflow" data-view="${escapeHtml(viewId)}">保存</button><button class="btn btn-primary" type="button" data-action="submit-tool-workflow" data-view="${escapeHtml(viewId)}">提交</button></div></div><div class="inbound-form-body"><section class="consumable-form-section"><div class="consumable-section-title">基础信息</div><div class="consumable-form-grid">${this.renderToolWorkflowFields(viewId, config, {}, false)}</div></section><section class="consumable-form-section"><div class="consumable-section-title">${escapeHtml(config.sectionTitle)}</div>${this.renderToolAssetTable(viewId, config, workflow.draftItems || [], true)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：填写${escapeHtml(config.title.replace("工具仪表-", ""))}信息</span></div><button class="btn btn-light" type="button" data-action="tool-instrument-action" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+          }
+
+          renderToolWorkflowProcess(viewId, workflow, config) {
+            const order = this.store.getToolWorkflowOrder(viewId, workflow.activeId);
+            if (!order) return this.renderToolWorkflowList(viewId, workflow, config);
+            const decisionActions = workflow.readonly ? "" : `<button class="btn btn-primary" type="button" data-action="decide-tool-workflow" data-view="${escapeHtml(viewId)}" data-decision="同意">同意</button><button class="btn" type="button" data-action="decide-tool-workflow" data-view="${escapeHtml(viewId)}" data-decision="驳回">驳回</button><button class="btn" type="button" data-action="decide-tool-workflow" data-view="${escapeHtml(viewId)}" data-decision="拒绝">拒绝</button>`;
+            return `<div class="page-surface inbound-process-page consumable-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-tool-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions">${workflow.readonly ? "" : `<button class="btn" type="button" data-action="save-tool-workflow" data-view="${escapeHtml(viewId)}">保存</button>`}${decisionActions}</div></div><div class="inbound-form-body"><section class="consumable-form-section"><div class="consumable-section-title">基础信息</div><div class="consumable-form-grid">${this.renderToolWorkflowFields(viewId, config, order, true)}</div></section><section class="consumable-form-section"><div class="consumable-section-title">${escapeHtml(config.sectionTitle)}</div>${this.renderToolAssetTable(viewId, config, order.items || [], false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label>处理意见</label><textarea placeholder="请输入意见..."></textarea><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(config.title.replace("工具仪表-", ""))}审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.assignee)}</span></div><button class="btn btn-light" type="button" data-action="tool-instrument-action" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+          }
+
+          renderToolHistory() {
+            const tool = this.store.ensureToolInstrumentState();
+            const keyword = String(tool.historyKeyword || "").trim().toLowerCase();
+            const rows = keyword ? TOOL_HISTORY_ROWS.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : TOOL_HISTORY_ROWS;
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-history-search" value="${escapeHtml(tool.historyKeyword || "")}" placeholder="请输入资产编号/操作类型" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>操作单号</th><th>资产名称</th><th>操作人</th><th>操作时间</th><th>资产编号</th><th>操作类型</th><th>备注</th><th>操作</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.orderNo)}</td><td>${escapeHtml(row.assetName)}</td><td>${escapeHtml(row.operator)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.assetCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.remark)}</td><td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button></td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
           }
           renderOperationPage() {
             const page = this.store.getOperationPageData();
@@ -28286,7 +28785,6 @@
                             </div>
                             <div class="asset-history-context">
                               <span><strong>操作人</strong>${escapeHtml(entry.operator || "-")}</span>
-                              <span><strong>执行人</strong>${escapeHtml(entry.executor || "-")}</span>
                               <span><strong>操作结果</strong><span class="history-result-tag ${resultClass(entry.result)}">${escapeHtml(entry.result || "-")}</span></span>
                               ${entry.orderNo ? `<span><strong>关联单据</strong><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}">${escapeHtml(entry.orderNo)}</button></span>` : ""}
                             </div>
@@ -28696,7 +29194,7 @@
             const resultClass = (result) => result === "成功" ? "is-success" : result === "未生效" ? "is-failed" : "is-pending";
             const select = (field, options) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${filters[field] === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
             return `
-              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：跨资产统一查询生命周期动作、字段变更、来源单据与执行结果。||展示规则：支持关键字、时间、来源和结果筛选；一条操作记录对应一个资产事件，可展开查看字段新旧值、执行人和说明。||数据口径：成功、失败及未生效事件均进入全局操作记录；失败或未生效事件不得写入资产详情的操作记录时间轴。||联动规则：支持查看资产和关联工单，便于从操作日志回溯业务上下文。">
+              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：跨资产统一查询生命周期动作、字段变更、来源单据与执行结果。||展示规则：支持关键字、时间、来源和结果筛选；一条操作记录对应一个资产事件，可展开查看字段新旧值和说明，不展示执行人字段。||数据口径：成功、失败及未生效事件均进入全局操作记录；失败或未生效事件不得写入资产详情的操作记录时间轴。||联动规则：支持查看资产和关联工单，便于从操作日志回溯业务上下文。">
                 <div class="operation-log-head">
                   <div><h1>操作记录</h1><p>统一查看资产生命周期动作、字段新旧值、操作结果和关联单据。</p></div>
                   <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log">导出</button></div>
@@ -28733,7 +29231,7 @@
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><span><strong>执行人：</strong>${escapeHtml(event.executor)}</span><span><strong>事件编号：</strong>${escapeHtml(event.id)}</span><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div><span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note || "-")}</span></div></td></tr>` : ""}`;
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><span><strong>事件编号：</strong>${escapeHtml(event.id)}</span><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div><span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note || "-")}</span></div></td></tr>` : ""}`;
                       }).join("") : `<tr><td colspan="8" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
@@ -29798,9 +30296,12 @@
               <div class="page-surface process-config-page">
                 <div class="process-config-head">
                   <div data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：按资产类型和业务活动配置是否通过流程单办理，同时保留台账统一资产活动入口。||展示规则：页面顶部标题、配置方式和统计卡片固定，仅下方活动配置内容区域滚动。||范围限制：仅覆盖 IT设备与场地设施；机柜、备件继续从台账直接办理。"><h1>表单流程配置</h1><p>配置 IT设备和场地设施的资产活动是否通过流程单办理。机柜、备件仍从台账直接办理。</p></div>
-                  <div class="process-config-mode" role="group" aria-label="表单流程配置方式" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程配置方式" data-demand-text="需求来源：V3R5-4997。||交互目的：支持管理员在统一配置和分项配置之间切换。||点击后行为：统一开启/关闭模式使用总开关控制全部可配置流程；分项开启/关闭模式允许逐个活动设置。||默认规则：首次进入默认选中分项开启/关闭，切换模式不直接修改已有流程状态。">
-                    <button class="${configMode === "unified" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="unified">统一开启/关闭</button>
-                    <button class="${configMode === "itemized" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="itemized">分项开启/关闭</button>
+                  <div class="process-config-head-actions">
+                    <div class="process-config-mode" role="group" aria-label="表单流程配置方式" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程配置方式" data-demand-text="需求来源：V3R5-4997。||交互目的：支持管理员在统一配置和分项配置之间切换。||点击后行为：统一开启/关闭模式使用总开关控制全部可配置流程；分项开启/关闭模式允许逐个活动设置。||默认规则：首次进入默认选中分项开启/关闭，切换模式不直接修改已有流程状态。">
+                      <button class="${configMode === "unified" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="unified">统一开启/关闭</button>
+                      <button class="${configMode === "itemized" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="itemized">分项开启/关闭</button>
+                    </div>
+                    <button class="btn btn-primary" type="button" data-action="save-process-config" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="保存表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：保存管理员当前设置的流程启停配置。||点击后行为：保存当前统一或分项配置结果，并提示配置已保存生效。||校验规则：存在未完结流程单时，关闭动作仍需先完成对应流程单，不允许通过保存绕过关闭校验。">保存</button>
                   </div>
                 </div>
                 <div class="process-config-summary">
@@ -32943,6 +33444,10 @@
                 this.store.setProcessConfigMode(actionTarget.getAttribute("data-mode"));
                 return;
               }
+              if (action === "save-process-config") {
+                this.store.saveProcessConfig();
+                return;
+              }
               if (action === "toggle-all-process-flows") {
                 this.store.toggleAllProcessFlows();
                 return;
@@ -33295,6 +33800,65 @@
               }
               if (action === "consumable-ledger-tool") {
                 this.store.handleConsumableLedgerTool(actionTarget.getAttribute("data-label"));
+                return;
+              }
+              if (action === "set-tool-workflow-tab") {
+                this.store.setToolWorkflowTab(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-tab"));
+                return;
+              }
+              if (action === "open-tool-workflow-form") {
+                this.store.openToolWorkflowForm(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "back-tool-workflow-list") {
+                this.store.backToToolWorkflowList(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "save-tool-workflow") {
+                this.store.saveToolWorkflow(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "submit-tool-workflow") {
+                this.store.submitToolWorkflow(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "decide-tool-workflow") {
+                this.store.decideToolWorkflow(
+                  actionTarget.getAttribute("data-view"),
+                  actionTarget.getAttribute("data-decision")
+                );
+                return;
+              }
+              if (action === "open-tool-workflow-process") {
+                this.store.openToolWorkflowProcess(
+                  actionTarget.getAttribute("data-view"),
+                  actionTarget.getAttribute("data-id"),
+                  actionTarget.getAttribute("data-process") !== "true"
+                );
+                return;
+              }
+              if (action === "add-tool-workflow-item") {
+                this.store.addToolWorkflowItem(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "remove-tool-workflow-item") {
+                this.store.removeToolWorkflowItem(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "open-tool-ledger-detail") {
+                this.store.openToolLedgerDetail(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "back-tool-ledger") {
+                this.store.backToToolLedger();
+                return;
+              }
+              if (action === "tool-ledger-tab") {
+                this.store.setToolLedgerTab(actionTarget.getAttribute("data-tab"));
+                return;
+              }
+              if (action === "tool-instrument-action") {
+                this.store.handleToolInstrumentAction(actionTarget.getAttribute("data-label"));
                 return;
               }
               if (action === "asset-overview-drilldown") {
@@ -33959,7 +34523,7 @@
                 renderWorkflowSheetSearchMenu(target);
                 return;
               }
-              if (role !== "form-tree-search" && role !== "detail-tree-search" && role !== "form-field-search" && role !== "detail-field-search" && role !== "space-tree-search" && role !== "template-object-search" && role !== "design-apply-search" && role !== "it-inbound-search" && role !== "it-workflow-search" && role !== "consumable-workflow-search" && role !== "consumable-ledger-search" && role !== "consumable-history-search" && role !== "consumable-material-dialog-search" && role !== "asset-history-search") {
+              if (role !== "form-tree-search" && role !== "detail-tree-search" && role !== "form-field-search" && role !== "detail-field-search" && role !== "space-tree-search" && role !== "template-object-search" && role !== "design-apply-search" && role !== "it-inbound-search" && role !== "it-workflow-search" && role !== "consumable-workflow-search" && role !== "consumable-ledger-search" && role !== "consumable-history-search" && role !== "consumable-material-dialog-search" && role !== "tool-workflow-search" && role !== "tool-ledger-search" && role !== "tool-history-search" && role !== "asset-history-search") {
                 return;
               }
               if (role === "consumable-material-dialog-search") {
@@ -33971,6 +34535,34 @@
                 this.store.setAssetHistoryFilter(field, target.value, false);
                 this.renderer.render();
                 const nextInput = document.querySelector(`[data-role="asset-history-search"][data-field="${field}"]`);
+                if (nextInput instanceof HTMLInputElement) {
+                  nextInput.focus();
+                  nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+                }
+              } else if (role === "tool-workflow-search") {
+                if (event.isComposing || target.dataset.composing === "true") return;
+                const viewId = target.getAttribute("data-view") || this.store.getState().ui.currentView;
+                this.store.setToolWorkflowKeyword(viewId, target.value, false);
+                this.renderer.render();
+                const nextInput = document.querySelector(`[data-role="tool-workflow-search"][data-view="${viewId}"]`);
+                if (nextInput instanceof HTMLInputElement) {
+                  nextInput.focus();
+                  nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+                }
+              } else if (role === "tool-ledger-search") {
+                if (event.isComposing || target.dataset.composing === "true") return;
+                this.store.setToolLedgerKeyword(target.value, false);
+                this.renderer.render();
+                const nextInput = document.querySelector('[data-role="tool-ledger-search"]');
+                if (nextInput instanceof HTMLInputElement) {
+                  nextInput.focus();
+                  nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+                }
+              } else if (role === "tool-history-search") {
+                if (event.isComposing || target.dataset.composing === "true") return;
+                this.store.setToolHistoryKeyword(target.value, false);
+                this.renderer.render();
+                const nextInput = document.querySelector('[data-role="tool-history-search"]');
                 if (nextInput instanceof HTMLInputElement) {
                   nextInput.focus();
                   nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
@@ -34082,7 +34674,7 @@
 
             document.addEventListener("compositionstart", (event) => {
               const target = event.target;
-              if (target instanceof HTMLInputElement && ["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "asset-history-search"].includes(target.getAttribute("data-role"))) {
+              if (target instanceof HTMLInputElement && ["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search"].includes(target.getAttribute("data-role"))) {
                 target.dataset.composing = "true";
               }
             });
@@ -34093,11 +34685,17 @@
                 return;
               }
               const role = target.getAttribute("data-role");
-              if (!["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "asset-history-search"].includes(role)) {
+              if (!["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search"].includes(role)) {
                 return;
               }
               target.dataset.composing = "false";
-              if (role === "consumable-workflow-search") {
+              if (role === "tool-workflow-search") {
+                this.store.setToolWorkflowKeyword(target.getAttribute("data-view") || this.store.getState().ui.currentView, target.value, false);
+              } else if (role === "tool-ledger-search") {
+                this.store.setToolLedgerKeyword(target.value, false);
+              } else if (role === "tool-history-search") {
+                this.store.setToolHistoryKeyword(target.value, false);
+              } else if (role === "consumable-workflow-search") {
                 this.store.setConsumableWorkflowKeyword(target.getAttribute("data-view") || this.store.getState().ui.currentView, target.value, false);
               } else if (role === "consumable-ledger-search") {
                 this.store.setConsumableLedgerKeyword(target.value, false);
@@ -34133,6 +34731,14 @@
                   target.getAttribute("data-view"),
                   target.getAttribute("data-id"),
                   target.getAttribute("data-field"),
+                  target.value
+                );
+                return;
+              }
+              if (target.matches('[data-role="tool-inventory-status"]')) {
+                this.store.updateToolInventoryStatus(
+                  target.getAttribute("data-view"),
+                  target.getAttribute("data-id"),
                   target.value
                 );
                 return;
