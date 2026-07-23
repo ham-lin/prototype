@@ -4398,6 +4398,49 @@
         color: var(--danger);
       }
 
+      .asset-status-tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        height: 24px;
+        padding: 0 10px;
+        border: 1px solid #d7e2ed;
+        border-radius: 999px;
+        background: #f4f7fa;
+        color: #60758b;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        vertical-align: middle;
+        box-sizing: border-box;
+      }
+
+      .asset-status-tag.is-in-use {
+        border-color: #bce8cf;
+        background: #eaf8f0;
+        color: #138a4b;
+      }
+
+      .asset-status-tag.is-idle {
+        border-color: #c9ddf5;
+        background: #eef6ff;
+        color: #3975b8;
+      }
+
+      .asset-status-tag.is-retired {
+        border-color: #f1c6c6;
+        background: #fff0f0;
+        color: #cf3f3f;
+      }
+
+      .asset-status-tag.is-pending {
+        border-color: #f2d79f;
+        background: #fff7e8;
+        color: #a86b00;
+      }
+
       .action-links {
         display: inline-flex;
         align-items: center;
@@ -5040,6 +5083,26 @@
       .process-route-dialog { width: min(560px, calc(100vw - 48px)); height: auto; min-height: 0; max-height: calc(100vh - 48px); display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: hidden; }
       .process-route-dialog-body { padding: 24px 26px; color: #38536d; line-height: 1.8; }
       .process-route-dialog-body strong { color: #173b60; }
+      .ledger-activity-validation-dialog { width: min(820px, calc(100vw - 48px)); height: fit-content; min-height: 0; max-height: calc(100vh - 48px); }
+      .ledger-activity-validation-dialog .relation-modal-body { padding: 18px 20px; overflow: auto; }
+      .ledger-activity-validation-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+      .ledger-activity-validation-stat { padding: 12px 14px; border: 1px solid #dce7f2; border-radius: 5px; background: #f8fbff; }
+      .ledger-activity-validation-stat span { display: block; color: #71869b; font-size: 12px; }
+      .ledger-activity-validation-stat strong { display: block; margin-top: 4px; color: #193d62; font-size: 20px; }
+      .ledger-activity-validation-stat.is-valid { border-color: #c8ead8; background: #f2fbf6; }
+      .ledger-activity-validation-stat.is-valid strong { color: #14854b; }
+      .ledger-activity-validation-stat.is-invalid { border-color: #f1d0d0; background: #fff6f6; }
+      .ledger-activity-validation-stat.is-invalid strong { color: #cf3e3e; }
+      .ledger-activity-validation-hint { margin: 0 0 12px; color: #526a82; font-size: 12px; line-height: 1.7; }
+      .ledger-activity-validation-table-wrap { max-height: 360px; overflow: auto; border: 1px solid #dde7f1; }
+      .ledger-activity-validation-table { width: 100%; min-width: 720px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+      .ledger-activity-validation-table th,
+      .ledger-activity-validation-table td { height: 40px; padding: 0 10px; border-bottom: 1px solid #e7edf4; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .ledger-activity-validation-table th { position: sticky; top: 0; z-index: 1; background: #edf7ff; color: #37536f; }
+      .ledger-activity-result { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eaf8f0; color: #16884c; white-space: nowrap; }
+      .ledger-activity-result.is-invalid { background: #fff0f0; color: #d33b3b; }
+      .ledger-activity-validation-dialog .relation-modal-footer { justify-content: flex-end; }
+      @media (max-width: 760px) { .ledger-activity-validation-summary { grid-template-columns: 1fr; } }
       @media (max-width: 900px) { .process-config-head { flex-direction: column; } .process-config-head-actions { width: 100%; flex-wrap: wrap; } .process-config-summary { grid-template-columns: 1fr; } .process-config-unified { align-items: flex-start; flex-direction: column; } }
 
       .relation-modal.master-slave-import-dialog {
@@ -14084,14 +14147,14 @@
           [VIEW_IDS.STATION_RETIRE]: { key: "stationRetire", assetKind: "station", action: "报废", title: "场地设施报废", orderLabel: "报废单", codePrefix: "SFBF", assetSection: "资产管理", defaultName: "场地设施报废申请", startEmpty: true, toolbarActions: [{ label: "选择资产", tone: "primary" }] }
         });
         const IT_WORKFLOW_ASSET_POOL = Object.freeze([
-          Object.freeze({ name: "核心数据库服务器-01", assetCode: "IT-SRV-202607-001", serialCode: "DLR760-26A07001", assetType: "设备分类>IT硬件>服务器>机架式服务器", assetCategory: "设备分类>IT硬件>服务器>机架式服务器", assetLocation: "A栋-2层-机房A-A01机柜-18U", uHeight: "2", status: "已上架", vendor: "戴尔", model: "PowerEdge R760", ratedPower: "1100W", description: "生产数据库集群主节点", ports: "8", portCount: "8", rackPosition: "A栋-2层-机房A-A01机柜", newLocation: "A栋-2层-机房B-B03机柜", startU: "18", warehouse: "2号楼-B1层-IT备件库A区", powerOnTime: "2026-07-14 10:00:00" }),
-          Object.freeze({ name: "核心汇聚交换机-01", assetCode: "IT-NET-202607-002", serialCode: "H3CS6520X26A002", assetType: "设备分类>IT硬件>网络设备>交换机", assetCategory: "设备分类>IT硬件>网络设备>交换机", assetLocation: "A栋-2层-机房A-A02机柜-32U", uHeight: "1", status: "已上架", vendor: "新华三", model: "S6520X-54QC-EI", ratedPower: "550W", description: "生产网络核心汇聚交换机", ports: "48", portCount: "48", rackPosition: "A栋-2层-机房A-A02机柜", newLocation: "A栋-2层-机房B-B01机柜", startU: "32", warehouse: "2号楼-B1层-IT备件库A区", powerOnTime: "2026-07-14 10:30:00" }),
-          Object.freeze({ name: "全闪存储阵列-01", assetCode: "IT-STO-202607-003", serialCode: "HWOS550026A003", assetType: "设备分类>IT硬件>存储设备>存储阵列", assetCategory: "设备分类>IT硬件>存储设备>存储阵列", assetLocation: "A栋-2层-机房A-A03机柜-10U", uHeight: "4", status: "已上架", vendor: "华为", model: "OceanStor Dorado 5000 V6", ratedPower: "1600W", description: "核心业务共享存储阵列", ports: "16", portCount: "16", rackPosition: "A栋-2层-机房A-A03机柜", newLocation: "A栋-2层-机房B-B05机柜", startU: "10", warehouse: "2号楼-B1层-IT备件库B区", powerOnTime: "2026-07-14 11:00:00" })
+          Object.freeze({ name: "核心数据库服务器-01", assetCode: "IT-SRV-202607-001", serialCode: "DLR760-26A07001", assetType: "设备分类>IT硬件>服务器>机架式服务器", assetCategory: "设备分类>IT硬件>服务器>机架式服务器", assetLocation: "A栋-2层-机房A-A01机柜-18U", uHeight: "2", status: "在用", vendor: "戴尔", model: "PowerEdge R760", ratedPower: "1100W", description: "生产数据库集群主节点", ports: "8", portCount: "8", rackPosition: "A栋-2层-机房A-A01机柜", newLocation: "A栋-2层-机房B-B03机柜", startU: "18", warehouse: "2号楼-B1层-IT备件库A区", powerOnTime: "2026-07-14 10:00:00" }),
+          Object.freeze({ name: "核心汇聚交换机-01", assetCode: "IT-NET-202607-002", serialCode: "H3CS6520X26A002", assetType: "设备分类>IT硬件>网络设备>交换机", assetCategory: "设备分类>IT硬件>网络设备>交换机", assetLocation: "A栋-2层-机房A-A02机柜-32U", uHeight: "1", status: "在用", vendor: "新华三", model: "S6520X-54QC-EI", ratedPower: "550W", description: "生产网络核心汇聚交换机", ports: "48", portCount: "48", rackPosition: "A栋-2层-机房A-A02机柜", newLocation: "A栋-2层-机房B-B01机柜", startU: "32", warehouse: "2号楼-B1层-IT备件库A区", powerOnTime: "2026-07-14 10:30:00" }),
+          Object.freeze({ name: "全闪存储阵列-01", assetCode: "IT-STO-202607-003", serialCode: "HWOS550026A003", assetType: "设备分类>IT硬件>存储设备>存储阵列", assetCategory: "设备分类>IT硬件>存储设备>存储阵列", assetLocation: "A栋-2层-机房A-A03机柜-10U", uHeight: "4", status: "在用", vendor: "华为", model: "OceanStor Dorado 5000 V6", ratedPower: "1600W", description: "核心业务共享存储阵列", ports: "16", portCount: "16", rackPosition: "A栋-2层-机房A-A03机柜", newLocation: "A栋-2层-机房B-B05机柜", startU: "10", warehouse: "2号楼-B1层-IT备件库B区", powerOnTime: "2026-07-14 11:00:00" })
         ]);
         const STATION_WORKFLOW_ASSET_POOL = Object.freeze([
-          Object.freeze({ name: "精密空调-01", assetCode: "SF-HVAC-202607-001", serialCode: "VTPX4-26A001", physicalLabelCode: "PL-SF-HVAC-001", serialNumber: "PEX4-2026-07001", assetType: "管理分类>暖通系统>空调系统>精密空调", assetCategory: "管理分类>暖通系统>空调系统>精密空调", assetLocation: "A栋-2层-机房A-空调区01", status: "已部署", description: "机房A主用精密空调，制冷量40kW", warehouse: "2号楼-B1层-设施备件库A区", deployLocation: "A栋-2层-机房A-空调区01", returnLocation: "2号楼-B1层-设施备件库A区", newLocation: "A栋-3层-机房B-空调区02" }),
-          Object.freeze({ name: "温湿度传感器-02", assetCode: "SF-SENSOR-202607-002", serialCode: "THTH-26A002", physicalLabelCode: "PL-SF-ENV-002", serialNumber: "TH-2026-07002", assetType: "管理分类>弱电系统>环境监控>温湿度传感器", assetCategory: "管理分类>弱电系统>环境监控>温湿度传感器", assetLocation: "A栋-2层-机房A-A02机柜列", status: "已部署", description: "机房A冷通道环境监测点", warehouse: "2号楼-B1层-设施备件库A区", deployLocation: "A栋-2层-机房A-A02机柜列", returnLocation: "2号楼-B1层-设施备件库A区", newLocation: "A栋-2层-机房A-A05机柜列" }),
-          Object.freeze({ name: "低压配电柜-03", assetCode: "SF-PDC-202607-003", serialCode: "SCH-PDC-26A003", physicalLabelCode: "PL-SF-PDC-003", serialNumber: "PDC-2026-07003", assetType: "管理分类>电气系统>配电系统>低压配电柜", assetCategory: "管理分类>电气系统>配电系统>低压配电柜", assetLocation: "A栋-B1层-低压配电室-03位", status: "已部署", description: "机房A动力配电主柜，额定电流630A", warehouse: "2号楼-B1层-设施备件库B区", deployLocation: "A栋-B1层-低压配电室-03位", returnLocation: "2号楼-B1层-设施备件库B区", newLocation: "B栋-B1层-低压配电室-02位" })
+          Object.freeze({ name: "精密空调-01", assetCode: "SF-HVAC-202607-001", serialCode: "VTPX4-26A001", physicalLabelCode: "PL-SF-HVAC-001", serialNumber: "PEX4-2026-07001", assetType: "管理分类>暖通系统>空调系统>精密空调", assetCategory: "管理分类>暖通系统>空调系统>精密空调", assetLocation: "A栋-2层-机房A-空调区01", status: "在用", description: "机房A主用精密空调，制冷量40kW", warehouse: "2号楼-B1层-设施备件库A区", deployLocation: "A栋-2层-机房A-空调区01", returnLocation: "2号楼-B1层-设施备件库A区", newLocation: "A栋-3层-机房B-空调区02" }),
+          Object.freeze({ name: "温湿度传感器-02", assetCode: "SF-SENSOR-202607-002", serialCode: "THTH-26A002", physicalLabelCode: "PL-SF-ENV-002", serialNumber: "TH-2026-07002", assetType: "管理分类>弱电系统>环境监控>温湿度传感器", assetCategory: "管理分类>弱电系统>环境监控>温湿度传感器", assetLocation: "A栋-2层-机房A-A02机柜列", status: "在用", description: "机房A冷通道环境监测点", warehouse: "2号楼-B1层-设施备件库A区", deployLocation: "A栋-2层-机房A-A02机柜列", returnLocation: "2号楼-B1层-设施备件库A区", newLocation: "A栋-2层-机房A-A05机柜列" }),
+          Object.freeze({ name: "低压配电柜-03", assetCode: "SF-PDC-202607-003", serialCode: "SCH-PDC-26A003", physicalLabelCode: "PL-SF-PDC-003", serialNumber: "PDC-2026-07003", assetType: "管理分类>电气系统>配电系统>低压配电柜", assetCategory: "管理分类>电气系统>配电系统>低压配电柜", assetLocation: "A栋-B1层-低压配电室-03位", status: "在用", description: "机房A动力配电主柜，额定电流630A", warehouse: "2号楼-B1层-设施备件库B区", deployLocation: "A栋-B1层-低压配电室-03位", returnLocation: "2号楼-B1层-设施备件库B区", newLocation: "B栋-B1层-低压配电室-02位" })
         ]);
         const IT_INBOUND_FORM_SCENARIO = Object.freeze({
           id: "ITRK202607140001",
@@ -16652,34 +16715,20 @@
         };
 
         const ASSET_FLOW_STATUS_OPTIONS = {
-          [VIEW_IDS.IT_FACILITY]: ["已入库", "待上架", "已上架", "待变动", "待下架", "待迁出", "已迁出"],
-          [VIEW_IDS.STATION_FACILITY]: ["已入库", "待部署", "已部署", "待变动", "待回库", "待报废", "已报废"],
-          [VIEW_IDS.CABINET]: ["已入库", "待部署", "已部署", "待变动", "待回库", "待报废", "已报废"],
-          [VIEW_IDS.SPARE_PART]: ["已入库", "待出库", "待调拨", "待报废", "待回库", "已报废"]
+          [VIEW_IDS.IT_FACILITY]: ["", "待上架", "", "待变动", "", "待下架", "", "待迁出"],
+          [VIEW_IDS.STATION_FACILITY]: ["", "待部署", "", "待变动", "", "待回库", "", "待报废"],
+          [VIEW_IDS.CABINET]: ["", "待部署", "", "待变动", "", "待回库", "", "待报废"],
+          [VIEW_IDS.SPARE_PART]: ["", "待出库", "", "待调拨", "", "待报废"]
         };
 
         const getAssetFlowStatus = (viewId, index = 0, assetStatus = "", fallback = "") => {
-          const normalizedStatus = String(assetStatus || "");
-          if (normalizedStatus === "空闲" || normalizedStatus === "库存") {
-            return "已入库";
-          }
-          if (normalizedStatus === "在用") {
-            if (viewId === VIEW_IDS.IT_FACILITY) {
-              return "已上架";
-            }
-            if (viewId === VIEW_IDS.STATION_FACILITY || viewId === VIEW_IDS.CABINET) {
-              return "已部署";
-            }
-          }
-          if (normalizedStatus === "迁出") {
-            return "已迁出";
-          }
-          if (normalizedStatus === "报废") {
-            return "已报废";
+          const normalizedFallback = String(fallback || "").trim();
+          if (/^待/.test(normalizedFallback)) {
+            return normalizedFallback;
           }
           const options = ASSET_FLOW_STATUS_OPTIONS[viewId] || [];
           if (!options.length) {
-            return fallback || normalizedStatus || "-";
+            return "";
           }
           return options[Math.abs(Number(index) || 0) % options.length];
         };
@@ -17225,12 +17274,12 @@
             ticketId: "V3R5-4890",
             version: "v1.3",
             type: "优化",
-            title: "【台账】优化 批量选择资产时执行上架、部署等活动时的错误提示",
-            description: "优化 批量选择资产时执行上架、部署等活动时的错误提示",
+            title: "【台账】优化 批量选择资产执行上架、部署等活动时的错误提示",
+            description: "优化 批量选择资产执行上架、部署等活动时的错误提示",
             scope: "资产台账",
             targetView: VIEW_IDS.IT_FACILITY,
             targetLabel: "批量活动错误提示",
-            status: "设计中"
+            status: "设计完成"
           },          {
             id: "V3R5-4419",
             ticketId: "V3R5-4419",
@@ -17297,7 +17346,7 @@
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
           "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时先提示并进入流程发起页，带入机柜、U位及设备信息；审核同意后进入待执行，执行人点击“执行完成”后才更新资产数据。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
           "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在包含设备页签查看设备、来源单据和有效期。", rules: ["包含设备列表合并展示已上架和预占中设备，并用不同状态与视觉样式区分。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "预占记录展示U位范围、来源流程单、预占人、预占时间和有效期，并支持进入流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
-          "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项错误说明", value: "快速识别失败资产并继续处理可执行资产", scenario: "一次选择多条状态不同的资产执行批量活动时，部分资产可能不满足条件。", rules: ["执行前校验每条资产的状态、位置和权限。", "结果区分成功、失败和跳过，并展示具体原因。"], boundary: "不得用单一失败提示掩盖具体资产错误，也不得错误处理不符合条件的资产。" },
+          "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项校验结果", value: "快速识别不可处理资产并继续处理符合条件的数据", scenario: "一次选择多条资产执行批量活动时，资产状态和进行中的流程状态可能不同。", rules: ["资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态。", "先校验资产流程状态是否为空，再按资产状态校验活动范围。", "部分资产不符合条件时展示可处理数、已排除数和逐行原因，继续后只带入校验通过的数据。", "全部资产不符合条件时不进入办理页面。"], boundary: "不得用单一失败提示掩盖具体资产错误，不得重复发起进行中流程，也不得错误处理不符合状态要求的资产。" },
           "V3R5-4419": { role: "机房管理员", need: "通过机柜层级和U位可视化查看设备占用", value: "直观掌握机柜容量并快速定位设备", scenario: "规划上架位置或核对机柜资源时，需要查看U位使用情况。", rules: ["空间视图展示机柜数、设备数和利用率。", "机柜卡片展示U高、已用/空闲U位并支持进入详情。"], boundary: "U位数据缺失、重叠或超出机柜高度时应提示异常。" },
           "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产并扫码进入详情", value: "在现场无需返回PC即可完成资产核对", scenario: "巡检或故障处理现场，需要快速识别标签并查看资产信息。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "二维码无效、资产不存在或无权限时给出明确提示。" },
           "V3R5-838": { role: "运维人员", need: "在资产详情中切换3D场景并定位当前资产", value: "直观理解资产所处空间、机柜和U位", scenario: "远程定位设备或核对空间关系时，需要从二维信息进入三维场景。", rules: ["IT设备、机柜和场地设施详情支持2D/3D切换，默认2D。", "通过 resource_id 定位并高亮资产、机柜或所属空间。"], boundary: "资产未建模时逐级降级定位；平台不可用或空间未建模时隐藏3D入口。" }
@@ -17657,6 +17706,20 @@
             .replace(/'/g, "&#39;");
         }
 
+        function renderAssetStatusTag(value) {
+          const status = String(value ?? "").trim() || "-";
+          const className = status === "在用"
+            ? "is-in-use"
+            : status === "空闲"
+              ? "is-idle"
+              : ["迁出", "报废", "已迁出", "已报废"].includes(status)
+                ? "is-retired"
+                : status.startsWith("待")
+                  ? "is-pending"
+                  : "";
+          return `<span class="asset-status-tag ${className}" title="资产状态：${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+        }
+
         function getWorkflowSheetSearchOptions(input) {
           try {
             return JSON.parse(input?.getAttribute("data-options") || "[]");
@@ -17931,6 +17994,7 @@
                 processConfigMode: "itemized",
                 processRouteDialog: null,
                 processCloseDialog: null,
+                ledgerActivityValidationDialog: null,
                 assetOperationViewDialog: null,
                 exportMenuOpen: null,
                 assetOperationLog: {
@@ -17991,8 +18055,8 @@
                       executor: "刘婷",
                       description: "采购批次PO-202607-018到货，包含数据库服务器与核心交换机，验收合格后入IT备件库A区。",
                       assets: [
-                        { ...IT_WORKFLOW_ASSET_POOL[0], status: "待入库", assetLocation: "" },
-                        { ...IT_WORKFLOW_ASSET_POOL[1], status: "待入库", assetLocation: "" }
+                        { ...IT_WORKFLOW_ASSET_POOL[0], status: "空闲", assetLocation: "" },
+                        { ...IT_WORKFLOW_ASSET_POOL[1], status: "空闲", assetLocation: "" }
                       ]
                     },
                     {
@@ -18004,7 +18068,7 @@
                       approver: "李敏",
                       executor: "刘婷",
                       description: "全闪存储阵列已完成到货验收并入IT备件库B区。",
-                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[2], status: "在库", assetLocation: "2号楼-B1层-IT备件库B区" }]
+                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[2], status: "空闲", assetLocation: "2号楼-B1层-IT备件库B区" }]
                     },
                     {
                       id: "ITRK2026071200006",
@@ -18015,7 +18079,7 @@
                       approver: "李敏",
                       executor: "王强",
                       description: "核心汇聚交换机应急备件到货，待审核后进入网络设备备件库存。",
-                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[1], name: "核心汇聚交换机-备件01", assetCode: "IT-NET-202607-012", status: "待入库", assetLocation: "" }]
+                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[1], name: "核心汇聚交换机-备件01", assetCode: "IT-NET-202607-012", status: "空闲", assetLocation: "" }]
                     },
                     {
                       id: "ITRK2026071100003",
@@ -18026,7 +18090,7 @@
                       approver: "李敏",
                       executor: "刘婷",
                       description: "灾备中心服务器完成验收并入IT备件库A区。",
-                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[0], name: "灾备数据库服务器-01", assetCode: "IT-SRV-202607-011", status: "在库", assetLocation: "2号楼-B1层-IT备件库A区" }]
+                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[0], name: "灾备数据库服务器-01", assetCode: "IT-SRV-202607-011", status: "空闲", assetLocation: "2号楼-B1层-IT备件库A区" }]
                     }
                   ]
                 },
@@ -18161,11 +18225,11 @@
 
           static createSpareParts() {
             const list = [
-              ["备件SSD-待安装01", "SSD-R5-NEW-01", "硬盘", "库存", "2号楼-B1层-备件库A区"],
-              ["10GE网卡-备用01", "NIC-R5-SP-01", "网卡", "库存", "2号楼-B1层-备件库B区"],
-              ["万兆光模块-备用01", "SFP-R5-SP-01", "光模块", "库存", "2号楼-B1层-备件库C区"],
-              ["电源模块-备用A", "PWR-R5-SP-01", "电源模块", "库存", "2号楼-B1层-备件库A区"],
-              ["散热风扇-备用01", "FAN-R5-SP-01", "散热件", "库存", "2号楼-B1层-备件库B区"]
+              ["备件SSD-待安装01", "SSD-R5-NEW-01", "硬盘", "空闲", "2号楼-B1层-备件库A区"],
+              ["10GE网卡-备用01", "NIC-R5-SP-01", "网卡", "空闲", "2号楼-B1层-备件库B区"],
+              ["万兆光模块-备用01", "SFP-R5-SP-01", "光模块", "空闲", "2号楼-B1层-备件库C区"],
+              ["电源模块-备用A", "PWR-R5-SP-01", "电源模块", "空闲", "2号楼-B1层-备件库A区"],
+              ["散热风扇-备用01", "FAN-R5-SP-01", "散热件", "空闲", "2号楼-B1层-备件库B区"]
             ];
             const rows = expandRows(list, 220, (item, index, round) => ({
               id: "SP-" + pad(index + 1, 3),
@@ -19520,7 +19584,7 @@
               [VIEW_IDS.IT_FACILITY]: ["上架", "编辑", "迁出", "变动", "下架"],
               [VIEW_IDS.STATION_FACILITY]: ["部署", "编辑", "报废", "回库", "变动"],
               [VIEW_IDS.CABINET]: ["部署", "编辑", "报废", "回库", "变动"],
-              [VIEW_IDS.SPARE_PART]: ["出库", "编辑", "调拨"]
+              [VIEW_IDS.SPARE_PART]: ["出库", "编辑", "调拨", "报废"]
             };
             const sheetActions = sheetBatchActionsByView[viewId] || [];
             if (sheetActions.includes(actionLabel)) {
@@ -19764,7 +19828,7 @@
                 itRows.unshift(target);
               }
               target.assetStatus = "在用";
-              target.assetSummary = "已上架";
+              target.assetSummary = "";
               target.assetLocation = [cabinetName, startU ? startU + "U" : ""].filter(Boolean).join(" > ");
               target.startU = startU;
               target.uHeight = String(context.uHeight || asset.uHeight || target.uHeight || "1");
@@ -19795,7 +19859,7 @@
             }
             if (action === "下架") {
               target.assetStatus = "空闲";
-              target.assetSummary = "已下架";
+              target.assetSummary = "";
               target.assetLocation = context.destination || asset.warehouse || "2号楼-B1层-IT备件库A区";
               target.startU = "";
               if (context.cabinetId) {
@@ -19816,7 +19880,7 @@
                 ...target,
                 id: "RT-" + pad(nextNumber, 3),
                 assetStatus: "迁出",
-                assetSummary: "已迁出",
+                assetSummary: "",
                 retiredAt: "2026-07-20 10:30:00",
                 retiredReason: "设备迁出"
               };
@@ -22519,18 +22583,120 @@
             return true;
           }
 
-          requestLedgerActivity(viewId, actionLabel, selectedRowIds = null) {
-            const config = this.getProcessFlowActivity(viewId, actionLabel);
-            if (!config) {
-              this.openOperationPage(viewId, null, String(actionLabel || "").replace(/^批量/, ""), selectedRowIds || []);
-              return;
+          getLedgerActivityValidationRule(viewId, actionLabel) {
+            const action = String(actionLabel || "").replace(/^批量/, "");
+            const allStatuses = ["空闲", "在用"];
+            const rules = {
+              [VIEW_IDS.IT_FACILITY]: {
+                "上架": ["空闲"],
+                "变动": ["在用"],
+                "下架": ["在用"],
+                "编辑": allStatuses,
+                "迁出": allStatuses
+              },
+              [VIEW_IDS.STATION_FACILITY]: {
+                "部署": ["空闲"],
+                "变动": ["在用"],
+                "回库": ["在用"],
+                "编辑": allStatuses,
+                "报废": allStatuses
+              },
+              [VIEW_IDS.CABINET]: {
+                "部署": ["空闲"],
+                "变动": ["在用"],
+                "回库": ["在用"],
+                "编辑": allStatuses,
+                "报废": allStatuses
+              },
+              [VIEW_IDS.SPARE_PART]: {
+                "出库": ["空闲"],
+                "调拨": ["空闲"],
+                "编辑": allStatuses,
+                "报废": allStatuses
+              }
+            };
+            const allowedStatuses = rules[viewId]?.[action];
+            return allowedStatuses ? { action, allowedStatuses } : null;
+          }
+
+          getNormalizedAssetProcessStatus(row) {
+            const rawStatus = String(row?.assetSummary || row?.processStatus || row?.flowStatus || "").trim();
+            if (!rawStatus || ["-", "空", "无"].includes(rawStatus) || /^已/.test(rawStatus)) {
+              return "";
             }
-            const action = config.activity.label;
+            return rawStatus;
+          }
+
+          validateLedgerActivityRows(viewId, actionLabel, selectedRowIds = []) {
+            const rule = this.getLedgerActivityValidationRule(viewId, actionLabel);
+            if (!rule) return null;
+            const results = selectedRowIds.map((rowId) => {
+              const row = this.getRowById(viewId, rowId);
+              if (!row) {
+                return { id: rowId, assetCode: rowId, name: "资产不存在", assetStatus: "-", processStatus: "-", valid: false, reason: "未找到资产数据，可能已被删除或移出当前台账" };
+              }
+              const assetStatus = String(row.assetStatus || "").trim() === "库存" ? "空闲" : String(row.assetStatus || "").trim();
+              const processStatus = this.getNormalizedAssetProcessStatus(row);
+              let reason = "";
+              if (processStatus) {
+                reason = `资产存在“${processStatus}”流程，不能重复发起“${rule.action}”`;
+              } else if (!assetStatus) {
+                reason = `资产状态缺失，不能执行“${rule.action}”`;
+              } else if (!rule.allowedStatuses.includes(assetStatus)) {
+                reason = `当前资产状态为“${assetStatus}”，不能执行“${rule.action}”`;
+              }
+              return {
+                id: row.id,
+                assetCode: row.assetCode || row.serialCode || row.id,
+                name: row.name || row.assetCode || row.id,
+                assetStatus: assetStatus || "-",
+                processStatus: processStatus || "-",
+                valid: !reason,
+                reason: reason || "校验通过，可继续处理"
+              };
+            });
+            return {
+              viewId,
+              actionLabel: rule.action,
+              results,
+              validRowIds: results.filter((item) => item.valid).map((item) => item.id),
+              invalidCount: results.filter((item) => !item.valid).length
+            };
+          }
+
+          closeLedgerActivityValidationDialog() {
+            this.state.ui.ledgerActivityValidationDialog = null;
+            this.emit();
+          }
+
+          continueLedgerActivityValidation() {
+            const dialog = this.state.ui.ledgerActivityValidationDialog;
+            if (!dialog || !dialog.validRowIds?.length) return;
+            const { viewId, actionLabel, validRowIds } = dialog;
+            this.state.ui.ledgerActivityValidationDialog = null;
+            this.requestLedgerActivity(viewId, actionLabel, validRowIds);
+          }
+
+          requestLedgerActivity(viewId, actionLabel, selectedRowIds = null) {
+            const action = String(actionLabel || "").replace(/^批量/, "");
             const selected = Array.isArray(selectedRowIds) ? selectedRowIds.filter(Boolean) : this.getSelectedRowIds(viewId);
             const isHeaderBatchRack = action === "上架" && Array.isArray(selectedRowIds);
             this.closeAssetActivityMenu(false);
             if (action !== "入库" && !selected.length && !isHeaderBatchRack) {
               this.pushToast("请选择资产", `请先勾选需要${action}的资产。`, "warning");
+              return;
+            }
+            if (selected.length) {
+              const validation = this.validateLedgerActivityRows(viewId, action, selected);
+              if (validation?.invalidCount) {
+                this.state.ui.ledgerActivityValidationDialog = validation;
+                this.emit();
+                return;
+              }
+            }
+            const config = this.getProcessFlowActivity(viewId, action);
+            if (!config) {
+              this.openOperationPage(viewId, null, action, selected);
               return;
             }
             if (!this.isProcessFlowEnabled(config.activity.flowViewId)) {
@@ -22668,11 +22834,11 @@
           buildItAssetWorkflowAsset(config, index = 0) {
             if (config?.assetKind === "station") {
               const asset = { ...STATION_WORKFLOW_ASSET_POOL[index % STATION_WORKFLOW_ASSET_POOL.length] };
-              const statusByAction = { "入库": "待入库", "部署": "在库", "编辑": "已部署", "回库": "已部署", "变动": "已部署", "报废": "待报废" };
+              const statusByAction = { "入库": "空闲", "部署": "空闲", "编辑": asset.status, "回库": "在用", "变动": "在用", "报废": asset.status };
               return { ...asset, status: statusByAction[config.action] || asset.status };
             }
             const asset = { ...IT_WORKFLOW_ASSET_POOL[index % IT_WORKFLOW_ASSET_POOL.length] };
-            const statusByKey = { rack: "在库", change: "已上架", offShelf: "已上架", edit: asset.status, moveOut: "已下架" };
+            const statusByKey = { rack: "空闲", change: "在用", offShelf: "在用", edit: asset.status, moveOut: asset.status };
             return { ...asset, status: statusByKey[config?.key] || asset.status };
           }
 
@@ -28004,11 +28170,11 @@
               return Object.fromEntries(this.getItWorkflowSheetColumns(action).map((column) => [column.key, ""]));
             }
             const assetLocation = asset.assetLocation || asset.rackPosition || asset.warehouse || "A栋-2层-机房A";
-            const flowStatusMap = { "入库": "待入库", "场地入库": "待入库", "上架": "已上架", "部署": "待部署", "下架": "待下架", "变动": "变动中", "场地变动": "变动中", "编辑": "编辑中", "场地编辑": "编辑中", "回库": "待回库", "报废": "待报废", "迁出": "待迁出" };
+            const flowStatusMap = { "入库": "待入库", "场地入库": "待入库", "上架": "待上架", "部署": "待部署", "下架": "待下架", "变动": "待变动", "场地变动": "待变动", "编辑": "待编辑", "场地编辑": "待编辑", "回库": "待回库", "报废": "待报废", "迁出": "待迁出" };
             return {
               assetCode: asset.assetCode || "IT-HW-202607-" + String(index + 1).padStart(2, "0"),
               name: asset.name || "服务器-0" + (index + 1),
-              assetStatus: asset.assetStatus || asset.status || "在库",
+              assetStatus: asset.assetStatus || asset.status || "空闲",
               assetSummary: asset.assetSummary || flowStatusMap[action] || "待处理",
               assetCategory: asset.assetCategory || asset.assetType || "设备分类>IT硬件>服务器>机架式服务器",
               assetLocation,
@@ -28481,7 +28647,7 @@
                   ${detail.basicFields.map((field) => `
                     <div class="detail-item">
                       <strong>${escapeHtml(field.label)}</strong>
-                      <span>${escapeHtml(field.value)}</span>
+                      <span>${field.label === "资产状态" ? renderAssetStatusTag(field.value) : escapeHtml(field.value)}</span>
                     </div>
                   `).join("")}
                 </div>
@@ -29878,6 +30044,13 @@
             return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。"`
           }
 
+          getBatchLedgerActivityDemandAttrs(action) {
+            const validationActions = new Set(["上架", "部署", "变动", "下架", "回库", "编辑", "迁出", "出库", "调拨", "报废"]);
+            if (!validationActions.has(action)) return this.getLedgerOperationDemandAttrs(action);
+            const actionLabel = escapeHtml(action);
+            return ` data-demand-version="v1.1,v1.3" data-demand-req-id="V3R5-4375,V3R5-4890" data-demand-title-v11="${actionLabel}电子表格禁用规则" data-demand-text-v11="需求来源：V3R5-4375。||交互目的：进入${actionLabel}电子表格后，按操作场景控制字段禁用、隐藏和必填。" data-demand-title-v13="批量${actionLabel}逐项状态校验" data-demand-text-v13="需求来源：V3R5-4890。||触发条件：在 IT设备、场地设施、机柜或备件台账批量选择资产后执行${actionLabel}。||校验顺序：先判断资产流程状态是否为空，再按空闲、在用资产状态判断是否允许执行当前活动。||部分可处理：部分资产不符合条件时展示逐行原因，可继续处理校验通过的数据；全部不符合时不进入办理页面。||状态口径：资产流程状态仅记录待上架、待部署、待变动等进行中状态，不使用已入库、已上架、已部署等完成状态。"`;
+          }
+
           getCrossPageSelectionDemandAttrs(target = "selection") {
             const titleMap = {
               header: "跨页选择当前页资产",
@@ -29914,7 +30087,7 @@
               [VIEW_IDS.CABINET]: stationActions,
               [VIEW_IDS.SPARE_PART]: {
                 primary: ["出库", "编辑", "调拨"],
-                more: []
+                more: ["报废"]
               }
             };
             return actionMap[viewId] || {
@@ -29936,7 +30109,7 @@
               <div class="ledger-batch-selection-toolbar" aria-label="已选资产批量操作"${this.getCrossPageSelectionDemandAttrs("toolbar")}>
                 <span class="batch-selection-count">已选 ${selectedIds.length} 条</span>
                 ${primaryActions.map((action) => `
-                  <button class="btn batch-pill-btn" type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getLedgerOperationDemandAttrs(action)}>${escapeHtml(action)}</button>
+                  <button class="btn batch-pill-btn" type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getBatchLedgerActivityDemandAttrs(action)}>${escapeHtml(action)}</button>
                 `).join("")}
                 ${moreActions.length ? `<div class="batch-action-wrap">
                   <button class="btn batch-pill-btn" type="button" data-action="${moreActions.length ? "toggle-batch-selection-menu" : "batch-selection-action"}" data-view="${escapeHtml(viewId)}" data-label="更多" aria-haspopup="${moreActions.length ? "menu" : "false"}" aria-expanded="${moreActions.length && menuOpen ? "true" : "false"}"${this.getMultiSelectMoreDemandAttrs()}>
@@ -29950,7 +30123,7 @@
                   ${moreActions.length && menuOpen ? `
                     <div class="batch-action-menu" role="menu">
                       ${moreActions.map((action) => `
-                        <button type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getLedgerOperationDemandAttrs(action)}>${escapeHtml(action)}</button>
+                        <button type="button" data-action="batch-selection-action" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(action)}"${this.getBatchLedgerActivityDemandAttrs(action)}>${escapeHtml(action)}</button>
                       `).join("")}
                     </div>
                   ` : ""}
@@ -30118,8 +30291,7 @@
                   }
                   if (column.key === "assetStatus") {
                     const value = parentRow[column.key];
-                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : (value === "报废" || value === "迁出") ? "discarded" : "";
-                    return `<td><span class="status-text ${className}">${escapeHtml(value || "-")}</span></td>`;
+                    return `<td>${renderAssetStatusTag(value)}</td>`;
                   }
                   const value = parentRow[column.key];
                   return `<td><span class="text-ellipsis" title="${escapeHtml(value || "-")}">${escapeHtml(value || "-")}</span></td>`;
@@ -30165,8 +30337,7 @@
                   }
                   if (column.key === "assetStatus") {
                     const value = childRow[column.key];
-                    const className = value === "在用" ? "in-use" : value === "空闲" ? "idle" : (value === "报废" || value === "迁出") ? "discarded" : "";
-                    return `<td><span class="status-text ${className}">${escapeHtml(value || "-")}</span></td>`;
+                    return `<td>${renderAssetStatusTag(value)}</td>`;
                   }
                   const value = childRow[column.key];
                   return `<td><span class="text-ellipsis" title="${escapeHtml(value || "-")}">${escapeHtml(value || "-")}</span></td>`;
@@ -30183,8 +30354,7 @@
               return this.renderRowActions(viewId, row, options);
             }
             if (key === "assetStatus") {
-              const className = row[key] === "在用" ? "in-use" : row[key] === "空闲" ? "idle" : (row[key] === "报废" || row[key] === "迁出") ? "discarded" : "";
-              return `<span class="status-text ${className}">${escapeHtml(row[key] || "-")}</span>`;
+              return renderAssetStatusTag(row[key]);
             }
             if (key === "name") {
               const nameValue = row[key] || "-";
@@ -31783,6 +31953,33 @@
             `;
           }
 
+          renderLedgerActivityValidationDialog(dialog) {
+            const results = Array.isArray(dialog.results) ? dialog.results : [];
+            const validCount = results.filter((item) => item.valid).length;
+            const invalidCount = results.length - validCount;
+            return `
+              <div class="relation-modal-backdrop" data-action="close-ledger-activity-validation-dialog"></div>
+              <section class="relation-modal ledger-activity-validation-dialog" role="dialog" aria-modal="true" aria-labelledby="ledgerActivityValidationTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4890" data-demand-title="资产活动逐项校验结果" data-demand-text="需求来源：V3R5-4890。||交互目的：批量选择状态不同的资产执行上架、部署、变动、回库等活动时，逐条展示校验结果并允许继续处理符合条件的数据。||状态模型：资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态，不记录已入库、已上架或已部署。||校验顺序：先判断资产流程状态是否为空，再按资产状态判断活动适用范围；存在进行中流程时禁止重复发起。||部分可处理：部分资产不符合条件时展示可处理数与已排除数，继续后只带入校验通过的数据；全部不符合时不进入办理页面。||异常判断：资产不存在、状态缺失、已有进行中流程或资产状态不满足活动要求时，必须逐行展示具体原因。">
+                <header class="relation-modal-head"><div class="relation-modal-title" id="ledgerActivityValidationTitle">${invalidCount === results.length ? "当前资产均不可处理" : "部分资产不可处理"}</div><button class="relation-modal-close" type="button" data-action="close-ledger-activity-validation-dialog" aria-label="关闭">×</button></header>
+                <div class="relation-modal-body">
+                  <div class="ledger-activity-validation-summary">
+                    <div class="ledger-activity-validation-stat"><span>本次选择</span><strong>${results.length}</strong></div>
+                    <div class="ledger-activity-validation-stat is-valid"><span>可继续${escapeHtml(dialog.actionLabel || "处理")}</span><strong>${validCount}</strong></div>
+                    <div class="ledger-activity-validation-stat is-invalid"><span>已排除</span><strong>${invalidCount}</strong></div>
+                  </div>
+                  <p class="ledger-activity-validation-hint">系统已先校验资产流程状态，再校验资产状态。${validCount ? `继续后仅带入通过校验的 ${validCount} 条资产。` : "请调整资产状态或先完结进行中的流程后重试。"}</p>
+                  <div class="ledger-activity-validation-table-wrap">
+                    <table class="ledger-activity-validation-table">
+                      <thead><tr><th style="width:150px;">资产编号</th><th style="width:150px;">资产名称</th><th style="width:90px;">资产状态</th><th style="width:110px;">资产流程状态</th><th>校验结果</th></tr></thead>
+                      <tbody>${results.map((item) => `<tr><td title="${escapeHtml(item.assetCode)}">${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td><td>${renderAssetStatusTag(item.assetStatus)}</td><td>${escapeHtml(item.processStatus)}</td><td title="${escapeHtml(item.reason)}"><span class="ledger-activity-result ${item.valid ? "" : "is-invalid"}">${item.valid ? "可处理" : escapeHtml(item.reason)}</span></td></tr>`).join("")}</tbody>
+                    </table>
+                  </div>
+                </div>
+                <footer class="relation-modal-footer"><div class="relation-modal-actions"><button class="btn" type="button" data-action="close-ledger-activity-validation-dialog">取消</button>${validCount ? `<button class="btn btn-primary" type="button" data-action="continue-ledger-activity-validation">继续处理 ${validCount} 条</button>` : ""}</div></footer>
+              </section>
+            `;
+          }
+
           renderProcessCloseDialog(dialog) {
             const bulkItems = Array.isArray(dialog.items) ? dialog.items : [];
             return `
@@ -32053,6 +32250,9 @@
             if (state.ui.requirementUserStoryDrawer) {
               return this.renderRequirementUserStoryDrawer(state.ui.requirementUserStoryDrawer);
             }
+            if (state.ui.ledgerActivityValidationDialog) {
+              return this.renderLedgerActivityValidationDialog(state.ui.ledgerActivityValidationDialog);
+            }
             if (state.ui.processRouteDialog) {
               return this.renderProcessRouteDialog(state.ui.processRouteDialog);
             }
@@ -32315,7 +32515,7 @@
                             <td>${escapeHtml(row.assetCode || row.serialCode || "-")}</td>
                             <td>${escapeHtml(row.assetCategory || "-")}</td>
                             <td>${escapeHtml(row.assetLocation || "-")}</td>
-                            <td>${escapeHtml(row.assetStatus || "-")}</td>
+                            <td>${renderAssetStatusTag(row.assetStatus)}</td>
                             <td><button class="asset-overview-dialog-op" type="button" data-action="top-action" data-label="查看资产详情">查看</button></td>
                           </tr>
                         `).join("")}
@@ -32959,7 +33159,7 @@
                       <div class="relation-current-name">${escapeHtml(currentRow.name || "-")}</div>
                       <div class="relation-current-meta">
                         <span>资产编号<strong>${escapeHtml(currentRow.assetCode || "-")}</strong></span>
-                        <span>资产状态<strong>${escapeHtml(currentRow.assetStatus || "-")}</strong></span>
+                        <span>资产状态<strong>${renderAssetStatusTag(currentRow.assetStatus)}</strong></span>
                         <span>当前主设备<strong>${escapeHtml(parentRow ? (parentRow.name || parentRow.assetCode) : "无")}</strong></span>
                         <span>已绑从设备<strong>${children.length} 个</strong></span>
                       </div>
@@ -33128,7 +33328,7 @@
                           <td>${escapeHtml(row.assetCode || "-")}</td>
                           <td>${escapeHtml(row.__sourceLabel || "-")}</td>
                           <td>${escapeHtml(row.assetCategory || "-")}</td>
-                          <td>${escapeHtml(row.assetStatus || "-")}</td>
+                          <td>${renderAssetStatusTag(row.assetStatus)}</td>
                           <td>${escapeHtml(row.assetLocation || "-")}</td>
                         </tr>
                       `;
@@ -33466,6 +33666,14 @@
               }
               if (action === "confirm-process-route-dialog") {
                 this.store.confirmProcessRouteDialog();
+                return;
+              }
+              if (action === "close-ledger-activity-validation-dialog") {
+                this.store.closeLedgerActivityValidationDialog();
+                return;
+              }
+              if (action === "continue-ledger-activity-validation") {
+                this.store.continueLedgerActivityValidation();
                 return;
               }
               if (action === "close-process-close-dialog") {
