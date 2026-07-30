@@ -965,6 +965,24 @@
         flex-direction: column;
       }
 
+      .inbound-form-page:has([data-action="back-it-inbound-list"]),
+      .inbound-process-page:has([data-action="back-it-inbound-list"]),
+      .inbound-form-page:has([data-action="back-it-asset-workflow-list"]),
+      .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) {
+        position: fixed;
+        inset: 0;
+        z-index: 120;
+        box-sizing: border-box;
+        width: 100vw;
+        height: 100vh;
+        min-height: 0;
+        overflow: hidden;
+        border: 0;
+        border-radius: 0;
+        background: #fff;
+        box-shadow: none;
+      }
+
       .inbound-form-header {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
@@ -983,6 +1001,38 @@
         font-size: 13px;
       }
 
+      [data-action="back-it-inbound-list"].inbound-form-back,
+      [data-action="back-it-asset-workflow-list"].inbound-form-back {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: transparent;
+        font-size: 0;
+      }
+
+      [data-action="back-it-inbound-list"].inbound-form-back::after,
+      [data-action="back-it-asset-workflow-list"].inbound-form-back::after {
+        color: #60758b;
+        content: "×";
+        font-size: 22px;
+        line-height: 1;
+      }
+
+      [data-action="back-it-inbound-list"].inbound-form-back:hover,
+      [data-action="back-it-asset-workflow-list"].inbound-form-back:hover {
+        border-color: #d9e5f1;
+        background: #f3f7fb;
+      }
+
       .inbound-form-heading {
         margin: 0;
         color: #1e344b;
@@ -994,8 +1044,19 @@
         justify-self: end;
       }
 
+      .inbound-form-page:has([data-action="back-it-inbound-list"]) .inbound-form-actions,
+      .inbound-process-page:has([data-action="back-it-inbound-list"]) .inbound-process-actions,
+      .inbound-form-page:has([data-action="back-it-asset-workflow-list"]) .inbound-form-actions,
+      .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) .inbound-process-actions {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        margin-right: 42px;
+      }
+
       .inbound-form-body {
         flex: 1;
+        min-height: 0;
         overflow: auto;
         padding: 14px 18px 20px;
         background: #f7fafc;
@@ -2776,15 +2837,17 @@
       .cabinet-space-panel {
         flex: 1;
         min-width: 0;
-        overflow: auto;
+        min-height: 0;
+        overflow: hidden;
         background: #f7f9fc;
-        padding: 14px;
+        padding: 14px 14px 0;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 12px;
       }
 
       .cabinet-space-stats {
+        flex: none;
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
@@ -2843,10 +2906,94 @@
       }
 
       .cabinet-space-content-head {
+        flex: none;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+      }
+
+      .cabinet-space-results {
+        flex: 1;
+        min-width: 0;
+        min-height: 0;
+        overflow: auto;
+        padding: 2px 2px 12px;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+      }
+
+      .cabinet-space-results.is-list {
+        overflow: hidden;
+        padding: 0;
+      }
+
+      .cabinet-space-results.is-list .cabinet-space-list-panel {
+        height: 100%;
+      }
+
+      .cabinet-space-panel > .pagination {
+        flex: none;
+        margin: 0 -14px;
+        background: #fff;
+        border-top-color: #dfe8f2;
+        box-shadow: 0 -4px 12px rgba(31, 57, 91, 0.04);
+      }
+
+      .cabinet-space-head-left {
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .cabinet-space-head-left {
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .cabinet-space-display-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        padding: 3px;
+        border: 1px solid #d7e3f0;
+        border-radius: 5px;
+        background: #f3f7fb;
+      }
+
+      .cabinet-space-display-btn {
+        min-width: 66px;
+        height: 28px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 3px;
+        background: transparent;
+        color: #5b7087;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .cabinet-space-display-btn:hover {
+        color: var(--primary);
+      }
+
+      .cabinet-space-display-btn.is-active {
+        background: #fff;
+        color: var(--primary);
+        font-weight: 600;
+        box-shadow: 0 1px 4px rgba(34, 91, 158, 0.16);
+      }
+
+      .cabinet-space-list-panel {
+        min-height: 0;
+        overflow: auto;
+        border: 1px solid #e2eaf3;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .cabinet-space-list-panel .asset-table {
+        min-width: 1180px;
       }
 
       .cabinet-space-selection {
@@ -2982,7 +3129,7 @@
       }
 
       .cabinet-mini-rack-unit {
-        height: 5px;
+        height: 7px;
         border-radius: 2px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: #2d3742;
@@ -5083,7 +5230,7 @@
       .process-route-dialog { width: min(560px, calc(100vw - 48px)); height: auto; min-height: 0; max-height: calc(100vh - 48px); display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: hidden; }
       .process-route-dialog-body { padding: 24px 26px; color: #38536d; line-height: 1.8; }
       .process-route-dialog-body strong { color: #173b60; }
-      .ledger-activity-validation-dialog { width: min(820px, calc(100vw - 48px)); height: fit-content; min-height: 0; max-height: calc(100vh - 48px); }
+      .ledger-activity-validation-dialog { width: min(1000px, calc(100vw - 48px)); height: fit-content; min-height: 0; max-height: calc(100vh - 48px); }
       .ledger-activity-validation-dialog .relation-modal-body { padding: 18px 20px; overflow: auto; }
       .ledger-activity-validation-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
       .ledger-activity-validation-stat { padding: 12px 14px; border: 1px solid #dce7f2; border-radius: 5px; background: #f8fbff; }
@@ -5095,12 +5242,14 @@
       .ledger-activity-validation-stat.is-invalid strong { color: #cf3e3e; }
       .ledger-activity-validation-hint { margin: 0 0 12px; color: #526a82; font-size: 12px; line-height: 1.7; }
       .ledger-activity-validation-table-wrap { max-height: 360px; overflow: auto; border: 1px solid #dde7f1; }
-      .ledger-activity-validation-table { width: 100%; min-width: 720px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+      .ledger-activity-validation-table { width: 100%; min-width: 900px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
       .ledger-activity-validation-table th,
       .ledger-activity-validation-table td { height: 40px; padding: 0 10px; border-bottom: 1px solid #e7edf4; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .ledger-activity-validation-table th { position: sticky; top: 0; z-index: 1; background: #edf7ff; color: #37536f; }
       .ledger-activity-result { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eaf8f0; color: #16884c; white-space: nowrap; }
       .ledger-activity-result.is-invalid { background: #fff0f0; color: #d33b3b; }
+      .ledger-activity-process-link { max-width: 100%; border: 0; padding: 0; background: transparent; color: var(--primary); font-size: 12px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+      .ledger-activity-process-link:hover { text-decoration: underline; }
       .ledger-activity-validation-dialog .relation-modal-footer { justify-content: flex-end; }
       @media (max-width: 760px) { .ledger-activity-validation-summary { grid-template-columns: 1fr; } }
       @media (max-width: 900px) { .process-config-head { flex-direction: column; } .process-config-head-actions { width: 100%; flex-wrap: wrap; } .process-config-summary { grid-template-columns: 1fr; } .process-config-unified { align-items: flex-start; flex-direction: column; } }
@@ -8572,10 +8721,10 @@
         align-items: center;
         justify-content: center;
         pointer-events: auto;
-        cursor: default;
+        cursor: pointer;
       }
 
-      .cabinet-reserved-device span {
+      .cabinet-reserved-device > .cabinet-reserved-label {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -8738,7 +8887,7 @@
 
       .cabinet-mounted-tooltip {
         position: absolute;
-        left: calc(100% + 18px);
+        left: calc(100% + 6px);
         top: 50%;
         z-index: 8;
         width: 224px;
@@ -8752,7 +8901,7 @@
         transform: translateY(-50%);
         opacity: 0;
         visibility: hidden;
-        pointer-events: none;
+        pointer-events: auto;
         box-shadow: 0 8px 18px rgba(17, 24, 33, 0.16);
         transition: opacity 0.15s ease, visibility 0.15s ease;
       }
@@ -8768,10 +8917,46 @@
         transform: translateY(-50%) rotate(45deg);
       }
 
+      .cabinet-mounted-tooltip::after {
+        content: "";
+        position: absolute;
+        left: -8px;
+        top: 0;
+        width: 8px;
+        height: 100%;
+      }
+
       .cabinet-mounted-device:hover .cabinet-mounted-tooltip,
-      .cabinet-mounted-device:focus .cabinet-mounted-tooltip {
+      .cabinet-mounted-device:focus .cabinet-mounted-tooltip,
+      .cabinet-mounted-device:focus-within .cabinet-mounted-tooltip,
+      .cabinet-reserved-device:hover .cabinet-mounted-tooltip,
+      .cabinet-reserved-device:focus .cabinet-mounted-tooltip,
+      .cabinet-reserved-device:focus-within .cabinet-mounted-tooltip {
         opacity: 1;
         visibility: visible;
+      }
+
+      .cabinet-reserved-device .cabinet-mounted-tooltip {
+        left: calc(100% + 6px);
+        pointer-events: auto;
+        cursor: default;
+      }
+
+      .cabinet-tooltip-link {
+        display: inline;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #77b8ff;
+        font: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .cabinet-tooltip-link:hover,
+      .cabinet-tooltip-link:focus {
+        color: #b9dcff;
       }
 
       .cabinet-mounted-tooltip span {
@@ -10431,6 +10616,16 @@
 
       .demand-popover p.is-demand-exception {
         color: #1f2d3d;
+        font-weight: 700;
+      }
+
+      .demand-popover p.is-demand-highlight {
+        margin-top: 8px;
+        padding: 8px 10px;
+        border-left: 3px solid #ff7d00;
+        border-radius: 3px;
+        background: #fff7e8;
+        color: #9a4b00;
         font-weight: 700;
       }
 
@@ -14581,7 +14776,7 @@
           },
           [VIEW_IDS.SPARE_PART]: {
             title: "备件清单",
-            modeLabel: "",
+            modeLabel: "标准视图",
             placeholder: "请输入资产编码/资产名称",
             secondaryLabel: "高级搜索",
             pageSize: 200,
@@ -17236,7 +17431,7 @@
           {
             id: "V3R5-4662",
             ticketId: "V3R5-4662",
-            version: "v1.3",
+            version: "v1.4",
             type: "优化",
             title: "【资产管理】优化 资产表单设计及资产详情设计逻辑",
             description: "优化 资产表单设计及资产详情设计逻辑",
@@ -17308,7 +17503,7 @@
           {
             id: "V3R5-838",
             ticketId: "V3R5-838",
-            version: "v1.3",
+            version: "v1.4",
             type: "新增",
             title: "【位置信息】新增 机柜/场地设施/IT设备 支持3D展示",
             description: "【位置信息】新增 机柜/场地设施/IT设备 支持3D展示",
@@ -17335,7 +17530,7 @@
           "V3R5-4185": { role: "系统管理员", need: "在表单设计和详情设计的资产树中搜索分类或模型", value: "快速定位配置对象，减少逐级展开成本", scenario: "资产分类层级较深、模型数量较多时，需要按名称搜索。", rules: ["搜索命中子节点时保留父级路径并自动展开。", "清空搜索后恢复原有树结构和展开状态。"], boundary: "无匹配结果时保留当前配置，不得清空已选节点或字段。" },
           "V3R5-4117": { role: "运维主管", need: "将已配置的资产概览看板应用到其他组织或空间层级", value: "复用看板配置并保持多层级展示一致", scenario: "多个机房、楼层或区域需要使用相同指标看板时，可批量复用配置。", rules: ["应用前选择目标层级并展示受影响范围。", "只复制目标层级支持的组件和指标配置。"], boundary: "未选择目标、目标无权限或字段不兼容时不得直接覆盖。" },
           "V3R5-4113": { role: "运维主管", need: "从资产概览指标逐级下钻到明细数据", value: "快速定位指标异常对应的资产和位置", scenario: "发现资产数量、状态或利用率异常时，需要查看组成数据。", rules: ["支持从汇总指标进入下一层级或资产列表。", "下钻过程保留当前筛选条件和层级路径。"], boundary: "无下级数据或用户无查看权限时，展示明确空态或权限提示。" },
-          "V3R5-4112": { role: "运维人员", need: "在资产详情中查看统一、可筛选的操作记录", value: "追溯资产字段、位置、关系及流程变化", scenario: "定位资产异常或审计变更时，需要查看操作前后值和来源单据。", rules: ["成功生效的事件进入资产详情操作记录。", "记录展示操作人、来源、结果、关联单据和字段新旧值。"], boundary: "失败或未生效事件只进入全局操作记录，不得写入正式资产履历。" },
+          "V3R5-4112": { role: "运维人员", need: "在资产详情中查看统一、可筛选的操作记录", value: "追溯资产字段、位置、关系及流程变化", scenario: "定位资产异常或审计变更时，需要查看操作前后值和来源单据。", rules: ["成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "流程工单显示具体业务入口名称；记录展示操作人、来源、关联单据和字段新旧值，不展示操作结果。"], boundary: "失败或未生效事件只进入全局操作记录，不得写入正式资产履历。" },
           "V3R5-4111": { role: "资产管理员", need: "在资产台账中跨页勾选并批量处理资产", value: "无需把所有目标资产集中到同一页即可完成批量操作", scenario: "目标资产分布在多页搜索结果中时，需要持续累积选择。", rules: ["翻页后保留已选资产和累计数量。", "表头全选只影响当前页，不清空其他页选择。"], boundary: "筛选范围变化或资产失效时，应清理不再适用的选择并提示。" },
           "V3R5-4110": { role: "资产管理员", need: "在空间视图中按位置查看资产分布而不展示设备末级节点", value: "减少树节点数量并突出空间层级", scenario: "按园区、楼栋、楼层和房间浏览资产时，需要快速定位空间。", rules: ["空间树只展示空间层级及资产数量。", "设备明细继续在右侧列表或详情区域展示。"], boundary: "资产位置缺失时应归入未分配位置，不得生成异常树节点。" },
           "V3R5-4427": { role: "运维人员", need: "在场地设施及备件详情中查看符合其业务特点的位置信息", value: "避免使用不适用的机柜U位图并快速识别同空间设备", scenario: "查看精密空调、传感器或备件位置时，需要了解所属空间和附近设备。", rules: ["展示空间路径、当前设备和同空间设备。", "同空间设备支持搜索并可进入对应详情。"], boundary: "位置缺失或同空间无其他设备时展示清晰空态。" },
@@ -17344,10 +17539,10 @@
           "V3R5-4418": { role: "资产管理员", need: "在高级搜索中按厂商筛选资产", value: "快速定位指定来源或品牌的设备", scenario: "处理维保、替换或批次问题时，需要查询同厂商资产。", rules: ["高级搜索默认提供厂商条件。", "厂商选项来自当前台账可见数据并去重。"], boundary: "无厂商数据时保留请选择状态，不影响其他条件查询。" },
           "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗且不展示右上角提示；进度管理器展开时自动定位并闪烁对应任务行，收起时通过结果数量和强调动画触达，展开后定位任务。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时，应在任务列表中保留可识别状态和后续操作。" },
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
-          "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时先提示并进入流程发起页，带入机柜、U位及设备信息；审核同意后进入待执行，执行人点击“执行完成”后才更新资产数据。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
-          "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在包含设备页签查看设备、来源单据和有效期。", rules: ["包含设备列表合并展示已上架和预占中设备，并用不同状态与视觉样式区分。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "预占记录展示U位范围、来源流程单、预占人、预占时间和有效期，并支持进入流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
-          "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项校验结果", value: "快速识别不可处理资产并继续处理符合条件的数据", scenario: "一次选择多条资产执行批量活动时，资产状态和进行中的流程状态可能不同。", rules: ["资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态。", "先校验资产流程状态是否为空，再按资产状态校验活动范围。", "部分资产不符合条件时展示可处理数、已排除数和逐行原因，继续后只带入校验通过的数据。", "全部资产不符合条件时不进入办理页面。"], boundary: "不得用单一失败提示掩盖具体资产错误，不得重复发起进行中流程，也不得错误处理不符合状态要求的资产。" },
-          "V3R5-4419": { role: "机房管理员", need: "通过机柜层级和U位可视化查看设备占用", value: "直观掌握机柜容量并快速定位设备", scenario: "规划上架位置或核对机柜资源时，需要查看U位使用情况。", rules: ["空间视图展示机柜数、设备数和利用率。", "机柜卡片展示U高、已用/空闲U位并支持进入详情。"], boundary: "U位数据缺失、重叠或超出机柜高度时应提示异常。" },
+          "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时不再弹出二次确认，直接进入全屏流程发起页，并带入台账已选资产或机柜、U位及设备信息；通过右上角关闭按钮返回来源页面。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
+          "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在机柜图中识别预占位置并追溯来源流程单。", rules: ["右侧包含设备列表只展示正式上架设备，不展示预占中的设备。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "左侧机柜图中的预占设备使用与在架设备一致的悬浮信息卡，展示资产编号、资产名称、U位范围和来源流程单；流程单号支持点击进入对应流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
+          "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项校验结果", value: "快速识别不可处理资产并继续处理符合条件的数据", scenario: "一次选择多条资产执行批量活动时，资产状态和进行中的流程状态可能不同。", rules: ["资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态。", "先校验资产流程状态是否为空，再按资产状态校验活动范围。", "资产存在进行中流程时展示关联流程单号，流程单号支持点击进入对应流程单详情。", "部分资产不符合条件时展示可处理数、已排除数和逐行原因，继续后只带入校验通过的数据。", "全部资产不符合条件时不进入办理页面。"], boundary: "不得用单一失败提示掩盖具体资产错误，不得重复发起进行中流程，也不得错误处理不符合状态要求的资产；关联流程单缺失时展示“-”且不得阻断校验结果。" },
+          "V3R5-4419": { role: "机房管理员", need: "在空间范围内切换卡片或列表查看机柜及U位占用", value: "既能直观掌握机柜容量，又能沿用台账列表完成明细查询和批量处理", scenario: "规划上架位置时使用卡片查看U位容量，核对或批量处理同空间机柜时切换为列表。", rules: ["IT设备、场地设施、机柜和备件台账首次进入时默认展示空间视图。", "机柜台账的空间视图默认使用卡片模式；标准视图用于查看全局台账。", "空间视图保留空间树、机柜数、设备数和利用率统计，并支持卡片展示和列表展示。", "顶部统计卡片和展示切换固定显示，底部分页器固定显示，仅中间机柜卡片或列表结果区域随鼠标滚动。", "机柜缩略图蓝色表示已占用U位占总U位的比例示意，从底部向上填充；灰色表示空闲U位。", "缩略图按10个示意格等分显示，每格代表10%的容量区间；蓝色格数按已用U/总U换算并四舍五入，只要已用U大于0至少显示1格。", "精确占用以卡片中的已用U/总U和百分比为准，具体物理U位在机柜详情查看。", "卡片/列表切换只在空间视图中显示，并保留空间节点、查询条件、分页和已选数据。", "进入机柜详情再返回时恢复离开前的空间节点及展示方式。"], boundary: "当前空间无机柜时展示空态；U位数据缺失、重叠或超出机柜高度时应提示异常；缩略图蓝色格数不得解释为设备数量或精确U位坐标。" },
           "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产并扫码进入详情", value: "在现场无需返回PC即可完成资产核对", scenario: "巡检或故障处理现场，需要快速识别标签并查看资产信息。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "二维码无效、资产不存在或无权限时给出明确提示。" },
           "V3R5-838": { role: "运维人员", need: "在资产详情中切换3D场景并定位当前资产", value: "直观理解资产所处空间、机柜和U位", scenario: "远程定位设备或核对空间关系时，需要从二维信息进入三维场景。", rules: ["IT设备、机柜和场地设施详情支持2D/3D切换，默认2D。", "通过 resource_id 定位并高亮资产、机柜或所属空间。"], boundary: "资产未建模时逐级降级定位；平台不可用或空间未建模时隐藏3D入口。" }
         });
@@ -17985,6 +18180,7 @@
                 },
                 columnWidths: {},
                 listViewModes: {},
+                cabinetSpaceDisplayMode: "card",
                 listViewModeMenuOpen: null,
                 assetActivityMenuOpen: null,
                 processConfig: {
@@ -17992,7 +18188,6 @@
                   station: { inbound: true, deploy: true, change: true, return: true, edit: true, retire: true }
                 },
                 processConfigMode: "itemized",
-                processRouteDialog: null,
                 processCloseDialog: null,
                 ledgerActivityValidationDialog: null,
                 assetOperationViewDialog: null,
@@ -18050,13 +18245,13 @@
                       name: "核心业务设备到货入库",
                       creator: "张伟",
                       createdAt: "2026-07-14 08:45:20",
-                      status: "待审核",
+                      status: "已完成",
                       approver: "李敏",
                       executor: "刘婷",
-                      description: "采购批次PO-202607-018到货，包含数据库服务器与核心交换机，验收合格后入IT备件库A区。",
+                      description: "采购批次PO-202607-018到货，包含数据库服务器与核心交换机，已完成验收并入IT备件库A区。",
                       assets: [
-                        { ...IT_WORKFLOW_ASSET_POOL[0], status: "空闲", assetLocation: "" },
-                        { ...IT_WORKFLOW_ASSET_POOL[1], status: "空闲", assetLocation: "" }
+                        { ...IT_WORKFLOW_ASSET_POOL[0], status: "空闲", assetLocation: "2号楼-B1层-IT备件库A区" },
+                        { ...IT_WORKFLOW_ASSET_POOL[1], status: "空闲", assetLocation: "2号楼-B1层-IT备件库A区" }
                       ]
                     },
                     {
@@ -18075,11 +18270,11 @@
                       name: "网络设备应急备件入库",
                       creator: "陈浩",
                       createdAt: "2026-07-12 14:26:32",
-                      status: "待审核",
+                      status: "已完成",
                       approver: "李敏",
                       executor: "王强",
-                      description: "核心汇聚交换机应急备件到货，待审核后进入网络设备备件库存。",
-                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[1], name: "核心汇聚交换机-备件01", assetCode: "IT-NET-202607-012", status: "空闲", assetLocation: "" }]
+                      description: "核心汇聚交换机应急备件已完成到货验收并进入网络设备备件库存。",
+                      assets: [{ ...IT_WORKFLOW_ASSET_POOL[1], name: "核心汇聚交换机-备件01", assetCode: "IT-NET-202607-012", status: "空闲", assetLocation: "2号楼-B1层-网络设备备件区" }]
                     },
                     {
                       id: "ITRK2026071100003",
@@ -19184,7 +19379,8 @@
           }
 
           getListViewMode(viewId) {
-            return this.state.ui.listViewModes?.[viewId] || (viewId === VIEW_IDS.CABINET ? "space" : "standard");
+            const spaceViewLedgers = [VIEW_IDS.IT_FACILITY, VIEW_IDS.STATION_FACILITY, VIEW_IDS.CABINET, VIEW_IDS.SPARE_PART];
+            return this.state.ui.listViewModes?.[viewId] || (spaceViewLedgers.includes(viewId) ? "space" : "standard");
           }
 
           toggleListViewModeMenu(viewId) {
@@ -19217,6 +19413,22 @@
             this.state.ui.listViewModes[viewId] = mode;
             this.state.ui.listViewModeMenuOpen = null;
             this.state.ui.exportMenuOpen = null;
+            this.state.ui.batchSelectionMenuOpen = null;
+            this.closeRowMoreMenu(false);
+            this.emit();
+          }
+
+          getCabinetSpaceDisplayMode() {
+            return ["card", "list"].includes(this.state.ui.cabinetSpaceDisplayMode)
+              ? this.state.ui.cabinetSpaceDisplayMode
+              : "card";
+          }
+
+          setCabinetSpaceDisplayMode(mode) {
+            if (!["card", "list"].includes(mode)) {
+              return;
+            }
+            this.state.ui.cabinetSpaceDisplayMode = mode;
             this.state.ui.batchSelectionMenuOpen = null;
             this.closeRowMoreMenu(false);
             this.emit();
@@ -19319,6 +19531,33 @@
             this.emit();
           }
 
+          filterRowsByActiveSpaceNode(viewId, rows) {
+            if (!Array.isArray(rows)) {
+              return rows || [];
+            }
+            const treeState = this.ensureSpaceTreeState(viewId);
+            const activeNode = String(treeState.activeNode || this.getSpaceTreeRootId(viewId));
+            if (activeNode === this.getSpaceTreeRootId(viewId)) {
+              return rows;
+            }
+            const encodedPath = activeNode.split(":").slice(2).join(":");
+            const selectedParts = encodedPath.split("/").map((part) => {
+              try {
+                return decodeURIComponent(part);
+              } catch (error) {
+                return part;
+              }
+            }).slice(1);
+            if (!selectedParts.length) {
+              return rows;
+            }
+            return rows.filter((row) => {
+              const location = String(row.assetLocation || row.position || "未配置位置").trim() || "未配置位置";
+              const locationParts = location.split(/[-/＞>]/).map((part) => part.trim()).filter(Boolean);
+              return selectedParts.every((part, index) => locationParts[index] === part);
+            });
+          }
+
           toggleSpaceTreeNode(viewId, nodeId) {
             if (!viewId || !nodeId) {
               return;
@@ -19370,7 +19609,13 @@
                   ? (config.viewId === VIEW_IDS.IT_FACILITY ? ["添加资产", "初始化", "上架", "变动", "下架", "迁出"] : ["添加资产", "初始化", "部署", "变动", "回库", "报废"])
                   : [config.actions[index % config.actions.length]];
                 actions.forEach((action, actionIndex) => {
-                  const source = action === "添加资产" ? "空间视图" : action === "初始化" ? "资产台账" : config.source;
+                  const sourceType = action === "添加资产" ? "空间视图" : action === "初始化" ? "资产台账" : config.source;
+                  const workflowEntryPrefix = config.viewId === VIEW_IDS.IT_FACILITY
+                    ? "IT设备"
+                    : config.viewId === VIEW_IDS.STATION_FACILITY
+                      ? "场地设施"
+                      : "资产";
+                  const source = sourceType === "流程工单" ? `${workflowEntryPrefix}${action}` : sourceType;
                   const result = !isLifecycleSample && (index + actionIndex + viewIndex) % 7 === 0 ? "未生效" : "成功";
                   const locationBefore = ["添加资产", "初始化", "入库"].includes(action) ? "-" : ["上架", "部署"].includes(action) ? "2号楼-B1层-资产库" : "A栋-2层-临时区";
                   const locationAfter = action === "添加资产" ? "A栋-2层-临时区" : ["下架", "回库"].includes(action) ? "2号楼-B1层-资产库" : String(row.assetLocation || "资产库");
@@ -19396,13 +19641,14 @@
                     operator: index % 2 ? "刘婷" : "系统管理员",
                     executor: index % 2 ? "陈浩" : "刘婷",
                     source,
-                    orderNo: source === "流程工单" ? `${config.viewId === VIEW_IDS.STATION_FACILITY ? "SF" : "IT"}${actionPrefixMap[action] || "CZ"}202607${String(index + 1).padStart(6, "0")}` : "",
+                    sourceType,
+                    orderNo: sourceType === "流程工单" ? `${config.viewId === VIEW_IDS.STATION_FACILITY ? "SF" : "IT"}${actionPrefixMap[action] || "CZ"}202607${String(index + 1).padStart(6, "0")}` : "",
                     result,
                     relatedViewId: relatedCabinet ? VIEW_IDS.CABINET : "",
                     relatedRowId: relatedCabinet?.id || "",
                     relatedObject: relatedCabinet ? String(relatedCabinet.name || relatedCabinet.assetCode || "关联机柜") : "-",
                     changes,
-                    note: result === "成功" ? "同一次业务操作涉及的属性、位置和关系变化合并为一条履历。" : "本次操作未生效，仅保留操作记录和字段变化快照，不写入正式资产履历。"
+                    note: result === "成功" ? "" : "本次操作未生效，仅保留操作记录和字段变化快照，不写入正式资产履历。"
                   });
                 });
               });
@@ -19429,7 +19675,7 @@
             const baseRows = this.getAssetHistoryEvents().filter((event) => {
               const day = Number(String(event.time).slice(8, 10)) || 1;
               const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject].some((value) => String(value || "").toLowerCase().includes(keyword));
-              return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || event.source === filters.source) && (!filters.result || filters.result === "全部" || event.result === filters.result);
+              return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source) && (!filters.result || filters.result === "全部" || event.result === filters.result);
             });
             const histogramMap = new Map();
             baseRows.forEach((event) => {
@@ -19459,7 +19705,7 @@
                 total: filteredRows.length,
                 success: filteredRows.filter((item) => item.result === "成功").length,
                 failed: filteredRows.filter((item) => item.result === "未生效").length,
-                workOrders: filteredRows.filter((item) => item.source === "流程工单" && item.orderNo).length
+                workOrders: filteredRows.filter((item) => (item.sourceType || item.source) === "流程工单" && item.orderNo).length
               }
             };
           }
@@ -19744,7 +19990,7 @@
               : null;
             const cabinetName = cabinetRow?.name || cabinetRow?.assetCode || "当前机柜";
             this.state.ui.cabinetRackDialog = null;
-            this.state.ui.processRouteDialog = {
+            this.startProcessRoute({
               sourceViewId: VIEW_IDS.IT_FACILITY,
               flowViewId: config.activity.flowViewId,
               groupLabel: config.group.label,
@@ -19761,8 +20007,7 @@
                 deviceCode: payload.deviceCode || deviceRow?.assetCode || "",
                 deviceName: payload.deviceName || deviceRow?.name || ""
               }
-            };
-            this.emit();
+            });
           }
 
           openCabinetRackDialog(mode, payload = {}) {
@@ -20308,6 +20553,32 @@
               }
               return;
             }
+            if (requirement.id === "V3R5-4890") {
+              const targetView = requirement.targetView || VIEW_IDS.IT_FACILITY;
+              const sampleRows = this.getListRows(targetView).slice(1, 3);
+              this.state.ui.currentTopNav = "运营管理";
+              this.state.ui.currentView = targetView;
+              this.state.ui.guidePage = null;
+              this.state.ui.operationPage = null;
+              this.state.ui.detailPage = null;
+              this.state.ui.drawer = null;
+              this.state.ui.ledgerHierarchyMenuOpen = false;
+              this.state.ui.assetActivityMenuOpen = null;
+              if (!this.state.ui.listViewModes) this.state.ui.listViewModes = {};
+              if (!this.state.ui.listSelections) this.state.ui.listSelections = {};
+              this.state.ui.listViewModes[targetView] = "space";
+              this.state.ui.listSelections[targetView] = sampleRows.map((row) => row.id);
+              this.closeGuideMenu(false);
+              const validation = this.validateLedgerActivityRows(targetView, "上架", this.state.ui.listSelections[targetView]);
+              if (validation?.invalidCount) {
+                this.state.ui.ledgerActivityValidationDialog = validation;
+                this.emit();
+                return;
+              }
+              this.pushToast("已定位需求范围", "已选中状态不同的示例资产，可点击批量上架验证逐项判断。", "success");
+              this.emit();
+              return;
+            }
             if (requirement.id === "V3R5-4419") {
               this.state.ui.currentTopNav = "运营管理";
               this.state.ui.currentView = VIEW_IDS.CABINET;
@@ -20319,7 +20590,8 @@
                 this.state.ui.listViewModes = {};
               }
               this.state.ui.listViewModes[VIEW_IDS.CABINET] = "space";
-              this.pushToast("已定位需求范围", "已跳转到“机柜层级可视化展示”，并切换到空间视图。", "success");
+              this.state.ui.cabinetSpaceDisplayMode = "card";
+              this.pushToast("已定位需求范围", "已跳转到“机柜层级可视化展示”，并切换到空间视图的卡片展示。", "success");
               this.emit();
               return;
             }
@@ -21413,7 +21685,7 @@
             }).filter((item) => item.status === "空闲");
             const cabinetUsedU = cabinetMountedDevices.reduce((total, device) => total + device.uHeightNumber, 0);
             const cabinetReservedU = cabinetReservedDevices.reduce((total, device) => total + device.uHeightNumber, 0);
-            const cabinetRelatedDevices = [...cabinetMountedDevices, ...cabinetReservedDevices]
+            const cabinetRelatedDevices = [...cabinetMountedDevices]
               .sort((first, second) => first.startUNumber - second.startUNumber);
             const basicFields = [
               { label: "资产编号", value: normalize(row.assetCode) },
@@ -21561,7 +21833,7 @@
                 && event.result === "成功"
                 && matchesKeyword
                 && (!historyFilters.action || historyFilters.action === "全部" || event.action === historyFilters.action)
-                && (!historyFilters.source || historyFilters.source === "全部" || event.source === historyFilters.source)
+                && (!historyFilters.source || historyFilters.source === "全部" || (event.sourceType || event.source) === historyFilters.source)
                 && (!historyOperator || String(event.operator || "").toLowerCase().includes(historyOperator))
                 && (historyRangeDays >= 999 || eventDay >= historyCutoffDay);
             });
@@ -21648,8 +21920,8 @@
               containsEmptyText: "没有找到匹配的记录",
               cabinetContains: {
                 relatedTitle: "包含设备",
-                relatedColumns: ["资产编号", "名称", "占用状态", "资产分类", "U位范围", "来源单据", "预占人", "预占时间", "有效期", "操作"],
-                relatedColumnKeys: ["assetCode", "name", "occupancyStatus", "assetCategory", "uRange", "sourceOrder", "reservedBy", "reservedAt", "expireAt", "action"],
+                relatedColumns: ["资产编号", "名称", "资产分类", "U位范围", "操作"],
+                relatedColumnKeys: ["assetCode", "name", "assetCategory", "uRange", "action"],
                 relatedRows: cabinetRelatedDevices,
                 mountedRows: cabinetMountedDevices,
                 reservedRows: cabinetReservedDevices,
@@ -22256,11 +22528,17 @@
 
           backToItInboundList(tab = "") {
             const inbound = this.ensureItInboundState();
+            const returnContext = inbound.returnContext || null;
             inbound.mode = "list";
             inbound.activeId = "";
             inbound.readonly = false;
+            inbound.returnContext = null;
             if (tab) {
               inbound.tab = tab;
+            }
+            if (returnContext?.viewId) {
+              this.state.ui.currentView = returnContext.viewId;
+              this.state.ui.detailPage = returnContext.detailPage || null;
             }
             this.emit();
           }
@@ -22627,16 +22905,42 @@
             return rawStatus;
           }
 
+          getLedgerActivityProcessOrder(viewId, row, processStatus) {
+            const status = String(processStatus || "").trim();
+            if (!status || status === "-") return null;
+            const action = status.replace(/^待/, "").replace(/中$/, "");
+            const groupId = viewId === VIEW_IDS.IT_FACILITY
+              ? "it"
+              : viewId === VIEW_IDS.STATION_FACILITY
+                ? "station"
+                : "";
+            const group = PROCESS_FLOW_GROUPS.find((item) => item.id === groupId);
+            const activity = group?.activities.find((item) => item.label === action);
+            if (!activity) return null;
+            const orders = this.getProcessFlowOrders(activity.flowViewId);
+            const assetCode = String(row?.assetCode || row?.serialCode || row?.id || "").trim();
+            const assetName = String(row?.name || "").trim();
+            const matchedOrder = orders.find((order) => (order.assets || []).some((asset) => {
+              const orderAssetCode = String(asset.assetCode || asset.serialCode || asset.id || "").trim();
+              const orderAssetName = String(asset.name || "").trim();
+              return (assetCode && orderAssetCode === assetCode) || (assetName && orderAssetName === assetName);
+            })) || this.getProcessFlowUnfinishedOrders(activity.flowViewId)[0] || orders[0];
+            return matchedOrder
+              ? { flowViewId: activity.flowViewId, orderId: matchedOrder.id, orderNo: matchedOrder.id }
+              : null;
+          }
+
           validateLedgerActivityRows(viewId, actionLabel, selectedRowIds = []) {
             const rule = this.getLedgerActivityValidationRule(viewId, actionLabel);
             if (!rule) return null;
             const results = selectedRowIds.map((rowId) => {
               const row = this.getRowById(viewId, rowId);
               if (!row) {
-                return { id: rowId, assetCode: rowId, name: "资产不存在", assetStatus: "-", processStatus: "-", valid: false, reason: "未找到资产数据，可能已被删除或移出当前台账" };
+                return { id: rowId, assetCode: rowId, name: "资产不存在", assetStatus: "-", processStatus: "-", processOrder: null, valid: false, reason: "未找到资产数据，可能已被删除或移出当前台账" };
               }
               const assetStatus = String(row.assetStatus || "").trim() === "库存" ? "空闲" : String(row.assetStatus || "").trim();
               const processStatus = this.getNormalizedAssetProcessStatus(row);
+              const processOrder = this.getLedgerActivityProcessOrder(viewId, row, processStatus);
               let reason = "";
               if (processStatus) {
                 reason = `资产存在“${processStatus}”流程，不能重复发起“${rule.action}”`;
@@ -22651,6 +22955,7 @@
                 name: row.name || row.assetCode || row.id,
                 assetStatus: assetStatus || "-",
                 processStatus: processStatus || "-",
+                processOrder,
                 valid: !reason,
                 reason: reason || "校验通过，可继续处理"
               };
@@ -22667,6 +22972,28 @@
           closeLedgerActivityValidationDialog() {
             this.state.ui.ledgerActivityValidationDialog = null;
             this.emit();
+          }
+
+          openLedgerActivityProcessOrder(flowViewId, orderId) {
+            if (!flowViewId || !orderId) return;
+            this.state.ui.ledgerActivityValidationDialog = null;
+            this.state.ui.currentTopNav = "运营管理";
+            this.state.ui.currentView = flowViewId;
+            if (flowViewId === VIEW_IDS.IT_INBOUND) {
+              const inbound = this.ensureItInboundState();
+              inbound.tab = "all";
+              inbound.onlyUnfinished = false;
+              this.openItInboundProcess(orderId, true);
+              return;
+            }
+            const workflow = this.ensureItAssetWorkflowState(flowViewId);
+            if (!workflow || !this.getItAssetWorkflowOrder(flowViewId, orderId)) {
+              this.openProcessOrders(flowViewId, false);
+              return;
+            }
+            workflow.tab = "all";
+            workflow.onlyUnfinished = false;
+            this.openItAssetWorkflowProcess(flowViewId, orderId, true);
           }
 
           continueLedgerActivityValidation() {
@@ -22703,25 +23030,23 @@
               this.openOperationPage(viewId, null, action, selected, { source: "ledgerActivity" });
               return;
             }
-            this.state.ui.processRouteDialog = {
+            this.startProcessRoute({
               sourceViewId: viewId,
               flowViewId: config.activity.flowViewId,
               groupLabel: config.group.label,
               activityLabel: action,
               selectedRowIds: selected
-            };
-            this.emit();
+            });
           }
 
-          closeProcessRouteDialog() {
-            this.state.ui.processRouteDialog = null;
-            this.emit();
-          }
-
-          confirmProcessRouteDialog() {
-            const dialog = this.state.ui.processRouteDialog;
+          startProcessRoute(dialog) {
             if (!dialog) return;
-            this.state.ui.processRouteDialog = null;
+            const returnContext = {
+              viewId: dialog.entrySource === "cabinetDetail" ? VIEW_IDS.CABINET : dialog.sourceViewId,
+              detailPage: dialog.entrySource === "cabinetDetail" && this.state.ui.detailPage
+                ? { ...this.state.ui.detailPage }
+                : null
+            };
             if (dialog.entrySource === "cabinetDetail") {
               this.state.ui.detailPage = null;
               this.state.ui.cabinetRackDialog = null;
@@ -22729,11 +23054,16 @@
             this.state.ui.currentTopNav = "运营管理";
             this.state.ui.currentView = dialog.flowViewId;
             if (dialog.flowViewId === VIEW_IDS.IT_INBOUND) {
+              const inbound = this.ensureItInboundState();
+              inbound.returnContext = returnContext;
               this.openItInboundForm();
               return;
             }
             const workflow = this.ensureItAssetWorkflowState(dialog.flowViewId);
             const config = this.getItAssetWorkflowConfig(dialog.flowViewId);
+            if (workflow) {
+              workflow.returnContext = returnContext;
+            }
             this.openItAssetWorkflowForm(dialog.flowViewId);
             const rows = (dialog.selectedRowIds || []).map((id) => this.getRowById(dialog.sourceViewId, id)).filter(Boolean);
             const cabinetContext = dialog.cabinetContext || null;
@@ -22800,9 +23130,7 @@
             }
             const bag = this.state.ui.itAssetWorkflows || (this.state.ui.itAssetWorkflows = {});
             if (!bag[viewId]) {
-              const statuses = viewId === VIEW_IDS.IT_RACK
-                ? ["待审核", "已完成", "已完成", "已拒绝", "已完成"]
-                : ["待审核", "已完成", "待执行", "已拒绝", "已完成"];
+              const statuses = ["已完成", "已完成", "已完成", "已拒绝", "已完成"];
               const scenario = ASSET_WORKFLOW_SCENARIOS[viewId] || {};
               const names = scenario.orderNames || ["核心设备", "机房设备", "业务设备", "网络设备", "测试设备"];
               const formAssetIndexes = scenario.assetIndexes?.length ? scenario.assetIndexes : [0];
@@ -22889,9 +23217,15 @@
           backToItAssetWorkflowList(viewId) {
             const workflow = this.ensureItAssetWorkflowState(viewId);
             if (!workflow) return;
+            const returnContext = workflow.returnContext || null;
             workflow.mode = "list";
             workflow.activeId = "";
             workflow.readonly = false;
+            workflow.returnContext = null;
+            if (returnContext?.viewId) {
+              this.state.ui.currentView = returnContext.viewId;
+              this.state.ui.detailPage = returnContext.detailPage || null;
+            }
             this.emit();
           }
 
@@ -27913,7 +28247,8 @@
             const goals = {
               "v1.1": "支持主从设备、IT设备初始化及电子表格优化",
               "v1.2": "易用性需求优化",
-              "v1.3": "拓展资产可视化能力+移动端"
+              "v1.3": "拓展资产可视化能力+移动端",
+              "v1.4": "管理流程拓展及权限审计精细化"
             };
             return goals[version] || "版本需求规格范围";
           }
@@ -28062,7 +28397,7 @@
                       : tab.id === "relation"
                         ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                         : tab.id === "history"
-                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；每条记录展示操作时间、操作类型、来源、操作人、结果、关联工单及字段新旧值，不展示执行人字段。||数据口径：资产详情仅展示已成功生效且实际改变资产数据的事件；失败或未生效记录统一在全局操作记录中查看。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
+                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||【重点规则】同一次业务操作涉及的属性、位置和关系变化必须合并为一条履历，不得拆分为多条重复记录。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；流程工单来源展示具体业务入口名称，如“IT设备上架”；每条记录展示操作时间、操作类型、来源、操作人、关联工单及字段新旧值，不展示执行人和操作结果字段。||数据口径：资产详情仅展示已成功生效且实际改变资产数据的事件；失败或未生效记录统一在全局操作记录中查看。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
                           : tab.id === "workOrders"
                             ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产关联工单" data-demand-text="需求来源：V3R5-4112。||交互目的：集中查看事件、问题、变更等工单与当前资产的关联关系，补充资产操作记录的业务上下文。||展示规则：列表展示工单类型、操作人、操作时间、工单标题和工单编号；工单编号和查看按钮均可进入对应工单。||数据口径：仅展示明确关联当前资产的工单，不把工单处理过程重复写入资产操作记录。||异常判断：关联工单已删除、无权限或数据缺失时给出明确提示；无关联数据时展示空态。"'
                             : "";
@@ -28669,7 +29004,7 @@
             return `
               <div class="position-view-bar">
                 <div class="asset-location-breadcrumb">${options.showBreadcrumb === false ? "" : escapeHtml(detail.breadcrumb)}</div>
-                <span class="position-view-switch-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-838" data-demand-title="位置信息 2D/3D 切换" data-demand-text="需求来源：V3R5-838。||交互目的：机柜、IT设备、场地设施详情的位置信息支持 2D/3D 切换，3D模式内嵌3D可视化平台场景，通过CMDB维护的唯一ID（resource_id）关联并高亮当前资产。||点击后行为：默认2D；点击3D后加载三维场景并定位——IT设备高亮所在机柜对应U位设备，机柜高亮整柜，场地设施高亮所属空间内模型；点击2D回到原位置信息展示。||异常判断：资产未建模时逐级降级定位（设备→所属机柜→所属机房/区域）并提示“暂未三维建模”；所属空间也未建模或客户未部署3D平台时不展示3D入口，位置信息维持2D展示。">
+                <span class="position-view-switch-wrap" data-demand-version="v1.4" data-demand-req-id="V3R5-838" data-demand-title="位置信息 2D/3D 切换" data-demand-text="需求来源：V3R5-838。||交互目的：机柜、IT设备、场地设施详情的位置信息支持 2D/3D 切换，3D模式内嵌3D可视化平台场景，通过CMDB维护的唯一ID（resource_id）关联并高亮当前资产。||点击后行为：默认2D；点击3D后加载三维场景并定位——IT设备高亮所在机柜对应U位设备，机柜高亮整柜，场地设施高亮所属空间内模型；点击2D回到原位置信息展示。||异常判断：资产未建模时逐级降级定位（设备→所属机柜→所属机房/区域）并提示“暂未三维建模”；所属空间也未建模或客户未部署3D平台时不展示3D入口，位置信息维持2D展示。">
                   <span class="position-view-switch" role="group" aria-label="位置信息视图切换">
                     <button type="button" class="${mode === "2d" ? "is-active" : ""}" data-action="position-view-mode" data-value="2d">2D</button>
                     <button type="button" class="${mode === "3d" ? "is-active" : ""}" data-action="position-view-mode" data-value="3d">3D</button>
@@ -28735,7 +29070,7 @@
               `;
             }
             return `
-              <div class="position-3d-stage" data-demand-version="v1.3" data-demand-req-id="V3R5-838" data-demand-title="3D场景展示与定位高亮" data-demand-text="需求来源：V3R5-838。||交互目的：3D模式内嵌3D可视化平台的三维场景（免登嵌入），进入后自动按当前资产的 resource_id 定位相机并高亮目标。||展示规则：场景保留3D平台原生的旋转、缩放、漫游能力；左下角展示资产名称、resource_id 与定位级别；IT设备高亮所在机柜对应U位设备，机柜高亮整柜并展示使用率，场地设施高亮所属空间内模型。||异常判断：资产未建模时顶部出现降级提示条并逐级降级定位（设备→机柜→机房/区域）；3D平台加载失败时提示“三维场景加载失败”，并保留切回2D入口。">
+              <div class="position-3d-stage" data-demand-version="v1.4" data-demand-req-id="V3R5-838" data-demand-title="3D场景展示与定位高亮" data-demand-text="需求来源：V3R5-838。||交互目的：3D模式内嵌3D可视化平台的三维场景（免登嵌入），进入后自动按当前资产的 resource_id 定位相机并高亮目标。||展示规则：场景保留3D平台原生的旋转、缩放、漫游能力；左下角展示资产名称、resource_id 与定位级别；IT设备高亮所在机柜对应U位设备，机柜高亮整柜并展示使用率，场地设施高亮所属空间内模型。||异常判断：资产未建模时顶部出现降级提示条并逐级降级定位（设备→机柜→机房/区域）；3D平台加载失败时提示“三维场景加载失败”，并保留切回2D入口。">
                 <div class="position-3d-head">
                   <span class="position-3d-head-title">
                     <span class="position-3d-live-dot" aria-hidden="true"></span>
@@ -28916,7 +29251,6 @@
           renderAssetDetailHistory(detail) {
             const entries = detail.historyEntries || [];
             const filters = detail.historyFilters || { keyword: "", action: "全部", source: "全部", operator: "" };
-            const resultClass = (result) => result === "成功" ? "is-success" : result === "未生效" ? "is-failed" : "is-pending";
             return `
               <div class="asset-tab-panel">
                 <div class="asset-history-toolbar">
@@ -28951,13 +29285,11 @@
                             </div>
                             <div class="asset-history-context">
                               <span><strong>操作人</strong>${escapeHtml(entry.operator || "-")}</span>
-                              <span><strong>操作结果</strong><span class="history-result-tag ${resultClass(entry.result)}">${escapeHtml(entry.result || "-")}</span></span>
                               ${entry.orderNo ? `<span><strong>关联单据</strong><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}">${escapeHtml(entry.orderNo)}</button></span>` : ""}
                             </div>
                             <div class="asset-history-change-group">
                               ${(entry.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：旧值 <em>${escapeHtml(change.oldValue || "-")}</em>，新值 <em>${escapeHtml(change.newValue || "-")}</em></div>`).join("") || `<div class="asset-history-change">本次操作无字段值变化</div>`}
                             </div>
-                            <div class="asset-history-meta"><span>${escapeHtml(entry.note || "-")}</span></div>
                           </div>
                         </div>
                       `).join("")}
@@ -29104,16 +29436,11 @@
               key: (cabinet.relatedColumnKeys || [])[index] || "column" + index
             }));
             const relatedInitialWidths = {
-              assetCode: 108,
-              name: 130,
-              occupancyStatus: 78,
-              assetCategory: 190,
-              uRange: 76,
-              sourceOrder: 116,
-              reservedBy: 64,
-              reservedAt: 126,
-              expireAt: 126,
-              action: 86
+              assetCode: 150,
+              name: 170,
+              assetCategory: 280,
+              uRange: 110,
+              action: 90
             };
             const uInitialWidths = {
               __select: 36,
@@ -29225,7 +29552,7 @@
               </div>
             `;
             return `
-              <div class="cabinet-contains-layout" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情设备活动流程判断" data-demand-text="需求来源：V3R5-4997。||交互目的：机柜详情中的上架、下架、迁出入口与 IT设备台账使用同一套流程开关，避免从不同入口绕过审批。||入口文案：空闲U位入口统一显示“上架设备”。||判断规则：上架读取 IT设备上架流程开关，下架读取 IT设备下架流程开关，迁出读取 IT设备迁出流程开关。||流程开启：点击入口先提示需通过流程办理，确认后进入对应 IT设备流程发起页；审核同意后进入待执行，只有点击“执行完成”才写回台账。||流程关闭：继续使用机柜详情现有直接办理弹窗，确认后立即更新资产数据。||数据结果：上架更新设备机柜与U位；下架清除机柜U位并更新IT设备台账位置和状态；迁出从IT设备台账移除并进入“已迁出/已废弃”。||范围限制：不为机柜资产本身新增流程，机柜和备件仍不纳入表单流程配置。">
+              <div class="cabinet-contains-layout" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情设备活动流程判断" data-demand-text="需求来源：V3R5-4997。||交互目的：机柜详情中的上架、下架、迁出入口与 IT设备台账使用同一套流程开关，避免从不同入口绕过审批。||入口文案：空闲U位入口统一显示“上架设备”。||判断规则：上架读取 IT设备上架流程开关，下架读取 IT设备下架流程开关，迁出读取 IT设备迁出流程开关。||流程开启：点击入口不再二次确认，直接进入全屏流程发起页，并自动带入当前机柜、目标U位或设备信息；通过右上角关闭按钮返回机柜详情。审核同意后进入待执行，只有点击“执行完成”才写回台账。||流程关闭：继续使用机柜详情现有直接办理弹窗，确认后立即更新资产数据。||数据结果：上架更新设备机柜与U位；下架清除机柜U位并更新IT设备台账位置和状态；迁出从IT设备台账移除并进入“已迁出/已废弃”。||范围限制：不为机柜资产本身新增流程，机柜和备件仍不纳入表单流程配置。">
                 <div class="cabinet-contains-side">
                   <div class="asset-rack cabinet-contains-rack">
                     <div class="rack-shell">
@@ -29242,10 +29569,16 @@
                           <div class="cabinet-mounted-layer">
                             ${mountedDevices.map(renderMountedDevice).join("")}
                           </div>
-                          <div class="cabinet-reserved-layer">
+                          <div class="cabinet-reserved-layer" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="机柜预占U位与流程追溯" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情“包含设备”页签中直观标识设备预占的U位范围，避免预占位置被重复分配。||展示规则：预占U位使用青色斜纹高亮并标注起始U位，与正式上架设备和空闲U位形成明确区分。||悬浮交互：鼠标悬停或键盘聚焦预占块时展示资产编号、资产名称、U位范围和来源流程单；鼠标移入信息卡时保持显示。||联动规则：流程单号支持点击进入对应的设备上架流程单详情。||状态流转：草稿不生成预占；流程提交后生成预占；执行完成后转为正式上架占用；流程驳回、取消或超期后释放预占U位。||异常判断：预占范围与正式占用或其他预占冲突、U位超出机柜高度、资产不存在、机柜失效或来源流程单状态异常时，不得绘制错误占位，并应给出明确提示。">
                             ${reservedDevices.map((device) => `
-                              <div class="cabinet-reserved-device" style="top:${escapeHtml(device.top)}%;height:calc(${escapeHtml(device.height)}% - 2px);" title="预占设备：${escapeHtml(device.name)}；U位：${escapeHtml(String(device.start))}U-${escapeHtml(String(device.start + device.uHeight - 1))}U；流程单：${escapeHtml(device.orderNo)}">
-                                <span>预占 ${escapeHtml(String(device.start))}U</span>
+                              <div class="cabinet-reserved-device" tabindex="0" style="top:${escapeHtml(device.top)}%;height:calc(${escapeHtml(device.height)}% - 2px);" aria-label="预占设备，资产编号${escapeHtml(device.code)}，资产名称${escapeHtml(device.name)}，流程单${escapeHtml(device.orderNo)}">
+                                <span class="cabinet-reserved-label">预占 ${escapeHtml(String(device.start))}U</span>
+                                <span class="cabinet-mounted-tooltip" role="tooltip">
+                                  <span>资产编号：${escapeHtml(device.code)}</span>
+                                  <span>资产名称：${escapeHtml(device.name)}</span>
+                                  <span>U位范围：${escapeHtml(String(device.start))}U-${escapeHtml(String(device.start + device.uHeight - 1))}U</span>
+                                  <span>流程单：<button class="cabinet-tooltip-link" type="button" data-action="open-work-order" data-no="${escapeHtml(device.orderNo)}">${escapeHtml(device.orderNo)}</button></span>
+                                </span>
                               </div>
                             `).join("")}
                           </div>
@@ -29259,7 +29592,7 @@
                   </div>
                 </div>
                 <div class="cabinet-contains-main">
-                  <div class="cabinet-capacity-summary" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="设备预占机柜展示" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情“包含设备”页签同时识别正式上架设备和预占设备，避免机柜容量被重复分配。||容量口径：总U位=已使用U位+预占U位+剩余可分配U位；预占U位占用可分配容量，但不计入正式设备数和正式利用率。||展示规则：正式上架使用深色设备块和“已上架”状态；预占使用青色虚线设备块和“预占中”状态，并展示来源流程单、预占人、预占时间和有效期。||状态流转：草稿不占用U位；流程提交后生成预占；流程驳回、取消或超期释放预占；执行完成后预占转为正式上架。||异常判断：预占与正式占用冲突、U位超出机柜高度、机柜失效或流程单状态异常时，应阻止提交并明确提示。">
+                  <div class="cabinet-capacity-summary" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="设备预占机柜展示" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情中识别正式上架设备和预占U位，避免机柜容量被重复分配。||容量口径：总U位=已使用U位+预占U位+剩余可分配U位；预占U位占用可分配容量，但不计入正式设备数和正式利用率。||列表规则：右侧包含设备列表只展示正式上架设备，不展示预占中的设备；列表字段为资产编号、名称、资产分类、U位范围和操作。||机柜图规则：正式上架使用深色设备块，预占使用青色虚线设备块；鼠标悬停或键盘聚焦设备时展示统一的信息卡，鼠标可移入信息卡且卡片保持显示；预占信息卡展示资产编号、资产名称、U位范围和来源流程单，流程单号支持点击进入对应流程单。||状态流转：草稿不占用U位；流程提交后生成预占；流程驳回、取消或超期释放预占；执行完成后预占转为正式上架。||异常判断：预占与正式占用冲突、U位超出机柜高度、机柜失效或流程单状态异常时，应阻止提交并明确提示。">
                     <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">机柜总U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.totalU))}U</strong></div>
                     <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">已使用U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.usedU))}U</strong></div>
                     <div class="cabinet-capacity-item is-reserved"><span class="cabinet-capacity-label">预占U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.reservedU))}U</strong></div>
@@ -29269,7 +29602,7 @@
                   </div>
                   <section class="cabinet-section cabinet-related-panel">
                     <div class="cabinet-section-head">
-                      <div class="cabinet-section-title">${escapeHtml(cabinet.relatedTitle)}<span class="cabinet-section-title-note">已上架 ${escapeHtml(String(summary.mountedCount))} 台 · 预占 ${escapeHtml(String(summary.reservedCount))} 台</span></div>
+                      <div class="cabinet-section-title">${escapeHtml(cabinet.relatedTitle)}<span class="cabinet-section-title-note">已上架 ${escapeHtml(String(summary.mountedCount))} 台</span></div>
                     </div>
                     <div class="cabinet-section-body">
                       <table class="cabinet-inline-table table-resizable" data-view="${escapeHtml(relatedTableViewId)}">
@@ -29397,7 +29730,7 @@
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><span><strong>事件编号：</strong>${escapeHtml(event.id)}</span><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div><span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note || "-")}</span></div></td></tr>` : ""}`;
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><span><strong>事件编号：</strong>${escapeHtml(event.id)}</span><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div>${event.note ? `<span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note)}</span>` : ""}</div></td></tr>` : ""}`;
                       }).join("") : `<tr><td colspan="8" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
@@ -29703,13 +30036,16 @@
 
           renderListPage(viewId, state) {
             const meta = LIST_PAGE_META[viewId];
-            const filteredRows = this.store.getFilteredRows(viewId);
+            const viewMode = this.store.getListViewMode(viewId);
+            const baseFilteredRows = this.store.getFilteredRows(viewId);
+            const filteredRows = viewMode === "space"
+              ? this.store.filterRowsByActiveSpaceNode(viewId, baseFilteredRows)
+              : baseFilteredRows;
             const pageMeta = this.store.getListPageMeta(viewId, filteredRows);
             const rows = this.store.getCurrentPageRows(viewId, filteredRows);
             const renderHeaderTools = meta.showTools && viewId !== VIEW_IDS.SPARE_PART;
             const renderTableTools = meta.showTools && viewId === VIEW_IDS.SPARE_PART;
             const hasSelection = this.store.getSelectedRowIds(viewId).length > 0;
-            const viewMode = this.store.getListViewMode(viewId);
             const renderCabinetSpaceView = viewId === VIEW_IDS.CABINET && viewMode === "space";
             return `
               <div class="page-surface list-page-surface">
@@ -29754,7 +30090,7 @@
             const activeLabel = viewMode === "space" ? "空间视图" : "标准视图";
             const menuOpen = state.ui.listViewModeMenuOpen === viewId;
             const demandAttrs = viewId === VIEW_IDS.CABINET
-              ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化入口" data-demand-text="需求来源：V3R5-4419。||交互目的：机柜台账支持从标准表格切换到空间/层级可视化视图，按位置范围直观看到机柜数量、设备数量和U位利用情况。||点击后行为：展开视图菜单，可切换“标准视图”和“空间视图”；选择空间视图后展示左侧空间树、顶部统计卡片和机柜可视化卡片。||状态限制：仅作用于机柜管理台账，不改变机柜或上架设备数据。||异常判断：空间节点无机柜、筛选无结果或当前用户无查看权限时，应展示空态或权限提示，不应出现空白页面。"'
+              ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜空间视图入口" data-demand-text="需求来源：V3R5-4419。||交互目的：将全局台账查看方式与空间范围查看方式分开，用户可在标准视图和空间视图之间切换。||默认规则：首次进入机柜管理默认展示“空间视图 + 卡片展示”。||空间视图规则：保留左侧空间树和顶部统计卡片，右侧结果区支持卡片展示与列表展示；切换展示方式不改变当前空间节点和查询条件。||标准视图规则：展示全局机柜台账列表，不显示空间树。||状态限制：视图和展示方式仅改变查看形态，不修改机柜及设备数据。||异常判断：空间节点无机柜、筛选无结果或无查看权限时，应展示明确空态或权限提示。"'
               : "";
             return `
               <div class="mode-chip-wrap"${demandAttrs}>
@@ -29800,7 +30136,7 @@
           }
 
           renderCabinetMiniRack(usage) {
-            const slots = 14;
+            const slots = 10;
             const usedSlots = usage.usedU > 0 ? Math.max(1, Math.round((usage.usedU / usage.height) * slots)) : 0;
             return `
               <div class="cabinet-mini-rack" aria-hidden="true">
@@ -29813,6 +30149,7 @@
 
           renderCabinetSpaceView(rows, filteredRows, pageMeta) {
             const meta = LIST_PAGE_META[VIEW_IDS.CABINET];
+            const displayMode = this.store.getCabinetSpaceDisplayMode();
             const statRows = filteredRows.length ? filteredRows : rows;
             const stats = statRows.reduce((acc, row, index) => {
               const usage = this.getCabinetUsage(row, index);
@@ -29827,7 +30164,7 @@
             const selectedIds = this.store.getSelectedRowIds(VIEW_IDS.CABINET);
             const allCardsSelected = cardRows.length > 0 && cardRows.every((row) => selectedIds.includes(row.id));
             return `
-              <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜层级可视化展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在机柜台账空间视图中以可视化卡片展示机柜层级、位置、设备数和U位使用情况，帮助用户快速识别机柜资源占用。||展示规则：顶部统计当前筛选范围内机柜数、设备数和利用率；下方每个机柜卡片展示机柜名称、U高、U位使用进度、资产位置和设备数；空间视图与标准视图共用顶部查询和台账操作，卡片支持勾选、跨视图保留选择、查看详情和更多操作。||操作规则：机柜业务活动使用部署、编辑、报废、变动和回库等场地类生命周期文案；选中卡片后顶部展示与标准视图一致的批量操作栏。||状态限制：卡片数据应跟当前筛选、分页和空间树节点保持一致。||异常判断：无机柜数据时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
+              <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜空间视图展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在空间树限定的范围内，通过卡片或列表两种方式查看机柜资源。||默认规则：IT设备、场地设施、机柜和备件台账首次进入默认展示空间视图；机柜空间视图默认使用卡片模式。||展示规则：空间视图始终保留左侧空间树和机柜数、设备数、利用率统计；卡片展示突出U位占用和容量，列表展示复用标准台账字段、勾选和操作能力。||滚动规则：顶部统计卡片和卡片/列表切换区域固定在可视区域顶部，底部分页器固定在可视区域底部；鼠标滚动仅作用于中间机柜卡片或列表结果区域。||U位颜色规则：蓝色表示已占用U位比例，灰色表示空闲U位；缩略图将整柜等分为10个示意格，每格代表10%的容量区间，蓝色格数按已用U除以总U换算并四舍五入，从底部向上填充，已用U大于0时至少显示1格。蓝色格数不代表设备数量，也不代表精确物理U位；精确值以卡片的已用U/总U和百分比为准，具体位置进入机柜详情查看。||切换规则：卡片/列表切换只在空间视图中出现，切换后保留当前空间节点、查询条件、分页与已选数据；进入详情再返回时恢复离开前的展示方式。||数据范围：统计卡片、机柜卡片和空间列表均按当前空间节点及查询条件计算。||异常判断：当前空间无机柜时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
                 <div class="cabinet-space-stats">
                   <section class="cabinet-space-stat">
                     <div>
@@ -29871,13 +30208,26 @@
                   </section>
                 </div>
                 <div class="cabinet-space-content-head">
-                  <label class="cabinet-space-selection">
-                    <input type="checkbox" data-action="toggle-list-page-selection" data-view="${escapeHtml(VIEW_IDS.CABINET)}" ${allCardsSelected ? "checked" : ""} />
-                    <span>全选当前页${selectedIds.length ? `（已选 ${selectedIds.length} 条）` : ""}</span>
-                  </label>
+                  <div class="cabinet-space-head-left">
+                    ${displayMode === "card" ? `
+                      <label class="cabinet-space-selection">
+                        <input type="checkbox" data-action="toggle-list-page-selection" data-view="${escapeHtml(VIEW_IDS.CABINET)}" ${allCardsSelected ? "checked" : ""} />
+                        <span>全选当前页${selectedIds.length ? `（已选 ${selectedIds.length} 条）` : ""}</span>
+                      </label>
+                    ` : `<span class="cabinet-space-selection">当前空间共 ${pageMeta.total} 个机柜${selectedIds.length ? `，已选 ${selectedIds.length} 条` : ""}</span>`}
+                  </div>
+                  <div class="cabinet-space-display-switch" role="group" aria-label="空间视图展示方式" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="空间视图卡片与列表切换" data-demand-text="需求来源：V3R5-4419。||交互目的：在同一个空间节点下切换容量可视化和台账明细查看。||点击后行为：卡片展示突出机柜U位、设备数和利用情况；列表展示复用标准台账列、勾选及操作入口。||默认规则：首次进入空间视图默认选中卡片展示。||状态保留：切换时保留空间节点、搜索条件、分页和当前已选数据；切换到标准视图后隐藏本控件。||异常判断：当前空间无数据时仍保留切换控件和空态，避免用户误以为页面加载失败。">
+                    <button class="cabinet-space-display-btn ${displayMode === "card" ? "is-active" : ""}" type="button" data-action="set-cabinet-space-display-mode" data-mode="card" aria-pressed="${displayMode === "card" ? "true" : "false"}">卡片展示</button>
+                    <button class="cabinet-space-display-btn ${displayMode === "list" ? "is-active" : ""}" type="button" data-action="set-cabinet-space-display-mode" data-mode="list" aria-pressed="${displayMode === "list" ? "true" : "false"}">列表展示</button>
+                  </div>
                 </div>
-                ${cardRows.length
-                  ? `<div class="cabinet-card-grid">
+                <div class="cabinet-space-results is-${escapeHtml(displayMode)}">
+                  ${displayMode === "list"
+                    ? (cardRows.length
+                      ? `<div class="cabinet-space-list-panel"><div class="table-wrap">${this.renderListTable(VIEW_IDS.CABINET, cardRows)}</div></div>`
+                      : `<div class="cabinet-space-empty">当前空间暂无机柜数据</div>`)
+                    : (cardRows.length
+                    ? `<div class="cabinet-card-grid">
                       ${cardRows.map((row, index) => {
                         const usage = this.getCabinetUsage(row, index);
                         const percent = Math.min(100, Math.max(0, usage.percent));
@@ -29894,7 +30244,7 @@
                               ${this.renderCabinetMiniRack(usage)}
                               <div class="cabinet-usage-line">
                                 <span>U位使用</span>
-                                <strong>${usage.usedU}/${usage.height}</strong>
+                                <strong>${usage.usedU}/${usage.height}（${percent}%）</strong>
                               </div>
                               <div class="cabinet-usage-bar">
                                 <span class="cabinet-usage-fill" style="width:${percent}%"></span>
@@ -29908,8 +30258,9 @@
                           </article>
                         `;
                       }).join("")}
-                    </div>`
-                  : `<div class="cabinet-space-empty">暂无机柜数据</div>`}
+                      </div>`
+                    : `<div class="cabinet-space-empty">当前空间暂无机柜数据</div>`)}
+                </div>
                 ${this.renderPagination(meta, VIEW_IDS.CABINET, pageMeta)}
               </div>
             `;
@@ -30511,7 +30862,7 @@
             if (!group) return "";
             const open = state.ui.assetActivityMenuOpen === viewId;
             return `
-              <div class="asset-activity-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账统一资产活动入口" data-demand-text="需求来源：V3R5-4997。||交互目的：普通用户始终从台账统一入口选择资产活动，不需要预先判断是否启用流程。||点击后行为：选择业务活动后，系统读取最新表单流程配置；流程关闭时直接办理，流程开启时提示并进入对应流程发起页。||展示规则：下拉菜单继续使用入库、上架、变动等原业务文案，不向普通用户展示配置术语。">
+              <div class="asset-activity-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账统一资产活动入口" data-demand-text="需求来源：V3R5-4997。||交互目的：普通用户始终从台账统一入口选择资产活动，不需要预先判断是否启用流程。||点击后行为：选择业务活动后，系统读取最新表单流程配置；流程关闭时直接办理，流程开启时不再二次确认，直接打开全屏流程发起页并带入当前已选资产。||关闭规则：流程页右上角提供关闭按钮，关闭后返回来源台账并保留原筛选、视图和选择状态。||展示规则：下拉菜单继续使用入库、上架、变动等原业务文案，不向普通用户展示配置术语。">
                 <button class="btn btn-primary asset-activity-trigger ${open ? "is-open" : ""}" type="button" data-action="toggle-asset-activity-menu" data-view="${escapeHtml(viewId)}" aria-haspopup="menu" aria-expanded="${open ? "true" : "false"}"><span>资产活动</span><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
                 ${open ? `<div class="asset-activity-menu" role="menu">${group.activities.map((activity) => `<button type="button" data-action="ledger-asset-activity" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(activity.label)}">${escapeHtml(activity.label)}</button>`).join("")}</div>` : ""}
               </div>
@@ -31158,8 +31509,8 @@
                     <div class="page-title-desc">用于控制资产出入库/上架部署/下架/变动等活动的字段显示</div>
                   </div>
                   <div class="design-toolbar-actions">
-                    <button class="btn" type="button" data-action="open-design-apply-dialog" data-scope="form" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="表单字段应用至其他模型" data-demand-text="需求来源：V3R5-4662。||交互目的：将当前模型的表单字段配置复制到其他模型，并在确认前展示目标模型字段差异。||点击后行为：打开目标模型选择弹窗，展示可应用字段和目标模型缺失字段；确认后仅应用目标模型存在的字段。||异常判断：未选择目标模型、目标模型缺失字段或当前模型无可应用字段时，应给出明确提示。">应用至其他模型</button>
-                    <button class="btn" type="button" data-action="jump-form-detail-design" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="跳转详情设计" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计与详情设计可以互相跳转，并保持当前资产分类上下文一致。||点击后行为：从表单设计跳转到详情设计的基本信息页签，继续维护表单可用字段范围。||展示规则：表单字段只能从详情设计基本信息已启用字段中选择。">去详情设计</button>
+                    <button class="btn" type="button" data-action="open-design-apply-dialog" data-scope="form" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="表单字段应用至其他模型" data-demand-text="需求来源：V3R5-4662。||交互目的：将当前模型的表单字段配置复制到其他模型，并在确认前展示目标模型字段差异。||点击后行为：打开目标模型选择弹窗，展示可应用字段和目标模型缺失字段；确认后仅应用目标模型存在的字段。||异常判断：未选择目标模型、目标模型缺失字段或当前模型无可应用字段时，应给出明确提示。">应用至其他模型</button>
+                    <button class="btn" type="button" data-action="jump-form-detail-design" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="跳转详情设计" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计与详情设计可以互相跳转，并保持当前资产分类上下文一致。||点击后行为：从表单设计跳转到详情设计的基本信息页签，继续维护表单可用字段范围。||展示规则：表单字段只能从详情设计基本信息已启用字段中选择。">去详情设计</button>
                     <button class="btn btn-primary" data-action="save-form-design">保存</button>
                   </div>
                 </div>
@@ -31182,7 +31533,7 @@
                     </div>
                     <div class="design-tree-resize" data-role="design-tree-resize" data-scope="form" aria-label="拖拽调整资产树宽度"></div>
                   </div>
-                  <div class="panel design-field-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="表单字段为详情字段子集" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计不再维护独立字段全集，避免表单字段与详情字段配置不一致。||展示规则：当前可选字段来自详情设计“基本信息”中已启用的字段；详情设计取消字段后，表单设计中对应字段同步移除。||状态限制：只约束表单设计与详情设计基本信息字段，位置信息、履历信息、关系拓扑和包含设备按详情页签规则独立配置。">
+                  <div class="panel design-field-panel" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="表单字段为详情字段子集" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计不再维护独立字段全集，避免表单字段与详情字段配置不一致。||展示规则：当前可选字段来自详情设计“基本信息”中已启用的字段；详情设计取消字段后，表单设计中对应字段同步移除。||状态限制：只约束表单设计与详情设计基本信息字段，位置信息、履历信息、关系拓扑和包含设备按详情页签规则独立配置。">
                     <div class="field-panel-head">
                       <div>
                         <div class="field-panel-title">显示字段</div>
@@ -31275,9 +31626,9 @@
                     <div class="page-title-desc">用于配置查看资产详情的显示内容</div>
                   </div>
                   <div class="design-toolbar-actions">
-                    <button class="btn" type="button" data-action="go-model-config" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="去模型配置" data-demand-text="需求来源：V3R5-4662。||交互目的：从资产详情设计中快速进入当前模型的属性配置入口，用于新增、删除或修改字段来源。||点击后行为：原型中展示跳转提示；真实系统应进入模型管理-对应模型的属性配置界面。">去模型配置</button>
-                    <button class="btn" type="button" data-action="open-design-apply-dialog" data-scope="detail" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="详情字段应用至其他模型" data-demand-text="需求来源：V3R5-4662。||交互目的：将当前模型的详情页签字段配置复制到其他模型，并在确认前展示目标模型字段差异。||点击后行为：打开目标模型选择弹窗，展示可应用字段和目标模型缺失字段；确认后仅应用目标模型存在的字段。||异常判断：未选择目标模型、目标模型缺失字段或当前页签无可应用字段时，应给出明确提示。">应用至其他模型</button>
-                    <button class="btn" type="button" data-action="jump-detail-form-design" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="跳转表单设计" data-demand-text="需求来源：V3R5-4662。||交互目的：详情设计与表单设计可以互相跳转，并保持当前资产分类上下文一致。||点击后行为：从详情设计跳转到表单设计，继续选择实际进入表单的字段。||展示规则：详情设计中会标识已被表单设计使用的字段。">去表单设计</button>
+                    <button class="btn" type="button" data-action="go-model-config" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="去模型配置" data-demand-text="需求来源：V3R5-4662。||交互目的：从资产详情设计中快速进入当前模型的属性配置入口，用于新增、删除或修改字段来源。||点击后行为：原型中展示跳转提示；真实系统应进入模型管理-对应模型的属性配置界面。">去模型配置</button>
+                    <button class="btn" type="button" data-action="open-design-apply-dialog" data-scope="detail" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="详情字段应用至其他模型" data-demand-text="需求来源：V3R5-4662。||交互目的：将当前模型的详情页签字段配置复制到其他模型，并在确认前展示目标模型字段差异。||点击后行为：打开目标模型选择弹窗，展示可应用字段和目标模型缺失字段；确认后仅应用目标模型存在的字段。||异常判断：未选择目标模型、目标模型缺失字段或当前页签无可应用字段时，应给出明确提示。">应用至其他模型</button>
+                    <button class="btn" type="button" data-action="jump-detail-form-design" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="跳转表单设计" data-demand-text="需求来源：V3R5-4662。||交互目的：详情设计与表单设计可以互相跳转，并保持当前资产分类上下文一致。||点击后行为：从详情设计跳转到表单设计，继续选择实际进入表单的字段。||展示规则：详情设计中会标识已被表单设计使用的字段。">去表单设计</button>
                     <button class="btn btn-primary" data-action="save-detail-design">保存</button>
                   </div>
                 </div>
@@ -31334,7 +31685,7 @@
                           <input class="detail-title-input" value="${escapeHtml(previewTitle)}" readonly />
                         </div>
                         ${tabId === "basic" ? `
-                          <div class="design-relation-note" data-demand-version="v1.3" data-demand-req-id="V3R5-4662" data-demand-title="详情字段表单使用标识" data-demand-text="需求来源：V3R5-4662。||交互目的：在详情设计中直接识别哪些字段已经被表单设计使用，避免调整详情字段时误删表单字段。||展示规则：当前资产分类表单已使用的字段，在详情设计基本信息字段列表中显示“表单已用”标识。||状态限制：标识随当前资产分类切换而变化；取消详情字段后，对应表单字段会同步移除。">
+                          <div class="design-relation-note" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="详情字段表单使用标识" data-demand-text="需求来源：V3R5-4662。||交互目的：在详情设计中直接识别哪些字段已经被表单设计使用，避免调整详情字段时误删表单字段。||展示规则：当前资产分类表单已使用的字段，在详情设计基本信息字段列表中显示“表单已用”标识。||状态限制：标识随当前资产分类切换而变化；取消详情字段后，对应表单字段会同步移除。">
                             ${isActiveModel
                               ? `当前模型：${escapeHtml(activeNodeLabel)}。表单设计已使用 ${formUsedFields.size} 个基本信息字段。`
                               : `当前节点：${escapeHtml(activeNodeLabel)}。该节点是资产分类，不是资产模型，不能配置字段属性；请选择具体模型后维护详情字段。`}
@@ -31935,31 +32286,13 @@
             `;
           }
 
-          renderProcessRouteDialog(dialog) {
-            const selectedCount = Array.isArray(dialog.selectedRowIds) ? dialog.selectedRowIds.length : 0;
-            const cabinetContext = dialog.cabinetContext || null;
-            const cabinetContextText = cabinetContext
-              ? dialog.activityLabel === "上架"
-                ? `本次操作来源于机柜详情，将预填 <strong>${escapeHtml(cabinetContext.cabinetName || "当前机柜")}</strong>${cabinetContext.unit ? ` 的 <strong>${escapeHtml(String(cabinetContext.unit))}U</strong>` : ""}。`
-                : `本次操作来源于机柜详情，将为设备 <strong>${escapeHtml(cabinetContext.deviceName || cabinetContext.deviceCode || "当前设备")}</strong> 发起流程，并带入当前机柜与U位信息。`
-              : "";
-            return `
-              <div class="relation-modal-backdrop" data-action="close-process-route-dialog"></div>
-              <section class="relation-modal process-route-dialog" role="dialog" aria-modal="true" aria-labelledby="processRouteDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程办理提示" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从台账或机柜详情点击已启用流程的 IT设备资产活动。||点击后行为：确认后进入对应流程发起页；台账已选资产自动带入；机柜详情发起上架时带入机柜和目标U位，发起下架或迁出时同时带入当前设备。||直接办理：对应流程关闭时不展示本提示，继续使用当前入口的直接办理表单。||权限限制：无流程发起权限时不得绕过提示进入直接办理页面。">
-                <header class="relation-modal-head"><div class="relation-modal-title" id="processRouteDialogTitle">需通过流程办理</div><button class="relation-modal-close" type="button" data-action="close-process-route-dialog" aria-label="关闭">×</button></header>
-                <div class="process-route-dialog-body">当前“<strong>${escapeHtml(dialog.groupLabel + dialog.activityLabel)}</strong>”已启用流程管理，${cabinetContextText || (selectedCount ? `将为已选择的 <strong>${selectedCount}</strong> 条资产发起流程。` : "本次操作需要通过流程单办理。")}是否前往发起？</div>
-                <footer class="relation-modal-footer"><div class="relation-modal-actions"><button class="btn" type="button" data-action="close-process-route-dialog">取消</button><button class="btn btn-primary" type="button" data-action="confirm-process-route-dialog">前往发起</button></div></footer>
-              </section>
-            `;
-          }
-
           renderLedgerActivityValidationDialog(dialog) {
             const results = Array.isArray(dialog.results) ? dialog.results : [];
             const validCount = results.filter((item) => item.valid).length;
             const invalidCount = results.length - validCount;
             return `
               <div class="relation-modal-backdrop" data-action="close-ledger-activity-validation-dialog"></div>
-              <section class="relation-modal ledger-activity-validation-dialog" role="dialog" aria-modal="true" aria-labelledby="ledgerActivityValidationTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4890" data-demand-title="资产活动逐项校验结果" data-demand-text="需求来源：V3R5-4890。||交互目的：批量选择状态不同的资产执行上架、部署、变动、回库等活动时，逐条展示校验结果并允许继续处理符合条件的数据。||状态模型：资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态，不记录已入库、已上架或已部署。||校验顺序：先判断资产流程状态是否为空，再按资产状态判断活动适用范围；存在进行中流程时禁止重复发起。||部分可处理：部分资产不符合条件时展示可处理数与已排除数，继续后只带入校验通过的数据；全部不符合时不进入办理页面。||异常判断：资产不存在、状态缺失、已有进行中流程或资产状态不满足活动要求时，必须逐行展示具体原因。">
+              <section class="relation-modal ledger-activity-validation-dialog" role="dialog" aria-modal="true" aria-labelledby="ledgerActivityValidationTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4890" data-demand-title="资产活动逐项校验结果" data-demand-text="需求来源：V3R5-4890。||交互目的：批量选择状态不同的资产执行上架、部署、变动、回库等活动时，逐条展示校验结果并允许继续处理符合条件的数据。||状态模型：资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态，不记录已入库、已上架或已部署。||校验顺序：先判断资产流程状态是否为空，再按资产状态判断活动适用范围；存在进行中流程时禁止重复发起。||流程追溯：存在进行中流程的资产同时展示关联流程单号，流程单号支持点击进入对应流程单详情。||部分可处理：部分资产不符合条件时展示可处理数与已排除数，继续后只带入校验通过的数据；全部不符合时不进入办理页面。||异常判断：资产不存在、状态缺失、已有进行中流程或资产状态不满足活动要求时，必须逐行展示具体原因；无法关联流程单时流程单列展示“-”。">
                 <header class="relation-modal-head"><div class="relation-modal-title" id="ledgerActivityValidationTitle">${invalidCount === results.length ? "当前资产均不可处理" : "部分资产不可处理"}</div><button class="relation-modal-close" type="button" data-action="close-ledger-activity-validation-dialog" aria-label="关闭">×</button></header>
                 <div class="relation-modal-body">
                   <div class="ledger-activity-validation-summary">
@@ -31970,8 +32303,8 @@
                   <p class="ledger-activity-validation-hint">系统已先校验资产流程状态，再校验资产状态。${validCount ? `继续后仅带入通过校验的 ${validCount} 条资产。` : "请调整资产状态或先完结进行中的流程后重试。"}</p>
                   <div class="ledger-activity-validation-table-wrap">
                     <table class="ledger-activity-validation-table">
-                      <thead><tr><th style="width:150px;">资产编号</th><th style="width:150px;">资产名称</th><th style="width:90px;">资产状态</th><th style="width:110px;">资产流程状态</th><th>校验结果</th></tr></thead>
-                      <tbody>${results.map((item) => `<tr><td title="${escapeHtml(item.assetCode)}">${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td><td>${renderAssetStatusTag(item.assetStatus)}</td><td>${escapeHtml(item.processStatus)}</td><td title="${escapeHtml(item.reason)}"><span class="ledger-activity-result ${item.valid ? "" : "is-invalid"}">${item.valid ? "可处理" : escapeHtml(item.reason)}</span></td></tr>`).join("")}</tbody>
+                      <thead><tr><th style="width:150px;">资产编号</th><th style="width:150px;">资产名称</th><th style="width:90px;">资产状态</th><th style="width:110px;">资产流程状态</th><th style="width:170px;">流程单</th><th>校验结果</th></tr></thead>
+                      <tbody>${results.map((item) => `<tr><td title="${escapeHtml(item.assetCode)}">${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td><td>${renderAssetStatusTag(item.assetStatus)}</td><td>${escapeHtml(item.processStatus)}</td><td>${item.processOrder ? `<button class="ledger-activity-process-link" type="button" title="进入流程单 ${escapeHtml(item.processOrder.orderNo)}" data-action="open-ledger-activity-process-order" data-flow-view="${escapeHtml(item.processOrder.flowViewId)}" data-order-id="${escapeHtml(item.processOrder.orderId)}">${escapeHtml(item.processOrder.orderNo)}</button>` : "-"}</td><td title="${escapeHtml(item.reason)}"><span class="ledger-activity-result ${item.valid ? "" : "is-invalid"}">${item.valid ? "可处理" : escapeHtml(item.reason)}</span></td></tr>`).join("")}</tbody>
                     </table>
                   </div>
                 </div>
@@ -32252,9 +32585,6 @@
             }
             if (state.ui.ledgerActivityValidationDialog) {
               return this.renderLedgerActivityValidationDialog(state.ui.ledgerActivityValidationDialog);
-            }
-            if (state.ui.processRouteDialog) {
-              return this.renderProcessRouteDialog(state.ui.processRouteDialog);
             }
             if (state.ui.processCloseDialog) {
               return this.renderProcessCloseDialog(state.ui.processCloseDialog);
@@ -33628,6 +33958,10 @@
                 this.store.setListViewMode(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-mode"));
                 return;
               }
+              if (action === "set-cabinet-space-display-mode") {
+                this.store.setCabinetSpaceDisplayMode(actionTarget.getAttribute("data-mode"));
+                return;
+              }
               if (action === "toggle-asset-activity-menu") {
                 this.store.toggleAssetActivityMenu(actionTarget.getAttribute("data-view"));
                 return;
@@ -33660,16 +33994,12 @@
                 this.store.openProcessOrders(actionTarget.getAttribute("data-flow-view"), true);
                 return;
               }
-              if (action === "close-process-route-dialog") {
-                this.store.closeProcessRouteDialog();
-                return;
-              }
-              if (action === "confirm-process-route-dialog") {
-                this.store.confirmProcessRouteDialog();
-                return;
-              }
               if (action === "close-ledger-activity-validation-dialog") {
                 this.store.closeLedgerActivityValidationDialog();
+                return;
+              }
+              if (action === "open-ledger-activity-process-order") {
+                this.store.openLedgerActivityProcessOrder(actionTarget.getAttribute("data-flow-view"), actionTarget.getAttribute("data-order-id"));
                 return;
               }
               if (action === "continue-ledger-activity-validation") {
@@ -35698,7 +36028,9 @@
             }[ch]));
             const renderPart = (part) => {
               const isException = /^异常判断[：:]/.test(part);
-              return '<p class="' + (isException ? "is-demand-exception" : "") + '">' + escape(part) + "</p>";
+              const isHighlight = /^【重点规则】/.test(part);
+              const partClass = isHighlight ? "is-demand-highlight" : isException ? "is-demand-exception" : "";
+              return '<p class="' + partClass + '">' + escape(part) + "</p>";
             };
             const renderEntry = (entry) => {
               const parts = splitParts(entry.text);
