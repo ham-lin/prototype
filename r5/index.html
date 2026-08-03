@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -660,6 +660,12 @@
         min-height: 0;
         overflow: auto;
         padding: 10px 12px;
+        margin-right: 0;
+        transition: margin-right .2s ease;
+      }
+
+      body.is-demand-page-panel-open .workspace {
+        margin-right: 390px;
       }
 
       .workspace.is-fixed-content-view {
@@ -981,6 +987,17 @@
         border-radius: 0;
         background: #fff;
         box-shadow: none;
+        transition: right .2s ease, width .2s ease;
+      }
+
+      @media (min-width: 761px) {
+        body.is-demand-page-panel-open .inbound-form-page:has([data-action="back-it-inbound-list"]),
+        body.is-demand-page-panel-open .inbound-process-page:has([data-action="back-it-inbound-list"]),
+        body.is-demand-page-panel-open .inbound-form-page:has([data-action="back-it-asset-workflow-list"]),
+        body.is-demand-page-panel-open .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) {
+          right: 390px;
+          width: calc(100vw - 390px);
+        }
       }
 
       .inbound-form-header {
@@ -4832,6 +4849,70 @@
         border-bottom: 1px solid #f3f7fb;
       }
 
+      .app-offline-data-entry {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .app-offline-data-copy {
+        min-width: 0;
+      }
+
+      .app-offline-data-copy strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #193b62;
+        font-size: 14px;
+      }
+
+      .app-offline-data-copy span {
+        color: #70849a;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .app-offline-data-info {
+        margin: 12px 0 0;
+        padding: 11px 16px 11px 34px;
+        border: 1px solid #dceafd;
+        border-radius: 6px;
+        background: #f5f9ff;
+        color: #55708e;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .app-offline-data-info li + li {
+        margin-top: 2px;
+      }
+
+      .relation-modal.app-offline-data-dialog {
+        width: min(680px, calc(100vw - 48px));
+        height: fit-content;
+        min-height: 0;
+        max-height: calc(100vh - 48px);
+      }
+
+      .app-offline-data-dialog .relation-modal-head,
+      .app-offline-data-dialog .relation-modal-footer {
+        flex: 0 0 auto;
+      }
+
+      .app-offline-data-dialog .relation-modal-body {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow: auto;
+      }
+
+      .app-offline-ledger-options {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px 20px;
+      }
+
       .config-title-with-tip {
         display: flex;
         align-items: center;
@@ -5242,11 +5323,12 @@
       .ledger-activity-validation-stat.is-invalid strong { color: #cf3e3e; }
       .ledger-activity-validation-hint { margin: 0 0 12px; color: #526a82; font-size: 12px; line-height: 1.7; }
       .ledger-activity-validation-table-wrap { max-height: 360px; overflow: auto; border: 1px solid #dde7f1; }
-      .ledger-activity-validation-table { width: 100%; min-width: 900px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+      .ledger-activity-validation-table { width: 100%; min-width: 1050px; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
       .ledger-activity-validation-table th,
       .ledger-activity-validation-table td { height: 40px; padding: 0 10px; border-bottom: 1px solid #e7edf4; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .ledger-activity-validation-table th { position: sticky; top: 0; z-index: 1; background: #edf7ff; color: #37536f; }
-      .ledger-activity-result { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eaf8f0; color: #16884c; white-space: nowrap; }
+      .ledger-activity-validation-table td:last-child { height: auto; padding-top: 8px; padding-bottom: 8px; overflow: visible; text-overflow: clip; white-space: normal; }
+      .ledger-activity-result { display: inline-flex; align-items: center; min-height: 22px; max-width: 100%; padding: 3px 8px; border-radius: 11px; background: #eaf8f0; color: #16884c; line-height: 1.5; white-space: normal; overflow-wrap: anywhere; }
       .ledger-activity-result.is-invalid { background: #fff0f0; color: #d33b3b; }
       .ledger-activity-process-link { max-width: 100%; border: 0; padding: 0; background: transparent; color: var(--primary); font-size: 12px; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
       .ledger-activity-process-link:hover { text-decoration: underline; }
@@ -10479,6 +10561,11 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        transition: right .2s ease;
+      }
+
+      body.is-demand-page-panel-open .toast-root {
+        right: 408px;
       }
 
       .toast {
@@ -10489,6 +10576,49 @@
         border-radius: 8px;
         color: #fff;
         box-shadow: 0 12px 24px rgba(16, 33, 51, 0.18);
+      }
+
+      .toast.is-top-center {
+        position: fixed;
+        top: calc(var(--topbar-h) + 14px);
+        left: 50%;
+        right: auto;
+        width: max-content;
+        max-width: min(440px, calc(100vw - 36px));
+        transform: translateX(-50%);
+        z-index: 62;
+      }
+
+      .toast.is-single-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        max-width: min(720px, calc(100vw - 36px));
+        padding-top: 10px;
+        padding-bottom: 10px;
+        white-space: nowrap;
+      }
+
+      .toast.is-single-line strong,
+      .toast.is-single-line .toast-message,
+      .toast.is-single-line .toast-action {
+        display: inline;
+        flex: none;
+        margin: 0;
+      }
+
+      .toast.is-single-line strong::after {
+        content: "，";
+      }
+
+      .toast.is-single-line > .demand-badge {
+        top: -9px;
+        right: 28px;
+      }
+
+      body.is-demand-page-panel-open .toast.is-top-center {
+        left: calc((100vw - 390px) / 2);
       }
 
       .toast.success {
@@ -10513,7 +10643,7 @@
         font-size: 13px;
       }
 
-      .toast span {
+      .toast-message {
         display: block;
         opacity: 0.92;
       }
@@ -10627,6 +10757,272 @@
         background: #fff7e8;
         color: #9a4b00;
         font-weight: 700;
+      }
+
+      .demand-page-panel-switch {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        z-index: 970;
+        display: none;
+        align-items: center;
+        gap: 9px;
+        height: 34px;
+        padding: 0 11px 0 13px;
+        border: 1px solid #d8e3ef;
+        border-radius: 4px 0 0 4px;
+        background: #fff;
+        color: #38536d;
+        font-size: 12px;
+        box-shadow: 0 5px 16px rgba(22, 53, 84, .12);
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        transform: translateY(-50%);
+        transition: right .2s ease, border-color .16s ease, color .16s ease;
+      }
+
+      .demand-page-panel-switch.has-custom-position {
+        transform: none;
+      }
+
+      .demand-page-panel-switch.is-dragging {
+        cursor: grabbing;
+        transform: none;
+        transition: none;
+      }
+
+      body.is-demand-mode .demand-page-panel-switch {
+        display: inline-flex;
+      }
+
+      .demand-page-panel-switch:hover,
+      .demand-page-panel-switch.is-on {
+        border-color: #ffb58f;
+        color: #d84a0b;
+      }
+
+      .demand-page-panel-switch.is-on {
+        right: 390px;
+      }
+
+      .demand-page-panel-switch-count {
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 9px;
+        background: #fff1e8;
+        color: #d84a0b;
+        font-size: 11px;
+        line-height: 18px;
+        text-align: center;
+      }
+
+      .demand-page-panel-switch-track {
+        position: relative;
+        width: 30px;
+        height: 16px;
+        border-radius: 8px;
+        background: #cbd7e3;
+        transition: background .18s ease;
+      }
+
+      .demand-page-panel-switch-track::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(25, 48, 72, .25);
+        transition: transform .18s ease;
+      }
+
+      .demand-page-panel-switch.is-on .demand-page-panel-switch-track {
+        background: #ff7a45;
+      }
+
+      .demand-page-panel-switch.is-on .demand-page-panel-switch-track::after {
+        transform: translateX(14px);
+      }
+
+      .demand-page-panel {
+        position: fixed;
+        top: var(--topbar-h);
+        right: 0;
+        bottom: 0;
+        z-index: 960;
+        display: none;
+        width: min(390px, 100vw);
+        border: 1px solid #d8e3ef;
+        border-top: 0;
+        border-right: 0;
+        border-bottom: 0;
+        border-radius: 0;
+        background: #fff;
+        box-shadow: 0 14px 38px rgba(20, 48, 78, .2);
+        overflow: hidden;
+      }
+
+      @media (min-width: 761px) {
+        body.is-demand-page-panel-open:has(.inbound-form-page [data-action="back-it-inbound-list"]) .demand-page-panel,
+        body.is-demand-page-panel-open:has(.inbound-process-page [data-action="back-it-inbound-list"]) .demand-page-panel,
+        body.is-demand-page-panel-open:has(.inbound-form-page [data-action="back-it-asset-workflow-list"]) .demand-page-panel,
+        body.is-demand-page-panel-open:has(.inbound-process-page [data-action="back-it-asset-workflow-list"]) .demand-page-panel {
+          top: 0;
+        }
+      }
+
+      body.is-demand-page-panel-open .topbar-guide-menu {
+        position: fixed;
+        top: calc(var(--topbar-h) + 8px);
+        right: 398px;
+      }
+
+      body.is-demand-mode .demand-page-panel.is-open {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .demand-page-panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: none;
+        min-height: 50px;
+        padding: 0 12px 0 16px;
+        border-bottom: 1px solid #e5edf5;
+        background: #f8fafc;
+      }
+
+      .demand-page-panel-title {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        color: #203d59;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .demand-page-panel-title span {
+        color: #7c8fa2;
+        font-size: 11px;
+        font-weight: 400;
+      }
+
+      .demand-page-panel-close {
+        width: 28px;
+        height: 28px;
+        border: 0;
+        border-radius: 3px;
+        background: transparent;
+        color: #6f8398;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .demand-page-panel-close:hover {
+        background: #edf2f7;
+        color: #263f58;
+      }
+
+      .demand-page-panel-body {
+        flex: 1;
+        min-height: 0;
+        padding: 10px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+      }
+
+      .demand-page-panel-empty {
+        padding: 42px 20px;
+        color: #7b8fa4;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: center;
+      }
+
+      .demand-page-panel-item {
+        display: block;
+        width: 100%;
+        margin: 0 0 8px;
+        padding: 11px 12px;
+        border: 1px solid #e1e9f2;
+        border-radius: 5px;
+        background: #fff;
+        color: #415a72;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+      }
+
+      .demand-page-panel-item:hover {
+        border-color: #ffc4a6;
+        background: #fffaf7;
+      }
+
+      .demand-page-panel-item.is-active {
+        border-color: #ff9b6a;
+        background: #fff7f2;
+        box-shadow: inset 3px 0 0 #ff7a45;
+      }
+
+      .demand-page-panel-item-meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+        color: #8a9cad;
+        font-size: 10px;
+      }
+
+      .demand-page-panel-item-meta span {
+        padding: 1px 5px;
+        border-radius: 2px;
+        background: #f0f4f8;
+      }
+
+      .demand-page-panel-item strong {
+        display: block;
+        color: #24425f;
+        font-size: 13px;
+      }
+
+      .demand-page-panel-item p {
+        margin: 6px 0 0;
+        font-size: 11px;
+        line-height: 1.55;
+      }
+
+      .demand-page-panel-item p.is-demand-highlight {
+        padding: 6px 8px;
+        border-left: 3px solid #ff7d00;
+        background: #fff7e8;
+        color: #9a4b00;
+        font-weight: 700;
+      }
+
+      .demand-link-highlight {
+        animation: demandLinkPulse 1.6s ease;
+        outline: 2px solid rgba(255, 122, 69, .9) !important;
+        outline-offset: 4px;
+      }
+
+      @keyframes demandLinkPulse {
+        0%, 100% { box-shadow: none; }
+        25%, 75% { box-shadow: 0 0 0 6px rgba(255, 122, 69, .18); }
+        50% { box-shadow: 0 0 0 10px rgba(255, 122, 69, .08); }
+      }
+
+      @media (max-width: 760px) {
+        .demand-page-panel-switch.is-on { display: none !important; }
+        .demand-page-panel { width: 100vw; }
+        body.is-demand-page-panel-open .workspace { margin-right: 0; }
+        body.is-demand-page-panel-open .toast-root { right: 18px; }
+        body.is-demand-page-panel-open .topbar-guide-menu { right: 8px; }
       }
 
       .master-slave-exception-guide {
@@ -14688,10 +15084,9 @@
             showTools: false,
             actions: ["批量初始化"],
             rowActions: ["初始化"],
-            columns: [
-              { key: "__select", label: "" },
-              { key: "assetStatus", label: "资产状态" },
-              { key: "assetCode", label: "资产编号" },
+          columns: [
+            { key: "__select", label: "" },
+            { key: "assetCode", label: "资产编号" },
               { key: "assetCategory", label: "资产分类" },
               { key: "serialCode", label: "编号" },
               { key: "assetSummary", label: "资产流程状态" },
@@ -14736,10 +15131,9 @@
             showTools: false,
             actions: ["批量初始化"],
             rowActions: ["初始化"],
-            columns: [
-              { key: "__select", label: "" },
-              { key: "assetStatus", label: "资产状态" },
-              { key: "assetCode", label: "资产编号" },
+          columns: [
+            { key: "__select", label: "" },
+            { key: "assetCode", label: "资产编号" },
               { key: "assetCategory", label: "资产分类" },
               { key: "serialCode", label: "编号" },
               { key: "assetSummary", label: "资产流程状态" },
@@ -17497,7 +17891,7 @@
             scope: "运维宝",
             targetView: VIEW_IDS.IT_FACILITY,
             targetAction: "App页面",
-            targetLabel: "App页面",
+            targetLabel: "运维宝App-资产管理",
             status: "设计完成"
           },
           {
@@ -17530,7 +17924,7 @@
           "V3R5-4185": { role: "系统管理员", need: "在表单设计和详情设计的资产树中搜索分类或模型", value: "快速定位配置对象，减少逐级展开成本", scenario: "资产分类层级较深、模型数量较多时，需要按名称搜索。", rules: ["搜索命中子节点时保留父级路径并自动展开。", "清空搜索后恢复原有树结构和展开状态。"], boundary: "无匹配结果时保留当前配置，不得清空已选节点或字段。" },
           "V3R5-4117": { role: "运维主管", need: "将已配置的资产概览看板应用到其他组织或空间层级", value: "复用看板配置并保持多层级展示一致", scenario: "多个机房、楼层或区域需要使用相同指标看板时，可批量复用配置。", rules: ["应用前选择目标层级并展示受影响范围。", "只复制目标层级支持的组件和指标配置。"], boundary: "未选择目标、目标无权限或字段不兼容时不得直接覆盖。" },
           "V3R5-4113": { role: "运维主管", need: "从资产概览指标逐级下钻到明细数据", value: "快速定位指标异常对应的资产和位置", scenario: "发现资产数量、状态或利用率异常时，需要查看组成数据。", rules: ["支持从汇总指标进入下一层级或资产列表。", "下钻过程保留当前筛选条件和层级路径。"], boundary: "无下级数据或用户无查看权限时，展示明确空态或权限提示。" },
-          "V3R5-4112": { role: "运维人员", need: "在资产详情中查看统一、可筛选的操作记录", value: "追溯资产字段、位置、关系及流程变化", scenario: "定位资产异常或审计变更时，需要查看操作前后值和来源单据。", rules: ["成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "流程工单显示具体业务入口名称；记录展示操作人、来源、关联单据和字段新旧值，不展示操作结果。"], boundary: "失败或未生效事件只进入全局操作记录，不得写入正式资产履历。" },
+          "V3R5-4112": { role: "运维人员", need: "统一查询资产详情与全局操作记录", value: "追溯资产字段、位置、关系、流程及执行结果变化", scenario: "定位资产异常或审计变更时，需要按资产、来源单据及字段新旧值快速检索记录。", rules: ["成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "全局操作记录支持按资产信息、操作信息、来源单据、字段名称、旧值和新值查询，并展示成功及未生效结果。", "流程工单显示具体业务入口名称；记录详情不展示内部事件编号。"], boundary: "失败或未生效事件只进入全局操作记录，不得写入正式资产履历；缺失的新旧值使用“-”兜底。" },
           "V3R5-4111": { role: "资产管理员", need: "在资产台账中跨页勾选并批量处理资产", value: "无需把所有目标资产集中到同一页即可完成批量操作", scenario: "目标资产分布在多页搜索结果中时，需要持续累积选择。", rules: ["翻页后保留已选资产和累计数量。", "表头全选只影响当前页，不清空其他页选择。"], boundary: "筛选范围变化或资产失效时，应清理不再适用的选择并提示。" },
           "V3R5-4110": { role: "资产管理员", need: "在空间视图中按位置查看资产分布而不展示设备末级节点", value: "减少树节点数量并突出空间层级", scenario: "按园区、楼栋、楼层和房间浏览资产时，需要快速定位空间。", rules: ["空间树只展示空间层级及资产数量。", "设备明细继续在右侧列表或详情区域展示。"], boundary: "资产位置缺失时应归入未分配位置，不得生成异常树节点。" },
           "V3R5-4427": { role: "运维人员", need: "在场地设施及备件详情中查看符合其业务特点的位置信息", value: "避免使用不适用的机柜U位图并快速识别同空间设备", scenario: "查看精密空调、传感器或备件位置时，需要了解所属空间和附近设备。", rules: ["展示空间路径、当前设备和同空间设备。", "同空间设备支持搜索并可进入对应详情。"], boundary: "位置缺失或同空间无其他设备时展示清晰空态。" },
@@ -17543,7 +17937,7 @@
           "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在机柜图中识别预占位置并追溯来源流程单。", rules: ["右侧包含设备列表只展示正式上架设备，不展示预占中的设备。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "左侧机柜图中的预占设备使用与在架设备一致的悬浮信息卡，展示资产编号、资产名称、U位范围和来源流程单；流程单号支持点击进入对应流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
           "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项校验结果", value: "快速识别不可处理资产并继续处理符合条件的数据", scenario: "一次选择多条资产执行批量活动时，资产状态和进行中的流程状态可能不同。", rules: ["资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态。", "先校验资产流程状态是否为空，再按资产状态校验活动范围。", "资产存在进行中流程时展示关联流程单号，流程单号支持点击进入对应流程单详情。", "部分资产不符合条件时展示可处理数、已排除数和逐行原因，继续后只带入校验通过的数据。", "全部资产不符合条件时不进入办理页面。"], boundary: "不得用单一失败提示掩盖具体资产错误，不得重复发起进行中流程，也不得错误处理不符合状态要求的资产；关联流程单缺失时展示“-”且不得阻断校验结果。" },
           "V3R5-4419": { role: "机房管理员", need: "在空间范围内切换卡片或列表查看机柜及U位占用", value: "既能直观掌握机柜容量，又能沿用台账列表完成明细查询和批量处理", scenario: "规划上架位置时使用卡片查看U位容量，核对或批量处理同空间机柜时切换为列表。", rules: ["IT设备、场地设施、机柜和备件台账首次进入时默认展示空间视图。", "机柜台账的空间视图默认使用卡片模式；标准视图用于查看全局台账。", "空间视图保留空间树、机柜数、设备数和利用率统计，并支持卡片展示和列表展示。", "顶部统计卡片和展示切换固定显示，底部分页器固定显示，仅中间机柜卡片或列表结果区域随鼠标滚动。", "机柜缩略图蓝色表示已占用U位占总U位的比例示意，从底部向上填充；灰色表示空闲U位。", "缩略图按10个示意格等分显示，每格代表10%的容量区间；蓝色格数按已用U/总U换算并四舍五入，只要已用U大于0至少显示1格。", "精确占用以卡片中的已用U/总U和百分比为准，具体物理U位在机柜详情查看。", "卡片/列表切换只在空间视图中显示，并保留空间节点、查询条件、分页和已选数据。", "进入机柜详情再返回时恢复离开前的空间节点及展示方式。"], boundary: "当前空间无机柜时展示空态；U位数据缺失、重叠或超出机柜高度时应提示异常；缩略图蓝色格数不得解释为设备数量或精确U位坐标。" },
-          "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产并扫码进入详情", value: "在现场无需返回PC即可完成资产核对", scenario: "巡检或故障处理现场，需要快速识别标签并查看资产信息。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "二维码无效、资产不存在或无权限时给出明确提示。" },
+          "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产、扫码进入详情，并在离线场景导入台账数据", value: "在现场无网络或网络不稳定时仍能完成资产查询与核对", scenario: "巡检或故障处理现场网络不可用时，需要提前下载指定台账数据并导入运维宝App。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "Web端资产基础配置提供App离线数据下载，支持全量台账或部分台账范围。", "部分导出支持选择IT设施、场地设施、机柜、备件，且至少选择一个台账。", "下载文件需导入App指定目录，具体操作参考App使用手册。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "未选择台账、所选范围无数据、文件生成失败、App导入失败、二维码无效、资产不存在或无权限时给出明确提示。" },
           "V3R5-838": { role: "运维人员", need: "在资产详情中切换3D场景并定位当前资产", value: "直观理解资产所处空间、机柜和U位", scenario: "远程定位设备或核对空间关系时，需要从二维信息进入三维场景。", rules: ["IT设备、机柜和场地设施详情支持2D/3D切换，默认2D。", "通过 resource_id 定位并高亮资产、机柜或所属空间。"], boundary: "资产未建模时逐级降级定位；平台不可用或空间未建模时隐藏3D入口。" }
         });
 
@@ -18307,6 +18701,7 @@
                 fieldApplyDialog: null,
                 cabinetRackDialog: null,
                 assetBoardSaveDialog: null,
+                appOfflineDataDialog: null,
                 masterSlaveTemplateDialog: null,
                 masterSlaveImportDialog: null,
                 masterSlaveImportResultDialog: null,
@@ -19674,7 +20069,8 @@
             const cutoffDay = 14 - maxDays + 1;
             const baseRows = this.getAssetHistoryEvents().filter((event) => {
               const day = Number(String(event.time).slice(8, 10)) || 1;
-              const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject].some((value) => String(value || "").toLowerCase().includes(keyword));
+              const changeValues = (event.changes || []).flatMap((change) => [change.field, change.oldValue, change.newValue]);
+              const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject, event.source, event.note, ...changeValues].some((value) => String(value || "").toLowerCase().includes(keyword));
               return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source) && (!filters.result || filters.result === "全部" || event.result === filters.result);
             });
             const histogramMap = new Map();
@@ -20482,6 +20878,18 @@
             }
             if (requirement.targetAction === "批量上架") {
               this.openOperationPage(requirement.targetView || VIEW_IDS.IT_FACILITY, null, "上架");
+              return;
+            }
+            if (requirement.targetAction === "App离线数据") {
+              this.state.ui.currentTopNav = "运营管理";
+              this.state.ui.currentView = VIEW_IDS.TEMPLATE_CONFIG;
+              this.state.ui.guidePage = null;
+              this.state.ui.operationPage = null;
+              this.state.ui.detailPage = null;
+              this.state.ui.drawer = null;
+              this.state.ui.ledgerHierarchyMenuOpen = false;
+              this.openAppOfflineDataDialog();
+              this.pushToast("已定位需求范围", "已打开“" + requirement.targetLabel + "”。", "success");
               return;
             }
             if (requirement.targetAction === "App页面") {
@@ -22526,6 +22934,20 @@
             this.emit();
           }
 
+          openSubmittedItInbound(orderId) {
+            const order = this.getItInboundOrder(orderId);
+            if (!order) return;
+            const inbound = this.ensureItInboundState();
+            this.state.ui.currentTopNav = "运营管理";
+            this.state.ui.currentView = VIEW_IDS.IT_INBOUND;
+            this.state.ui.detailPage = null;
+            this.state.ui.operationPage = null;
+            inbound.mode = "process";
+            inbound.activeId = orderId;
+            inbound.readonly = true;
+            this.emit();
+          }
+
           backToItInboundList(tab = "") {
             const inbound = this.ensureItInboundState();
             const returnContext = inbound.returnContext || null;
@@ -22549,6 +22971,7 @@
 
           submitItInboundForm() {
             const inbound = this.ensureItInboundState();
+            const returnContext = inbound.returnContext ? { ...inbound.returnContext } : null;
             this.syncItInboundDraftFirstRow();
             const getField = (id, fallback) => String(document.getElementById(id)?.value || fallback || "").trim();
             const now = "2026-07-14 09:" + pad(10 + (inbound.orders.length % 40)) + ":21";
@@ -22568,10 +22991,27 @@
             };
             inbound.orders.unshift(order);
             inbound.tab = "mine";
-            inbound.mode = "list";
-            inbound.activeId = "";
+            inbound.mode = returnContext?.viewId ? "list" : "process";
+            inbound.activeId = returnContext?.viewId ? "" : order.id;
+            inbound.readonly = !returnContext?.viewId;
+            inbound.returnContext = null;
             inbound.draftAssets = [];
-            this.pushToast("提交成功", "入库单已提交，等待审核人处理。", "success");
+            if (returnContext?.viewId) {
+              this.state.ui.currentView = returnContext.viewId;
+              this.state.ui.detailPage = returnContext.detailPage || null;
+            }
+            this.pushToast("申请已提交", `单号：${order.id}`, "success", {
+              action: "open-submitted-it-inbound",
+              actionLabel: "查看申请",
+              taskId: order.id,
+              placement: "top-center",
+              singleLine: true,
+              demandVersion: "v1.3",
+              demandReqId: "V3R5-4997",
+              demandTitle: "流程申请提交结果",
+              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后以单行提示明确反馈申请结果，并提供流程单追溯入口。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后展示；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因并保留当前页面。",
+              durationMs: 6000
+            });
             this.emit();
           }
 
@@ -23214,6 +23654,20 @@
             this.emit();
           }
 
+          openSubmittedItAssetWorkflow(viewId, orderId) {
+            const workflow = this.ensureItAssetWorkflowState(viewId);
+            const order = this.getItAssetWorkflowOrder(viewId, orderId);
+            if (!workflow || !order) return;
+            this.state.ui.currentTopNav = "运营管理";
+            this.state.ui.currentView = viewId;
+            this.state.ui.detailPage = null;
+            this.state.ui.operationPage = null;
+            workflow.mode = "process";
+            workflow.activeId = orderId;
+            workflow.readonly = true;
+            this.emit();
+          }
+
           backToItAssetWorkflowList(viewId) {
             const workflow = this.ensureItAssetWorkflowState(viewId);
             if (!workflow) return;
@@ -23288,13 +23742,14 @@
             const config = this.getItAssetWorkflowConfig(viewId);
             const workflow = this.ensureItAssetWorkflowState(viewId);
             if (!config || !workflow) return;
+            const returnContext = workflow.returnContext ? { ...workflow.returnContext } : null;
             const scenario = ASSET_WORKFLOW_SCENARIOS[viewId]?.form || {};
             const nameInput = document.getElementById("itWorkflowName");
             const descriptionInput = document.getElementById("itWorkflowDescription");
             const approverInput = document.getElementById("itWorkflowApprover");
             const executorInput = document.getElementById("itWorkflowExecutor");
             const sequence = workflow.orders.length + 1;
-            workflow.orders.unshift({
+            const order = {
               id: config.codePrefix + "20260714" + String(sequence).padStart(4, "0"),
               name: String(nameInput?.value || config.defaultName).trim() || config.defaultName,
               creator: scenario.creator || "系统管理员",
@@ -23307,12 +23762,35 @@
               assets: this.getItAssetWorkflowDraftAssets(viewId)
                 .filter((asset) => !asset.__blank)
                 .map((asset) => ({ ...asset }))
-            });
+            };
+            workflow.orders.unshift(order);
             workflow.tab = "mine";
-            workflow.mode = "list";
             workflow.sourceContext = null;
-            workflow.activeId = "";
-            this.pushToast("提交成功", config.title + "已提交，等待审核人处理。", "success");
+            workflow.returnContext = null;
+            if (returnContext?.viewId) {
+              workflow.mode = "list";
+              workflow.activeId = "";
+              workflow.readonly = false;
+              this.state.ui.currentView = returnContext.viewId;
+              this.state.ui.detailPage = returnContext.detailPage || null;
+            } else {
+              workflow.mode = "process";
+              workflow.activeId = order.id;
+              workflow.readonly = true;
+            }
+            this.pushToast("申请已提交", `单号：${order.id}`, "success", {
+              action: "open-submitted-it-asset-workflow",
+              actionLabel: "查看申请",
+              taskId: order.id,
+              viewId,
+              placement: "top-center",
+              singleLine: true,
+              demandVersion: "v1.3",
+              demandReqId: "V3R5-4997",
+              demandTitle: "流程申请提交结果",
+              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后以单行提示明确反馈申请结果，并提供流程单追溯入口。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后展示；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因并保留当前页面。",
+              durationMs: 6000
+            });
             this.emit();
           }
 
@@ -24930,6 +25408,94 @@
             ];
           }
 
+          openAppOfflineDataDialog() {
+            const ledgers = {};
+            this.getMasterSlaveTemplateLedgerOptions().forEach((item) => {
+              ledgers[item.viewId] = true;
+            });
+            this.state.ui.appOfflineDataDialog = { scope: "all", ledgers };
+            this.emit();
+          }
+
+          closeAppOfflineDataDialog() {
+            this.state.ui.appOfflineDataDialog = null;
+            this.emit();
+          }
+
+          setAppOfflineDataScope(scope) {
+            const dialog = this.state.ui.appOfflineDataDialog;
+            if (!dialog) {
+              return;
+            }
+            dialog.scope = scope === "partial" ? "partial" : "all";
+            if (dialog.scope === "all") {
+              this.getMasterSlaveTemplateLedgerOptions().forEach((item) => {
+                dialog.ledgers[item.viewId] = true;
+              });
+            }
+            this.emit();
+          }
+
+          toggleAppOfflineDataLedger(viewId) {
+            const dialog = this.state.ui.appOfflineDataDialog;
+            if (!dialog || dialog.scope !== "partial" || !viewId) {
+              return;
+            }
+            dialog.ledgers[viewId] = !dialog.ledgers[viewId];
+            this.emit();
+          }
+
+          confirmAppOfflineDataDownload() {
+            const dialog = this.state.ui.appOfflineDataDialog;
+            if (!dialog) {
+              return;
+            }
+            const ledgerOptions = this.getMasterSlaveTemplateLedgerOptions();
+            const selectedLedgers = dialog.scope === "all"
+              ? ledgerOptions
+              : ledgerOptions.filter((item) => dialog.ledgers[item.viewId]);
+            if (!selectedLedgers.length) {
+              this.pushToast("请选择台账", "导出部分台账数据时，至少选择一个台账范围。", "warning");
+              return;
+            }
+            const ledgers = selectedLedgers.map((item) => ({
+              viewId: item.viewId,
+              label: item.label,
+              rows: this.getListRows(item.viewId).map((row) => ({ ...row }))
+            }));
+            const rowCount = ledgers.reduce((total, item) => total + item.rows.length, 0);
+            if (!rowCount) {
+              this.pushToast("暂无可下载数据", "所选台账范围内没有可导出的资产数据。", "warning");
+              return;
+            }
+            try {
+              const now = new Date();
+              const stamp = [now.getFullYear(), pad(now.getMonth() + 1, 2), pad(now.getDate(), 2), "_", pad(now.getHours(), 2), pad(now.getMinutes(), 2), pad(now.getSeconds(), 2)].join("");
+              const packageData = {
+                schemaVersion: "1.0",
+                purpose: "运维宝App离线查看数据",
+                generatedAt: now.toISOString(),
+                scope: dialog.scope === "all" ? "全部台账" : "部分台账",
+                ledgerCount: selectedLedgers.length,
+                rowCount,
+                ledgers
+              };
+              const blob = new Blob([JSON.stringify(packageData, null, 2)], { type: "application/json;charset=utf-8" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = "运维宝App离线数据_" + stamp + ".json";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 0);
+              this.state.ui.appOfflineDataDialog = null;
+              this.pushToast("离线数据已下载", "已生成" + selectedLedgers.length + "类台账、共" + rowCount + "条数据，请将文件导入App指定目录。", "success");
+            } catch (error) {
+              this.pushToast("下载失败", "离线数据文件生成失败或浏览器拒绝了下载请求，请重试。", "warning");
+            }
+          }
+
           openMasterSlaveTemplateDialog() {
             this.state.ui.masterSlaveTemplateDialog = {
               scope: "all",
@@ -26274,7 +26840,14 @@
               tone,
               action: options.action || "",
               actionLabel: options.actionLabel || "",
-              taskId: options.taskId || ""
+              taskId: options.taskId || "",
+              viewId: options.viewId || "",
+              placement: options.placement || "",
+              singleLine: Boolean(options.singleLine),
+              demandVersion: options.demandVersion || "",
+              demandReqId: options.demandReqId || "",
+              demandTitle: options.demandTitle || "",
+              demandText: options.demandText || ""
             };
             this.state.ui.toasts = [toast, ...this.state.ui.toasts].slice(0, 4);
             this.emit();
@@ -28578,7 +29151,7 @@
             const scenario = IT_INBOUND_FORM_SCENARIO;
             const sheet = this.renderItWorkflowSheet("入库", assets, true, { name: "itInboundAssetName", assetCode: "itInboundAssetCode", assetCategory: "itInboundAssetType", uHeight: "itInboundAssetUHeight", warehouseLocation: "itInboundWarehouse" }, true);
             const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions"><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="上传本地数据">上传本地数据</button></div></div>`;
-            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-inbound">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-inbound">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.createdAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itInboundApprover"><option>${escapeHtml(scenario.approver)}</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itInboundExecutor"><option>${escapeHtml(scenario.executor)}</option><option>陈浩</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">入库单名称</div><div class="inbound-form-value is-wide"><input id="itInboundName" value="${escapeHtml(scenario.name)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itInboundDescription">${escapeHtml(scenario.description)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>入库资产列表</strong></div>${sheetToolbar}${sheet}</section></div></div>`;
+            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-inbound">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-inbound" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账流程提交结果" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从资产台账入口被引导至入库流程单并点击提交。||提交结果：申请创建成功后关闭当前流程单页面并返回来源台账，不停留在已提交表单。||结果反馈：界面顶部居中展示“申请已提交，单号：XXXX”，提示支持手动关闭。||状态限制：仅台账来源的流程单提交后自动关闭；从流程菜单直接新建时仍停留在已提交申请详情。||异常判断：提交失败时保留当前流程单页面及已填写内容，并展示具体失败原因。">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.createdAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itInboundApprover"><option>${escapeHtml(scenario.approver)}</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itInboundExecutor"><option>${escapeHtml(scenario.executor)}</option><option>陈浩</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">入库单名称</div><div class="inbound-form-value is-wide"><input id="itInboundName" value="${escapeHtml(scenario.name)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itInboundDescription">${escapeHtml(scenario.description)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>入库资产列表</strong></div>${sheetToolbar}${sheet}</section></div></div>`;
           }
           renderItInboundProcess(inbound) {
             const order = (inbound.orders || []).find((item) => item.id === inbound.activeId);
@@ -28641,7 +29214,7 @@
             const rowModeTip = config.allowManualRows
               ? "支持直接填写空白行，也可通过选择资产或上传模板带入"
               : "资产行仅可通过“选择资产”或上传模板带入";
-            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-asset-workflow" data-view="${escapeHtml(viewId)}">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(formCode)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(formCreator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(formCreatedAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itWorkflowApprover"><option>${escapeHtml(formApprover)}</option><option>李敏</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itWorkflowExecutor"><option>${escapeHtml(formExecutor)}</option><option>陈浩</option><option>赵磊</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input id="itWorkflowName" value="${escapeHtml(formName)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itWorkflowDescription">${escapeHtml(formDescription)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>${escapeHtml(config.assetSection)}</strong><span class="workflow-sheet-mode-tip">${escapeHtml(rowModeTip)}</span></div>${sheetToolbar}${this.renderItAssetWorkflowAssetTable(config, assets, true)}</section></div></div>`;
+            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-asset-workflow" data-view="${escapeHtml(viewId)}" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账流程提交结果" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从资产台账入口被引导至流程单并点击提交。||提交结果：申请创建成功后关闭当前流程单页面并返回来源台账，不停留在已提交表单。||结果反馈：界面顶部居中展示“申请已提交，单号：XXXX”，提示支持手动关闭；点击“查看申请”可进入对应流程单详情。||状态限制：仅台账来源的流程单提交后自动关闭；从流程菜单直接新建时仍停留在已提交申请详情。||异常判断：提交失败时保留当前流程单页面及已填写内容，并展示具体失败原因。">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(formCode)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(formCreator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(formCreatedAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itWorkflowApprover"><option>${escapeHtml(formApprover)}</option><option>李敏</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itWorkflowExecutor"><option>${escapeHtml(formExecutor)}</option><option>陈浩</option><option>赵磊</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input id="itWorkflowName" value="${escapeHtml(formName)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itWorkflowDescription">${escapeHtml(formDescription)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>${escapeHtml(config.assetSection)}</strong><span class="workflow-sheet-mode-tip">${escapeHtml(rowModeTip)}</span></div>${sheetToolbar}${this.renderItAssetWorkflowAssetTable(config, assets, true)}</section></div></div>`;
           }
 
           renderItAssetWorkflowProcess(viewId, workflow, config) {
@@ -29693,27 +30266,27 @@
             const resultClass = (result) => result === "成功" ? "is-success" : result === "未生效" ? "is-failed" : "is-pending";
             const select = (field, options) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${filters[field] === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
             return `
-              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：跨资产统一查询生命周期动作、字段变更、来源单据与执行结果。||展示规则：支持关键字、时间、来源和结果筛选；一条操作记录对应一个资产事件，可展开查看字段新旧值和说明，不展示执行人字段。||数据口径：成功、失败及未生效事件均进入全局操作记录；失败或未生效事件不得写入资产详情的操作记录时间轴。||联动规则：支持查看资产和关联工单，便于从操作日志回溯业务上下文。">
+              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的生命周期动作、字段新旧值、操作结果及关联单据。||数据口径：成功、失败及未生效事件均进入全局操作记录；失败或未生效事件不得写入资产详情操作记录。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
                 <div class="operation-log-head">
-                  <div><h1>操作记录</h1><p>统一查看资产生命周期动作、字段新旧值、操作结果和关联单据。</p></div>
-                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log">导出</button></div>
+                  <div><h1>操作记录</h1><p>统一查看 IT设备，场地设施，机柜，备件 生命周期动作、字段新旧值、操作结果和关联单据。</p></div>
+                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源、结果和图表日期筛选后的全部匹配记录，不只导出当前分页。||结果反馈：无匹配数据时阻止导出并提示；生成成功后反馈导出记录数量。||异常判断：文件生成失败或浏览器拒绝下载时，应保留当前筛选条件并显示失败原因。">导出</button></div>
                 </div>
-                <div class="operation-log-saved-views"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
+                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源、操作结果和图表日期筛选；关键字可包含字段名称、旧值或新值。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：系统预置视图不可重命名或删除；自定义视图名称不可为空或重复。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
                 <div class="operation-log-summary">
                   <div class="operation-log-summary-card"><span>当前记录</span><strong>${data.summary.total}</strong></div>
                   <div class="operation-log-summary-card"><span>成功生效</span><strong>${data.summary.success}</strong></div>
                   <div class="operation-log-summary-card"><span>未生效</span><strong>${data.summary.failed}</strong></div>
                   <div class="operation-log-summary-card"><span>关联工单记录</span><strong>${data.summary.workOrders}</strong></div>
                 </div>
-                <div class="operation-log-filters">
-                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产编号/名称、操作类型、操作人、来源单据" />
+                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产、业务动作或字段变化记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口、关联单据、字段名称、旧值和新值。||组合规则：关键字与时间范围、来源、结果及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日全部来源和全部结果。||异常判断：无匹配数据时展示空态，不清空用户输入。">
+                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产、操作、来源单据、字段或新旧值" />
                   ${select("dateRange", ["近7日", "近15日", "近30日", "全部"])}
                   ${select("source", ["全部", "流程工单", "资产台账", "空间视图"])}
                   ${select("result", ["全部", "成功", "未生效"])}
                   <button class="btn btn-primary" type="button" data-action="asset-operation-search">查询</button>
                   <button class="btn" type="button" data-action="asset-operation-reset">重置</button>
                 </div>
-                <div class="operation-log-histogram">
+                <div class="operation-log-histogram" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录时间分布" data-demand-text="需求来源：V3R5-4112。||交互目的：按日期观察操作记录数量及成功、未生效事件分布。||展示规则：柱形高度表示当日记录总量，蓝色表示成功，红色表示未生效。||点击后行为：点击日期柱筛选当日记录，再次点击或点击“清除日期”恢复当前时间范围内全部数据。||联动规则：时间分布随关键字、来源和结果筛选同步更新。">
                   <div class="operation-log-histogram-head"><span>事件时间分布${filters.selectedDay ? ` · 已筛选 ${escapeHtml(filters.selectedDay)}` : ""}</span><div class="operation-log-histogram-legend"><span><i></i>成功</span><span><i class="is-failed"></i>未生效</span>${filters.selectedDay ? `<button class="operation-link" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(filters.selectedDay)}">清除日期</button>` : ""}</div></div>
                   <div class="operation-log-chart">
                     ${data.histogram.length ? data.histogram.map((item) => {
@@ -29724,13 +30297,13 @@
                     }).join("") : `<div style="grid-column:1/-1;align-self:center;text-align:center;color:#8799ac;font-size:12px;">当前条件下暂无时间分布数据</div>`}
                   </div>
                 </div>
-                <div class="operation-log-table-wrap">
+                <div class="operation-log-table-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录列表与详情" data-demand-text="需求来源：V3R5-4112。||展示规则：列表展示发生时间、操作类型、资产、操作人、具体来源入口、关联单据和操作结果。||详情规则：点击“详情”展开字段名称、旧值、新值及必要说明，不展示内部事件编号和执行人。||联动规则：关联单据支持进入工单详情，“查看资产”进入对应资产详情。||数据口径：全局列表保留成功与未生效记录；资产详情履历仅保留成功生效并实际改变资产数据的记录。||异常判断：资产或工单不存在、无权限时给出明确提示，不中断当前查询。">
                   <table class="operation-log-table">
                     <thead><tr><th style="width:150px;">发生时间</th><th style="width:110px;">操作类型</th><th style="width:220px;">资产编号 / 名称</th><th style="width:100px;">操作人</th><th style="width:110px;">来源</th><th style="width:170px;">关联单据</th><th style="width:90px;">结果</th><th style="width:200px;">操作</th></tr></thead>
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><span><strong>事件编号：</strong>${escapeHtml(event.id)}</span><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div>${event.note ? `<span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note)}</span>` : ""}</div></td></tr>` : ""}`;
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div>${event.note ? `<span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note)}</span>` : ""}</div></td></tr>` : ""}`;
                       }).join("") : `<tr><td colspan="8" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
@@ -30988,6 +31561,18 @@
                           <div class="field-hint">控制台账列表顶部“层级”入口是否展示；隐藏后不影响已维护的主从关系数据。</div>
                         </div>
                         <div class="field-hint">台账页负责层级开关，开启后固定树状结构并默认全部展开；本页维护主从关系数据，并控制台账页层级入口显示。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="config-section" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="App离线数据下载" data-demand-text="需求来源：V3R5-4773。||交互目的：在Web端生成供运维宝App离线查看的资产台账数据。||导出范围：支持导出全量台账，或从IT设施、场地设施、机柜、备件中选择一个或多个台账。||使用说明：该数据适用于运维宝App，用于App离线查看数据；下载的文件请导入App指定目录中，具体请参考App使用手册。||状态限制：全量导出时四类台账默认全部选中且不可取消；部分导出时至少选择一个台账。||异常判断：未选择台账、所选范围无数据、文件生成失败或浏览器拒绝下载时，应阻止操作并给出明确提示。">
+                    <div class="config-section-title">App离线数据</div>
+                    <div class="config-form-grid single">
+                      <div class="field-block app-offline-data-entry">
+                        <div class="app-offline-data-copy">
+                          <strong>运维宝App离线台账数据</strong>
+                          <span>按指定台账范围生成离线数据文件，供现场无网络环境下查询资产。</span>
+                        </div>
+                        <button class="btn btn-primary" type="button" data-action="open-app-offline-data-dialog">下载离线数据</button>
                       </div>
                     </div>
                   </div>
@@ -32303,7 +32888,7 @@
                   <p class="ledger-activity-validation-hint">系统已先校验资产流程状态，再校验资产状态。${validCount ? `继续后仅带入通过校验的 ${validCount} 条资产。` : "请调整资产状态或先完结进行中的流程后重试。"}</p>
                   <div class="ledger-activity-validation-table-wrap">
                     <table class="ledger-activity-validation-table">
-                      <thead><tr><th style="width:150px;">资产编号</th><th style="width:150px;">资产名称</th><th style="width:90px;">资产状态</th><th style="width:110px;">资产流程状态</th><th style="width:170px;">流程单</th><th>校验结果</th></tr></thead>
+                      <thead><tr><th style="width:150px;">资产编号</th><th style="width:150px;">资产名称</th><th style="width:90px;">资产状态</th><th style="width:110px;">资产流程状态</th><th style="width:170px;">流程单</th><th style="width:300px;">校验结果</th></tr></thead>
                       <tbody>${results.map((item) => `<tr><td title="${escapeHtml(item.assetCode)}">${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td><td>${renderAssetStatusTag(item.assetStatus)}</td><td>${escapeHtml(item.processStatus)}</td><td>${item.processOrder ? `<button class="ledger-activity-process-link" type="button" title="进入流程单 ${escapeHtml(item.processOrder.orderNo)}" data-action="open-ledger-activity-process-order" data-flow-view="${escapeHtml(item.processOrder.flowViewId)}" data-order-id="${escapeHtml(item.processOrder.orderId)}">${escapeHtml(item.processOrder.orderNo)}</button>` : "-"}</td><td title="${escapeHtml(item.reason)}"><span class="ledger-activity-result ${item.valid ? "" : "is-invalid"}">${item.valid ? "可处理" : escapeHtml(item.reason)}</span></td></tr>`).join("")}</tbody>
                     </table>
                   </div>
@@ -32357,7 +32942,7 @@
                     <span class="mobile-app-toolbar-title">运维宝 App<span class="sub">移动端交互原型 · 首页 / 待办 / 资产管理 / 扫码</span></span>
                     <button class="mobile-app-close" type="button" data-action="close-mobile-app" aria-label="关闭移动端原型">✕</button>
                   </div>
-                  <div class="mobile-app-frame-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理模块适配" data-demand-text="需求来源：V3R5-4773。||交互目的：从运维宝首页的功能模块进入资产管理，并支持在资产管理内返回首页；通过底部待办入口集中处理流程任务。||展示规则：首页固定一屏且不产生内容滚动，资产管理作为重点入口高亮展示，其他模块与下方信息区弱化处理；待办页顶部分类和底部导航固定，仅任务列表滚动；点击去处理后任务转入已处理。||联动规则：点击资产管理进入资产概览、资产台账、扫码与详情浏览，内页顶部始终提供返回首页入口；首页与待办通过底部导航互相切换。||状态限制：当前弹窗为移动端交互演示，真实系统需按移动端账号权限控制可见模块、待办和资产范围。||异常判断：无待办时展示空态；模块无权限、扫码无匹配资产、资产已删除或移动端网络异常时，应给出清晰提示并保留返回路径。">
+                  <div class="mobile-app-frame-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="运维宝资产管理模块适配" data-demand-text="需求来源：V3R5-4773。||交互目的：从运维宝首页的功能模块进入资产管理，并支持在资产管理内返回首页；通过底部待办入口集中处理流程任务。||联动规则：点击资产管理进入资产概览、资产台账、扫码与详情浏览，内页顶部始终提供返回首页入口；首页与待办通过底部导航互相切换。||状态限制：当前弹窗为移动端交互演示，真实系统需按移动端账号权限控制可见模块、待办和资产范围。||异常判断：无待办时展示空态；模块无权限、扫码无匹配资产、资产已删除或移动端网络异常时，应给出清晰提示并保留返回路径。">
                     <iframe data-role="mobile-app-frame" title="资产管理移动端原型"></iframe>
                   </div>
                 </div>
@@ -32624,6 +33209,9 @@
             }
             if (state.ui.localDataUploadDialog) {
               return this.renderLocalDataUploadDialog(state.ui.localDataUploadDialog);
+            }
+            if (state.ui.appOfflineDataDialog) {
+              return this.renderAppOfflineDataDialog(state.ui.appOfflineDataDialog);
             }
             if (state.ui.masterSlaveTemplateDialog) {
               return this.renderMasterSlaveTemplateDialog(state.ui.masterSlaveTemplateDialog);
@@ -33192,6 +33780,62 @@
             `;
           }
 
+          renderAppOfflineDataDialog(dialog) {
+            const ledgerOptions = this.store.getMasterSlaveTemplateLedgerOptions();
+            const scope = dialog.scope || "all";
+            const ledgers = dialog.ledgers || {};
+            return `
+              <div class="relation-modal-backdrop" data-action="close-app-offline-data-dialog"></div>
+              <section class="relation-modal app-offline-data-dialog" role="dialog" aria-modal="true" aria-labelledby="appOfflineDataDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4773" data-demand-title="App离线数据下载" data-demand-text="需求来源：V3R5-4773。||交互目的：选择资产台账范围并生成供运维宝App离线查看的数据文件。||导出范围：支持导出全量台账，或从IT设施、场地设施、机柜、备件中选择一个或多个台账。||使用说明：该数据适用于运维宝App，用于App离线查看数据；下载的文件请导入App指定目录中，具体请参考App使用手册。||状态限制：全量导出时四类台账默认全部选中且不可取消；部分导出时至少选择一个台账。||异常判断：未选择台账、所选范围无数据、文件生成失败或浏览器拒绝下载时，应阻止操作并给出明确提示。">
+                <header class="relation-modal-head">
+                  <div>
+                    <div class="relation-modal-title" id="appOfflineDataDialogTitle">下载App离线数据</div>
+                    <div class="relation-modal-subtitle">请选择需要导出的资产台账范围。</div>
+                  </div>
+                  <button class="relation-modal-close" type="button" data-action="close-app-offline-data-dialog" aria-label="关闭">×</button>
+                </header>
+                <div class="relation-modal-body">
+                  <div class="field-block">
+                    <span>导出范围</span>
+                    <div class="inline-radios">
+                      <label class="inline-radio">
+                        <input type="radio" name="appOfflineDataScope" data-role="app-offline-data-scope" value="all"${scope === "all" ? " checked" : ""} />
+                        <span>导出全量台账数据</span>
+                      </label>
+                      <label class="inline-radio">
+                        <input type="radio" name="appOfflineDataScope" data-role="app-offline-data-scope" value="partial"${scope === "partial" ? " checked" : ""} />
+                        <span>导出部分台账数据</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="field-block" style="margin-top:16px;">
+                    <span>选择台账</span>
+                    <div class="app-offline-ledger-options">
+                      ${ledgerOptions.map((item) => `
+                        <label class="inline-checkbox ${scope === "all" ? "disabled" : ""}">
+                          <input type="checkbox" data-role="app-offline-data-ledger" data-view="${escapeHtml(item.viewId)}"${scope === "all" || ledgers[item.viewId] ? " checked" : ""}${scope === "all" ? " disabled" : ""} />
+                          <span>${escapeHtml(item.label)}</span>
+                        </label>
+                      `).join("")}
+                    </div>
+                    <div class="field-hint">选择“部分台账数据”后，可勾选一个或多个台账范围。</div>
+                  </div>
+                  <ol class="app-offline-data-info">
+                    <li>该数据适用于运维宝App，用于App离线查看数据。</li>
+                    <li>下载的文件请导入App指定目录中，具体请参考App使用手册。</li>
+                  </ol>
+                </div>
+                <footer class="relation-modal-footer">
+                  <div></div>
+                  <div class="relation-modal-actions">
+                    <button class="btn" type="button" data-action="close-app-offline-data-dialog">取消</button>
+                    <button class="btn btn-primary" type="button" data-action="confirm-app-offline-data-download">下载</button>
+                  </div>
+                </footer>
+              </section>
+            `;
+          }
+
           renderMasterSlaveTemplateDialog(dialog) {
             const ledgerOptions = this.store.getMasterSlaveTemplateLedgerOptions();
             const scope = dialog.scope || "all";
@@ -33724,14 +34368,19 @@
           }
 
           renderToasts(state) {
-            return state.ui.toasts.map((toast) => `
-              <div class="toast ${escapeHtml(toast.tone)}" role="status">
-                <button class="toast-close" type="button" data-action="dismiss-toast" data-id="${escapeHtml(toast.id)}" aria-label="关闭提示">×</button>
-                <strong>${escapeHtml(toast.title)}</strong>
-                <span>${escapeHtml(toast.message)}</span>
-                ${toast.action ? `<button class="toast-action" type="button" data-action="${escapeHtml(toast.action)}" data-id="${escapeHtml(toast.taskId || "")}">${escapeHtml(toast.actionLabel || "查看")}</button>` : ""}
-              </div>
-            `).join("");
+            return state.ui.toasts.map((toast) => {
+              const demandAttrs = toast.demandText
+                ? ` data-demand-version="${escapeHtml(toast.demandVersion)}" data-demand-req-id="${escapeHtml(toast.demandReqId)}" data-demand-title="${escapeHtml(toast.demandTitle)}" data-demand-text="${escapeHtml(toast.demandText)}"`
+                : "";
+              return `
+                <div class="toast ${escapeHtml(toast.tone)}${toast.placement === "top-center" ? " is-top-center" : ""}${toast.singleLine ? " is-single-line" : ""}" role="status"${demandAttrs}>
+                  <button class="toast-close" type="button" data-action="dismiss-toast" data-id="${escapeHtml(toast.id)}" aria-label="关闭提示">×</button>
+                  <strong>${escapeHtml(toast.title)}</strong>
+                  <span class="toast-message">${escapeHtml(toast.message)}</span>
+                  ${toast.action ? `<button class="toast-action" type="button" data-action="${escapeHtml(toast.action)}" data-view="${escapeHtml(toast.viewId || "")}" data-id="${escapeHtml(toast.taskId || "")}">${escapeHtml(toast.actionLabel || "查看")}</button>` : ""}
+                </div>
+              `;
+            }).join("");
           }
         }
 
@@ -34247,6 +34896,14 @@
                 this.store.openItAssetWorkflowProcess(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-id"), actionTarget.getAttribute("data-process") !== "true");
                 return;
               }
+              if (action === "open-submitted-it-asset-workflow") {
+                this.store.openSubmittedItAssetWorkflow(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "open-submitted-it-inbound") {
+                this.store.openSubmittedItInbound(actionTarget.getAttribute("data-id"));
+                return;
+              }
               if (action === "it-asset-workflow-tool") {
                 this.store.handleItAssetWorkflowTool(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-label"));
                 return;
@@ -34726,6 +35383,18 @@
               }
               if (action === "save-template-config") {
                 this.store.saveTemplateConfig();
+                return;
+              }
+              if (action === "open-app-offline-data-dialog") {
+                this.store.openAppOfflineDataDialog();
+                return;
+              }
+              if (action === "close-app-offline-data-dialog") {
+                this.store.closeAppOfflineDataDialog();
+                return;
+              }
+              if (action === "confirm-app-offline-data-download") {
+                this.store.confirmAppOfflineDataDownload();
                 return;
               }
               if (action === "set-master-slave-hierarchy-control-visible") {
@@ -35357,6 +36026,14 @@
                 this.store.setMasterSlaveTemplateDialogScope(target.value);
                 return;
               }
+              if (target.matches('[data-role="app-offline-data-scope"]')) {
+                this.store.setAppOfflineDataScope(target.value);
+                return;
+              }
+              if (target.matches('[data-role="app-offline-data-ledger"]')) {
+                this.store.toggleAppOfflineDataLedger(target.getAttribute("data-view"));
+                return;
+              }
               if (target.matches('[data-role="master-slave-download-ledger"]')) {
                 this.store.toggleMasterSlaveTemplateDialogLedger(target.getAttribute("data-view"));
                 return;
@@ -35848,11 +36525,69 @@
             this.activeVersion = "all";
             this.activeRequirementId = null;
             this.activeTrigger = null;
+            this.pagePanelOpen = false;
+            this.pagePanelActiveKey = "";
+            this.pagePanelEntryMap = new Map();
+            this.mobilePageEntries = [];
+            this.pagePanelSwitchPositionKey = "r5-demand-page-panel-switch-top";
+            this.pagePanelSwitchDrag = null;
+            this.suppressPagePanelSwitchClick = false;
             this.hideTimer = null;
             this.popover = document.createElement("div");
             this.popover.className = "demand-popover";
             document.body.appendChild(this.popover);
+            this.mountPagePanel();
             this.bindEvents();
+          }
+
+          mountPagePanel() {
+            this.pagePanelSwitch = document.createElement("button");
+            this.pagePanelSwitch.type = "button";
+            this.pagePanelSwitch.className = "demand-page-panel-switch";
+            this.pagePanelSwitch.setAttribute("role", "switch");
+            this.pagePanelSwitch.setAttribute("aria-checked", "false");
+            this.pagePanelSwitch.setAttribute("aria-label", "显示本页全部需求说明");
+            this.pagePanelSwitch.title = "上下拖动调整位置，点击展开本页需求说明";
+            this.pagePanelSwitch.innerHTML = `
+              <span>本页需求</span>
+              <span class="demand-page-panel-switch-count">0</span>
+              <span class="demand-page-panel-switch-track" aria-hidden="true"></span>
+            `;
+            document.body.appendChild(this.pagePanelSwitch);
+            this.restorePagePanelSwitchPosition();
+
+            this.pagePanel = document.createElement("aside");
+            this.pagePanel.className = "demand-page-panel";
+            this.pagePanel.setAttribute("aria-label", "本页需求说明");
+            this.pagePanel.innerHTML = `
+              <header class="demand-page-panel-head">
+                <div class="demand-page-panel-title">本页需求说明 <span data-role="demand-page-panel-summary">共 0 项</span></div>
+                <button class="demand-page-panel-close" type="button" aria-label="关闭本页需求说明">×</button>
+              </header>
+              <div class="demand-page-panel-body"></div>
+            `;
+            document.body.appendChild(this.pagePanel);
+            this.pagePanelBody = this.pagePanel.querySelector(".demand-page-panel-body");
+            this.pagePanelSummary = this.pagePanel.querySelector('[data-role="demand-page-panel-summary"]');
+
+            this.pagePanelSwitch.addEventListener("click", (event) => {
+              if (this.suppressPagePanelSwitchClick) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+              }
+              this.togglePagePanel();
+            });
+            this.pagePanelSwitch.addEventListener("pointerdown", (event) => this.startPagePanelSwitchDrag(event));
+            this.pagePanelSwitch.addEventListener("pointermove", (event) => this.movePagePanelSwitchDrag(event));
+            this.pagePanelSwitch.addEventListener("pointerup", (event) => this.finishPagePanelSwitchDrag(event));
+            this.pagePanelSwitch.addEventListener("pointercancel", (event) => this.finishPagePanelSwitchDrag(event));
+            this.pagePanel.querySelector(".demand-page-panel-close")?.addEventListener("click", () => this.togglePagePanel(false));
+            this.pagePanelBody.addEventListener("click", (event) => {
+              const item = event.target.closest(".demand-page-panel-item");
+              if (!item) return;
+              this.revealPagePanelEntry(item.dataset.demandPanelKey || "");
+            });
           }
 
           bindEvents() {
@@ -35887,14 +36622,133 @@
               if (trigger) {
                 event.preventDefault();
                 event.stopPropagation();
+                event.stopImmediatePropagation();
+                this.showFor(trigger);
                 return;
               }
-              if (!event.target.closest(".demand-popover")) {
+              if (!event.target.closest(".demand-popover") && !event.target.closest(".demand-page-panel")) {
                 this.hide();
               }
             });
             window.addEventListener("scroll", () => this.hide(), true);
-            window.addEventListener("resize", () => this.hide());
+            window.addEventListener("resize", () => {
+              this.hide();
+              this.clampPagePanelSwitchPosition();
+            });
+            window.addEventListener("message", (event) => this.handleMobileDemandMessage(event));
+          }
+
+          getPagePanelSwitchTopBounds() {
+            const switchHeight = this.pagePanelSwitch?.getBoundingClientRect().height || 34;
+            const topbarBottom = document.querySelector(".topbar")?.getBoundingClientRect().bottom || 50;
+            return {
+              min: topbarBottom + 8,
+              max: Math.max(topbarBottom + 8, window.innerHeight - switchHeight - 8)
+            };
+          }
+
+          setPagePanelSwitchTop(top, persist = false) {
+            if (!this.pagePanelSwitch) return;
+            const bounds = this.getPagePanelSwitchTopBounds();
+            const nextTop = Math.min(bounds.max, Math.max(bounds.min, Number(top) || bounds.min));
+            this.pagePanelSwitch.classList.add("has-custom-position");
+            this.pagePanelSwitch.style.top = nextTop + "px";
+            if (persist) {
+              try {
+                window.localStorage.setItem(this.pagePanelSwitchPositionKey, String(Math.round(nextTop)));
+              } catch (error) {
+                /* 原型在禁用本地存储时仍保持本次拖动位置 */
+              }
+            }
+          }
+
+          restorePagePanelSwitchPosition() {
+            let savedTop = "";
+            try {
+              savedTop = window.localStorage.getItem(this.pagePanelSwitchPositionKey) || "";
+            } catch (error) {
+              savedTop = "";
+            }
+            if (!savedTop || !Number.isFinite(Number(savedTop))) return;
+            window.requestAnimationFrame(() => this.setPagePanelSwitchTop(Number(savedTop)));
+          }
+
+          clampPagePanelSwitchPosition() {
+            if (!this.pagePanelSwitch?.classList.contains("has-custom-position")) return;
+            this.setPagePanelSwitchTop(this.pagePanelSwitch.getBoundingClientRect().top);
+          }
+
+          startPagePanelSwitchDrag(event) {
+            if (!this.pagePanelSwitch || (event.pointerType === "mouse" && event.button !== 0)) return;
+            const rect = this.pagePanelSwitch.getBoundingClientRect();
+            this.pagePanelSwitchDrag = {
+              pointerId: event.pointerId,
+              startY: event.clientY,
+              startTop: rect.top,
+              currentTop: rect.top,
+              moved: false
+            };
+            this.pagePanelSwitch.setPointerCapture?.(event.pointerId);
+          }
+
+          movePagePanelSwitchDrag(event) {
+            const drag = this.pagePanelSwitchDrag;
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            const deltaY = event.clientY - drag.startY;
+            if (!drag.moved && Math.abs(deltaY) <= 4) return;
+            drag.moved = true;
+            this.pagePanelSwitch.classList.add("is-dragging");
+            drag.currentTop = drag.startTop + deltaY;
+            this.setPagePanelSwitchTop(drag.currentTop);
+            event.preventDefault();
+          }
+
+          finishPagePanelSwitchDrag(event) {
+            const drag = this.pagePanelSwitchDrag;
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            this.pagePanelSwitch.releasePointerCapture?.(event.pointerId);
+            this.pagePanelSwitch.classList.remove("is-dragging");
+            this.pagePanelSwitchDrag = null;
+            if (!drag.moved) return;
+            this.setPagePanelSwitchTop(drag.currentTop, true);
+            this.suppressPagePanelSwitchClick = true;
+            window.setTimeout(() => {
+              this.suppressPagePanelSwitchClick = false;
+            }, 0);
+          }
+
+          getMobileAppFrame() {
+            return document.querySelector('#overlay iframe[data-role="mobile-app-frame"]');
+          }
+
+          handleMobileDemandMessage(event) {
+            const frame = this.getMobileAppFrame();
+            if (!frame || event.source !== frame.contentWindow || !event.data) return;
+            if (event.data.type === "r5-mobile-demand-context") {
+              this.mobilePageEntries = Array.isArray(event.data.entries)
+                ? event.data.entries.map((entry) => ({
+                    mobileKey: String(entry.key || ""),
+                    version: String(entry.version || "v1.3"),
+                    reqId: String(entry.reqId || "V3R5-4773"),
+                    title: String(entry.title || "需求说明"),
+                    text: String(entry.text || "")
+                  })).filter((entry) => entry.mobileKey)
+                : [];
+              this.refreshPagePanel();
+              return;
+            }
+            if (event.data.type === "r5-mobile-demand-active") {
+              const matched = Array.from(this.pagePanelEntryMap.values())
+                .find((entry) => entry.isMobile && entry.mobileKey === String(event.data.key || ""));
+              if (!matched) return;
+              this.pagePanelActiveKey = matched.key;
+              this.pagePanelBody?.querySelectorAll(".demand-page-panel-item").forEach((item) => {
+                item.classList.toggle("is-active", item.dataset.demandPanelKey === matched.key);
+              });
+              if (this.pagePanelOpen) {
+                this.pagePanelBody?.querySelector(`[data-demand-panel-key="${matched.key}"]`)?.scrollIntoView({ block: "nearest" });
+              }
+            }
           }
 
           refresh(enabled, activeVersion = "all", activeRequirementId = null) {
@@ -35927,6 +36781,7 @@
               scope.appendChild(badge);
             });
             this.syncBadges();
+            this.refreshPagePanel();
           }
 
           hydrateTrigger(trigger, scope) {
@@ -35979,6 +36834,7 @@
           setEnabled(enabled) {
             this.enabled = Boolean(enabled);
             if (!this.enabled) {
+              this.pagePanelOpen = false;
               this.hide();
             }
             this.syncBadges();
@@ -36040,6 +36896,126 @@
             this.popover.innerHTML = entries.map(renderEntry).join(entries.length > 1 ? '<hr style="border:0;border-top:1px solid #edf2f8;margin:10px 0;">' : "");
             this.popover.style.display = "block";
             this.position(trigger);
+            this.activatePagePanelEntryForTrigger(trigger);
+          }
+
+          collectPagePanelEntries() {
+            const collected = [];
+            this.pagePanelEntryMap.clear();
+            let entryIndex = 0;
+            const mobileFrame = this.getMobileAppFrame();
+            if (mobileFrame) {
+              this.mobilePageEntries.forEach((entry) => {
+                const matchedVersion = this.activeVersion === "all" || entry.version === this.activeVersion;
+                const matchedRequirement = !this.activeRequirementId || entry.reqId === this.activeRequirementId;
+                if (!matchedVersion || !matchedRequirement) return;
+                const key = "mobile-page-demand-" + entry.mobileKey;
+                const item = { ...entry, key, isMobile: true };
+                collected.push(item);
+                this.pagePanelEntryMap.set(key, item);
+              });
+              return collected;
+            }
+            document.querySelectorAll(".demand-badge-trigger").forEach((trigger) => {
+              if (trigger.closest(".demand-page-panel")) return;
+              const badge = trigger.closest(".demand-badge");
+              const scope = badge?.parentElement;
+              if (!badge || badge.hidden || !scope || scope.getClientRects().length === 0) return;
+              if (!scope.closest("#content, #overlay")) return;
+              this.getVisibleEntries(trigger).forEach((entry) => {
+                const key = "page-demand-" + entryIndex;
+                entryIndex += 1;
+                const item = { ...entry, key, trigger, scope };
+                collected.push(item);
+                this.pagePanelEntryMap.set(key, item);
+              });
+            });
+            return collected;
+          }
+
+          refreshPagePanel() {
+            if (!this.pagePanel || !this.pagePanelBody || !this.pagePanelSwitch) return;
+            const entries = this.enabled ? this.collectPagePanelEntries() : [];
+            const countNode = this.pagePanelSwitch.querySelector(".demand-page-panel-switch-count");
+            if (countNode) countNode.textContent = String(entries.length);
+            if (this.pagePanelSummary) this.pagePanelSummary.textContent = "共 " + entries.length + " 项";
+            this.pagePanelSwitch.classList.toggle("is-on", this.pagePanelOpen);
+            this.pagePanelSwitch.setAttribute("aria-checked", this.pagePanelOpen ? "true" : "false");
+            this.pagePanel.classList.toggle("is-open", this.pagePanelOpen && this.enabled);
+            document.body.classList.toggle("is-demand-page-panel-open", this.pagePanelOpen && this.enabled);
+
+            if (entries.length === 0) {
+              this.pagePanelBody.innerHTML = '<div class="demand-page-panel-empty">当前页面暂无符合需求版本筛选条件的说明。</div>';
+              return;
+            }
+
+            const renderPart = (part) => {
+              const highlightClass = /^【重点规则】/.test(part) ? "is-demand-highlight" : "";
+              return '<p class="' + highlightClass + '">' + this.escapeText(part) + "</p>";
+            };
+            this.pagePanelBody.innerHTML = entries.map((entry) => {
+              const parts = String(entry.text || "")
+                .split("||")
+                .map((part) => part.trim())
+                .filter(Boolean);
+              const meta = [entry.version, entry.reqId].filter(Boolean);
+              return `
+                <button class="demand-page-panel-item${this.pagePanelActiveKey === entry.key ? " is-active" : ""}" type="button" data-demand-panel-key="${this.escapeText(entry.key)}">
+                  <div class="demand-page-panel-item-meta">${meta.map((value) => `<span>${this.escapeText(value)}</span>`).join("")}</div>
+                  <strong>${this.escapeText(entry.title || "需求说明")}</strong>
+                  ${parts.map(renderPart).join("")}
+                </button>
+              `;
+            }).join("");
+          }
+
+          togglePagePanel(force) {
+            this.pagePanelOpen = typeof force === "boolean" ? force : !this.pagePanelOpen;
+            this.refreshPagePanel();
+          }
+
+          activatePagePanelEntryForTrigger(trigger) {
+            const matched = Array.from(this.pagePanelEntryMap.values()).find((item) => item.trigger === trigger);
+            if (!matched) return;
+            this.pagePanelActiveKey = matched.key;
+            this.pagePanelBody?.querySelectorAll(".demand-page-panel-item").forEach((item) => {
+              item.classList.toggle("is-active", item.dataset.demandPanelKey === matched.key);
+            });
+            if (this.pagePanelOpen) {
+              this.pagePanelBody?.querySelector(`[data-demand-panel-key="${matched.key}"]`)?.scrollIntoView({ block: "nearest" });
+            }
+          }
+
+          revealPagePanelEntry(key) {
+            const entry = this.pagePanelEntryMap.get(key);
+            if (!entry) return;
+            this.hide();
+            this.pagePanelActiveKey = key;
+            this.pagePanelBody?.querySelectorAll(".demand-page-panel-item").forEach((item) => {
+              item.classList.toggle("is-active", item.dataset.demandPanelKey === key);
+            });
+            if (entry.isMobile) {
+              this.getMobileAppFrame()?.contentWindow?.postMessage({
+                type: "r5-mobile-demand-reveal",
+                key: entry.mobileKey
+              }, "*");
+              return;
+            }
+            entry.scope.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+            entry.scope.classList.remove("demand-link-highlight");
+            void entry.scope.offsetWidth;
+            entry.scope.classList.add("demand-link-highlight");
+            window.setTimeout(() => entry.scope.classList.remove("demand-link-highlight"), 1700);
+          }
+
+          escapeText(value) {
+            return String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;"
+            }[ch]));
           }
 
           getVisibleEntries(trigger) {
@@ -36095,10 +37071,14 @@
           position(trigger) {
             const rect = trigger.getBoundingClientRect();
             const popoverRect = this.popover.getBoundingClientRect();
+            const panelRect = this.pagePanelOpen && this.pagePanel?.classList.contains("is-open")
+              ? this.pagePanel.getBoundingClientRect()
+              : null;
+            const rightBoundary = panelRect ? panelRect.left - 8 : window.innerWidth - 8;
             let left = rect.right + 8;
             let top = rect.top;
-            if (left + popoverRect.width > window.innerWidth - 8) {
-              left = Math.max(8, rect.left - popoverRect.width - 8);
+            if (left + popoverRect.width > rightBoundary) {
+              left = Math.max(8, Math.min(rect.left - popoverRect.width - 8, rightBoundary - popoverRect.width));
             }
             if (top + popoverRect.height > window.innerHeight - 8) {
               top = Math.max(8, window.innerHeight - popoverRect.height - 8);
@@ -37067,16 +38047,16 @@
     gap: 12px;
     box-shadow: 0 4px 14px rgba(21, 48, 84, 0.07);
   }
-  .sum-qr {
+  .sum-asset-icon {
     width: 58px; height: 58px;
     border-radius: 10px;
-    background: #fff;
-    border: 1px solid var(--border-strong);
+    background: linear-gradient(145deg, #f7fbff 0%, #edf5ff 100%);
+    border: 1px solid #cfe1f6;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #33475e;
+    color: #2878d0;
   }
   .sum-info { flex: 1; min-width: 0; }
   .sum-name { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -37122,6 +38102,23 @@
     width: 26px; height: 3px;
     border-radius: 2px;
     background: var(--primary);
+  }
+  .detail-tab.is-disabled,
+  .detail-tab:disabled {
+    color: #a8b2bf;
+    background: #f7f8fa;
+    cursor: not-allowed;
+  }
+  .detail-tab.is-disabled::after,
+  .detail-tab:disabled::after { display: none; }
+  .detail-tab-unavailable {
+    display: block;
+    margin-top: 2px;
+    color: #b5bec9;
+    font-size: 9px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
   }
 
   .detail-body { padding: 12px 0 24px; }
@@ -37210,10 +38207,14 @@
   .peer-name { font-size: 13px; color: var(--primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .peer-code { font-size: 11px; color: var(--text-tertiary); margin-top: 1px; }
 
-  /* 履历 */
-  .range-pills { display: flex; gap: 8px; margin-bottom: 12px; }
+  /* 履历 / 操作记录 */
+  .mobile-history-shell { padding: 12px; }
+  .mobile-history-range-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .range-pills { display: flex; gap: 6px; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .range-pills::-webkit-scrollbar { display: none; }
   .range-pill {
-    padding: 4px 12px;
+    flex: none;
+    padding: 4px 10px;
     border-radius: 999px;
     background: #fff;
     border: 1px solid var(--border);
@@ -37231,8 +38232,8 @@
     background: #e0e9f3;
     border-radius: 2px;
   }
-  .tl-item { position: relative; padding-bottom: 16px; }
-  .tl-item:last-child { padding-bottom: 2px; }
+  .tl-item { position: relative; padding-bottom: 12px; }
+  .tl-item:last-child { padding-bottom: 0; }
   .tl-item::before {
     content: "";
     position: absolute;
@@ -37242,10 +38243,36 @@
     background: #fff;
     border: 2.5px solid var(--primary);
   }
-  .tl-time { font-size: 11px; color: var(--text-tertiary); }
-  .tl-action { font-size: 13px; font-weight: 700; margin-top: 1px; }
-  .tl-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-  .tl-user { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
+  .tl-time { margin-bottom: 5px; font-size: 11px; color: var(--text-tertiary); }
+  .mobile-history-card {
+    padding: 10px;
+    border: 1px solid #dfe8f2;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(35, 70, 110, .04);
+  }
+  .mobile-history-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .tl-action { min-width: 0; font-size: 13px; font-weight: 700; color: #183b63; }
+  .mobile-history-source {
+    flex: none;
+    max-width: 118px;
+    padding: 3px 8px;
+    border: 1px solid #c8ddf5;
+    border-radius: 999px;
+    background: #f1f7fe;
+    color: #3975b8;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mobile-history-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 12px; margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+  .mobile-history-order { border: 0; background: transparent; color: var(--primary); font-size: 11px; font-weight: 600; }
+  .mobile-history-changes { margin-top: 8px; padding: 7px 8px; border-left: 3px solid #9fc4ef; background: #f7fbff; }
+  .mobile-history-change { font-size: 11px; line-height: 1.65; color: #526b84; }
+  .mobile-history-change strong { color: #254563; }
+  .mobile-history-old { color: #8b99a8; text-decoration: line-through; }
+  .mobile-history-new { color: #137a47; font-weight: 600; }
 
   .mobile-work-order-list { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
   .mobile-work-order-card {
@@ -37488,6 +38515,13 @@
     font-weight: 700;
     cursor: help;
     box-shadow: 0 2px 6px rgba(213, 110, 0, 0.4);
+  }
+  .mobile-demand-link-highlight {
+    animation: mobileDemandLinkHighlight 1.7s ease;
+  }
+  @keyframes mobileDemandLinkHighlight {
+    0%, 100% { box-shadow: inherit; }
+    18%, 58% { box-shadow: 0 0 0 3px rgba(255, 122, 69, .36), 0 0 18px rgba(255, 122, 69, .28); }
   }
   .detail-tabs > .demand-badge,
   .type-pills > .demand-badge { top: 2px; right: 2px; }
@@ -37774,7 +38808,57 @@
     /* 原型口径：2026-08-01 前到期视为“即将到期” */
     return a.expire && a.expire <= "2026-08-01";
   }
-  function historyOf(id) { return HISTORY[id] || HISTORY_DEFAULT; }
+  function historyOf(id) {
+    var asset = byId(id);
+    var rows = HISTORY[id] || HISTORY_DEFAULT;
+    var location = asset && asset.loc ? (asset.loc.path || []).concat(asset.loc.cabinet || asset.loc.space || []).join("-") : "当前资产位置";
+    var typeName = asset ? (TYPE_LABELS[asset.type] || "资产") : "资产";
+    function sourceOf(action) {
+      if (/扫码/.test(action)) return { type: "空间视图", label: "移动端扫码" };
+      if (/入库/.test(action)) return { type: "流程工单", label: typeName + "入库" };
+      if (/上架|上电/.test(action)) return { type: "流程工单", label: typeName === "IT设备" ? "IT设备上架" : typeName + "部署" };
+      if (/下电|下架/.test(action)) return { type: "流程工单", label: typeName === "IT设备" ? "IT设备下架" : typeName + "回库" };
+      if (/配置变更|U位调整/.test(action)) return { type: "流程工单", label: typeName + "变动" };
+      if (/维保|故障/.test(action)) return { type: "流程工单", label: "事件工单" };
+      return { type: "资产台账", label: "资产台账" };
+    }
+    return rows.map(function (row, index) {
+      var source = sourceOf(row.action);
+      var changes = [];
+      if (/盘点/.test(row.action)) {
+        changes = [{ field: "盘点结果", oldValue: "待确认", newValue: "账实一致" }];
+      } else if (/入库/.test(row.action)) {
+        changes = [
+          { field: "资产状态", oldValue: "-", newValue: "空闲" },
+          { field: "资产位置", oldValue: "-", newValue: location }
+        ];
+      } else if (/关联/.test(row.action)) {
+        changes = [{ field: "资产关系", oldValue: "未关联", newValue: row.desc.replace(/^关联从设备：?/, "") }];
+      } else if (/扫码/.test(row.action)) {
+        changes = [{ field: "查看入口", oldValue: "-", newValue: "移动端扫码" }];
+      } else if (/上架|上电/.test(row.action)) {
+        changes = [
+          { field: "资产状态", oldValue: "空闲", newValue: "在用" },
+          { field: "资产位置", oldValue: "库房", newValue: location }
+        ];
+      } else if (/下架|下电/.test(row.action)) {
+        changes = [{ field: "资产状态", oldValue: "在用", newValue: "空闲" }];
+      } else if (/故障/.test(row.action)) {
+        changes = [{ field: "资产状态", oldValue: "在用", newValue: "空闲" }];
+      } else {
+        changes = [{ field: "操作说明", oldValue: "变更前", newValue: row.desc }];
+      }
+      return {
+        d: row.d,
+        action: row.action,
+        sourceType: source.type,
+        source: source.label,
+        user: row.user,
+        orderNo: source.type === "流程工单" ? (asset && asset.type === "station" ? "SF" : "IT") + "202607" + ("00000" + (index + 1)).slice(-6) : "",
+        changes: changes
+      };
+    });
+  }
   function fmtDaysAgo(d) {
     var base = new Date(2026, 6, 7); /* 原型固定“今天”=2026-07-07 */
     var t = new Date(base.getTime() - d * 86400000);
@@ -37783,7 +38867,7 @@
     return t.getFullYear() + "-" + mm + "-" + dd + " " + (d % 2 === 0 ? "10:2" + (d % 10) : "15:1" + (d % 10));
   }
 
-  var QR_SVG = '<svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3V3Zm2 2v4h4V5H5Zm8-2h8v8h-8V3Zm2 2v4h4V5h-4ZM3 13h8v8H3v-8Zm2 2v4h4v-4H5Zm10-2h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v2h-2v-2Zm4 0h2v2h-2v-2Z"/></svg>';
+  var GENERIC_ASSET_SVG = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.4 7.7 7.6 4.2 7.6-4.2M12 12v9"/><path d="m8.1 5.2 7.8 4.4" opacity=".6"/></svg>';
   var LOC_SVG = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 1 7 7c0 4.6-5.3 10.6-6.6 12a.6.6 0 0 1-.8 0C10.3 19.6 5 13.6 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5Z"/></svg>';
 
   /* ===================== 状态 ===================== */
@@ -37839,16 +38923,72 @@
     listCard: { t: "资产卡片与主从展开", d: "展示规则：卡片显示资产名称、状态徽标、资产编号、分类与位置路径；主设备带「主」标识，从设备带「从」标识。||点击后行为：点击卡片进入资产详情；主设备卡片底部可展开/收起从设备列表，点击从设备行直接进入其详情。||异常判断：从设备记录不存在时不展示对应行。" },
     tabScan: { t: "扫一扫入口", d: "交互目的：作为移动端核心功能，中间凸起大按钮突出扫码入口。||点击后行为：进入扫码取景页。||展示规则：三个Tab为 概览/扫一扫/资产，扫一扫居中凸起。" },
     locSheet: { t: "级联位置选择面板", d: "交互目的：逐级选择统计位置范围。||交互行为：面包屑显示已选路径，点击任意层级可回退；列表显示当前层级选项及资产数，有下级的显示箭头；选到房间（末级）自动确认，中间层级点「确定」按当前层级生效；「重置为全部」恢复全部园区。||异常判断：点击遮罩取消，不改变已生效的范围。" },
-    dtSummary: { t: "资产摘要卡", d: "展示规则：显示资产二维码缩略图、名称、状态徽标、资产编号、台账类型、分类，主/从设备补充角色标识。||交互目的：进入详情后第一眼确认资产身份，与实物标签核对。" },
-    dtTabs: { t: "详情页签", d: "展示规则：基本信息/位置信息/履历信息/关系拓扑；机柜类型额外提供「包含设备」页签且排在位置信息前。||点击后行为：切换页签刷新下方内容区，页签吸顶。" },
+    dtSummary: { t: "资产摘要卡", d: "展示规则：使用通用资产图标，并显示名称、状态徽标、资产编号、台账类型、分类；主/从设备补充角色标识。||交互目的：进入详情后第一眼确认资产身份。" },
+    dtTabs: { t: "详情页签", d: "展示规则：基本信息、位置信息、履历信息、关联工单正常可用；机柜类型额外提供「包含设备」页签且排在位置信息前。关系拓扑本期暂不实现，页签置灰并显示「暂不实现」，不可点击。||点击后行为：点击可用页签刷新下方内容区，页签吸顶。" },
     dtBasic: { t: "基本信息字段", d: "展示规则：字段按 资产标识/运行状态/网络信息(仅IT设备)/生命周期 分组展示；字段口径与Web端资产详情设计一致。||异常判断：无值字段显示「—」；到期时间早于预警阈值时追加「即将到期」标识。" },
     dtPosition: { t: "位置信息（按类型区分）", d: "展示规则：IT设备显示位置路径+所在机柜U位局部图（当前资产高亮）；机柜显示U位占用图与上架设备数；场地设施及备件不使用机柜/U位图，改为显示所属空间与同空间设备（与V3R5-4427口径一致）。||点击后行为：同空间设备可点击跳转对应资产详情。" },
-    dtHistory: { t: "履历信息", d: "展示规则：时间线倒序展示操作时间、动作、说明、操作人。||点击后行为：支持 全部/近7日/近15日 时间范围筛选。||异常判断：范围内无记录时显示空态提示。" },
-    dtRelation: { t: "关系拓扑", d: "展示规则：主设备通过「有一部分」关系箭头指向从设备，当前资产节点高亮；一个主设备对应多个从设备时逐组展示。||点击后行为：点击节点跳转对应资产详情。||异常判断：无主从关系时显示空态，不渲染拓扑。" },
+    dtHistory: { t: "履历信息", d: "展示规则：与 Web 端操作记录采用同一数据口径，按时间倒序展示操作类型、具体业务入口、操作人、关联单据及字段旧值/新值；不展示执行人和操作结果。||筛选规则：App 端仅支持全部/近7日/近10日/近15日时间范围筛选，不提供组合查询和全局操作记录入口。||合并规则（重点）：同一次业务操作涉及的属性、位置和关系变化合并为一条履历。||数据口径：资产详情仅展示已成功生效并实际改变资产数据的记录；失败或未生效记录在 Web 端全局操作记录中查看。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，时间范围内无记录时展示空态。" },
+    dtRelation: { t: "关系拓扑（暂不实现）", d: "版本说明：移动端关系拓扑本期暂不实现。||展示规则：关系拓扑页签置灰并显示「暂不实现」，不可点击，不进入关系拓扑内容区。||后续规划：待关系数据与移动端拓扑交互方案确认后再开放。" },
     dtContains: { t: "包含设备（机柜）", d: "展示规则：列出机柜上架设备的名称、状态、资产编号、分类与U位区间。||点击后行为：点击设备名称跳转其详情。||异常判断：无上架设备时显示「没有找到匹配的记录」。" },
     scanFrame: { t: "扫码识别", d: "交互目的：扫描资产标签二维码直达资产详情。||交互行为：取景框内扫描线动画表示识别中；识别成功短暂提示后自动跳转资产详情。||异常判断：非本系统资产标签提示「未识别到资产」，扫描线暂停，可重新扫码；资产已删除或无权限时同样走异常提示。||支持范围：识别资产标签配置生成的二维码。" },
     scanSim: { t: "模拟扫码（原型演示）", d: "展示规则：仅原型演示用，点击标签模拟扫码结果，覆盖四类资产及无效二维码分支；实际App调用系统相机识别。" }
   };
+
+  var MOBILE_DEMAND_META = {
+    dtPosition: { version: "v1.2", reqId: "V3R5-4427" },
+    dtHistory: { version: "v1.3", reqId: "V3R5-4112" }
+  };
+  var MOBILE_PAGE_DEMANDS = {
+    pageHome: {
+      t: "运维宝App首页",
+      d: "需求来源：V3R5-4773。||交互目的：从运维宝App首页进入资产管理模块。||展示规则：资产管理作为重点入口突出展示，其他模块和非核心信息弱化；首页保持原始尺寸并禁用内容滚动。||点击后行为：点击资产管理进入资产概览，并可从资产管理内返回首页。"
+    },
+    pageTodo: {
+      t: "运维宝App待办页",
+      d: "需求来源：V3R5-4773。||交互目的：集中查看并处理移动端待办。||展示规则：顶部分类支持横向拖动，标题、分类和底部导航固定，仅待办列表滚动。||点击后行为：点击去处理完成演示流转，处理后进入已处理分类。"
+    },
+    pageApps: {
+      t: "运维宝App应用页",
+      d: "需求来源：V3R5-4773。||交互目的：按业务分组展示移动端应用入口。||展示规则：IT设备相关入口可进入资产管理，其他模块保留结构；底部监控、告警入口模糊弱化且不可点击。"
+    }
+  };
+
+  function getMobileDemandEntry(key, item) {
+    var meta = MOBILE_DEMAND_META[key] || { version: "v1.3", reqId: "V3R5-4773" };
+    return {
+      key: key,
+      version: meta.version,
+      reqId: meta.reqId,
+      title: item.t,
+      text: item.d
+    };
+  }
+
+  function notifyParentDemandContext() {
+    if (window.self === window.top) return;
+    var entries = [];
+    if (state.demandMode) {
+      var seen = {};
+      document.querySelectorAll('.demand-badge[data-dm]').forEach(function (badge) {
+        var key = badge.getAttribute("data-dm");
+        if (!key || seen[key] || !DEMANDS[key] || badge.getClientRects().length === 0) return;
+        seen[key] = true;
+        entries.push(getMobileDemandEntry(key, DEMANDS[key]));
+      });
+      if (!entries.length) {
+        var pageKey = state.shell === "todo" ? "pageTodo" : state.shell === "apps" ? "pageApps" : state.shell === "home" ? "pageHome" : "";
+        if (pageKey && MOBILE_PAGE_DEMANDS[pageKey]) {
+          entries.push(getMobileDemandEntry(pageKey, MOBILE_PAGE_DEMANDS[pageKey]));
+        }
+      }
+    }
+    window.parent.postMessage({ type: "r5-mobile-demand-context", entries: entries }, "*");
+  }
+
+  function notifyParentDemandActive(key) {
+    if (window.self === window.top) return;
+    window.parent.postMessage({ type: "r5-mobile-demand-active", key: key }, "*");
+  }
 
   function dmBadge(key) {
     if (!state.demandMode || !DEMANDS[key]) return "";
@@ -37865,8 +39005,10 @@
     return demandPop;
   }
   function showDemand(badge) {
-    var item = DEMANDS[badge.getAttribute("data-dm")];
+    var demandKey = badge.getAttribute("data-dm");
+    var item = DEMANDS[demandKey];
     if (!item) return;
+    notifyParentDemandActive(demandKey);
     var pop = ensureDemandPop();
     var parts = item.d.split("||");
     var inner = "<b>" + esc(item.t) + "</b>";
@@ -37888,6 +39030,28 @@
   function hideDemand() {
     if (demandPop) demandPop.style.display = "none";
   }
+
+  window.addEventListener("message", function (event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== "r5-mobile-demand-reveal") return;
+    var key = String(event.data.key || "");
+    var badge = Array.prototype.find.call(document.querySelectorAll('.demand-badge[data-dm]'), function (item) {
+      return item.getAttribute("data-dm") === key;
+    });
+    var target = badge ? badge.parentElement : key === "pageHome"
+      ? document.querySelector(".app-home")
+      : key === "pageTodo"
+        ? document.querySelector(".todo-page")
+        : key === "pageApps"
+          ? document.querySelector(".apps-page")
+          : null;
+    if (!target) return;
+    hideDemand();
+    target.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    target.classList.remove("mobile-demand-link-highlight");
+    void target.offsetWidth;
+    target.classList.add("mobile-demand-link-highlight");
+    window.setTimeout(function () { target.classList.remove("mobile-demand-link-highlight"); }, 1700);
+  });
 
   document.addEventListener("mouseover", function (ev) {
     var b = ev.target.closest && ev.target.closest(".demand-badge");
@@ -38322,21 +39486,29 @@
   function renderDetailHistory(a) {
     var entries = historyOf(a.id);
     var range = state.historyRange;
-    var limit = range === "近7日" ? 7 : range === "近15日" ? 15 : 9999;
+    var limit = range === "近7日" ? 7 : range === "近10日" ? 10 : range === "近15日" ? 15 : 9999;
     var shown = entries.filter(function (e) { return e.d <= limit; });
 
-    var html = '<div class="field-group">' + dmBadge("dtHistory") + '<div style="padding:12px 14px 14px">';
-    html += '<div class="range-pills">';
-    ["全部", "近7日", "近15日"].forEach(function (r) {
+    var html = '<div class="field-group">' + dmBadge("dtHistory") + '<div class="mobile-history-shell">';
+    html += '<div class="mobile-history-range-row"><div class="range-pills">';
+    ["全部", "近7日", "近10日", "近15日"].forEach(function (r) {
       html += '<button class="range-pill ' + (range === r ? "is-active" : "") + '" data-action="set-history-range" data-range="' + r + '">' + r + '</button>';
     });
-    html += '</div>';
+    html += '</div></div>';
     if (!shown.length) {
-      html += '<div style="padding:24px 0;text-align:center;color:var(--text-tertiary);font-size:12px">当前时间范围内无履历记录</div>';
+      html += '<div style="padding:28px 0;text-align:center;color:var(--text-tertiary);font-size:12px">没有找到匹配的操作记录</div>';
     } else {
       html += '<div class="timeline">';
       shown.forEach(function (e) {
-        html += '<div class="tl-item"><div class="tl-time">' + esc(fmtDaysAgo(e.d)) + '</div><div class="tl-action">' + esc(e.action) + '</div><div class="tl-desc">' + esc(e.desc) + '</div><div class="tl-user">操作人：' + esc(e.user) + '</div></div>';
+        html += '<div class="tl-item"><div class="tl-time">' + esc(fmtDaysAgo(e.d)) + '</div><div class="mobile-history-card">';
+        html += '<div class="mobile-history-card-head"><div class="tl-action">操作类型：' + esc(e.action) + '</div><span class="mobile-history-source" title="' + esc(e.source) + '">' + esc(e.source) + '</span></div>';
+        html += '<div class="mobile-history-meta"><span>操作人：' + esc(e.user || "-") + '</span>';
+        if (e.orderNo) html += '<span>关联单据：<button class="mobile-history-order" data-action="open-mobile-work-order" data-no="' + esc(e.orderNo) + '">' + esc(e.orderNo) + '</button></span>';
+        html += '</div><div class="mobile-history-changes">';
+        (e.changes || []).forEach(function (change) {
+          html += '<div class="mobile-history-change"><strong>' + esc(change.field || "-") + '</strong>：<span class="mobile-history-old">' + esc(change.oldValue || "-") + '</span> → <span class="mobile-history-new">' + esc(change.newValue || "-") + '</span></div>';
+        });
+        html += '</div></div></div>';
       });
       html += '</div>';
     }
@@ -38424,7 +39596,7 @@
       { id: "position", label: "位置信息" },
       { id: "history", label: "履历信息" },
       { id: "workOrders", label: "关联工单" },
-      { id: "relation", label: "关系拓扑" }
+      { id: "relation", label: "关系拓扑", disabled: true }
     ];
     if (a.type === "cabinet") tabs.splice(1, 0, { id: "contains", label: "包含设备" });
     return tabs;
@@ -38436,6 +39608,7 @@
     var titleMap = { it: "IT设备详情", station: "场地设施详情", cabinet: "机柜详情", spare: "备件详情" };
     var rel = relationOf(a.id);
     var tabs = detailTabsOf(a);
+    var activeDetailTab = state.detailTab === "relation" ? "basic" : state.detailTab;
 
     var html = '';
     html += '<div class="detail-nav">';
@@ -38445,7 +39618,7 @@
 
     html += '<div class="page-scroll">';
     html += '<div class="summary-card">' + dmBadge("dtSummary");
-    html += '<div class="sum-qr">' + QR_SVG + '</div>';
+    html += '<div class="sum-asset-icon" aria-label="通用资产图标">' + GENERIC_ASSET_SVG + '</div>';
     html += '<div class="sum-info">';
     html += '<div class="sum-name"><span class="nm">' + esc(a.name) + '</span><span class="badge ' + (STATUS_CLS[a.status] || "st-idle") + '">' + esc(a.status) + '</span></div>';
     html += '<div class="sum-code">' + esc(a.code) + '</div>';
@@ -38456,17 +39629,17 @@
 
     html += '<div class="detail-tabs">' + dmBadge("dtTabs");
     tabs.forEach(function (t) {
-      html += '<button class="detail-tab ' + (state.detailTab === t.id ? "is-active" : "") + '" data-action="set-detail-tab" data-tab="' + t.id + '">' + t.label + '</button>';
+      var disabledAttrs = t.disabled ? ' disabled aria-disabled="true" title="暂不实现"' : ' data-action="set-detail-tab" data-tab="' + t.id + '"';
+      html += '<button class="detail-tab ' + (activeDetailTab === t.id ? "is-active" : "") + (t.disabled ? " is-disabled" : "") + '"' + disabledAttrs + '><span>' + t.label + '</span>' + (t.disabled ? '<em class="detail-tab-unavailable">暂不实现</em>' : '') + '</button>';
     });
     html += '</div>';
 
     html += '<div class="detail-body">';
-    if (state.detailTab === "basic") html += renderDetailBasic(a);
-    else if (state.detailTab === "position") html += renderDetailPosition(a);
-    else if (state.detailTab === "history") html += renderDetailHistory(a);
-    else if (state.detailTab === "workOrders") html += renderDetailWorkOrders(a);
-    else if (state.detailTab === "relation") html += renderDetailRelation(a);
-    else if (state.detailTab === "contains") html += renderDetailContains(a);
+    if (activeDetailTab === "basic") html += renderDetailBasic(a);
+    else if (activeDetailTab === "position") html += renderDetailPosition(a);
+    else if (activeDetailTab === "history") html += renderDetailHistory(a);
+    else if (activeDetailTab === "workOrders") html += renderDetailWorkOrders(a);
+    else if (activeDetailTab === "contains") html += renderDetailContains(a);
     html += '</div>';
     html += '</div>';
     return html;
@@ -38734,6 +39907,7 @@
       si.setSelectionRange(si.value.length, si.value.length);
       state._focusSearch = false;
     }
+    notifyParentDemandContext();
   }
 
   /* ===================== 交互 ===================== */
@@ -38913,7 +40087,9 @@
       state.detailId = null;
       render();
     } else if (action === "set-detail-tab") {
-      state.detailTab = el.getAttribute("data-tab");
+      var nextDetailTab = el.getAttribute("data-tab");
+      if (!nextDetailTab || nextDetailTab === "relation") return;
+      state.detailTab = nextDetailTab;
       render();
     } else if (action === "set-history-range") {
       state.historyRange = el.getAttribute("data-range");
