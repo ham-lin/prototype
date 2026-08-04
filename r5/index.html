@@ -2202,6 +2202,10 @@
       }
 
       .version-req-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 8;
+        flex: 0 0 auto;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -2210,6 +2214,7 @@
         border: 1px solid #e8eef6;
         border-radius: 10px;
         background: #fff;
+        box-shadow: 0 4px 12px rgba(26, 72, 120, 0.06);
       }
 
       .version-req-filter {
@@ -3165,20 +3170,6 @@
 
       .cabinet-usage-line strong {
         color: #18365f;
-      }
-
-      .cabinet-usage-bar {
-        height: 5px;
-        border-radius: 999px;
-        background: #e8eef7;
-        overflow: hidden;
-      }
-
-      .cabinet-usage-fill {
-        display: block;
-        height: 100%;
-        border-radius: inherit;
-        background: #2d8cff;
       }
 
       .cabinet-card-meta {
@@ -5262,6 +5253,8 @@
       .process-config-head h1 { margin: 0; color: #183653; font-size: 18px; }
       .process-config-head p { margin: 6px 0 0; color: #71869c; font-size: 12px; }
       .process-config-head-actions { display: flex; flex: none; align-items: center; gap: 8px; }
+      .process-config-save-state { color: #7b8ea2; font-size: 12px; }
+      .process-config-save-state.is-dirty { color: #c06b00; font-weight: 600; }
       .process-config-mode { display: inline-flex; flex: none; align-items: center; padding: 3px; border: 1px solid #d8e3ef; border-radius: 5px; background: #eef3f8; }
       .process-config-mode button { height: 30px; padding: 0 14px; border: 0; border-radius: 3px; background: transparent; color: #5e7389; font-size: 12px; cursor: pointer; }
       .process-config-mode button.is-active { background: #fff; color: var(--primary); box-shadow: 0 1px 4px rgba(27, 64, 101, .14); font-weight: 600; }
@@ -5284,6 +5277,12 @@
       .process-config-group-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid #e6edf4; background: #f9fbfd; }
       .process-config-group-head strong { color: #203d5a; font-size: 14px; }
       .process-config-group-head span { color: #7b8ea2; font-size: 12px; }
+      .process-config-group-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+      .process-config-group-state { min-width: 48px; color: #60768c; font-size: 12px; text-align: right; }
+      .process-config-group-state.is-on { color: #16894b; }
+      .process-config-group-state.is-mixed { color: #b36a00; }
+      .process-config-group-switch-wrap { position: relative; display: inline-flex; align-items: center; }
+      .process-config-group-switch-wrap > .demand-badge { top: -10px; right: -10px; }
       .process-config-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
       .process-config-table th, .process-config-table td { height: 46px; padding: 0 16px; border-bottom: 1px solid #e9eff5; text-align: left; }
       .process-config-table th { background: #eef7ff; color: #49637d; font-weight: 600; }
@@ -5292,11 +5291,14 @@
       .process-config-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(25, 48, 72, .25); transition: transform .18s ease; }
       .process-config-switch.is-on { background: var(--primary); }
       .process-config-switch.is-on::after { transform: translateX(18px); }
+      .process-config-switch.is-pending { box-shadow: 0 0 0 2px rgba(240, 139, 35, .28); }
       .process-config-switch:disabled { cursor: not-allowed; opacity: .55; }
       .process-config-status { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eef3f8; color: #687c90; }
       .process-config-status.is-on { background: #e9f7ef; color: #16894b; }
-      .process-config-form-link { border: 0; background: transparent; color: var(--primary); font-size: 12px; cursor: pointer; }
-      .process-config-form-link:hover { text-decoration: underline; }
+      .process-config-form-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 28px; padding: 0 10px; border: 1px solid #b9d3f2; border-radius: 4px; background: #f5f9ff; color: var(--primary); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+      .process-config-form-link:hover { border-color: var(--primary); background: #eaf3ff; box-shadow: 0 2px 6px rgba(30, 102, 210, .12); }
+      .process-config-form-link:focus-visible { outline: 2px solid rgba(28, 111, 229, .25); outline-offset: 2px; }
+      .process-config-form-link-icon { color: #4b83c7; font-size: 13px; line-height: 1; }
       .process-close-blockers { display: grid; gap: 8px; margin-top: 14px; }
       .process-close-blocker { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 11px; border: 1px solid #e1eaf3; border-radius: 4px; background: #f8fbfe; }
       .process-close-blocker span { color: #38536d; font-size: 12px; }
@@ -5308,9 +5310,27 @@
       .asset-activity-menu { position: absolute; top: calc(100% + 5px); left: 0; right: auto; z-index: 80; width: 144px; padding: 5px; border: 1px solid #d8e3ef; border-radius: 4px; background: #fff; box-shadow: 0 10px 28px rgba(25, 52, 81, .16); }
       .asset-activity-menu button { width: 100%; height: 34px; display: flex; align-items: center; border: 0; border-radius: 3px; background: transparent; color: #304b67; text-align: left; padding: 0 12px; white-space: nowrap; }
       .asset-activity-menu button:hover { background: #edf6ff; color: var(--primary); }
-      .process-route-dialog { width: min(560px, calc(100vw - 48px)); height: auto; min-height: 0; max-height: calc(100vh - 48px); display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: hidden; }
-      .process-route-dialog-body { padding: 24px 26px; color: #38536d; line-height: 1.8; }
+      .process-route-dialog { width: min(680px, calc(100vw - 48px)); height: auto; min-height: 0; max-height: calc(100vh - 48px); display: flex; flex-direction: column; align-items: stretch; gap: 0; overflow: hidden; }
+      .process-route-dialog-body { padding: 20px 24px; color: #38536d; line-height: 1.8; overflow: auto; }
       .process-route-dialog-body strong { color: #173b60; }
+      .process-close-message { margin: 0 0 14px; color: #38536d; }
+      .process-close-order-table-wrap { width: 100%; border: 1px solid #dce6f0; border-radius: 4px; overflow: hidden; }
+      .process-close-order-table { width: 100% !important; min-width: 0 !important; max-width: 100%; border-collapse: collapse; table-layout: fixed; background: #fff; }
+      .process-close-order-table th,
+      .process-close-order-table td { height: 40px; padding: 0 14px; border-bottom: 1px solid #e5edf5; color: #38536d; font-size: 12px; text-align: left; }
+      .process-close-order-table th { background: #eef6fd; color: #294965; font-weight: 600; }
+      .process-close-order-table tbody tr:last-child td { border-bottom: 0; }
+      .process-close-order-table th:first-child,
+      .process-close-order-table td:first-child { padding-right: 8px; padding-left: 8px; color: #71869b; text-align: center; }
+      .process-close-order-table td:nth-child(2) { color: #38536d; font-weight: 400; overflow-wrap: anywhere; }
+      .process-close-module-link { padding: 0; border: 0; background: transparent; color: var(--primary); font: inherit; font-weight: 500; text-align: left; cursor: pointer; }
+      .process-close-module-link:hover { text-decoration: underline; }
+      .process-close-pagination { min-height: 34px; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; color: #71869b; font-size: 12px; }
+      .process-close-pagination-actions { display: flex; align-items: center; gap: 6px; }
+      .process-close-pagination button { min-width: 28px; height: 28px; padding: 0 8px; border: 1px solid #d8e3ee; border-radius: 3px; background: #fff; color: #38536d; cursor: pointer; }
+      .process-close-pagination button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+      .process-close-pagination button:disabled { color: #b7c2cd; background: #f7f9fb; cursor: not-allowed; }
+      .process-close-pagination .is-current { border-color: var(--primary); background: var(--primary); color: #fff; }
       .ledger-activity-validation-dialog { width: min(1000px, calc(100vw - 48px)); height: fit-content; min-height: 0; max-height: calc(100vh - 48px); }
       .ledger-activity-validation-dialog .relation-modal-body { padding: 18px 20px; overflow: auto; }
       .ledger-activity-validation-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
@@ -8786,6 +8806,10 @@
         pointer-events: none;
       }
 
+      .cabinet-reserved-layer.demand-anchor {
+        position: absolute;
+      }
+
       .cabinet-reserved-device {
         position: absolute;
         left: 3px;
@@ -8817,6 +8841,22 @@
         inset: 0;
         z-index: 4;
         pointer-events: none;
+      }
+
+      .cabinet-operation-demand-anchor.demand-anchor {
+        position: absolute;
+        top: 52%;
+        right: -5px;
+        z-index: 12;
+        width: 1px;
+        height: 1px;
+        pointer-events: none;
+      }
+
+      .cabinet-operation-demand-anchor > .demand-badge {
+        top: -9px;
+        right: -9px;
+        z-index: 12;
       }
 
       .cabinet-empty-slot {
@@ -9213,6 +9253,99 @@
         border-radius: 6px;
       }
 
+      .cabinet-rack-device-search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .cabinet-rack-device-search-box {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid #d8e4f2;
+        border-radius: 4px;
+        background: #fff;
+        color: #8aa0b6;
+      }
+
+      .cabinet-rack-device-search-box:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(31, 120, 255, 0.1);
+      }
+
+      .cabinet-rack-device-search-box input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        padding: 0 0 0 8px;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #263b52;
+      }
+
+      .cabinet-rack-device-result-count {
+        flex: 0 0 auto;
+        color: #6d8298;
+        font-size: 12px;
+      }
+
+      .cabinet-rack-dialog-empty {
+        height: 120px;
+        color: #8799ab;
+        text-align: center !important;
+      }
+
+      .cabinet-rack-device-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 34px;
+        margin-top: 10px;
+        color: #71869b;
+        font-size: 12px;
+      }
+
+      .cabinet-rack-device-pagination-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .cabinet-rack-device-pagination button {
+        min-width: 28px;
+        height: 28px;
+        padding: 0 8px;
+        border: 1px solid #d8e3ee;
+        border-radius: 3px;
+        background: #fff;
+        color: #38536d;
+        cursor: pointer;
+      }
+
+      .cabinet-rack-device-pagination button:hover:not(:disabled) {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .cabinet-rack-device-pagination button:disabled {
+        color: #b7c2cd;
+        background: #f7f9fb;
+        cursor: not-allowed;
+      }
+
+      .cabinet-rack-device-pagination .is-current {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: #fff;
+      }
+
       .cabinet-rack-dialog-table {
         width: 100%;
         min-width: 760px;
@@ -9292,6 +9425,19 @@
         padding: 0 9px;
         color: #1f3349;
         outline: none;
+      }
+
+      .cabinet-rack-form input[readonly] {
+        border-color: #dfe5ec;
+        background: #f3f5f7;
+        color: #8998a8;
+        cursor: not-allowed;
+      }
+
+      .cabinet-rack-form label > span.is-required::before {
+        content: "*";
+        margin-right: 4px;
+        color: #e5484d;
       }
 
       .cabinet-rack-form .is-wide {
@@ -10047,7 +10193,7 @@
 
       .label-layout {
         display: grid;
-        grid-template-columns: 280px minmax(0, 1fr) 320px;
+        grid-template-columns: 380px minmax(0, 1fr) 380px;
         min-height: 740px;
       }
 
@@ -10079,6 +10225,65 @@
       .label-panel {
         padding: 14px 12px 16px;
         overflow: auto;
+      }
+
+      .label-binding-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .label-binding-row {
+        display: grid;
+        grid-template-columns: minmax(108px, 1fr) 62px auto 28px;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .label-binding-row select,
+      .label-binding-row input[type="number"] {
+        width: 100%;
+        min-width: 0;
+        height: 34px;
+      }
+
+      .label-binding-hide-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #30465d;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .label-binding-hide-title input {
+        width: 15px;
+        height: 15px;
+        margin: 0;
+      }
+
+      .label-binding-delete {
+        width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        color: #6f8398;
+        cursor: pointer;
+      }
+
+      .label-binding-delete:hover {
+        color: #e5484d;
+        background: #fff1f0;
+      }
+
+      .label-binding-add {
+        align-self: flex-start;
+        margin-top: 10px;
+        border-radius: 16px;
       }
 
       .label-section {
@@ -10121,6 +10326,11 @@
         grid-template-columns: 62px minmax(0, 1fr);
         padding: 14px;
         border-radius: 8px;
+      }
+
+      .label-side .label-card.large {
+        width: 100%;
+        box-sizing: border-box;
       }
 
       .label-card.wide {
@@ -11315,6 +11525,14 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+      }
+
+      .operation-asset-dialog-backdrop {
+        z-index: 1120;
+      }
+
+      .operation-asset-dialog {
+        z-index: 1121;
       }
 
       .relation-modal.asset-relation-dialog {
@@ -17602,6 +17820,15 @@
         ];
 
         const VERSION_REQUIREMENT_TYPES = ["新增", "优化", "删除"];
+        const VERSION_REQUIREMENT_ORDER = ["v1.1", "v1.2", "v1.3", "v1.4", "v1.5"];
+        const sortRequirementVersions = (versions) => [...versions].sort((left, right) => {
+          const leftIndex = VERSION_REQUIREMENT_ORDER.indexOf(left);
+          const rightIndex = VERSION_REQUIREMENT_ORDER.indexOf(right);
+          if (leftIndex === -1 && rightIndex === -1) return left.localeCompare(right, undefined, { numeric: true });
+          if (leftIndex === -1) return 1;
+          if (rightIndex === -1) return -1;
+          return leftIndex - rightIndex;
+        });
 
         const VERSION_REQUIREMENTS = [
           {
@@ -17717,10 +17944,10 @@
           {
             id: "V3R5-4112",
             ticketId: "V3R5-4112",
-            version: "v1.3",
+            version: "v1.4",
             type: "优化",
-            title: "资产详情资产履历显示规则",
-            description: "优化 资产详情中的资产履历显示规则",
+            title: "优化 资产详情中的履历显示规则及新增全局操作记录",
+            description: "优化 资产详情中的履历显示规则及新增全局操作记录",
             scope: "资产详情",
             targetView: VIEW_IDS.IT_FACILITY,
             targetLabel: "资产详情-履历",
@@ -17825,7 +18052,7 @@
           {
             id: "V3R5-4662",
             ticketId: "V3R5-4662",
-            version: "v1.4",
+            version: "v1.5",
             type: "优化",
             title: "【资产管理】优化 资产表单设计及资产详情设计逻辑",
             description: "优化 资产表单设计及资产详情设计逻辑",
@@ -17833,6 +18060,19 @@
             targetView: VIEW_IDS.FORM_DESIGN,
             targetLabel: "资产表单设计及资产详情设计",
             status: "挂起"
+          },
+          {
+            id: "V3R5-5571",
+            ticketId: "V3R5-5571",
+            version: "v1.4",
+            type: "优化",
+            title: "【资产管理】优化 资产活动中字段禁用/隐藏逻辑",
+            description: "【资产管理】优化 资产活动中字段禁用/隐藏逻辑",
+            scope: "资产活动",
+            targetView: VIEW_IDS.IT_FACILITY,
+            targetAction: "批量上架",
+            targetLabel: "资产活动字段禁用/隐藏规则",
+            status: "设计中"
           },
           {
             id: "V3R5-4997",
@@ -17861,7 +18101,7 @@
           {
             id: "V3R5-4890",
             ticketId: "V3R5-4890",
-            version: "v1.3",
+            version: "v1.4",
             type: "优化",
             title: "【台账】优化 批量选择资产执行上架、部署等活动时的错误提示",
             description: "优化 批量选择资产执行上架、部署等活动时的错误提示",
@@ -17897,7 +18137,7 @@
           {
             id: "V3R5-838",
             ticketId: "V3R5-838",
-            version: "v1.4",
+            version: "v1.5",
             type: "新增",
             title: "【位置信息】新增 机柜/场地设施/IT设备 支持3D展示",
             description: "【位置信息】新增 机柜/场地设施/IT设备 支持3D展示",
@@ -17933,10 +18173,11 @@
           "V3R5-4418": { role: "资产管理员", need: "在高级搜索中按厂商筛选资产", value: "快速定位指定来源或品牌的设备", scenario: "处理维保、替换或批次问题时，需要查询同厂商资产。", rules: ["高级搜索默认提供厂商条件。", "厂商选项来自当前台账可见数据并去重。"], boundary: "无厂商数据时保留请选择状态，不影响其他条件查询。" },
           "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗且不展示右上角提示；进度管理器展开时自动定位并闪烁对应任务行，收起时通过结果数量和强调动画触达，展开后定位任务。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时，应在任务列表中保留可识别状态和后续操作。" },
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
-          "V3R5-4997": { role: "系统管理员", need: "统一或分项配置资产活动是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时不再弹出二次确认，直接进入全屏流程发起页，并带入台账已选资产或机柜、U位及设备信息；通过右上角关闭按钮返回来源页面。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "统一关闭或分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
+          "V3R5-5571": { role: "资产管理员", need: "在不同资产活动中只看到符合当前业务规则的可编辑字段", value: "减少误填、误改和无关字段干扰", scenario: "执行入库、上架、部署、变动、回库等资产活动时，不同字段需要按活动类型禁用或隐藏。", rules: ["字段禁用与隐藏规则按资产类型和业务活动分别配置。", "隐藏字段不在活动表单中展示，禁用字段保留显示但不可修改。", "字段规则调整后应与表单必填和提交校验保持一致。"], boundary: "字段规则冲突、配置缺失或必填字段被隐藏时不得直接提交，应使用默认规则或提示管理员修正配置。" },
+          "V3R5-4997": { role: "系统管理员", need: "按资产模块整体或按业务活动分项配置是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "流程开启时，台账入口直接进入全屏流程发起页；机柜详情上架需先选择已有设备或填写新设备信息，确认后再进入流程单，并带入机柜、U位及设备信息；通过右上角关闭按钮返回来源页面。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "模块整体关闭或业务活动分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
           "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在机柜图中识别预占位置并追溯来源流程单。", rules: ["右侧包含设备列表只展示正式上架设备，不展示预占中的设备。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "左侧机柜图中的预占设备使用与在架设备一致的悬浮信息卡，展示资产编号、资产名称、U位范围和来源流程单；流程单号支持点击进入对应流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
           "V3R5-4890": { role: "资产管理员", need: "批量执行上架、部署等活动时获得逐项校验结果", value: "快速识别不可处理资产并继续处理符合条件的数据", scenario: "一次选择多条资产执行批量活动时，资产状态和进行中的流程状态可能不同。", rules: ["资产状态仅使用空闲、在用；资产流程状态仅记录待上架、待部署、待变动等进行中状态。", "先校验资产流程状态是否为空，再按资产状态校验活动范围。", "资产存在进行中流程时展示关联流程单号，流程单号支持点击进入对应流程单详情。", "部分资产不符合条件时展示可处理数、已排除数和逐行原因，继续后只带入校验通过的数据。", "全部资产不符合条件时不进入办理页面。"], boundary: "不得用单一失败提示掩盖具体资产错误，不得重复发起进行中流程，也不得错误处理不符合状态要求的资产；关联流程单缺失时展示“-”且不得阻断校验结果。" },
-          "V3R5-4419": { role: "机房管理员", need: "在空间范围内切换卡片或列表查看机柜及U位占用", value: "既能直观掌握机柜容量，又能沿用台账列表完成明细查询和批量处理", scenario: "规划上架位置时使用卡片查看U位容量，核对或批量处理同空间机柜时切换为列表。", rules: ["IT设备、场地设施、机柜和备件台账首次进入时默认展示空间视图。", "机柜台账的空间视图默认使用卡片模式；标准视图用于查看全局台账。", "空间视图保留空间树、机柜数、设备数和利用率统计，并支持卡片展示和列表展示。", "顶部统计卡片和展示切换固定显示，底部分页器固定显示，仅中间机柜卡片或列表结果区域随鼠标滚动。", "机柜缩略图蓝色表示已占用U位占总U位的比例示意，从底部向上填充；灰色表示空闲U位。", "缩略图按10个示意格等分显示，每格代表10%的容量区间；蓝色格数按已用U/总U换算并四舍五入，只要已用U大于0至少显示1格。", "精确占用以卡片中的已用U/总U和百分比为准，具体物理U位在机柜详情查看。", "卡片/列表切换只在空间视图中显示，并保留空间节点、查询条件、分页和已选数据。", "进入机柜详情再返回时恢复离开前的空间节点及展示方式。"], boundary: "当前空间无机柜时展示空态；U位数据缺失、重叠或超出机柜高度时应提示异常；缩略图蓝色格数不得解释为设备数量或精确U位坐标。" },
+          "V3R5-4419": { role: "机房管理员", need: "在空间范围内切换卡片或列表查看机柜及U位占用", value: "既能直观掌握机柜容量，又能沿用台账列表完成明细查询和批量处理", scenario: "规划上架位置时使用卡片查看U位容量，核对或批量处理同空间机柜时切换为列表。", rules: ["IT设备、场地设施、机柜和备件台账首次进入时默认展示空间视图。", "机柜台账的空间视图默认使用卡片模式；标准视图用于查看全局台账。", "空间视图保留空间树、机柜数、设备数和利用率统计，并支持卡片展示和列表展示。", "顶部统计卡片和展示切换固定显示，底部分页器固定显示，仅中间机柜卡片或列表结果区域随鼠标滚动。", "机柜缩略图蓝色表示已占用U位占总U位的比例示意，从底部向上填充；灰色表示空闲U位。", "缩略图按10个示意格等分显示，每格代表10%的容量区间；蓝色格数按已用U/总U换算并四舍五入，只要已用U大于0至少显示1格。", "精确占用以卡片中的已用U/总U和百分比为准，具体物理U位在机柜详情查看。", "机柜详情将“包含设备”页签置于首位并默认进入，用于继续查看设备明细、U位占用和可分配容量。", "卡片/列表切换只在空间视图中显示，并保留空间节点、查询条件、分页和已选数据。", "进入机柜详情再返回时恢复离开前的空间节点及展示方式。"], boundary: "当前空间无机柜时展示空态；U位数据缺失、重叠或超出机柜高度时应提示异常；缩略图蓝色格数不得解释为设备数量或精确U位坐标。" },
           "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产、扫码进入详情，并在离线场景导入台账数据", value: "在现场无网络或网络不稳定时仍能完成资产查询与核对", scenario: "巡检或故障处理现场网络不可用时，需要提前下载指定台账数据并导入运维宝App。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "Web端资产基础配置提供App离线数据下载，支持全量台账或部分台账范围。", "部分导出支持选择IT设施、场地设施、机柜、备件，且至少选择一个台账。", "下载文件需导入App指定目录，具体操作参考App使用手册。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "未选择台账、所选范围无数据、文件生成失败、App导入失败、二维码无效、资产不存在或无权限时给出明确提示。" },
           "V3R5-838": { role: "运维人员", need: "在资产详情中切换3D场景并定位当前资产", value: "直观理解资产所处空间、机柜和U位", scenario: "远程定位设备或核对空间关系时，需要从二维信息进入三维场景。", rules: ["IT设备、机柜和场地设施详情支持2D/3D切换，默认2D。", "通过 resource_id 定位并高亮资产、机柜或所属空间。"], boundary: "资产未建模时逐级降级定位；平台不可用或空间未建模时隐藏3D入口。" }
         });
@@ -18581,6 +18822,7 @@
                   it: { inbound: false, rack: true, change: true, offShelf: false, edit: true, moveOut: false },
                   station: { inbound: true, deploy: true, change: true, return: true, edit: true, retire: true }
                 },
+                processConfigDraft: null,
                 processConfigMode: "itemized",
                 processCloseDialog: null,
                 ledgerActivityValidationDialog: null,
@@ -18785,6 +19027,10 @@
                 labelConfig: {
                   activeTemplateId: "brandQr",
                   bindField: "资产标签",
+                  boundFields: [
+                    { field: "资产编号", fontSize: 14, hideTitle: true },
+                    { field: "名称", fontSize: 14, hideTitle: true }
+                  ],
                   printMode: "标签打印机",
                   width: 50,
                   height: 30
@@ -19990,9 +20236,7 @@
               { viewId: VIEW_IDS.RETIRED_ASSET, type: "迁出/报废资产", source: "流程工单", actions: ["迁出", "报废"] }
             ];
             const cabinets = this.getListRows(VIEW_IDS.CABINET);
-            const oldStatusMap = { "入库": "待入库", "上架": "在库", "部署": "在库", "变动": "在用", "下架": "已上架", "回库": "在用", "编辑": "在用", "迁出": "待迁出", "出库": "在库", "调拨": "在库", "报废": "待报废" };
-            const newStatusMap = { "入库": "在库", "上架": "已上架", "部署": "已部署", "变动": "在用", "下架": "在库", "回库": "在库", "编辑": "在用", "迁出": "已迁出", "出库": "在用", "调拨": "在库", "报废": "已报废" };
-            const actionPrefixMap = { "添加资产": "ADD", "初始化": "INIT", "入库": "RK", "上架": "SJ", "部署": "BS", "变动": "BD", "下架": "XJ", "回库": "HK", "编辑": "BJ", "迁出": "QC", "出库": "CK", "调拨": "DB", "报废": "BF" };
+          const actionPrefixMap = { "创建设备": "ADD", "初始化": "INIT", "入库": "RK", "上架": "SJ", "部署": "BS", "变动": "BD", "下架": "XJ", "回库": "HK", "编辑": "BJ", "迁出": "QC", "出库": "CK", "调拨": "DB", "报废": "BF" };
             const events = [];
             viewConfigs.forEach((config, viewIndex) => {
               this.getListRows(config.viewId).forEach((row, index) => {
@@ -20001,10 +20245,10 @@
                 const relatedCabinet = config.viewId === VIEW_IDS.IT_FACILITY && cabinets.length ? cabinets[index % cabinets.length] : null;
                 const isLifecycleSample = [VIEW_IDS.IT_FACILITY, VIEW_IDS.STATION_FACILITY].includes(config.viewId) && index < 3;
                 const actions = isLifecycleSample
-                  ? (config.viewId === VIEW_IDS.IT_FACILITY ? ["添加资产", "初始化", "上架", "变动", "下架", "迁出"] : ["添加资产", "初始化", "部署", "变动", "回库", "报废"])
+            ? (config.viewId === VIEW_IDS.IT_FACILITY ? ["创建设备", "初始化", "上架", "变动", "下架", "迁出"] : ["创建设备", "初始化", "部署", "变动", "回库", "报废"])
                   : [config.actions[index % config.actions.length]];
                 actions.forEach((action, actionIndex) => {
-                  const sourceType = action === "添加资产" ? "空间视图" : action === "初始化" ? "资产台账" : config.source;
+            const sourceType = action === "创建设备" ? "空间视图" : action === "初始化" ? "资产台账" : config.source;
                   const workflowEntryPrefix = config.viewId === VIEW_IDS.IT_FACILITY
                     ? "IT设备"
                     : config.viewId === VIEW_IDS.STATION_FACILITY
@@ -20012,10 +20256,9 @@
                       : "资产";
                   const source = sourceType === "流程工单" ? `${workflowEntryPrefix}${action}` : sourceType;
                   const result = !isLifecycleSample && (index + actionIndex + viewIndex) % 7 === 0 ? "未生效" : "成功";
-                  const locationBefore = ["添加资产", "初始化", "入库"].includes(action) ? "-" : ["上架", "部署"].includes(action) ? "2号楼-B1层-资产库" : "A栋-2层-临时区";
-                  const locationAfter = action === "添加资产" ? "A栋-2层-临时区" : ["下架", "回库"].includes(action) ? "2号楼-B1层-资产库" : String(row.assetLocation || "资产库");
+            const locationBefore = ["创建设备", "初始化", "入库"].includes(action) ? "-" : ["上架", "部署"].includes(action) ? "2号楼-B1层-资产库" : "A栋-2层-临时区";
+            const locationAfter = action === "创建设备" ? "A栋-2层-临时区" : ["下架", "回库"].includes(action) ? "2号楼-B1层-资产库" : String(row.assetLocation || "资产库");
                   const changes = [
-                    { field: "资产流程状态", oldValue: action === "添加资产" ? "-" : action === "初始化" ? "未初始化" : oldStatusMap[action] || "待处理", newValue: action === "添加资产" ? "未初始化" : action === "初始化" ? "在库" : newStatusMap[action] || "已完成" },
                     { field: "资产位置", oldValue: locationBefore, newValue: locationAfter },
                     { field: "名称", oldValue: assetName + "-待确认", newValue: assetName },
                     { field: "厂商", oldValue: "待补录", newValue: String(row.vendor || "已补录") },
@@ -20373,7 +20616,12 @@
             };
             const activityLabel = activityMap[mode];
             const config = activityLabel ? this.getProcessFlowActivity(VIEW_IDS.IT_FACILITY, activityLabel) : null;
-            if (!config || !this.isProcessFlowEnabled(config.activity.flowViewId)) {
+            const processDriven = Boolean(config && this.isProcessFlowEnabled(config.activity.flowViewId));
+            if (mode === "add") {
+              this.openCabinetRackDialog(mode, { ...payload, processDriven });
+              return;
+            }
+            if (!processDriven) {
               this.openCabinetRackDialog(mode, payload);
               return;
             }
@@ -20407,13 +20655,22 @@
           }
 
           openCabinetRackDialog(mode, payload = {}) {
+            const detailPage = this.state.ui.detailPage;
+            const cabinetRow = detailPage?.viewId === VIEW_IDS.CABINET
+              ? this.getRowById(VIEW_IDS.CABINET, detailPage.rowId)
+              : null;
             this.state.ui.cabinetRackDialog = {
               mode: mode || "add",
               unit: payload.unit || "",
+              shelfLocation: cabinetRow?.assetLocation || cabinetRow?.name || cabinetRow?.assetCode || "当前机柜",
               deviceCode: payload.deviceCode || "",
               deviceName: payload.deviceName || "",
               startU: payload.startU || "",
-              uHeight: payload.uHeight || ""
+              uHeight: payload.uHeight || "",
+              deviceKeyword: "",
+              devicePage: 1,
+              devicePageSize: 20,
+              processDriven: Boolean(payload.processDriven)
             };
             this.emit();
           }
@@ -20432,6 +20689,27 @@
             }
             this.state.ui.cabinetRackDialog.selectedDeviceId = rowId;
             this.emit();
+          }
+
+          setCabinetRackDeviceKeyword(keyword, shouldEmit = true) {
+            const dialog = this.state.ui.cabinetRackDialog;
+            if (!dialog) return;
+            dialog.deviceKeyword = String(keyword || "");
+            dialog.devicePage = 1;
+            if (shouldEmit) this.emit();
+          }
+
+          setCabinetRackDevicePage(page) {
+            const dialog = this.state.ui.cabinetRackDialog;
+            if (!dialog) return;
+            dialog.devicePage = Math.max(1, Number(page) || 1);
+            this.emit();
+          }
+
+          setCabinetRackNewField(key, value) {
+            const dialog = this.state.ui.cabinetRackDialog;
+            if (!dialog || !key) return;
+            dialog[key] = value;
           }
 
           closeCabinetRackDialog() {
@@ -20541,6 +20819,13 @@
 
           confirmCabinetRackAction(label) {
             const dialog = this.state.ui.cabinetRackDialog;
+            if (dialog?.mode === "new") {
+              document.querySelectorAll('[data-role="cabinet-rack-new-field"]').forEach((field) => {
+                const key = field.getAttribute("data-field");
+                if (!key || !("value" in field)) return;
+                dialog[key] = typeof field.value === "string" ? field.value.trim() : field.value;
+              });
+            }
             const unitText = dialog?.unit ? "第" + dialog.unit + "U位" : "当前U位";
             const selectedDevice = dialog?.selectedDeviceId ? this.getRowById(VIEW_IDS.IT_FACILITY, dialog.selectedDeviceId) : null;
             const deviceText = selectedDevice?.name || dialog?.deviceName || dialog?.deviceCode || "当前设备";
@@ -20548,10 +20833,42 @@
             const cabinetRow = detailPage?.viewId === VIEW_IDS.CABINET ? this.getRowById(VIEW_IDS.CABINET, detailPage.rowId) : null;
             const action = dialog?.mode === "offShelf" ? "下架" : dialog?.mode === "retire" ? "迁出" : "上架";
             const asset = selectedDevice || {
-              name: dialog?.deviceName || (dialog?.mode === "new" ? "新建机架式服务器" : ""),
-              assetCode: dialog?.deviceCode || "",
-              uHeight: dialog?.uHeight || "1"
+              name: dialog?.name || dialog?.deviceName || "",
+              assetCode: dialog?.assetCode || dialog?.deviceCode || "",
+              assetCategory: dialog?.assetCategory || "",
+              uHeight: dialog?.uHeight || "",
+              portCount: dialog?.portCount || "",
+              description: dialog?.description || ""
             };
+            if (action === "上架" && dialog?.processDriven) {
+              if (!selectedDevice && [asset.assetCode, asset.name, asset.assetCategory, asset.uHeight].some((value) => !String(value || "").trim())) {
+                this.pushToast("请完善设备信息", "进入上架流程前，请填写资产编号、名称、资产分类和U高。", "warning");
+                return;
+              }
+              const config = this.getProcessFlowActivity(VIEW_IDS.IT_FACILITY, "上架");
+              if (config && this.isProcessFlowEnabled(config.activity.flowViewId)) {
+                this.startProcessRoute({
+                  sourceViewId: VIEW_IDS.IT_FACILITY,
+                  flowViewId: config.activity.flowViewId,
+                  groupLabel: config.group.label,
+                  activityLabel: "上架",
+                  selectedRowIds: selectedDevice?.id ? [selectedDevice.id] : [],
+                  entrySource: "cabinetDetail",
+                  cabinetContext: {
+                    cabinetId: cabinetRow?.id || "",
+                    cabinetName: cabinetRow?.name || cabinetRow?.assetCode || "当前机柜",
+                    cabinetLocation: cabinetRow?.assetLocation || "",
+                    unit: dialog?.unit || dialog?.startU || "",
+                    uHeight: asset.uHeight || "1",
+                    deviceId: selectedDevice?.id || "",
+                    deviceCode: asset.assetCode || "",
+                    deviceName: asset.name || "",
+                    deviceDraft: { ...asset }
+                  }
+                });
+                return;
+              }
+            }
             const result = this.applyItAssetLifecycleResult(action, asset, {
               cabinetId: cabinetRow?.id || "",
               cabinetName: cabinetRow?.name || cabinetRow?.assetCode || "当前机柜",
@@ -22300,7 +22617,7 @@
               historyRange,
               historyRanges: ["全部", "近7日", "近10日", "近15日"],
               historyFilters,
-              historyActions: ["全部", "添加资产", "初始化", "入库", "上架", "部署", "变动", "下架", "回库", "编辑", "迁出", "报废"],
+            historyActions: ["全部", "创建设备", "初始化", "入库", "上架", "部署", "变动", "下架", "回库", "编辑", "迁出", "报废"],
               historySources: ["全部", "空间视图", "资产台账", "流程工单"],
               historyEntries,
               relatedWorkOrders,
@@ -22982,6 +23299,7 @@
               id: "ITRK20260714" + pad(inbound.orders.length + 1, 4),
               name: getField("itInboundName", IT_INBOUND_FORM_SCENARIO.name),
               creator: IT_INBOUND_FORM_SCENARIO.creator,
+              initiatedByMe: true,
               createdAt: now,
               status: "待审核",
               approver: getField("itInboundApprover", IT_INBOUND_FORM_SCENARIO.approver),
@@ -22991,9 +23309,9 @@
             };
             inbound.orders.unshift(order);
             inbound.tab = "mine";
-            inbound.mode = returnContext?.viewId ? "list" : "process";
-            inbound.activeId = returnContext?.viewId ? "" : order.id;
-            inbound.readonly = !returnContext?.viewId;
+            inbound.mode = "list";
+            inbound.activeId = "";
+            inbound.readonly = false;
             inbound.returnContext = null;
             inbound.draftAssets = [];
             if (returnContext?.viewId) {
@@ -23009,7 +23327,7 @@
               demandVersion: "v1.3",
               demandReqId: "V3R5-4997",
               demandTitle: "流程申请提交结果",
-              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后以单行提示明确反馈申请结果，并提供流程单追溯入口。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后展示；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因并保留当前页面。",
+              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后自动关闭当前流程单页面，并以单行提示反馈申请结果。||列表联动：新生成的流程单立即写入“我发起的”页签并展示在列表首行。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后关闭页面；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因。",
               durationMs: 6000
             });
             this.emit();
@@ -23158,6 +23476,26 @@
             return config ? Boolean(this.state.ui.processConfig?.[config.group.id]?.[config.activity.key]) : false;
           }
 
+          ensureProcessConfigDraft() {
+            if (!this.state.ui.processConfigDraft) {
+              this.state.ui.processConfigDraft = JSON.parse(JSON.stringify(this.state.ui.processConfig || {}));
+            }
+            return this.state.ui.processConfigDraft;
+          }
+
+          isProcessFlowDraftEnabled(flowViewId) {
+            const config = this.getProcessFlowActivityByFlowView(flowViewId);
+            const draft = this.ensureProcessConfigDraft();
+            return config ? Boolean(draft?.[config.group.id]?.[config.activity.key]) : false;
+          }
+
+          hasUnsavedProcessConfig() {
+            const draft = this.ensureProcessConfigDraft();
+            return PROCESS_FLOW_GROUPS.some((group) => group.activities.some((activity) => (
+              Boolean(this.state.ui.processConfig?.[group.id]?.[activity.key]) !== Boolean(draft?.[group.id]?.[activity.key])
+            )));
+          }
+
           isWorkflowMenuVisible(viewId) {
             return !PROCESS_FLOW_VIEW_IDS.has(viewId) || this.isProcessFlowEnabled(viewId);
           }
@@ -23179,90 +23517,135 @@
           }
 
           saveProcessConfig() {
-            this.state.ui.processConfigSavedAt = new Date().toISOString();
-            this.pushToast("保存成功", "当前表单流程配置已保存并生效。", "success");
-          }
-
-          toggleAllProcessFlows() {
-            const activities = PROCESS_FLOW_GROUPS.flatMap((group) => group.activities.map((activity) => ({ group, activity })));
-            const allEnabled = activities.every(({ activity }) => this.isProcessFlowEnabled(activity.flowViewId));
-            if (!allEnabled) {
-              activities.forEach(({ group, activity }) => {
-                const config = this.state.ui.processConfig[group.id] || (this.state.ui.processConfig[group.id] = {});
-                config[activity.key] = true;
-              });
-              this.pushToast("流程已统一开启", "IT设备和场地设施的全部可配置活动将通过流程单办理。", "success");
-              this.emit();
+            const draft = this.ensureProcessConfigDraft();
+            if (!this.hasUnsavedProcessConfig()) {
+              this.pushToast("无需保存", "当前没有未保存的流程配置修改。", "info");
               return;
             }
-            const blockers = activities.map(({ group, activity }) => {
+            const blockers = PROCESS_FLOW_GROUPS.flatMap((group) => group.activities.map((activity) => {
+              const appliedEnabled = Boolean(this.state.ui.processConfig?.[group.id]?.[activity.key]);
+              const draftEnabled = Boolean(draft?.[group.id]?.[activity.key]);
+              if (!appliedEnabled || draftEnabled) return null;
               const count = this.getProcessFlowUnfinishedOrders(activity.flowViewId).length;
               return count ? { groupId: group.id, groupLabel: group.label, activityKey: activity.key, activityLabel: activity.label, flowViewId: activity.flowViewId, count } : null;
-            }).filter(Boolean);
+            }).filter(Boolean));
             if (blockers.length) {
               this.state.ui.processCloseDialog = {
                 bulk: true,
+                saveConfig: true,
                 count: blockers.reduce((total, item) => total + item.count, 0),
                 items: blockers
               };
               this.emit();
               return;
             }
+            this.state.ui.processConfig = JSON.parse(JSON.stringify(draft));
+            this.state.ui.processConfigDraft = JSON.parse(JSON.stringify(draft));
+            this.state.ui.processConfigSavedAt = new Date().toISOString();
+            this.pushToast("保存成功", "当前表单流程配置已保存并生效。", "success");
+          }
+
+          toggleAllProcessFlows() {
+            const activities = PROCESS_FLOW_GROUPS.flatMap((group) => group.activities.map((activity) => ({ group, activity })));
+            const allEnabled = activities.every(({ activity }) => this.isProcessFlowDraftEnabled(activity.flowViewId));
+            if (allEnabled) {
+              const blockers = activities.map(({ group, activity }) => {
+                const count = this.getProcessFlowUnfinishedOrders(activity.flowViewId).length;
+                return count ? { groupId: group.id, groupLabel: group.label, activityKey: activity.key, activityLabel: activity.label, flowViewId: activity.flowViewId, count } : null;
+              }).filter(Boolean);
+              if (blockers.length) {
+                this.state.ui.processCloseDialog = {
+                  bulk: true,
+                  scopeLabel: "全部流程",
+                  count: blockers.reduce((total, item) => total + item.count, 0),
+                  items: blockers,
+                  page: 1
+                };
+                this.emit();
+                return;
+              }
+            }
+            const draft = this.ensureProcessConfigDraft();
             activities.forEach(({ group, activity }) => {
-              const config = this.state.ui.processConfig[group.id] || (this.state.ui.processConfig[group.id] = {});
-              config[activity.key] = false;
+              const config = draft[group.id] || (draft[group.id] = {});
+              config[activity.key] = !allEnabled;
             });
-            this.pushToast("流程已统一关闭", "IT设备和场地设施的全部活动将从台账直接办理。", "success");
             this.emit();
           }
 
           openExternalProcessFormDesign(flowViewId) {
             const config = this.getProcessFlowActivityByFlowView(flowViewId);
             if (!config) return;
-            const formName = `${config.group.label}${config.activity.label}流程表单`;
-            const externalFormDesignUrl = "";
-            if (externalFormDesignUrl) {
-              const url = new URL(externalFormDesignUrl, window.location.href);
-              url.searchParams.set("flowViewId", flowViewId);
-              url.searchParams.set("formName", formName);
-              window.open(url.toString(), "_blank", "noopener");
-              return;
+            this.pushToast(
+              `${config.group.label}${config.activity.label}表单设计`,
+              "跳转至“业务配置-应用”对应入口，通过新标签页打开的方式",
+              "info",
+              { durationMs: 5000 }
+            );
+          }
+
+          toggleProcessGroup(groupId) {
+            const group = PROCESS_FLOW_GROUPS.find((item) => item.id === groupId);
+            if (!group) return;
+            const allEnabled = group.activities.every((activity) => this.isProcessFlowDraftEnabled(activity.flowViewId));
+            if (allEnabled) {
+              const blockers = group.activities.map((activity) => {
+                const count = this.getProcessFlowUnfinishedOrders(activity.flowViewId).length;
+                return count ? { groupId: group.id, groupLabel: group.label, activityKey: activity.key, activityLabel: activity.label, flowViewId: activity.flowViewId, count } : null;
+              }).filter(Boolean);
+              if (blockers.length) {
+                this.state.ui.processCloseDialog = {
+                  bulk: true,
+                  scopeLabel: group.label,
+                  count: blockers.reduce((total, item) => total + item.count, 0),
+                  items: blockers,
+                  page: 1
+                };
+                this.emit();
+                return;
+              }
             }
-            const openedWindow = window.open("", "_blank");
-            if (!openedWindow) {
-              this.pushToast("无法打开表单设计", "浏览器阻止了新窗口，请允许弹出窗口后重试。", "error");
-              return;
-            }
-            openedWindow.opener = null;
-            openedWindow.document.write(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(formName)} - 外部表单设计</title><style>body{margin:0;background:#f4f7fb;color:#23415f;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}.top{height:52px;padding:0 24px;background:#1764d7;color:#fff;display:flex;align-items:center;font-weight:700}.wrap{max-width:960px;margin:36px auto;padding:0 20px}.card{padding:28px;border:1px solid #dce6f1;border-radius:8px;background:#fff;box-shadow:0 8px 28px rgba(34,67,101,.08)}h1{margin:0 0 8px;font-size:20px}.meta{color:#6f8499;font-size:13px}.notice{margin-top:24px;padding:14px 16px;border-left:3px solid #2f7ee6;background:#f3f8ff;line-height:1.7;font-size:13px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}.field{padding:14px;border:1px dashed #cbd9e8;background:#fbfdff;font-size:13px}</style></head><body><div class="top">外部表单设计模块（原型）</div><main class="wrap"><section class="card"><h1>${escapeHtml(formName)}</h1><div class="meta">来源：R5资产管理 / 表单流程配置　·　流程标识：${escapeHtml(flowViewId)}</div><div class="notice">已从表单流程配置打开对应表单设计。真实系统接入时，将该原型跳转地址替换为外部表单模块地址，并携带流程标识与表单标识。</div><div class="fields"><div class="field">基本信息区</div><div class="field">流程参与人配置</div><div class="field">资产明细区</div><div class="field">审批意见与附件</div></div></section></main></body></html>`);
-            openedWindow.document.close();
-            this.pushToast("已打开表单设计", `${formName} 已在新标签页打开。`, "success");
+            const draft = this.ensureProcessConfigDraft();
+            const config = draft[group.id] || (draft[group.id] = {});
+            group.activities.forEach((activity) => { config[activity.key] = !allEnabled; });
+            this.emit();
           }
 
           toggleProcessFlow(groupId, activityKey) {
             const group = PROCESS_FLOW_GROUPS.find((item) => item.id === groupId);
             const activity = group?.activities.find((item) => item.key === activityKey);
             if (!group || !activity) return;
-            const config = this.state.ui.processConfig[groupId] || (this.state.ui.processConfig[groupId] = {});
-            if (!config[activityKey]) {
-              config[activityKey] = true;
-              this.pushToast("流程已启用", `${group.label}${activity.label}将通过流程单办理。`, "success");
-              this.emit();
-              return;
+            const draft = this.ensureProcessConfigDraft();
+            const config = draft[groupId] || (draft[groupId] = {});
+            const nextEnabled = !Boolean(config[activityKey]);
+            if (!nextEnabled) {
+              const unfinishedOrders = this.getProcessFlowUnfinishedOrders(activity.flowViewId);
+              if (unfinishedOrders.length) {
+                this.state.ui.processCloseDialog = {
+                  bulk: false,
+                  groupLabel: group.label,
+                  activityLabel: activity.label,
+                  flowViewId: activity.flowViewId,
+                  count: unfinishedOrders.length,
+                  page: 1
+                };
+                this.emit();
+                return;
+              }
             }
-            const unfinished = this.getProcessFlowUnfinishedOrders(activity.flowViewId);
-            if (unfinished.length) {
-              this.state.ui.processCloseDialog = { groupId, activityKey, flowViewId: activity.flowViewId, groupLabel: group.label, activityLabel: activity.label, count: unfinished.length };
-              this.emit();
-              return;
-            }
-            config[activityKey] = false;
-            this.pushToast("流程已关闭", `${group.label}${activity.label}将从台账直接办理。`, "success");
+            config[activityKey] = nextEnabled;
             this.emit();
           }
 
           closeProcessCloseDialog() {
             this.state.ui.processCloseDialog = null;
+            this.emit();
+          }
+
+          setProcessCloseDialogPage(page) {
+            const dialog = this.state.ui.processCloseDialog;
+            if (!dialog) return;
+            dialog.page = Math.max(1, Number(page) || 1);
             this.emit();
           }
 
@@ -23287,6 +23670,14 @@
             this.state.ui.currentView = flowViewId;
             this.state.ui.processCloseDialog = null;
             this.emit();
+          }
+
+          openProcessOrdersInNewTab(flowViewId) {
+            if (!flowViewId || !PROCESS_FLOW_VIEW_IDS.has(flowViewId)) return;
+            const targetUrl = new URL(window.location.href);
+            targetUrl.searchParams.set("prototypeView", flowViewId);
+            targetUrl.searchParams.set("prototypeTab", "all");
+            window.open(targetUrl.toString(), "_blank", "noopener");
           }
 
           toggleAssetActivityMenu(viewId) {
@@ -23520,7 +23911,15 @@
                 serialCode: row.serialCode || "",
                 serialNumber: row.serialNumber || ""
               }));
-              if (!draftRows.length && cabinetContext?.deviceCode) {
+              if (!draftRows.length && cabinetContext?.deviceDraft) {
+                draftRows = [{
+                  ...this.buildItAssetWorkflowAsset(config, 0),
+                  ...cabinetContext.deviceDraft,
+                  name: cabinetContext.deviceDraft.name || cabinetContext.deviceName || "",
+                  assetCode: cabinetContext.deviceDraft.assetCode || cabinetContext.deviceCode || "",
+                  assetType: cabinetContext.deviceDraft.assetCategory || ""
+                }];
+              } else if (!draftRows.length && cabinetContext?.deviceCode) {
                 draftRows = [{
                   ...this.buildItAssetWorkflowAsset(config, 0),
                   name: cabinetContext.deviceName || "",
@@ -23551,7 +23950,8 @@
                   cabinetName: cabinetContext.cabinetName,
                   unit: cabinetContext.unit,
                   uHeight: cabinetContext.uHeight,
-                  activityLabel: dialog.activityLabel
+                  activityLabel: dialog.activityLabel,
+                  assetRowsLocked: dialog.activityLabel === "上架"
                 };
               }
               workflow.draftAssets = draftRows;
@@ -23753,6 +24153,7 @@
               id: config.codePrefix + "20260714" + String(sequence).padStart(4, "0"),
               name: String(nameInput?.value || config.defaultName).trim() || config.defaultName,
               creator: scenario.creator || "系统管理员",
+              initiatedByMe: true,
               createdAt: "2026-07-14 12:00:00",
               status: "待审核",
               approver: String(approverInput?.value || scenario.approver || "资产管理员"),
@@ -23767,16 +24168,12 @@
             workflow.tab = "mine";
             workflow.sourceContext = null;
             workflow.returnContext = null;
+            workflow.mode = "list";
+            workflow.activeId = "";
+            workflow.readonly = false;
             if (returnContext?.viewId) {
-              workflow.mode = "list";
-              workflow.activeId = "";
-              workflow.readonly = false;
               this.state.ui.currentView = returnContext.viewId;
               this.state.ui.detailPage = returnContext.detailPage || null;
-            } else {
-              workflow.mode = "process";
-              workflow.activeId = order.id;
-              workflow.readonly = true;
             }
             this.pushToast("申请已提交", `单号：${order.id}`, "success", {
               action: "open-submitted-it-asset-workflow",
@@ -23788,7 +24185,7 @@
               demandVersion: "v1.3",
               demandReqId: "V3R5-4997",
               demandTitle: "流程申请提交结果",
-              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后以单行提示明确反馈申请结果，并提供流程单追溯入口。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后展示；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因并保留当前页面。",
+              demandText: "需求来源：V3R5-4997。||交互目的：提交成功后自动关闭当前流程单页面，并以单行提示反馈申请结果。||列表联动：新生成的流程单立即写入“我发起的”页签并展示在列表首行。||展示规则：单行展示“申请已提交，单号：XXXX”和“查看申请”，支持手动关闭。||点击后行为：点击“查看申请”进入对应流程单详情。||状态限制：仅申请创建成功后关闭页面；提交失败时保留当前页面及已填写内容。||异常判断：流程单不存在或无法打开时，应提示具体原因。",
               durationMs: 6000
             });
             this.emit();
@@ -26816,6 +27213,44 @@
             this.emit();
           }
 
+          getLabelBoundFields() {
+            const config = this.state.ui.labelConfig;
+            if (!Array.isArray(config.boundFields)) {
+              config.boundFields = [
+                { field: "资产编号", fontSize: 14, hideTitle: true },
+                { field: "名称", fontSize: 14, hideTitle: true }
+              ];
+            }
+            return config.boundFields;
+          }
+
+          addLabelBoundField() {
+            const fields = this.getLabelBoundFields();
+            const options = ["资产编号", "名称", "资产分类", "资产位置", "序列号", "品牌", "型号"];
+            const nextField = options.find((item) => !fields.some((field) => field.field === item));
+            if (!nextField) {
+              this.pushToast("无法新增字段", "当前可配置字段已全部添加。", "warning");
+              return;
+            }
+            fields.push({ field: nextField, fontSize: 14, hideTitle: false });
+            this.emit();
+          }
+
+          updateLabelBoundField(index, key, value) {
+            const fields = this.getLabelBoundFields();
+            const item = fields[index];
+            if (!item) return;
+            item[key] = key === "fontSize" ? Math.min(36, Math.max(8, Number(value) || 14)) : value;
+            this.emit();
+          }
+
+          removeLabelBoundField(index) {
+            const fields = this.getLabelBoundFields();
+            if (!fields[index]) return;
+            fields.splice(index, 1);
+            this.emit();
+          }
+
           uploadLogo() {
             this.pushToast("上传入口已触发", "原型中未接入真实文件上传，已模拟打开 Logo 上传区域。", "info");
           }
@@ -28226,7 +28661,7 @@
 
           renderTopbar(state) {
             const demandScope = state.ui.demandExplainEnabled ? (state.ui.versionRequirementFilter || "all") : "off";
-            const demandVersionOptions = ["all", ...new Set(VERSION_REQUIREMENTS.map((item) => item.version))];
+            const demandVersionOptions = ["all", ...sortRequirementVersions(new Set(VERSION_REQUIREMENTS.map((item) => item.version)))];
             const getDemandScopeLabel = (version) => version === "all" ? "全部版本" : version;
             return `
               <div class="topbar-left">
@@ -28717,7 +29152,7 @@
 
           renderVersionRequirementsPage(state) {
             const activeVersion = state.ui.versionRequirementFilter || "all";
-            const versions = [...new Set(VERSION_REQUIREMENTS.map((item) => item.version))];
+            const versions = sortRequirementVersions(new Set(VERSION_REQUIREMENTS.map((item) => item.version)));
             const visibleItems = activeVersion === "all"
               ? VERSION_REQUIREMENTS
               : VERSION_REQUIREMENTS.filter((item) => item.version === activeVersion);
@@ -28821,14 +29256,15 @@
               "v1.1": "支持主从设备、IT设备初始化及电子表格优化",
               "v1.2": "易用性需求优化",
               "v1.3": "拓展资产可视化能力+移动端",
-              "v1.4": "管理流程拓展及权限审计精细化"
+              "v1.4": "管理流程拓展及权限审计精细化",
+              "v1.5": "移动端能力升级及资产配置体验优化"
             };
             return goals[version] || "版本需求规格范围";
           }
 
           renderRequirementSpecPage(state) {
             const activeVersion = state.ui.versionRequirementFilter || "all";
-            const versions = [...new Set(VERSION_REQUIREMENTS.map((item) => item.version))];
+            const versions = sortRequirementVersions(new Set(VERSION_REQUIREMENTS.map((item) => item.version)));
             const visibleItems = activeVersion === "all"
               ? VERSION_REQUIREMENTS
               : VERSION_REQUIREMENTS.filter((item) => item.version === activeVersion);
@@ -28965,8 +29401,10 @@
                 </div>
                 <div class="tabs">
                   ${detail.tabs.map((tab) => {
-                    const demandAttrs = tab.id === "position" && detail.viewId === VIEW_IDS.STATION_FACILITY
-                      ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施及备件位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施及备件详情位置信息页签不展示机柜/U位图，改为展示所属空间、当前设备和同空间设备。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同空间设备支持搜索并可点击名称查看详情。||状态限制：仅作用于场地设施及备件详情，机柜和IT设备仍按各自位置模型展示。"'
+                    const demandAttrs = tab.id === "contains" && detail.viewId === VIEW_IDS.CABINET
+                      ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜详情包含设备优先展示" data-demand-text="需求来源：V3R5-4419。||交互目的：从机柜空间视图进入详情后，优先查看机柜内设备与U位资源情况。||展示规则：机柜详情将“包含设备”页签固定在首位，并作为进入机柜详情后的默认页签；页面展示设备明细、U位占用、预占U位及剩余可分配容量。||联动规则：设备数量、U位数据与机柜空间视图保持一致；从详情返回时恢复原空间节点、卡片或列表展示方式及查询条件。||范围限制：仅调整机柜详情页签，IT设备、场地设施和备件详情页签顺序不受影响。||异常判断：机柜内无设备时仍保留页签和容量信息，并展示设备列表空态。"'
+                      : tab.id === "position" && detail.viewId === VIEW_IDS.STATION_FACILITY
+                        ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施及备件位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施及备件详情位置信息页签不展示机柜/U位图，改为展示所属空间、当前设备和同空间设备。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同空间设备支持搜索并可点击名称查看详情。||状态限制：仅作用于场地设施及备件详情，机柜和IT设备仍按各自位置模型展示。"'
                       : tab.id === "relation"
                         ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                         : tab.id === "history"
@@ -28997,7 +29435,7 @@
             const orders = inbound.onlyUnfinished ? (inbound.orders || []).filter((item) => !terminalStatuses.has(item.status)) : (inbound.orders || []);
             const tabRows = inbound.tab === "pending" ? orders.filter((item) => !terminalStatuses.has(item.status))
               : inbound.tab === "processed" ? orders.filter((item) => item.status === "已完成" || item.status === "已拒绝")
-              : inbound.tab === "mine" ? orders.filter((item) => item.creator === "系统管理员")
+              : inbound.tab === "mine" ? orders.filter((item) => item.initiatedByMe || item.creator === "系统管理员")
               : inbound.tab === "cc" || inbound.tab === "draft" ? []
               : inbound.tab === "department" || inbound.tab === "shift" ? orders.filter((item) => item.status !== "已拒绝")
               : orders;
@@ -29103,7 +29541,7 @@
             };
           }
 
-          renderItWorkflowSheet(action, assets = [], editable = false, inputIds = {}, allowManualRows = false) {
+          renderItWorkflowSheet(action, assets = [], editable = false, inputIds = {}, allowManualRows = false, lockedRows = false) {
             const columns = this.getItWorkflowSheetColumns(action);
             const readonlyColumnKeys = this.getItWorkflowReadonlyColumnKeys(action, columns);
             const records = (assets.length ? assets : [{}]).map((asset, index) => this.mapItWorkflowSheetAsset(action, asset, index));
@@ -29140,9 +29578,9 @@
                 : `<td title="${escapeHtml(value)}">${escapeHtml(value || "—")}</td>`;
             };
             const isFullyReadonly = editable && columns.length > 0 && columns.every((column) => readonlyColumnKeys.has(column.key));
-            const dataRows = records.map((record, rowIndex) => `<tr class="${isFullyReadonly ? "is-readonly-row" : ""}"><th scope="row">${rowIndex + 1}</th>${columns.map((column) => renderCell(column, record, rowIndex)).join("")}</tr>`).join("");
+            const dataRows = records.map((record, rowIndex) => `<tr class="${lockedRows || isFullyReadonly ? "is-readonly-row" : ""}${lockedRows ? " is-source-locked-row" : ""}"><th scope="row">${rowIndex + 1}</th>${columns.map((column) => renderCell(column, record, rowIndex)).join("")}</tr>`).join("");
             const blankRows = Array.from({ length: rowCount - records.length }, (_, index) => `<tr class="${allowManualRows && editable ? "is-editable-blank-row" : "is-placeholder-row"}"><th scope="row">${records.length + index + 1}</th>${columns.map(() => allowManualRows && editable ? '<td><input class="workflow-sheet-input" value="" /></td>' : '<td>&nbsp;</td>').join("")}</tr>`).join("");
-            const sheetClass = ` is-ledger-workflow-sheet ${allowManualRows ? "is-manual-row-sheet" : "is-fixed-row-sheet"}`;
+            const sheetClass = ` is-ledger-workflow-sheet ${allowManualRows ? "is-manual-row-sheet" : "is-fixed-row-sheet"}${lockedRows ? " is-source-locked-sheet" : ""}`;
             const fieldLabels = columns.map((column) => `<td><span class="workflow-sheet-field-label${column.required ? " is-required" : ""}">${column.required ? "*" : ""}${escapeHtml(column.label)}</span></td>`).join("");
             return `<div class="operation-sheet-shell workflow-sheet-shell${sheetClass}"><div class="operation-sheet-wrap"><table class="operation-sheet-table"><colgroup><col class="row-index" />${columnGroup}</colgroup><thead><tr><th class="sheet-corner"></th>${columns.map((column) => `<th>${column.letter}</th>`).join("")}</tr></thead><tbody><tr class="field-row"><th></th>${fieldLabels}</tr>${dataRows}${blankRows}</tbody></table></div><div class="operation-sheet-footer"><div class="operation-zoom"><button type="button" aria-label="缩小">−</button><div class="operation-zoom-bar" aria-hidden="true"></div><button type="button" aria-label="放大">+</button><span>100%</span></div></div></div>`;
           }
@@ -29175,7 +29613,7 @@
             const sourceOrders = workflow.onlyUnfinished ? workflow.orders.filter((item) => !terminalStatuses.has(item.status)) : workflow.orders;
             const tabRows = workflow.tab === "pending" ? sourceOrders.filter((item) => !terminalStatuses.has(item.status))
               : workflow.tab === "processed" ? sourceOrders.filter((item) => item.status === "已完成" || item.status === "已拒绝")
-              : workflow.tab === "mine" ? sourceOrders.filter((item) => item.creator === "系统管理员")
+              : workflow.tab === "mine" ? sourceOrders.filter((item) => item.initiatedByMe || item.creator === "系统管理员")
               : workflow.tab === "cc" || workflow.tab === "draft" ? []
               : sourceOrders;
             const rows = keyword ? tabRows.filter((item) => [item.id, item.name, item.creator, item.status].join(" ").toLowerCase().includes(keyword)) : tabRows;
@@ -29183,12 +29621,12 @@
             return `<div class="page-surface inbound-list-page"><div class="inbound-list-head"><h1>${escapeHtml(config.title)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-it-asset-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="it-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" aria-label="搜索${escapeHtml(config.orderLabel)}" /></label><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="快捷查询">快捷查询</button><span style="flex:1 1 auto;"></span><div class="inbound-toolbar-actions">${this.store.isProcessFlowEnabled(viewId) ? `<button class="btn btn-primary" type="button" data-action="open-it-asset-workflow-form" data-view="${escapeHtml(viewId)}">新建</button>` : ""}<button class="btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="导出">导出</button></div></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th style="width:48px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:220px;">${escapeHtml(config.orderLabel)}号</th><th>${escapeHtml(config.orderLabel)}名称</th><th style="width:150px;">创建人</th><th style="width:210px;">创建时间</th><th style="width:130px;">状态</th><th style="width:150px;">操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td title="${escapeHtml(order.name)}">${escapeHtml(order.name)}</td><td>${escapeHtml(order.creator)}</td><td>${escapeHtml(order.createdAt)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td><button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" && !terminalStatuses.has(order.status) ? `<button class="inbound-link-btn" type="button" data-action="open-it-asset-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="8" style="height:180px;text-align:center;color:#91a3b5;">暂无${keyword ? "匹配" : ""}${escapeHtml(config.orderLabel)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
           }
 
-          renderItAssetWorkflowAssetTable(config, assets, editable = false) {
+          renderItAssetWorkflowAssetTable(config, assets, editable = false, lockedRows = false) {
             const actionByKey = { rack: "上架", change: "变动", offShelf: "下架", edit: "编辑", moveOut: "迁出" };
             const action = config.assetKind === "station"
               ? (config.action === "入库" ? "场地入库" : config.action === "编辑" ? "场地编辑" : config.action === "变动" ? "场地变动" : config.action)
               : (actionByKey[config.key] || "编辑");
-            return this.renderItWorkflowSheet(action, assets, editable, {}, Boolean(config.allowManualRows));
+            return this.renderItWorkflowSheet(action, assets, editable, {}, Boolean(config.allowManualRows) && !lockedRows, lockedRows);
           }
           renderItAssetWorkflowForm(viewId, workflow, config) {
             const assets = this.store.getItAssetWorkflowDraftAssets(viewId);
@@ -29202,6 +29640,7 @@
             const formDescription = formScenario.description || config.title + "，提交后进入审核流程。";
             const actionByKey = { rack: "上架", change: "变动", offShelf: "下架", edit: "编辑", moveOut: "迁出" };
             const action = config.assetKind === "station" ? config.action : (actionByKey[config.key] || "编辑");
+            const isCabinetPrefilled = action === "上架" && workflow.sourceContext?.source === "机柜详情" && workflow.sourceContext?.assetRowsLocked;
             const toolbarActionsByAction = {
               "上架": [{ label: "上传本地文件", tone: "light" }, { label: "选择资产", tone: "primary" }],
               "变动": [{ label: "选择资产", tone: "primary" }],
@@ -29209,12 +29648,14 @@
               "编辑": [{ label: "选择资产", tone: "primary" }],
               "迁出": [{ label: "选择资产", tone: "primary" }]
             };
-            const toolbarActions = config.toolbarActions || toolbarActionsByAction[action] || [];
+            const toolbarActions = isCabinetPrefilled ? [] : (config.toolbarActions || toolbarActionsByAction[action] || []);
             const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions">${toolbarActions.map((item) => `<button class="btn ${item.tone === "primary" ? "btn-primary" : "btn-light"}" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(item.label)}">${escapeHtml(item.label)}</button>`).join("")}</div></div>`;
-            const rowModeTip = config.allowManualRows
+            const rowModeTip = isCabinetPrefilled
+              ? "资产信息已从机柜详情带入，不可修改"
+              : config.allowManualRows
               ? "支持直接填写空白行，也可通过选择资产或上传模板带入"
               : "资产行仅可通过“选择资产”或上传模板带入";
-            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-asset-workflow" data-view="${escapeHtml(viewId)}" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账流程提交结果" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从资产台账入口被引导至流程单并点击提交。||提交结果：申请创建成功后关闭当前流程单页面并返回来源台账，不停留在已提交表单。||结果反馈：界面顶部居中展示“申请已提交，单号：XXXX”，提示支持手动关闭；点击“查看申请”可进入对应流程单详情。||状态限制：仅台账来源的流程单提交后自动关闭；从流程菜单直接新建时仍停留在已提交申请详情。||异常判断：提交失败时保留当前流程单页面及已填写内容，并展示具体失败原因。">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(formCode)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(formCreator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(formCreatedAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itWorkflowApprover"><option>${escapeHtml(formApprover)}</option><option>李敏</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itWorkflowExecutor"><option>${escapeHtml(formExecutor)}</option><option>陈浩</option><option>赵磊</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input id="itWorkflowName" value="${escapeHtml(formName)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itWorkflowDescription">${escapeHtml(formDescription)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>${escapeHtml(config.assetSection)}</strong><span class="workflow-sheet-mode-tip">${escapeHtml(rowModeTip)}</span></div>${sheetToolbar}${this.renderItAssetWorkflowAssetTable(config, assets, true)}</section></div></div>`;
+            return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-asset-workflow" data-view="${escapeHtml(viewId)}" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账流程提交结果" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从资产台账入口被引导至流程单并点击提交。||提交结果：申请创建成功后关闭当前流程单页面并返回来源台账，不停留在已提交表单。||结果反馈：界面顶部居中展示“申请已提交，单号：XXXX”，提示支持手动关闭；点击“查看申请”可进入对应流程单详情。||状态限制：仅台账来源的流程单提交后自动关闭；从流程菜单直接新建时仍停留在已提交申请详情。||异常判断：提交失败时保留当前流程单页面及已填写内容，并展示具体失败原因。">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(formCode)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(formCreator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(formCreatedAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itWorkflowApprover"><option>${escapeHtml(formApprover)}</option><option>李敏</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itWorkflowExecutor"><option>${escapeHtml(formExecutor)}</option><option>陈浩</option><option>赵磊</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input id="itWorkflowName" value="${escapeHtml(formName)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itWorkflowDescription">${escapeHtml(formDescription)}</textarea></div></div></section><section class="inbound-section"${isCabinetPrefilled ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情带入资产锁定" data-demand-text="需求来源：V3R5-4997。||展示规则：从机柜详情选择或新建的设备信息自动带入上架流程单，资产明细行整体置灰且不可编辑。||入口限制：该来源下隐藏“上传本地文件”和“选择资产”按钮，设备变更需返回机柜详情重新选择或填写。||数据范围：同时带入当前机柜、开始U位及已确认的设备字段，流程单仅补充审核人、执行人和申请说明等流程信息。||异常判断：来源设备被删除、状态发生变化或目标U位冲突时，提交阶段应阻止操作并提示返回机柜详情重新办理。"' : ""}><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>${escapeHtml(config.assetSection)}</strong><span class="workflow-sheet-mode-tip">${escapeHtml(rowModeTip)}</span></div>${sheetToolbar}${this.renderItAssetWorkflowAssetTable(config, assets, !isCabinetPrefilled, isCabinetPrefilled)}</section></div></div>`;
           }
 
           renderItAssetWorkflowProcess(viewId, workflow, config) {
@@ -30125,7 +30566,7 @@
               </div>
             `;
             return `
-              <div class="cabinet-contains-layout" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情设备活动流程判断" data-demand-text="需求来源：V3R5-4997。||交互目的：机柜详情中的上架、下架、迁出入口与 IT设备台账使用同一套流程开关，避免从不同入口绕过审批。||入口文案：空闲U位入口统一显示“上架设备”。||判断规则：上架读取 IT设备上架流程开关，下架读取 IT设备下架流程开关，迁出读取 IT设备迁出流程开关。||流程开启：点击入口不再二次确认，直接进入全屏流程发起页，并自动带入当前机柜、目标U位或设备信息；通过右上角关闭按钮返回机柜详情。审核同意后进入待执行，只有点击“执行完成”才写回台账。||流程关闭：继续使用机柜详情现有直接办理弹窗，确认后立即更新资产数据。||数据结果：上架更新设备机柜与U位；下架清除机柜U位并更新IT设备台账位置和状态；迁出从IT设备台账移除并进入“已迁出/已废弃”。||范围限制：不为机柜资产本身新增流程，机柜和备件仍不纳入表单流程配置。">
+              <div class="cabinet-contains-layout" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情设备活动流程判断" data-demand-text="需求来源：V3R5-4997。||交互目的：机柜详情中的上架、下架、迁出入口与 IT设备台账使用同一套流程开关，避免从不同入口绕过审批。||入口文案：空闲U位入口统一显示“上架设备”。||判断规则：上架读取 IT设备上架流程开关，下架读取 IT设备下架流程开关，迁出读取 IT设备迁出流程开关。||上架流程开启：点击“上架设备”后先选择已有设备或填写新设备信息，确认后再进入全屏上架流程单；系统自动带入当前机柜、目标U位和设备信息，资产行置灰不可编辑，并隐藏再次导入或选择资产的入口。||其他流程开启：下架、迁出继续直接进入对应全屏流程发起页并带入当前设备信息；审核同意后进入待执行，只有点击“执行完成”才写回台账。||流程关闭：继续使用机柜详情现有直接办理弹窗，确认后立即更新资产数据。||数据结果：上架更新设备机柜与U位；下架清除机柜U位并更新IT设备台账位置和状态；迁出从IT设备台账移除并进入“已迁出/已废弃”。||范围限制：不为机柜资产本身新增流程，机柜和备件仍不纳入表单流程配置。">
                 <div class="cabinet-contains-side">
                   <div class="asset-rack cabinet-contains-rack">
                     <div class="rack-shell">
@@ -30142,10 +30583,10 @@
                           <div class="cabinet-mounted-layer">
                             ${mountedDevices.map(renderMountedDevice).join("")}
                           </div>
-                          <div class="cabinet-reserved-layer" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="机柜预占U位与流程追溯" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情“包含设备”页签中直观标识设备预占的U位范围，避免预占位置被重复分配。||展示规则：预占U位使用青色斜纹高亮并标注起始U位，与正式上架设备和空闲U位形成明确区分。||悬浮交互：鼠标悬停或键盘聚焦预占块时展示资产编号、资产名称、U位范围和来源流程单；鼠标移入信息卡时保持显示。||联动规则：流程单号支持点击进入对应的设备上架流程单详情。||状态流转：草稿不生成预占；流程提交后生成预占；执行完成后转为正式上架占用；流程驳回、取消或超期后释放预占U位。||异常判断：预占范围与正式占用或其他预占冲突、U位超出机柜高度、资产不存在、机柜失效或来源流程单状态异常时，不得绘制错误占位，并应给出明确提示。">
+                          <div class="cabinet-reserved-layer" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="机柜预占U位与流程追溯" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情“包含设备”页签中直观标识设备预占的U位范围，避免预占位置被重复分配。||展示规则：预占U位使用青色斜纹高亮，块内仅显示“预占”，不展示起始U位；与正式上架设备和空闲U位形成明确区分。||位置规则：预占块按照流程单中的起始U位和U高定位，必须与机柜左侧U位刻度准确对齐。||悬浮交互：鼠标悬停或键盘聚焦预占块时展示资产编号、资产名称、U位范围和来源流程单；鼠标移入信息卡时保持显示。||联动规则：流程单号支持点击进入对应的设备上架流程单详情。||异常判断：预占范围与正式占用或其他预占冲突、U位超出机柜高度、资产不存在、机柜失效或来源流程单状态异常时，不得绘制错误占位，并应给出明确提示。">
                             ${reservedDevices.map((device) => `
                               <div class="cabinet-reserved-device" tabindex="0" style="top:${escapeHtml(device.top)}%;height:calc(${escapeHtml(device.height)}% - 2px);" aria-label="预占设备，资产编号${escapeHtml(device.code)}，资产名称${escapeHtml(device.name)}，流程单${escapeHtml(device.orderNo)}">
-                                <span class="cabinet-reserved-label">预占 ${escapeHtml(String(device.start))}U</span>
+                                <span class="cabinet-reserved-label">预占</span>
                                 <span class="cabinet-mounted-tooltip" role="tooltip">
                                   <span>资产编号：${escapeHtml(device.code)}</span>
                                   <span>资产名称：${escapeHtml(device.name)}</span>
@@ -30155,6 +30596,7 @@
                               </div>
                             `).join("")}
                           </div>
+                          <span class="cabinet-operation-demand-anchor" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜图设备上架、下架与迁出" data-demand-text="需求来源：V3R5-4419。||交互目的：直接在机柜U位图中定位设备或空闲位置，并完成设备上架、下架和迁出操作。||上架交互：鼠标悬停可分配的空闲U位时显示“上架设备”；点击后带入当前机柜和开始U位，再选择已有设备或创建设备。||下架与迁出交互：鼠标悬停已上架设备时展示设备信息及“下架、迁出”入口，点击后带入当前设备、机柜和U位上下文。||数据联动：操作完成后同步更新机柜U位、包含设备列表和IT设备台账；迁出设备进入“已迁出/已废弃”。||状态限制：已占用、预占、空闲和禁用U位分别展示与状态匹配的操作，不允许从不匹配状态绕过限制。||异常判断：设备状态冲突、U位并发占用、连续空间不足或存在进行中的冲突业务时，应阻止操作并提示具体原因。"></span>
                         </div>
                       </div>
                       <div class="rack-feet" aria-hidden="true"></div>
@@ -30819,9 +31261,6 @@
                                 <span>U位使用</span>
                                 <strong>${usage.usedU}/${usage.height}（${percent}%）</strong>
                               </div>
-                              <div class="cabinet-usage-bar">
-                                <span class="cabinet-usage-fill" style="width:${percent}%"></span>
-                              </div>
                               <div class="cabinet-card-meta" title="${escapeHtml(row.assetLocation || "-")}">${escapeHtml(row.assetLocation || "-")}</div>
                               <div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>
                             </button>
@@ -31382,20 +31821,14 @@
             const enabledCount = PROCESS_FLOW_GROUPS.reduce((total, group) => total + group.activities.filter((activity) => this.store.isProcessFlowEnabled(activity.flowViewId)).length, 0);
             const totalCount = PROCESS_FLOW_GROUPS.reduce((total, group) => total + group.activities.length, 0);
             const unfinishedCount = PROCESS_FLOW_GROUPS.reduce((total, group) => total + group.activities.reduce((sum, activity) => sum + (this.store.isProcessFlowEnabled(activity.flowViewId) ? this.store.getProcessFlowUnfinishedOrders(activity.flowViewId).length : 0), 0), 0);
-            const configMode = state.ui.processConfigMode === "unified" ? "unified" : "itemized";
-            const allEnabled = enabledCount === totalCount;
-            const allDisabled = enabledCount === 0;
-            const unifiedState = allEnabled ? "全部开启" : allDisabled ? "全部关闭" : "部分开启";
+            const hasPendingChanges = this.store.hasUnsavedProcessConfig();
             return `
               <div class="page-surface process-config-page">
                 <div class="process-config-head">
-                  <div data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：按资产类型和业务活动配置是否通过流程单办理，同时保留台账统一资产活动入口。||展示规则：页面顶部标题、配置方式和统计卡片固定，仅下方活动配置内容区域滚动。||范围限制：仅覆盖 IT设备与场地设施；机柜、备件继续从台账直接办理。"><h1>表单流程配置</h1><p>配置 IT设备和场地设施的资产活动是否通过流程单办理。机柜、备件仍从台账直接办理。</p></div>
+                  <div data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：按资产类型和业务活动配置是否通过流程单办理，同时保留台账统一资产活动入口。||展示规则：页面顶部标题和统计卡片固定，仅下方活动配置内容区域滚动。||配置层级：每个资产模块支持整体开启或关闭，模块内业务活动支持分项配置。||生效规则：开关修改仅形成页面草稿，未保存前不影响台账办理方式和流程菜单；点击保存并校验通过后统一生效。||范围限制：仅覆盖 IT设备与场地设施；机柜、备件继续从台账直接办理。"><h1>表单流程配置</h1><p>配置 IT设备和场地设施的资产活动是否通过流程单办理。机柜、备件仍从台账直接办理。</p></div>
                   <div class="process-config-head-actions">
-                    <div class="process-config-mode" role="group" aria-label="表单流程配置方式" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="流程配置方式" data-demand-text="需求来源：V3R5-4997。||交互目的：支持管理员在统一配置和分项配置之间切换。||点击后行为：统一开启/关闭模式使用总开关控制全部可配置流程；分项开启/关闭模式允许逐个活动设置。||默认规则：首次进入默认选中分项开启/关闭，切换模式不直接修改已有流程状态。">
-                      <button class="${configMode === "unified" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="unified">统一开启/关闭</button>
-                      <button class="${configMode === "itemized" ? "is-active" : ""}" type="button" data-action="set-process-config-mode" data-mode="itemized">分项开启/关闭</button>
-                    </div>
-                    <button class="btn btn-primary" type="button" data-action="save-process-config" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="保存表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：保存管理员当前设置的流程启停配置。||点击后行为：保存当前统一或分项配置结果，并提示配置已保存生效。||校验规则：存在未完结流程单时，关闭动作仍需先完成对应流程单，不允许通过保存绕过关闭校验。">保存</button>
+                    <span class="process-config-save-state ${hasPendingChanges ? "is-dirty" : ""}">${hasPendingChanges ? "有未保存修改" : "配置已保存"}</span>
+                    <button class="btn btn-primary" type="button" data-action="save-process-config" ${hasPendingChanges ? "" : "disabled"} data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="保存表单流程配置" data-demand-text="需求来源：V3R5-4997。||交互目的：保存管理员当前设置的流程启停配置。||点击后行为：开关调整仅保存为页面草稿；点击保存后统一提交各模块整体开关及业务活动分项配置，并在校验通过后正式生效。||校验规则：保存时统一检查所有拟关闭流程；任一流程存在未完结单据时，本次配置整体不生效，并保留未保存修改。||状态反馈：存在修改时显示“有未保存修改”；保存成功后显示“配置已保存”。">保存</button>
                   </div>
                 </div>
                 <div class="process-config-summary">
@@ -31403,28 +31836,38 @@
                   <div class="process-config-summary-card"><span>已启用流程</span><strong>${enabledCount}</strong></div>
                   <div class="process-config-summary-card"><span>进行中流程单</span><strong>${unfinishedCount}</strong></div>
                 </div>
-                ${configMode === "unified" ? `
-                  <div class="process-config-unified" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="统一控制全部流程" data-demand-text="需求来源：V3R5-4997。||点击后行为：当前未全部开启时统一开启全部流程；全部开启时尝试统一关闭全部流程。||关闭校验：关闭前一次校验所有已启用流程；任一流程存在未完结单据时，本次统一关闭整体失败，不允许部分关闭。||异常处理：提示阻塞流程及未完结数量，并支持进入对应流程单列表。">
-                    <div class="process-config-unified-copy"><strong>统一控制全部资产流程</strong><span>一次开启或关闭 IT设备、场地设施的全部可配置流程；统一关闭前会校验所有未完结流程单。</span></div>
-                    <div class="process-config-unified-action"><span class="process-config-unified-state ${allEnabled ? "is-on" : !allDisabled ? "is-mixed" : ""}">${unifiedState}</span><button class="process-config-switch ${allEnabled ? "is-on" : ""}" type="button" data-action="toggle-all-process-flows" aria-label="${allEnabled ? "统一关闭全部流程" : "统一开启全部流程"}"></button></div>
-                  </div>
-                ` : ""}
                 <div class="process-config-scroll">
-                  ${PROCESS_FLOW_GROUPS.map((group, groupIndex) => `
+                  ${PROCESS_FLOW_GROUPS.map((group, groupIndex) => {
+                    const groupEnabledCount = group.activities.filter((activity) => this.store.isProcessFlowDraftEnabled(activity.flowViewId)).length;
+                    const groupAllEnabled = groupEnabledCount === group.activities.length;
+                    const groupAllDisabled = groupEnabledCount === 0;
+                    const groupState = groupAllEnabled ? "全部开启" : groupAllDisabled ? "全部关闭" : "部分开启";
+                    const groupHasPendingChanges = group.activities.some((activity) => this.store.isProcessFlowEnabled(activity.flowViewId) !== this.store.isProcessFlowDraftEnabled(activity.flowViewId));
+                    return `
                     <section class="process-config-group">
-                      <div class="process-config-group-head"><strong>${escapeHtml(group.label)}</strong><span>台账活动入口始终保留，系统按开关判断直接办理或流程办理</span></div>
+                      <div class="process-config-group-head">
+                        <strong>${escapeHtml(group.label)}</strong>
+                        <div class="process-config-group-actions">
+                          <span class="process-config-group-state ${groupAllEnabled ? "is-on" : !groupAllDisabled ? "is-mixed" : ""}">${groupState}</span>
+                          <span class="process-config-group-switch-wrap" ${groupIndex === 0 ? 'data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="模块整体流程开关" data-demand-text="需求来源：V3R5-4997。||交互目的：分别调整 IT设备或场地设施模块下的全部业务流程配置。||点击后行为：模块未全部开启时，一次选中该模块全部流程；模块全部开启时，一次取消该模块全部流程。||生效规则：模块整体开关仅修改页面草稿，点击保存并校验通过后才影响实际办理方式。||分项规则：模块整体开关不影响下方分项开关的可操作性，管理员可继续单独调整某项业务活动。"' : ""}>
+                            <button class="process-config-switch ${groupAllEnabled ? "is-on" : ""} ${groupHasPendingChanges ? "is-pending" : ""}" type="button" data-action="toggle-process-group" data-group="${escapeHtml(group.id)}" aria-label="${groupAllEnabled ? "整体关闭" : "整体开启"}${escapeHtml(group.label)}流程"></button>
+                          </span>
+                        </div>
+                      </div>
                       <table class="process-config-table">
-                        <thead><tr><th style="width:20%;">业务活动</th><th style="width:22%;">当前办理方式</th><th style="width:20%;">未完结流程单</th><th style="width:20%;" ${groupIndex === 0 ? 'data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="分项流程开关" data-demand-text="需求来源：V3R5-4997。||交互目的：按单个业务活动独立选择流程办理或台账直接办理。||点击后行为：开启后显示对应流程菜单并从台账入口引导发起流程；关闭后从台账直接进入作业表单。||关闭校验：存在未完结流程单时禁止关闭，并提供查看流程单入口。"' : ""}>启用流程</th><th style="width:18%;" ${groupIndex === 0 ? 'data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="外部表单设计" data-demand-text="需求来源：V3R5-4997。||交互目的：从业务活动配置快速进入对应流程表单设计。||点击后行为：在新标签页打开外部表单设计模块，并携带资产类型、业务活动、流程标识和表单标识。||异常处理：浏览器阻止新窗口或外部模块不可用时，需给出明确提示。"' : ""}>操作</th></tr></thead>
+                        <thead><tr><th style="width:20%;">业务活动</th><th style="width:22%;">当前办理方式</th><th style="width:20%;">未完结流程单</th><th style="width:20%;" ${groupIndex === 0 ? 'data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="分项流程开关" data-demand-text="需求来源：V3R5-4997。||交互目的：按单个业务活动独立调整流程办理配置。||点击后行为：开关仅修改页面草稿，并以橙色外框提示该项尚未保存。||生效规则：点击保存并校验通过后，开启项显示对应流程菜单并从台账入口引导发起流程；关闭项从台账直接进入作业表单。||关闭校验：保存时存在未完结流程单则本次配置整体不生效。"' : ""}>启用流程</th><th style="width:18%;" ${groupIndex === 0 ? 'data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="表单设计入口" data-demand-text="需求来源：V3R5-4997。||交互目的：说明当前业务活动对应表单的正式配置入口。||点击后行为：提示“跳转至业务配置-应用对应入口，通过新标签页打开的方式”；本原型不直接打开外部模块。||正式交互：系统接入业务配置模块后，应在新标签页打开对应应用的表单设计入口。"' : ""}>操作</th></tr></thead>
                         <tbody>
                           ${group.activities.map((activity) => {
-                            const enabled = this.store.isProcessFlowEnabled(activity.flowViewId);
-                            const unfinished = enabled ? this.store.getProcessFlowUnfinishedOrders(activity.flowViewId).length : 0;
-                            return `<tr><td><strong>${escapeHtml(activity.label)}</strong></td><td><span class="process-config-status ${enabled ? "is-on" : ""}">${enabled ? "流程办理" : "台账直接办理"}</span></td><td>${unfinished ? `<button class="operation-link" type="button" data-action="open-process-orders" data-flow-view="${escapeHtml(activity.flowViewId)}">${unfinished} 张</button>` : "0 张"}</td><td><button class="process-config-switch ${enabled ? "is-on" : ""}" type="button" data-action="toggle-process-flow" data-group="${escapeHtml(group.id)}" data-key="${escapeHtml(activity.key)}" aria-label="${enabled ? "关闭" : "启用"}${escapeHtml(group.label + activity.label)}流程" ${configMode === "unified" ? "disabled" : ""}></button></td><td><button class="process-config-form-link" type="button" data-action="open-external-form-design" data-flow-view="${escapeHtml(activity.flowViewId)}">表单设计 ↗</button></td></tr>`;
+                            const appliedEnabled = this.store.isProcessFlowEnabled(activity.flowViewId);
+                            const draftEnabled = this.store.isProcessFlowDraftEnabled(activity.flowViewId);
+                            const unfinished = appliedEnabled ? this.store.getProcessFlowUnfinishedOrders(activity.flowViewId).length : 0;
+                            const pending = appliedEnabled !== draftEnabled;
+                            return `<tr><td><strong>${escapeHtml(activity.label)}</strong></td><td><span class="process-config-status ${appliedEnabled ? "is-on" : ""}">${appliedEnabled ? "流程办理" : "台账直接办理"}</span></td><td>${unfinished ? `<button class="operation-link" type="button" data-action="open-process-orders" data-flow-view="${escapeHtml(activity.flowViewId)}">${unfinished} 张</button>` : "0 张"}</td><td><button class="process-config-switch ${draftEnabled ? "is-on" : ""} ${pending ? "is-pending" : ""}" type="button" data-action="toggle-process-flow" data-group="${escapeHtml(group.id)}" data-key="${escapeHtml(activity.key)}" aria-label="${draftEnabled ? "关闭" : "启用"}${escapeHtml(group.label + activity.label)}流程"></button></td><td><button class="process-config-form-link" type="button" data-action="open-external-form-design" data-flow-view="${escapeHtml(activity.flowViewId)}"><span>表单设计</span><span class="process-config-form-link-icon" aria-hidden="true">↗</span></button></td></tr>`;
                           }).join("")}
                         </tbody>
                       </table>
                     </section>
-                  `).join("")}
+                  `}).join("")}
                 </div>
               </div>
             `;
@@ -32383,15 +32826,6 @@
           renderDetailDesignHistoryPreview(previewModel) {
             const previewEntries = [
               {
-                time: "2026-06-04 15:09:02",
-                action: "编辑属性",
-                operator: "admin",
-                summary: "编辑属性",
-                changes: [
-                  { field: "资产流程状态", oldValue: "待上架", newValue: "空闲" }
-                ]
-              },
-              {
                 time: "2026-06-03 17:01:10",
                 action: "编辑属性",
                 operator: "admin",
@@ -32479,6 +32913,8 @@
 
           renderLabelConfig(state) {
             const currentTemplate = LABEL_TEMPLATES.find((item) => item.id === state.ui.labelConfig.activeTemplateId) || LABEL_TEMPLATES[0];
+            const boundFields = Array.isArray(state.ui.labelConfig.boundFields) ? state.ui.labelConfig.boundFields : [];
+            const labelFieldOptions = ["资产编号", "名称", "资产分类", "资产位置", "序列号", "品牌", "型号"];
             const previewWidth = Math.max(180, state.ui.labelConfig.width * 4.4);
             const previewHeight = Math.max(120, state.ui.labelConfig.height * 4.4);
             return `
@@ -32491,7 +32927,7 @@
                   <div class="label-side">
                     <div class="label-section">
                       <h4>当前使用标签</h4>
-                      ${this.renderLabelCard(currentTemplate, true, previewWidth > 260 ? "wide" : currentTemplate.variant)}
+                      ${this.renderLabelCard(currentTemplate, true, previewWidth > 260 ? "wide" : currentTemplate.variant, false, boundFields)}
                     </div>
                     <div class="label-section">
                       <h4>标签模板</h4>
@@ -32503,7 +32939,7 @@
                   <div class="label-stage">
                     <div class="label-stage-inner">
                       <div style="--preview-width:${previewWidth}px;--preview-height:${previewHeight}px;">
-                        ${this.renderLabelCard(currentTemplate, true, currentTemplate.variant, true)}
+                        ${this.renderLabelCard(currentTemplate, true, currentTemplate.variant, true, boundFields)}
                       </div>
                     </div>
                   </div>
@@ -32512,13 +32948,25 @@
                       <div class="settings-title">配置标签字段</div>
                       <div class="settings-body">
                         <div class="field-block">
-                          <span>标签样式</span>
-                          <div style="display:flex;gap:8px;align-items:center;">
-                            <select data-role="label-setting" data-field="bindField">
-                              ${["资产标签", "设备标签", "备件标签"].map((item) => `<option value="${escapeHtml(item)}"${state.ui.labelConfig.bindField === item ? " selected" : ""}>${escapeHtml(item)}</option>`).join("")}
-                            </select>
-                            <button class="btn btn-light" data-action="configure-binding">配置字段绑定</button>
+                          <span>配置字段绑定</span>
+                          <div class="label-binding-list">
+                            ${boundFields.map((item, index) => `
+                              <div class="label-binding-row">
+                                <select data-role="label-bound-field" data-index="${index}" data-field="field" aria-label="选择标签字段">
+                                  ${labelFieldOptions.map((option) => `<option value="${escapeHtml(option)}"${item.field === option ? " selected" : ""}>${escapeHtml(option)}</option>`).join("")}
+                                </select>
+                                <input type="number" min="8" max="36" value="${escapeHtml(item.fontSize || 14)}" data-role="label-bound-field" data-index="${index}" data-field="fontSize" aria-label="字段字号" title="字段字号" />
+                                <label class="label-binding-hide-title">
+                                  <input type="checkbox" data-role="label-bound-field" data-index="${index}" data-field="hideTitle"${item.hideTitle ? " checked" : ""} />
+                                  <span>隐藏字段标题</span>
+                                </label>
+                                <button class="label-binding-delete" type="button" data-action="remove-label-bound-field" data-index="${index}" aria-label="删除${escapeHtml(item.field)}" title="删除字段">
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </button>
+                              </div>
+                            `).join("")}
                           </div>
+                          <button class="btn btn-light label-binding-add" type="button" data-action="add-label-bound-field">新增字段</button>
                         </div>
                         <div class="field-block">
                           <span>设置logo</span>
@@ -32590,14 +33038,29 @@
             }).join("");
           }
 
-          renderLabelCard(template, large, variantOverride = "", active = false) {
+          renderLabelCard(template, large, variantOverride = "", active = false, boundFields = null) {
             const variant = variantOverride || template.variant || "default";
+            const sampleValues = {
+              "资产编号": "IT-SRV-XXXX",
+              "名称": "核心设备XXXX",
+              "资产分类": "服务器",
+              "资产位置": "A栋-2层-机房A",
+              "序列号": "SNXXXXXXXX",
+              "品牌": "BRO-HER",
+              "型号": "MODEL-XXXX"
+            };
+            const lines = Array.isArray(boundFields)
+              ? boundFields.map((item) => ({
+                  text: item.hideTitle ? (sampleValues[item.field] || "XXXXX") : `${item.field}: ${sampleValues[item.field] || "XXXXX"}`,
+                  fontSize: Math.min(36, Math.max(8, Number(item.fontSize) || 14))
+                }))
+              : template.lines.map((line) => ({ text: line, fontSize: 0 }));
             return `
               <button class="label-card ${large ? "large" : ""} ${variant === "wide" ? "wide" : ""} ${variant === "barcode" ? "barcode" : ""} ${active ? "is-active" : ""}" ${large ? "" : `data-action="label-template" data-template="${escapeHtml(template.id)}"`}>
                 <div class="qr-box" aria-hidden="true"></div>
                 <div class="label-lines">
                   <div class="label-brand"><span>X</span>BRO-HER</div>
-                  ${template.lines.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}
+                  ${lines.map((line) => `<span${line.fontSize ? ` style="font-size:${line.fontSize}px;"` : ""}>${escapeHtml(line.text)}</span>`).join("")}
                   ${variant === "barcode" ? '<div class="barcode-box" aria-hidden="true"></div>' : ""}
                 </div>
               </button>
@@ -32606,11 +33069,19 @@
 
           renderCabinetRackDialog(dialog) {
             const unitText = dialog.unit ? "第" + dialog.unit + "U位" : "当前U位";
-            const deviceText = dialog.deviceName || dialog.deviceCode || "当前设备";
+            const deviceText = dialog.name || dialog.deviceName || dialog.assetCode || dialog.deviceCode || "当前设备";
             const deviceRows = this.store.getListRows(VIEW_IDS.IT_FACILITY)
-              .filter((row) => row.assetStatus === "空闲")
-              .slice(0, 8);
-            const fallbackDeviceRows = deviceRows.length ? deviceRows : this.store.getListRows(VIEW_IDS.IT_FACILITY).slice(0, 8);
+              .filter((row) => row.assetStatus === "空闲");
+            const fallbackDeviceRows = deviceRows.length ? deviceRows : this.store.getListRows(VIEW_IDS.IT_FACILITY);
+            const deviceKeyword = String(dialog.deviceKeyword || "").trim().toLocaleLowerCase();
+            const filteredDeviceRows = deviceKeyword
+              ? fallbackDeviceRows.filter((row) => [row.name, row.assetCode, row.assetCategory, row.assetLocation, row.serialCode]
+                  .some((value) => String(value || "").toLocaleLowerCase().includes(deviceKeyword)))
+              : fallbackDeviceRows;
+            const devicePageSize = Math.max(1, Number(dialog.devicePageSize) || 20);
+            const devicePageCount = Math.max(1, Math.ceil(filteredDeviceRows.length / devicePageSize));
+            const devicePage = Math.min(devicePageCount, Math.max(1, Number(dialog.devicePage) || 1));
+            const pagedDeviceRows = filteredDeviceRows.slice((devicePage - 1) * devicePageSize, devicePage * devicePageSize);
             const selectedDevice = fallbackDeviceRows.find((row) => row.id === dialog.selectedDeviceId) || null;
             const listColumns = [
               { key: "name", label: "名称" },
@@ -32621,9 +33092,11 @@
               { key: "serialCode", label: "序列号" }
             ];
             const shelfFields = [
-              ...OPERATION_SHEET_COLUMNS,
-              { key: "shelfLocation", label: "上架位置", width: 186, required: true },
-              { key: "operationStartU", label: "开始U位", width: 108, required: true }
+              { key: "shelfLocation", label: "上架位置", width: 186, required: true, readonly: true },
+              { key: "operationStartU", label: "开始U位", width: 108, required: true, readonly: true },
+              ...OPERATION_SHEET_COLUMNS
+                .filter((field) => !["assetStatus", "assetSummary", "assetLocation", "serialCode", "powerOnTime"].includes(field.key))
+                .map((field) => ({ ...field, required: ["assetCode", "name", "assetCategory", "uHeight"].includes(field.key) }))
             ];
             const renderSelectOptions = (key, value = "") => {
               const optionMap = {
@@ -32641,18 +33114,17 @@
             };
             const renderFormField = (field) => {
               const defaultValues = {
-                assetStatus: "待上架",
-                shelfLocation: "当前机柜 > " + unitText,
+                shelfLocation: dialog.shelfLocation || "当前机柜",
                 operationStartU: dialog.unit || "1"
               };
-              const value = defaultValues[field.key] || "";
-              const hasOptions = Boolean(renderSelectOptions(field.key, value));
+              const value = defaultValues[field.key] || dialog[field.key] || "";
+              const hasOptions = !field.readonly && Boolean(renderSelectOptions(field.key, value));
               return `
                 <label class="${field.key === "description" ? "is-wide" : ""}">
-                  <span>${escapeHtml(field.label)}${field.required ? " *" : ""}</span>
+                  <span class="${field.required ? "is-required" : ""}">${escapeHtml(field.label)}</span>
                   ${hasOptions
-                    ? `<select>${renderSelectOptions(field.key, value)}</select>`
-                    : `<input value="${escapeHtml(value)}" placeholder="请输入${escapeHtml(field.label)}" />`}
+                    ? `<select data-role="cabinet-rack-new-field" data-field="${escapeHtml(field.key)}">${renderSelectOptions(field.key, value)}</select>`
+                    : `<input value="${escapeHtml(value)}"${field.readonly ? ' readonly aria-readonly="true"' : ` data-role="cabinet-rack-new-field" data-field="${escapeHtml(field.key)}"`} placeholder="请输入${escapeHtml(field.label)}" />`}
                 </label>
               `;
             };
@@ -32679,29 +33151,45 @@
               title = "选择设备";
               subtitle = unitText + " · 选择可上架的 IT 设备";
               body = `
+                <div class="cabinet-rack-device-search">
+                  <label class="cabinet-rack-device-search-box">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                    <input type="search" data-role="cabinet-rack-device-search" value="${escapeHtml(dialog.deviceKeyword || "")}" placeholder="搜索名称、资产编号、分类、位置或序列号" aria-label="搜索可上架设备" />
+                  </label>
+                  <span class="cabinet-rack-device-result-count">共 ${filteredDeviceRows.length} 条</span>
+                </div>
                 <div class="cabinet-rack-device-list">
                   <table class="cabinet-rack-dialog-table">
                     <thead>
                       <tr>${listColumns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join("")}</tr>
                     </thead>
                     <tbody>
-                      ${fallbackDeviceRows.map((row) => `
+                      ${pagedDeviceRows.length ? pagedDeviceRows.map((row) => `
                         <tr class="${row.id === dialog.selectedDeviceId ? "is-selected" : ""}" data-action="select-cabinet-rack-device" data-id="${escapeHtml(row.id)}" tabindex="0" aria-selected="${row.id === dialog.selectedDeviceId ? "true" : "false"}">
                           ${listColumns.map((column) => {
                             const value = row[column.key] || "-";
                             return `<td title="${escapeHtml(value)}">${escapeHtml(value)}</td>`;
                           }).join("")}
                         </tr>
-                      `).join("")}
+                      `).join("") : `<tr><td class="cabinet-rack-dialog-empty" colspan="${listColumns.length}">未找到匹配的可上架设备</td></tr>`}
                     </tbody>
                   </table>
+                </div>
+                <div class="cabinet-rack-device-pagination" aria-label="设备列表分页">
+                  <span>共 ${filteredDeviceRows.length} 条，${devicePageSize} 条/页</span>
+                  <div class="cabinet-rack-device-pagination-actions">
+                    <button type="button" data-action="set-cabinet-rack-device-page" data-page="${devicePage - 1}" ${devicePage <= 1 ? "disabled" : ""}>上一页</button>
+                    <button class="is-current" type="button" aria-current="page">${devicePage}</button>
+                    <span>/ ${devicePageCount}</span>
+                    <button type="button" data-action="set-cabinet-rack-device-page" data-page="${devicePage + 1}" ${devicePage >= devicePageCount ? "disabled" : ""}>下一页</button>
+                  </div>
                 </div>
               `;
               footer = `
                 <span class="cabinet-rack-selected-text">${selectedDevice ? `已选择：${escapeHtml(selectedDevice.name || selectedDevice.assetCode || selectedDevice.id)}` : "请点击列表行选择设备"}</span>
                 <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
                 <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
-                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备" ${selectedDevice ? "" : "disabled"}>确认选择</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备" ${selectedDevice ? "" : "disabled"}>${dialog.processDriven ? "进入上架流程" : "确认选择"}</button>
               `;
             } else if (dialog.mode === "new") {
               title = "新建设备并上架";
@@ -32710,7 +33198,7 @@
               footer = `
                 <button class="btn" type="button" data-action="cabinet-rack-dialog-mode" data-mode="add">上一步</button>
                 <button class="btn" type="button" data-action="close-cabinet-rack-dialog">取消</button>
-                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备">提交</button>
+                <button class="btn btn-primary" type="button" data-action="confirm-cabinet-rack-action" data-label="上架设备">${dialog.processDriven ? "进入上架流程" : "提交"}</button>
               `;
             } else if (dialog.mode === "retire") {
               title = "迁出确认";
@@ -32743,7 +33231,7 @@
 
             return `
               <div class="relation-modal-backdrop" data-action="close-cabinet-rack-dialog"></div>
-              <section class="relation-modal cabinet-rack-dialog ${compact ? "compact" : ""}" role="dialog" aria-modal="true" aria-labelledby="cabinetRackDialogTitle">
+              <section class="relation-modal cabinet-rack-dialog ${compact ? "compact" : ""}" role="dialog" aria-modal="true" aria-labelledby="cabinetRackDialogTitle"${dialog.processDriven ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="机柜详情上架流程前置录入" data-demand-text="需求来源：V3R5-4997。||交互目的：从机柜详情发起上架时，先完成设备选择或新建设备信息填写，再进入IT设备上架流程，避免进入流程后重复选择资产。||点击后行为：选择已有设备或填写新设备必填信息后，点击“进入上架流程”，系统带入当前机柜、开始U位和设备数据。||流程单规则：由机柜详情带入的资产行置灰且不可编辑，同时隐藏“上传本地文件”和“选择资产”按钮。||状态限制：仅IT设备上架流程开启时执行该路径；流程关闭时确认后直接完成上架。||异常判断：未选择设备或新设备必填信息不完整时禁止进入流程，并提示用户完善信息。"' : ""}>
                 <header class="relation-modal-head">
                   <div>
                     <div class="relation-modal-title" id="cabinetRackDialogTitle">${escapeHtml(title)}</div>
@@ -32766,8 +33254,8 @@
             const rows = this.store.getFilteredRows(sourceViewId).slice(0, 60);
             const renderCell = (value) => `<td title="${escapeHtml(value || "-")}"><span class="cell-ellipsis">${escapeHtml(value || "-")}</span></td>`;
             return `
-              <div class="relation-modal-backdrop" data-action="close-operation-asset-dialog"></div>
-              <section class="relation-modal" role="dialog" aria-modal="true" aria-labelledby="operationAssetDialogTitle" style="width:min(980px,calc(100vw - 48px));">
+              <div class="relation-modal-backdrop operation-asset-dialog-backdrop" data-action="close-operation-asset-dialog"></div>
+              <section class="relation-modal operation-asset-dialog" role="dialog" aria-modal="true" aria-labelledby="operationAssetDialogTitle" style="width:min(980px,calc(100vw - 48px));">
                 <header class="relation-modal-head">
                   <div>
                     <div class="relation-modal-title" id="operationAssetDialogTitle">选择资产</div>
@@ -32900,16 +33388,60 @@
 
           renderProcessCloseDialog(dialog) {
             const bulkItems = Array.isArray(dialog.items) ? dialog.items : [];
+            const orderRows = (dialog.bulk
+              ? bulkItems.flatMap((item) => this.store.getProcessFlowUnfinishedOrders(item.flowViewId).map((order) => ({
+                  order,
+                  flowViewId: item.flowViewId,
+                  moduleLabel: `${item.groupLabel || ""}${item.activityLabel || ""}`
+                })))
+              : this.store.getProcessFlowUnfinishedOrders(dialog.flowViewId).map((order) => ({
+                  order,
+                  flowViewId: dialog.flowViewId,
+                  moduleLabel: `${dialog.groupLabel || ""}${dialog.activityLabel || ""}`
+                }))
+            ).map(({ order, flowViewId, moduleLabel }) => ({
+              orderNo: order.id || "-",
+              flowViewId,
+              moduleLabel: moduleLabel || "-",
+              assignee: ["待执行", "执行中"].includes(order.status)
+                ? (order.executor || order.assignee || order.approver || "-")
+                : (order.approver || order.assignee || order.executor || "-")
+            }));
+            const pageSize = 20;
+            const pageCount = Math.max(1, Math.ceil(orderRows.length / pageSize));
+            const currentPage = Math.min(pageCount, Math.max(1, Number(dialog.page) || 1));
+            const pageRows = orderRows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
             return `
               <div class="relation-modal-backdrop" data-action="close-process-close-dialog"></div>
-              <section class="relation-modal process-route-dialog" role="dialog" aria-modal="true" aria-labelledby="processCloseDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="关闭流程校验" data-demand-text="需求来源：V3R5-4997。||触发条件：关闭单项流程或统一关闭全部流程。||校验规则：草稿、审批中、待执行、执行中等未到终态的单据均视为未完结；存在未完结单据时禁止关闭。||异常处理：展示阻塞流程及单据数量，并支持进入对应流程列表继续处理。">
+              <section class="relation-modal process-route-dialog" role="dialog" aria-modal="true" aria-labelledby="processCloseDialogTitle" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="关闭流程校验" data-demand-text="需求来源：V3R5-4997。||触发条件：用户点击分项或模块整体关闭开关时，系统立即校验对应流程；点击保存时再次进行统一校验。||校验规则：草稿、审批中、待执行、执行中等未到终态的单据均视为未完结；任一拟关闭流程存在未完结单据时，不允许关闭开关，配置草稿保持原状态。||二次校验：保存时重新查询全部拟关闭流程，存在未完结单据则本次配置整体不生效，防止配置期间产生新的流程单。||明细展示：弹窗按序号、工单号、模块、当前待办人展示未完结单据，默认每页20条并支持分页；工单号使用普通文本展示，列表列宽自适应弹窗，不显示横向滚动条。||模块联动：模块展示具体流程入口名称，如“IT设备上架”；点击后通过新标签页打开对应流程模块，并定位到“全部工单”页签。">
                 <header class="relation-modal-head"><div class="relation-modal-title" id="processCloseDialogTitle">暂时无法关闭流程</div><button class="relation-modal-close" type="button" data-action="close-process-close-dialog" aria-label="关闭">×</button></header>
                 <div class="process-route-dialog-body">
-                  ${dialog.bulk
-                    ? `本次统一关闭涉及 <strong>${bulkItems.length}</strong> 个存在未完结单据的流程，共 <strong>${escapeHtml(String(dialog.count))}</strong> 张，暂无法统一关闭。请先完结以下流程单：<div class="process-close-blockers">${bulkItems.map((item) => `<div class="process-close-blocker"><span>${escapeHtml(item.groupLabel + item.activityLabel)}（${escapeHtml(String(item.count))} 张）</span><button class="process-config-form-link" type="button" data-action="open-process-orders" data-flow-view="${escapeHtml(item.flowViewId)}">查看流程单</button></div>`).join("")}</div>`
-                    : `当前“<strong>${escapeHtml(dialog.groupLabel + dialog.activityLabel)}</strong>”流程存在 <strong>${escapeHtml(String(dialog.count))}</strong> 张未完结流程单，暂无法关闭。请先完结相关流程单后再关闭。`}
+                  <p class="process-close-message">${dialog.bulk
+                    ? (dialog.saveConfig
+                      ? `本次保存涉及 <strong>${escapeHtml(String(orderRows.length))}</strong> 张未完结流程单，配置暂未生效。请先完结相关流程单后再次保存。`
+                      : `本次整体关闭“<strong>${escapeHtml(dialog.scopeLabel || "全部流程")}</strong>”涉及 <strong>${escapeHtml(String(orderRows.length))}</strong> 张未完结流程单，暂无法关闭。请先完结相关流程单后再关闭。`)
+                    : `当前“<strong>${escapeHtml(dialog.groupLabel + dialog.activityLabel)}</strong>”流程存在 <strong>${escapeHtml(String(orderRows.length))}</strong> 张未完结流程单，暂无法关闭。请先完结相关流程单后再关闭。`}</p>
+                  <div class="process-close-order-table-wrap">
+                    <table class="process-close-order-table">
+                      <colgroup><col style="width:56px;" /><col style="width:34%;" /><col style="width:34%;" /><col /></colgroup>
+                      <thead><tr><th>序号</th><th>工单号</th><th>模块</th><th>待办人</th></tr></thead>
+                      <tbody>${pageRows.length
+                        ? pageRows.map((row, index) => `<tr><td>${(currentPage - 1) * pageSize + index + 1}</td><td>${escapeHtml(row.orderNo)}</td><td><button class="process-close-module-link" type="button" data-action="open-process-orders-new-tab" data-flow-view="${escapeHtml(row.flowViewId)}">${escapeHtml(row.moduleLabel)}</button></td><td>${escapeHtml(row.assignee)}</td></tr>`).join("")
+                        : `<tr><td colspan="4" style="text-align:center;color:#8a9bad;">暂无未完结流程单</td></tr>`}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="process-close-pagination">
+                    <span>共 ${escapeHtml(String(orderRows.length))} 条，20 条/页</span>
+                    <div class="process-close-pagination-actions">
+                      <button type="button" data-action="set-process-close-page" data-page="${currentPage - 1}"${currentPage <= 1 ? " disabled" : ""}>上一页</button>
+                      <button class="is-current" type="button" aria-current="page">${currentPage}</button>
+                      <span>/ ${pageCount}</span>
+                      <button type="button" data-action="set-process-close-page" data-page="${currentPage + 1}"${currentPage >= pageCount ? " disabled" : ""}>下一页</button>
+                    </div>
+                  </div>
                 </div>
-                <footer class="relation-modal-footer"><div class="relation-modal-actions"><button class="btn" type="button" data-action="close-process-close-dialog">${dialog.bulk ? "我知道了" : "取消"}</button>${dialog.bulk ? "" : `<button class="btn btn-primary" type="button" data-action="view-unfinished-process-orders">查看流程单</button>`}</div></footer>
+                <footer class="relation-modal-footer"><div class="relation-modal-actions"><button class="btn btn-primary" type="button" data-action="close-process-close-dialog">我知道了</button></div></footer>
               </section>
             `;
           }
@@ -34623,6 +35155,10 @@
                 this.store.toggleProcessFlow(actionTarget.getAttribute("data-group"), actionTarget.getAttribute("data-key"));
                 return;
               }
+              if (action === "toggle-process-group") {
+                this.store.toggleProcessGroup(actionTarget.getAttribute("data-group"));
+                return;
+              }
               if (action === "set-process-config-mode") {
                 this.store.setProcessConfigMode(actionTarget.getAttribute("data-mode"));
                 return;
@@ -34643,6 +35179,10 @@
                 this.store.openProcessOrders(actionTarget.getAttribute("data-flow-view"), true);
                 return;
               }
+              if (action === "open-process-orders-new-tab") {
+                this.store.openProcessOrdersInNewTab(actionTarget.getAttribute("data-flow-view"));
+                return;
+              }
               if (action === "close-ledger-activity-validation-dialog") {
                 this.store.closeLedgerActivityValidationDialog();
                 return;
@@ -34657,6 +35197,10 @@
               }
               if (action === "close-process-close-dialog") {
                 this.store.closeProcessCloseDialog();
+                return;
+              }
+              if (action === "set-process-close-page") {
+                this.store.setProcessCloseDialogPage(actionTarget.getAttribute("data-page"));
                 return;
               }
               if (action === "view-unfinished-process-orders") {
@@ -35103,6 +35647,10 @@
                 this.store.selectCabinetRackDevice(actionTarget.getAttribute("data-id"));
                 return;
               }
+              if (action === "set-cabinet-rack-device-page") {
+                this.store.setCabinetRackDevicePage(actionTarget.getAttribute("data-page"));
+                return;
+              }
               if (action === "close-cabinet-rack-dialog") {
                 this.store.closeCabinetRackDialog();
                 return;
@@ -35547,6 +36095,14 @@
                 this.store.uploadLogo();
                 return;
               }
+              if (action === "add-label-bound-field") {
+                this.store.addLabelBoundField();
+                return;
+              }
+              if (action === "remove-label-bound-field") {
+                this.store.removeLabelBoundField(Number(actionTarget.getAttribute("data-index")));
+                return;
+              }
               if (action === "configure-binding") {
                 this.store.configureBinding();
                 return;
@@ -35730,10 +36286,19 @@
                 renderWorkflowSheetSearchMenu(target);
                 return;
               }
-              if (role !== "form-tree-search" && role !== "detail-tree-search" && role !== "form-field-search" && role !== "detail-field-search" && role !== "space-tree-search" && role !== "template-object-search" && role !== "design-apply-search" && role !== "it-inbound-search" && role !== "it-workflow-search" && role !== "consumable-workflow-search" && role !== "consumable-ledger-search" && role !== "consumable-history-search" && role !== "consumable-material-dialog-search" && role !== "tool-workflow-search" && role !== "tool-ledger-search" && role !== "tool-history-search" && role !== "asset-history-search") {
+              if (role !== "form-tree-search" && role !== "detail-tree-search" && role !== "form-field-search" && role !== "detail-field-search" && role !== "space-tree-search" && role !== "template-object-search" && role !== "design-apply-search" && role !== "it-inbound-search" && role !== "it-workflow-search" && role !== "consumable-workflow-search" && role !== "consumable-ledger-search" && role !== "consumable-history-search" && role !== "consumable-material-dialog-search" && role !== "tool-workflow-search" && role !== "tool-ledger-search" && role !== "tool-history-search" && role !== "asset-history-search" && role !== "cabinet-rack-device-search") {
                 return;
               }
-              if (role === "consumable-material-dialog-search") {
+              if (role === "cabinet-rack-device-search") {
+                if (event.isComposing || target.dataset.composing === "true") return;
+                this.store.setCabinetRackDeviceKeyword(target.value, false);
+                this.renderer.render();
+                const nextInput = document.querySelector('[data-role="cabinet-rack-device-search"]');
+                if (nextInput instanceof HTMLInputElement) {
+                  nextInput.focus();
+                  nextInput.setSelectionRange(nextInput.value.length, nextInput.value.length);
+                }
+              } else if (role === "consumable-material-dialog-search") {
                 if (event.isComposing || target.dataset.composing === "true") return;
                 this.store.setConsumableMaterialDialogKeyword(target.value, false);
               } else if (role === "asset-history-search") {
@@ -35881,7 +36446,7 @@
 
             document.addEventListener("compositionstart", (event) => {
               const target = event.target;
-              if (target instanceof HTMLInputElement && ["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search"].includes(target.getAttribute("data-role"))) {
+              if (target instanceof HTMLInputElement && ["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search", "cabinet-rack-device-search"].includes(target.getAttribute("data-role"))) {
                 target.dataset.composing = "true";
               }
             });
@@ -35892,11 +36457,13 @@
                 return;
               }
               const role = target.getAttribute("data-role");
-              if (!["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search"].includes(role)) {
+              if (!["design-apply-search", "form-field-search", "detail-field-search", "it-inbound-search", "it-workflow-search", "consumable-workflow-search", "consumable-ledger-search", "consumable-history-search", "tool-workflow-search", "tool-ledger-search", "tool-history-search", "asset-history-search", "cabinet-rack-device-search"].includes(role)) {
                 return;
               }
               target.dataset.composing = "false";
-              if (role === "tool-workflow-search") {
+              if (role === "cabinet-rack-device-search") {
+                this.store.setCabinetRackDeviceKeyword(target.value, false);
+              } else if (role === "tool-workflow-search") {
                 this.store.setToolWorkflowKeyword(target.getAttribute("data-view") || this.store.getState().ui.currentView, target.value, false);
               } else if (role === "tool-ledger-search") {
                 this.store.setToolLedgerKeyword(target.value, false);
@@ -35996,6 +36563,15 @@
                 this.store.setLabelField(target.getAttribute("data-field"), target.value);
                 return;
               }
+              if (target.matches('[data-role="label-bound-field"]')) {
+                const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
+                this.store.updateLabelBoundField(Number(target.getAttribute("data-index")), target.getAttribute("data-field"), value);
+                return;
+              }
+              if (target.matches('[data-role="cabinet-rack-new-field"]')) {
+                this.store.setCabinetRackNewField(target.getAttribute("data-field"), target.value);
+                return;
+              }
               if (target.matches('[data-role="asset-detect-enabled"]')) {
                 this.store.setIntegrationAssetDetectEnabled(target.value === "yes");
                 return;
@@ -36093,6 +36669,10 @@
               }
               if (target.matches('[data-role="label-setting"]')) {
                 this.store.setLabelField(target.getAttribute("data-field"), target.value);
+                return;
+              }
+              if (target.matches('[data-role="cabinet-rack-new-field"]')) {
+                this.store.setCabinetRackNewField(target.getAttribute("data-field"), target.value);
                 return;
               }
               if (target.matches('[data-role="relation-field"]')) {
@@ -36808,12 +37388,14 @@
               .map((id) => id.trim())
               .filter(Boolean);
             const entries = versions.map((version, index) => {
+              const reqId = reqIds[index] || reqIds[0] || "";
+              const catalogVersion = VERSION_REQUIREMENTS.find((item) => item.id === reqId)?.version || version;
               const suffix = this.toVersionDatasetSuffix(version);
               const duplicateIndex = versions.slice(0, index + 1).filter((item) => item === version).length;
               const duplicateSuffix = duplicateIndex > 1 ? suffix + duplicateIndex : suffix;
               return {
-                version,
-                reqId: reqIds[index] || reqIds[0] || "",
+                version: catalogVersion,
+                reqId,
                 title: scope.dataset["demandTitle" + duplicateSuffix] || scope.dataset["demandTitle" + suffix] || scope.dataset.demandTitle || "需求说明",
                 text: scope.dataset["demandText" + duplicateSuffix] || scope.dataset["demandText" + suffix] || scope.dataset.demandText || ""
               };
@@ -37165,6 +37747,23 @@
         }
 
         const store = new PrototypeStore();
+        const prototypeUrlParams = new URLSearchParams(window.location.search);
+        const prototypeView = prototypeUrlParams.get("prototypeView");
+        if (prototypeView && PROCESS_FLOW_VIEW_IDS.has(prototypeView)) {
+          if (prototypeView === VIEW_IDS.IT_INBOUND) {
+            const inbound = store.ensureItInboundState();
+            inbound.tab = "all";
+            inbound.onlyUnfinished = false;
+          } else {
+            const workflow = store.ensureItAssetWorkflowState(prototypeView);
+            if (workflow) {
+              workflow.tab = "all";
+              workflow.onlyUnfinished = false;
+            }
+          }
+          store.state.ui.currentTopNav = "运营管理";
+          store.state.ui.currentView = prototypeView;
+        }
         const renderer = new PrototypeRenderer(store, {
           topbar: document.getElementById("topbar"),
           sidebar: document.getElementById("sidebar"),
@@ -37923,6 +38522,29 @@
     color: #fff;
     font-weight: 600;
   }
+
+  .list-location-filter { position: relative; display: flex; align-items: center; gap: 8px; padding: 0 0 8px; }
+  .list-location-btn {
+    min-width: 0;
+    flex: 1;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-align: left;
+  }
+  .list-location-btn.is-active { border-color: #b9d7ff; background: #f2f8ff; color: var(--primary-deep); }
+  .list-location-btn svg { flex-shrink: 0; }
+  .list-location-btn .list-location-label { flex: 0 0 auto; color: var(--text-tertiary); }
+  .list-location-btn .list-location-value { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: inherit; }
+  .list-location-clear { flex: 0 0 auto; height: 32px; padding: 0 10px; border-radius: 8px; background: #eef3f8; color: #667b91; font-size: 12px; }
+  .list-location-filter > .demand-badge { top: -6px; right: -4px; }
 
   .drill-chip {
     margin: 0 12px 8px;
@@ -38883,9 +39505,10 @@
     historyRange: "全部",
     ovLocation: [],           /* 概览位置范围：级联路径前缀，空=全部 */
     locSheet: false,          /* 位置选择面板 */
+    locSheetTarget: "overview", /* overview | list */
     locSheetSel: [],          /* 面板中正在浏览的层级路径 */
     demandMode: true,         /* 需求说明模式：默认开启 */
-    list: { search: "", type: "all", drill: null },
+    list: { search: "", type: "all", location: [], drill: null },
     expanded: {},
     scan: { status: "idle", msg: "" },
     toast: null
@@ -38919,6 +39542,7 @@
     ovTrend: { t: "近30天趋势统计", d: "交互目的：查看近30天资产增量与迁出/报废变化趋势。||展示规则：按5天一组聚合展示柱状图；增量为蓝色，迁出/报废为橙色。||状态限制：趋势卡片仅查看，不支持下钻。" },
     listSearch: { t: "资产搜索", d: "交互目的：按关键字快速定位资产。||交互行为：输入即实时过滤，匹配资产名称或资产编号（模糊匹配）；右侧✕清空。||异常判断：无匹配结果时显示空态提示。" },
     listType: { t: "资产类型切换", d: "交互目的：按台账类型筛选列表。||点击后行为：在 全部/IT设备/场地设施/机柜/备件 之间切换，与搜索、下钻条件叠加生效。" },
+    listLocation: { t: "台账位置筛选", d: "需求来源：V3R5-4773。||交互目的：在 App 资产台账中按资产位置快速缩小查询范围。||点击后行为：打开底部级联位置面板，按园区、楼栋、楼层、机房逐级选择；选择末级位置后直接应用，也可在任意中间层级点击确定。||组合规则：位置条件与关键字、资产类型及概览下钻条件叠加生效；已选位置在筛选入口展示，支持一键清空。||异常判断：所选位置无资产时展示列表空态，关闭面板不改变已生效条件。" },
     listDrill: { t: "概览下钻条件", d: "展示规则：从概览进入时显示来源筛选条件（含位置范围），如「华东园区 / 1号楼 · 资产状态：在用」。||点击后行为：点✕清除下钻条件，恢复完整列表。" },
     listCard: { t: "资产卡片与主从展开", d: "展示规则：卡片显示资产名称、状态徽标、资产编号、分类与位置路径；主设备带「主」标识，从设备带「从」标识。||点击后行为：点击卡片进入资产详情；主设备卡片底部可展开/收起从设备列表，点击从设备行直接进入其详情。||异常判断：从设备记录不存在时不展示对应行。" },
     tabScan: { t: "扫一扫入口", d: "交互目的：作为移动端核心功能，中间凸起大按钮突出扫码入口。||点击后行为：进入扫码取景页。||展示规则：三个Tab为 概览/扫一扫/资产，扫一扫居中凸起。" },
@@ -38936,7 +39560,7 @@
 
   var MOBILE_DEMAND_META = {
     dtPosition: { version: "v1.2", reqId: "V3R5-4427" },
-    dtHistory: { version: "v1.3", reqId: "V3R5-4112" }
+    dtHistory: { version: "v1.4", reqId: "V3R5-4112" }
   };
   var MOBILE_PAGE_DEMANDS = {
     pageHome: {
@@ -39121,6 +39745,24 @@
     return state.ovLocation.length ? state.ovLocation.join(" / ") : "全部园区";
   }
 
+  function listLocationLabel() {
+    return state.list.location && state.list.location.length ? state.list.location.join(" / ") : "全部位置";
+  }
+
+  function activeLocationSelection() {
+    return state.locSheetTarget === "list" ? (state.list.location || []) : state.ovLocation;
+  }
+
+  function applyLocationSelection(path) {
+    var selection = (path || []).slice();
+    if (state.locSheetTarget === "list") state.list.location = selection;
+    else state.ovLocation = selection;
+  }
+
+  function activeLocationResultText() {
+    return state.locSheetTarget === "list" ? "台账位置：" + listLocationLabel() : "概览范围：" + ovLocationLabel();
+  }
+
   function stats(pool) {
     pool = pool || ASSETS;
     var total = pool.length, inuse = 0, idle = 0, expiring = 0;
@@ -39254,6 +39896,7 @@
     var f = state.list;
     return ASSETS.filter(function (a) {
       if (f.type !== "all" && a.type !== f.type) return false;
+      if (f.location && f.location.length && !matchLocPrefix(a, f.location)) return false;
       if (f.drill) {
         var d = f.drill;
         if (d.loc && d.loc.length && !matchLocPrefix(a, d.loc)) return false;
@@ -39310,7 +39953,7 @@
     var rows = filteredAssets();
     var f = state.list;
     var html = '';
-    html += '<div class="page-header"><div class="ph-title">资产台账</div><div class="ph-sub">共 ' + ASSETS.length + ' 台资产 · 支持搜索与分类筛选</div></div>';
+    html += '<div class="page-header"><div class="ph-title">资产台账</div><div class="ph-sub">共 ' + rows.length + ' 台资产 · 支持搜索、分类与位置筛选</div></div>';
     html += '<div class="list-tools">';
     html += '<div class="search-box">';
     html += '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>';
@@ -39322,6 +39965,15 @@
     [["all", "全部"], ["it", "IT设备"], ["station", "场地设施"], ["cabinet", "机柜"], ["spare", "备件"]].forEach(function (p) {
       html += '<button class="type-pill ' + (f.type === p[0] ? "is-active" : "") + '" data-action="set-type" data-type="' + p[0] + '">' + p[1] + '</button>';
     });
+    html += '</div>';
+    html += '<div class="list-location-filter">';
+    html += '<button class="list-location-btn ' + (f.location && f.location.length ? "is-active" : "") + '" data-action="open-list-loc-sheet">';
+    html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 4.6-5.3 10.6-6.6 12a.6.6 0 0 1-.8 0C10.3 19.6 5 13.6 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5Z"/></svg>';
+    html += '<span class="list-location-label">位置</span><span class="list-location-value">' + esc(listLocationLabel()) + '</span>';
+    html += '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    html += '</button>';
+    if (f.location && f.location.length) html += '<button class="list-location-clear" data-action="clear-list-location">清空</button>';
+    html += dmBadge("listLocation");
     html += '</div></div>';
 
     html += '<div class="page-scroll"><div class="asset-list">';
@@ -39690,13 +40342,14 @@
   function renderLocSheet() {
     var sel = state.locSheetSel;
     var children = locationChildren(sel);
+    var isListFilter = state.locSheetTarget === "list";
     var pin = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 1 7 7c0 4.6-5.3 10.6-6.6 12a.6.6 0 0 1-.8 0C10.3 19.6 5 13.6 5 9a7 7 0 0 1 7-7Zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5Z"/></svg>';
     var arrow = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
 
     var html = '<div class="sheet-mask" data-action="close-loc-sheet">';
     html += '<div class="sheet" data-action="sheet-noop">' + dmBadge("locSheet");
     html += '<div class="sheet-grip"></div>';
-    html += '<div class="sheet-title">选择位置</div>';
+    html += '<div class="sheet-title">' + (isListFilter ? "筛选资产位置" : "选择位置") + '</div>';
 
     /* 级联面包屑：全部园区 > 已选层级 > 请选择 */
     html += '<div class="loc-crumbs">';
@@ -39731,7 +40384,7 @@
     /* 底部操作 */
     html += '<div class="sheet-footer">';
     html += '<button class="sheet-btn ghost" data-action="loc-reset">重置为全部</button>';
-    html += '<button class="sheet-btn primary" data-action="loc-confirm">确定' + (sel.length ? "：" + esc(sel[sel.length - 1]) : "：全部园区") + '</button>';
+    html += '<button class="sheet-btn primary" data-action="loc-confirm">确定' + (sel.length ? "：" + esc(sel[sel.length - 1]) : (isListFilter ? "：全部位置" : "：全部园区")) + '</button>';
     html += '</div>';
 
     html += '</div></div>';
@@ -39893,7 +40546,7 @@
         html += '<div class="page page-scan ' + (state.tab === "scan" ? "active" : "") + '">' + (state.tab === "scan" ? renderScan() : "") + '</div>';
         html += renderTabbar();
         statusBar.classList.toggle("on-dark", state.tab === "scan");
-        if (state.locSheet && state.tab === "overview") html += renderLocSheet();
+        if (state.locSheet && (state.tab === "overview" || state.tab === "assets")) html += renderLocSheet();
       }
       html += '<button class="demand-fab ' + (state.demandMode ? "is-on" : "") + '" data-action="toggle-demand-mode" title="需求说明：' + (state.demandMode ? "开" : "关") + '" aria-label="切换需求说明">需</button>';
     }
@@ -40016,8 +40669,14 @@
       render();
       showToast("需求说明已" + (state.demandMode ? "开启" : "关闭"));
     } else if (action === "open-loc-sheet") {
+      state.locSheetTarget = "overview";
       state.locSheet = true;
-      state.locSheetSel = state.ovLocation.slice();
+      state.locSheetSel = activeLocationSelection().slice();
+      render();
+    } else if (action === "open-list-loc-sheet") {
+      state.locSheetTarget = "list";
+      state.locSheet = true;
+      state.locSheetSel = activeLocationSelection().slice();
       render();
     } else if (action === "close-loc-sheet") {
       state.locSheet = false;
@@ -40032,24 +40691,28 @@
       state.locSheetSel = picked;
       if (!locationChildren(picked).length) {
         /* 已到最末级，直接确认 */
-        state.ovLocation = picked;
+        applyLocationSelection(picked);
         state.locSheet = false;
         render();
-        showToast("概览范围：" + ovLocationLabel());
+        showToast(activeLocationResultText());
       } else {
         render();
       }
     } else if (action === "loc-confirm") {
-      state.ovLocation = state.locSheetSel.slice();
+      applyLocationSelection(state.locSheetSel);
       state.locSheet = false;
       render();
-      showToast("概览范围：" + ovLocationLabel());
+      showToast(activeLocationResultText());
     } else if (action === "loc-reset") {
-      state.ovLocation = [];
+      applyLocationSelection([]);
       state.locSheetSel = [];
       state.locSheet = false;
       render();
-      showToast("概览范围：全部园区");
+      showToast(activeLocationResultText());
+    } else if (action === "clear-list-location") {
+      state.list.location = [];
+      render();
+      showToast("台账位置：全部位置");
     } else if (action === "drill") {
       var kind = el.getAttribute("data-drill-kind");
       var label = el.getAttribute("data-drill-label");
@@ -40059,6 +40722,7 @@
       state.page = "main";
       state.list.type = "all";
       state.list.search = "";
+      state.list.location = [];
       if (kind === "all") {
         state.list.drill = drillLoc ? { kind: "loc", value: "", label: drillLocLabel, loc: drillLoc } : null;
       } else {
