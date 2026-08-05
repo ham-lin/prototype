@@ -31211,17 +31211,16 @@
                     <div class="overview-chart">${renderBars(categoryBars.map((value) => Math.max(18, value - 20)), Array.from({ length: 18 }, (_, index) => "7-" + (index + 1)), "近30天资产总量统计", VIEW_IDS.IT_FACILITY)}</div>
                   </section>
                   <section class="overview-card">
-                    <div class="overview-card-title">近30天资产迁出/报废统计</div>
+                    <div class="overview-card-title">近30天资产增量统计</div>
                     ${renderLineChartPanel(
-                      "近30天资产迁出/报废统计",
+                      "近30天资产增量统计",
                       VIEW_IDS.IT_FACILITY,
-                      ["200", "150", "100", "50", "0"],
+                      ["80", "60", "40", "20", "0"],
                       trendXLabels,
                       [
-                        { name: "迁出", values: ["112件", "88件", "130件", "92件", "158件", "48件", "98件"], color: "#2aa7ee" },
-                        { name: "报废", values: ["18件", "24件", "30件", "21件", "36件", "12件", "19件"], color: "#8bd3ff" }
+                        { name: "新增资产", values: ["32件", "28件", "46件", "35件", "58件", "22件", "41件"], color: "#2aa7ee" }
                       ],
-                      "查看资产迁出报废统计资产列表"
+                      "查看资产增量统计资产列表"
                     )}
                   </section>
                   <section class="overview-card">
@@ -38716,6 +38715,7 @@
   .mini-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
   .mini-bar { width: 100%; max-width: 22px; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, #4da2ff, #1677ff); min-height: 3px; }
   .mini-bar.out { background: linear-gradient(180deg, #ffb35c, #ff7d00); }
+  .mini-bar.total { background: linear-gradient(180deg, #5bd6a0, #18a86b); }
   .mini-bar-lbl { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
   .mini-bar-val { font-size: 10px; color: var(--text-secondary); font-weight: 600; }
 
@@ -39639,9 +39639,9 @@
     { lbl: "6-08", v: 3 }, { lbl: "6-13", v: 5 }, { lbl: "6-18", v: 2 },
     { lbl: "6-23", v: 6 }, { lbl: "6-28", v: 4 }, { lbl: "7-03", v: 7 }
   ];
-  var TREND_OUT = [
-    { lbl: "6-08", v: 1 }, { lbl: "6-13", v: 0 }, { lbl: "6-18", v: 2 },
-    { lbl: "6-23", v: 1 }, { lbl: "6-28", v: 0 }, { lbl: "7-03", v: 1 }
+  var TREND_TOTAL = [
+    { lbl: "6-08", v: 8 }, { lbl: "6-13", v: 13 }, { lbl: "6-18", v: 15 },
+    { lbl: "6-23", v: 21 }, { lbl: "6-28", v: 25 }, { lbl: "7-03", v: 29 }
   ];
 
   /* 扫码模拟标签 */
@@ -39784,7 +39784,7 @@
     ovType: { t: "资产类型统计", d: "交互目的：查看 IT设备/场地设施/机柜/备件 四类资产占比。||点击后行为：点击卡片跳转资产台账列表。||展示规则：环形图+图例，图例显示数量与百分比，中心显示总数；数据与台账实时一致。" },
     ovStatus: { t: "资产状态统计", d: "交互目的：查看在用/空闲资产分布与在用率。||点击后行为：点击卡片跳转资产列表并按在用状态过滤。||展示规则：资产状态口径与Web端一致，仅在用/空闲两种；中心显示在用率。" },
     ovTop10: { t: "资产分类 Top10", d: "交互目的：识别数量最多的资产分类。||点击后行为：点击任一分类行，跳转资产列表并按该分类过滤。||展示规则：按数量降序取前10，前三名序号高亮。" },
-    ovTrend: { t: "近30天趋势统计", d: "交互目的：查看近30天资产增量与迁出/报废变化趋势。||展示规则：按5天一组聚合展示柱状图；增量为蓝色，迁出/报废为橙色。||状态限制：趋势卡片仅查看，不支持下钻。" },
+    ovTrend: { t: "近30天趋势统计", d: "交互目的：查看近30天资产增量与资产总量变化趋势。||展示规则：按5天一组聚合展示柱状图；资产增量与资产总量均使用蓝色统计口径，资产总量展示截至各统计节点的累计资产数量。||状态限制：趋势卡片仅查看，不支持下钻。" },
     listSearch: { t: "资产搜索", d: "交互目的：按关键字快速定位资产。||交互行为：输入即实时过滤，匹配资产名称或资产编号（模糊匹配）；右侧✕清空。||异常判断：无匹配结果时显示空态提示。" },
     listType: { t: "资产类型切换", d: "交互目的：按台账类型筛选列表。||点击后行为：在 全部/IT设备/场地设施/机柜/备件 之间切换，与搜索、下钻条件叠加生效。" },
     listLocation: { t: "台账位置筛选", d: "需求来源：V3R5-4773。||交互目的：在 App 资产台账中按资产位置快速缩小查询范围。||点击后行为：打开底部级联位置面板，按园区、楼栋、楼层、机房逐级选择；选择末级位置后直接应用，也可在任意中间层级点击确定。||组合规则：位置条件与关键字、资产类型及概览下钻条件叠加生效；已选位置在筛选入口展示，支持一键清空。||异常判断：所选位置无资产时展示列表空态，关闭面板不改变已生效条件。" },
@@ -40054,7 +40054,7 @@
     ];
     var maxCat = s.cats.length ? s.cats[0].count : 1;
     var maxIn = Math.max.apply(null, TREND_IN.map(function (x) { return x.v; }));
-    var maxOut = Math.max.apply(null, TREND_OUT.map(function (x) { return x.v; })) || 1;
+    var maxTotal = Math.max.apply(null, TREND_TOTAL.map(function (x) { return x.v; })) || 1;
 
     var html = '';
     html += '<div class="page-scroll">';
@@ -40114,21 +40114,21 @@
     });
     html += '</div></div>';
 
+    /* 近30天资产总量 */
+    html += '<div class="card">' + dmBadge("ovTrend") + '<div class="card-title">近30天资产总量统计</div><div class="mini-bars">';
+    TREND_TOTAL.forEach(function (x) {
+      var h = Math.max(4, x.v / maxTotal * 58);
+      html += '<div class="mini-bar-col"><span class="mini-bar-val">' + x.v + '</span><div class="mini-bar total" style="height:' + h + 'px"></div><span class="mini-bar-lbl">' + esc(x.lbl) + '</span></div>';
+    });
+    html += '</div><div class="chart-legend-inline"><span><i style="background:#18a86b"></i>资产总量（台）</span></div></div>';
+
     /* 近30天增量 */
-    html += '<div class="card">' + dmBadge("ovTrend") + '<div class="card-title">近30天资产增量统计</div><div class="mini-bars">';
+    html += '<div class="card"><div class="card-title">近30天资产增量统计</div><div class="mini-bars">';
     TREND_IN.forEach(function (x) {
       var h = Math.max(4, x.v / maxIn * 58);
       html += '<div class="mini-bar-col"><span class="mini-bar-val">' + x.v + '</span><div class="mini-bar" style="height:' + h + 'px"></div><span class="mini-bar-lbl">' + esc(x.lbl) + '</span></div>';
     });
     html += '</div><div class="chart-legend-inline"><span><i style="background:#1677ff"></i>新增资产（台）</span></div></div>';
-
-    /* 近30天迁出/报废 */
-    html += '<div class="card"><div class="card-title">近30天迁出/报废统计</div><div class="mini-bars">';
-    TREND_OUT.forEach(function (x) {
-      var h = Math.max(4, x.v / maxOut * 58);
-      html += '<div class="mini-bar-col"><span class="mini-bar-val">' + x.v + '</span><div class="mini-bar out" style="height:' + h + 'px"></div><span class="mini-bar-lbl">' + esc(x.lbl) + '</span></div>';
-    });
-    html += '</div><div class="chart-legend-inline"><span><i style="background:#ff7d00"></i>迁出/报废（台）</span></div></div>';
 
     html += '<div style="height:8px"></div>';
     html += '</div>'; /* page-scroll */
