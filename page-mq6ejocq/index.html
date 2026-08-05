@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>视频监控 - 设备绑定</title>
+    <title>视频管理 - 交互原型</title>
     <style>
       :root {
         --primary: #0d86f8;
@@ -16,10 +16,16 @@
         --border-light: #edf0f4;
         --text: #001733;
         --muted: #6b7c90;
+        --success: #52c41a;
+        --danger: #f04438;
+        --warning: #fa8c16;
         --shadow: 0 8px 22px rgba(39, 64, 95, 0.08);
-        --topbar-h: 64px;
-        --sidebar-w: 200px;
+        --topbar-h: 44px;
+        --sidebar-w: 215px;
         --radius: 8px;
+        --camera-a: url("https://images.unsplash.com/photo-1580106815433-a5b1d1d53d85?auto=format&fit=crop&fm=jpg&q=78&w=1200");
+        --camera-b: url("https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&fm=jpg&q=78&w=1200");
+        --camera-c: url("https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&fm=jpg&q=78&w=1200");
       }
 
       * {
@@ -35,7 +41,7 @@
       }
 
       body {
-        min-width: 1360px;
+        min-width: 1120px;
         color: var(--text);
         background: var(--bg);
         font-family: "Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -55,11 +61,23 @@
         cursor: pointer;
       }
 
-      input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        margin: 0;
+      input[type="checkbox"],
+      input[type="radio"] {
         accent-color: var(--primary);
+      }
+
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: #c8d1dd;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
       }
 
       .app {
@@ -75,197 +93,167 @@
         display: flex;
         align-items: center;
         height: var(--topbar-h);
-        background: var(--primary);
         color: #fff;
+        background: var(--primary);
+        z-index: 20;
       }
 
       .brand {
-        width: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 9px;
-        padding-left: 8px;
-      }
-
-      .brand-mark {
-        width: auto;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        color: #fff;
+        width: var(--sidebar-w);
+        padding-left: 38px;
+        font-size: 17px;
         font-weight: 700;
-        letter-spacing: 0;
+        white-space: nowrap;
       }
 
-      .brand-mark span {
-        font-size: 20px;
-        line-height: 24px;
-      }
-
-      .top-divider {
-        width: 1px;
-        height: 18px;
-        background: rgba(255, 255, 255, 0.75);
+      .brand span {
+        font-weight: 400;
       }
 
       .app-switcher {
-        width: 72px;
-        height: 64px;
-        display: grid;
-        place-items: center;
-      }
-
-      .dots {
-        width: 21px;
-        height: 21px;
+        width: 40px;
+        height: 40px;
         display: grid;
         grid-template-columns: repeat(3, 3px);
         grid-auto-rows: 3px;
-        gap: 6px;
+        align-content: center;
+        justify-content: center;
+        gap: 4px;
       }
 
-      .dots i {
+      .app-switcher i {
         width: 3px;
         height: 3px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.82);
+        background: #fff;
       }
 
       .top-nav {
         display: flex;
-        align-items: stretch;
         align-self: stretch;
-        height: 64px;
+        align-items: stretch;
+        min-width: 0;
       }
 
       .top-nav a {
-        position: relative;
         display: flex;
         align-items: center;
-        padding: 0 27px;
+        padding: 0 17px;
         color: #fff;
         text-decoration: none;
         white-space: nowrap;
       }
 
-      .top-nav a.is-active::after {
-        content: "";
-        position: absolute;
-        left: 19px;
-        right: 19px;
-        bottom: 0;
-        height: 3px;
+      .top-nav a.is-active {
+        color: var(--primary);
         background: #fff;
-        border-radius: 3px 3px 0 0;
+        border-radius: 12px 12px 0 0;
+        font-weight: 700;
       }
 
       .top-actions {
         margin-left: auto;
         display: flex;
         align-items: center;
-        gap: 16px;
-        height: 64px;
+        gap: 13px;
         padding-right: 20px;
+        white-space: nowrap;
       }
 
-      .action-divider {
-        width: 1px;
-        height: 18px;
-        background: rgba(255, 255, 255, 0.82);
-        margin-right: 6px;
-      }
-
-      .icon-btn {
+      .top-icon {
         position: relative;
-        width: 24px;
-        height: 24px;
-        display: inline-grid;
+        width: 22px;
+        height: 22px;
+        display: grid;
         place-items: center;
         color: #fff;
+        font-size: 15px;
       }
 
       .badge {
         position: absolute;
-        right: -8px;
-        top: -11px;
-        min-width: 18px;
-        height: 16px;
+        top: -10px;
+        right: -11px;
+        min-width: 19px;
+        height: 17px;
         padding: 0 4px;
         border-radius: 9px;
-        background: #ff3b22;
         color: #fff;
+        background: #f04438;
         font-size: 11px;
-        line-height: 16px;
+        line-height: 17px;
         text-align: center;
-      }
-
-      .user-menu {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        color: #fff;
-        font-size: 14px;
       }
 
       .sidebar {
         position: relative;
         grid-row: 2;
         background: #fff;
-        box-shadow: 8px 0 18px rgba(29, 47, 73, 0.09);
-        z-index: 2;
+        border-right: 1px solid var(--border);
+        z-index: 5;
       }
 
       .side-title {
-        height: 80px;
-        display: flex;
-        align-items: end;
-        gap: 8px;
-        padding: 0 16px 22px;
-        font-size: 16px;
-        font-weight: 500;
-      }
-
-      .side-rule {
-        margin: 0 15px 14px;
-        border-top: 1px dashed #d6dce5;
+        padding: 18px 23px 17px;
+        font-weight: 700;
       }
 
       .menu {
         display: flex;
         flex-direction: column;
+        gap: 2px;
       }
 
-      .menu a {
+      .menu-item {
         position: relative;
+        width: 100%;
         height: 48px;
         display: flex;
         align-items: center;
-        padding-left: 40px;
-        color: #001733;
-        text-decoration: none;
+        gap: 14px;
+        padding-left: 24px;
+        color: #18314d;
+        text-align: left;
       }
 
-      .menu a.is-active {
-        color: #006cff;
-        background: var(--primary-soft);
+      .menu-item::before {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 5px 2px 5px 2px;
+        background:
+          radial-gradient(circle at 25% 25%, currentColor 0 2px, transparent 2.5px),
+          radial-gradient(circle at 75% 25%, currentColor 0 2px, transparent 2.5px),
+          radial-gradient(circle at 25% 75%, currentColor 0 2px, transparent 2.5px),
+          radial-gradient(circle at 75% 75%, currentColor 0 2px, transparent 2.5px);
+        color: #98a6b5;
       }
 
-      .menu a.is-active::before {
+      .menu-item.is-active {
+        color: #087df0;
+        background: var(--primary-light);
+      }
+
+      .menu-item.is-active::before {
+        color: #087df0;
+      }
+
+      .menu-item.is-active::after {
         content: "";
         position: absolute;
-        left: 0;
-        top: 0;
+        inset: 0 auto 0 0;
         width: 3px;
-        height: 100%;
         background: var(--primary);
       }
 
-      .side-bottom {
+      .side-collapse {
         position: absolute;
-        left: 28px;
-        bottom: 31px;
-        color: #8996a8;
+        left: 24px;
+        bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: #17314d;
       }
 
       .main {
@@ -273,652 +261,1996 @@
         grid-row: 2;
         min-width: 0;
         min-height: 0;
-        padding: 15px 15px 14px;
-        background: var(--bg);
+        padding: 14px 15px 15px;
+        overflow: hidden;
       }
 
-      .workspace {
+      .view-page {
+        display: none;
         width: 100%;
         height: 100%;
-        min-height: 760px;
-        display: flex;
-        flex-direction: column;
-        padding: 18px 14px 14px 15px;
-        border-radius: var(--radius);
-        background: #fff;
-        box-shadow: var(--shadow);
       }
 
-      .page-header {
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin: 0 0 14px;
+      .view-page.is-active {
+        display: block;
+      }
+
+      .page-card {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        padding: 14px 16px;
+        overflow: hidden;
+        border-radius: var(--radius);
+        background: #fff;
       }
 
       .page-title {
-        font-size: 16px;
-        font-weight: 700;
+        margin: 5px 0 16px;
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      .page-title-row {
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 5px 0 16px;
+      }
+
+      .page-title-row .page-title {
         margin: 0;
       }
 
-      .title-group {
-        position: relative;
-        display: inline-flex;
+      .page-title-actions {
+        display: flex;
         align-items: center;
         gap: 8px;
       }
 
-      .hint-icon {
-        position: relative;
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        color: #7c8da3;
-        background: transparent;
-        cursor: help;
-        transition: color 0.15s ease, background-color 0.15s ease;
+      #view-device .split-layout {
+        height: calc(100% - 55px);
       }
 
-      .hint-icon .svg-icon {
-        width: 15px;
-        height: 15px;
-      }
-
-      .hint-icon:hover {
-        color: var(--primary);
-        background: var(--primary-light);
-      }
-
-      .hint-icon::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: 50%;
-        top: 26px;
-        width: 360px;
-        padding: 9px 12px;
-        border-radius: 4px;
-        color: #fff;
-        background: rgba(0, 23, 51, 0.9);
-        font-size: 13px;
-        font-weight: 400;
-        line-height: 1.6;
-        white-space: normal;
-        transform: translateX(-18%);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.15s ease;
-        z-index: 10;
-      }
-
-      .hint-icon::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 20px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 6px solid rgba(0, 23, 51, 0.9);
-        transform: translateX(-50%);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.15s ease;
-        z-index: 10;
-      }
-
-      .hint-icon:hover::before,
-      .hint-icon:hover::after {
-        opacity: 1;
-      }
-
-      .settings-btn {
-        position: relative;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0 13px;
-        border-radius: 4px;
-        color: #fff;
-        background: var(--primary);
-      }
-
-      .settings-btn:hover {
-        background: var(--primary-dark);
-      }
-
-      .settings-demand-anchor {
-        position: relative;
-        display: inline-flex;
-      }
-
-      .demand-badge {
-        position: absolute;
-        top: -9px;
-        right: -10px;
-        z-index: 30;
-      }
-
-      .title-group .demand-badge {
-        right: -18px;
-      }
-
-      .demand-badge-trigger {
-        width: 20px;
-        height: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-radius: 999px;
-        background: #1677ff;
-        color: #fff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 1;
-        cursor: help;
-        box-shadow: 0 2px 8px rgba(22, 119, 255, 0.28);
-      }
-
-      .demand-popover {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: min(340px, calc(100vw - 32px));
-        z-index: 4000;
-        display: none;
-        padding: 12px 14px;
-        border: 1px solid #b7d6ff;
-        border-radius: 6px;
-        background: #fff;
-        color: #26384d;
-        box-shadow: 0 10px 26px rgba(15, 35, 70, 0.18);
-        font-size: 12px;
-        line-height: 1.65;
-      }
-
-      .demand-popover.is-visible {
-        display: block;
-      }
-
-      .demand-popover-title {
-        margin-bottom: 6px;
-        color: #0f2742;
-        font-weight: 700;
-      }
-
-      .demand-popover p {
-        margin: 0;
-      }
-
-      .content {
-        flex: 1;
-        min-height: 0;
+      .split-layout {
         display: grid;
-        grid-template-columns: 303px 1fr;
-        column-gap: 16px;
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 14px;
+        height: 100%;
+        min-height: 0;
       }
 
-      .space-panel {
-        min-height: 0;
+      .tree-panel {
         display: flex;
         flex-direction: column;
-        border: 1px solid var(--border);
-        border-radius: 7px;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: #fff;
       }
 
-      .panel-head {
-        height: 48px;
+      .tree-title {
+        flex: 0 0 48px;
         display: flex;
         align-items: center;
         padding: 0 16px;
         border-bottom: 1px solid var(--border);
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 700;
       }
 
-      .search-wrap {
-        padding: 10px 14px;
+      .search-box {
+        position: relative;
+        flex: 0 0 auto;
+        margin: 12px 14px 8px;
       }
 
-      .search {
-        height: 32px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0 12px;
+      .search-box::before {
+        content: "⌕";
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-51%);
+        color: #64778d;
+        font-size: 18px;
+      }
+
+      .search-box input {
+        width: 100%;
+        height: 33px;
+        padding: 0 12px 0 34px;
+        outline: none;
         border: 1px solid var(--border);
         border-radius: 18px;
-        color: #93a2b4;
-      }
-
-      .search input {
-        width: 100%;
-        min-width: 0;
-        padding: 0;
-        border: 0;
-        outline: 0;
         color: var(--text);
       }
 
-      .search input::placeholder {
-        color: #a4afbd;
+      .search-box input:focus,
+      .input:focus,
+      .select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(13, 134, 248, 0.1);
       }
 
-      .tree {
+      .tree-scroll {
         flex: 1;
+        min-height: 0;
+        padding: 0 8px 12px;
         overflow: auto;
-        padding: 0 8px 16px;
       }
 
       .tree-row {
-        height: 32px;
+        min-height: 31px;
         display: flex;
         align-items: center;
         gap: 7px;
-        border-radius: 6px;
-        color: #001733;
+        padding: 4px 8px;
+        border-radius: 5px;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .tree-row:hover {
+        background: #f3f7fb;
+      }
+
+      .tree-row.is-selected {
+        color: #0678e8;
+        background: #d7ebff;
+      }
+
+      .tree-row[data-depth="1"] {
+        padding-left: 24px;
+      }
+
+      .tree-row[data-depth="2"] {
+        padding-left: 43px;
+      }
+
+      .tree-row[data-depth="3"] {
+        padding-left: 62px;
+      }
+
+      .tree-row[data-depth="4"] { padding-left: 81px; }
+      .tree-row[data-depth="5"] { padding-left: 100px; }
+      .tree-row[data-depth="6"] { padding-left: 119px; }
+
+      .tree-row.is-tree-hidden { display: none; }
+
+      .tree-arrow {
+        width: 11px;
+        color: #13304d;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      .tree-icon {
+        width: 13px;
+        color: #0783f8;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .tree-label {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tree-count,
+      .space-tree-count {
+        flex: 0 0 auto;
+        min-width: 22px;
+        padding: 0 5px;
+        border-radius: 9px;
+        color: #73859a;
+        background: #edf2f7;
+        font-size: 11px;
+        line-height: 18px;
+        text-align: center;
+      }
+
+      .tree-row.is-selected .tree-count {
+        color: #0678e8;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .tree-check {
+        width: 15px;
+        height: 15px;
+        margin: 0;
+      }
+
+      .tree-link {
+        margin-left: auto;
+        color: #0678e8;
         white-space: nowrap;
       }
 
-      .tree-row.root {
-        padding-left: 9px;
-        color: #006cff;
+      .video-preview-layout {
+        grid-template-columns: 300px minmax(0, 1fr);
       }
 
-      .tree-row.is-active {
-        color: #006cff;
-        background: var(--primary-soft);
-      }
-
-      .tree-row.level-2 {
-        padding-left: 28px;
-      }
-
-      .tree-row.level-3 {
-        padding-left: 49px;
-      }
-
-      .tree-row.level-4 {
-        padding-left: 70px;
-      }
-
-      .caret {
-        width: 0;
-        height: 0;
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
-        border-left: 6px solid currentColor;
-      }
-
-      .caret.down {
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 6px solid currentColor;
-        border-bottom: 0;
-      }
-
-      .main-panel {
+      .video-workbench,
+      .history-workbench {
         min-width: 0;
+        min-height: 0;
         display: flex;
         flex-direction: column;
       }
 
-      .table-shell {
+      .video-grid {
         flex: 1;
         min-height: 0;
-        border-top: 1px solid var(--border);
-        overflow: hidden;
+        display: grid;
+        gap: 14px;
+        padding-bottom: 12px;
       }
 
-      table {
+      .video-grid.grid-1 {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+      }
+
+      .video-grid.grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+      }
+
+      .video-grid.grid-9 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .video-cell {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        color: #fff;
+        background: #242424;
+        isolation: isolate;
+      }
+
+      .video-cell.is-focused {
+        border-color: var(--primary);
+      }
+
+      .video-cell.camera-a,
+      .video-cell.camera-b,
+      .video-cell.camera-c {
+        background-color: #16283a;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .video-cell.camera-a {
+        background-image: linear-gradient(rgba(0, 18, 38, 0.12), rgba(0, 18, 38, 0.28)), var(--camera-a);
+      }
+
+      .video-cell.camera-b {
+        background-image: linear-gradient(rgba(0, 18, 38, 0.1), rgba(0, 18, 38, 0.34)), var(--camera-b);
+      }
+
+      .video-cell.camera-c {
+        background-image: linear-gradient(rgba(0, 18, 38, 0.18), rgba(0, 18, 38, 0.38)), var(--camera-c);
+      }
+
+      .video-cell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.12), transparent 35%, transparent 65%, rgba(0, 0, 0, 0.32));
+      }
+
+      .video-name {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        max-width: calc(100% - 90px);
+        overflow: hidden;
+        font-weight: 700;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        z-index: 2;
+      }
+
+      .video-time {
+        position: absolute;
+        right: 9px;
+        top: 8px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 11px;
+        z-index: 2;
+      }
+
+      .cell-close {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 23px;
+        height: 23px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.42);
+        z-index: 4;
+      }
+
+      .cell-controls {
+        position: absolute;
+        left: 9px;
+        bottom: 8px;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(5px);
+        transition: 0.18s ease;
+        z-index: 5;
+      }
+
+      .video-cell:hover .cell-controls,
+      .video-cell.is-focused .cell-controls {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .cell-tool {
+        width: 28px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.64);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .cell-side-tools {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        opacity: 0;
+        transition: 0.18s ease;
+        z-index: 5;
+      }
+
+      .video-cell:hover .cell-side-tools,
+      .video-cell.is-focused .cell-side-tools {
+        opacity: 1;
+      }
+
+      .cell-side-tools .cell-tool {
+        border: 0;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      .video-empty,
+      .video-loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #d9e0e7;
+        background: #303030;
+      }
+
+      .empty-icon {
+        position: relative;
+        width: 58px;
+        height: 38px;
+        border: 2px dashed #77828e;
+        border-radius: 4px;
+      }
+
+      .empty-icon::after {
+        content: "";
+        position: absolute;
+        right: -12px;
+        top: 9px;
+        border-width: 9px 0 9px 11px;
+        border-style: solid;
+        border-color: transparent transparent transparent #77828e;
+      }
+
+      .spinner {
+        width: 31px;
+        height: 31px;
+        border: 3px solid rgba(255, 255, 255, 0.22);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .video-bottom-bar,
+      .history-bottom-bar {
+        flex: 0 0 45px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .grid-switch,
+      .screen-actions {
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+
+      .grid-button,
+      .screen-button {
+        width: 38px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        color: #17314d;
+        border: 1px solid var(--border);
+        background: #fff;
+      }
+
+      .grid-button:first-child {
+        border-radius: 5px 0 0 5px;
+      }
+
+      .grid-button:last-child {
+        border-radius: 0 5px 5px 0;
+      }
+
+      .grid-button + .grid-button {
+        border-left: 0;
+      }
+
+      .grid-button.is-active {
+        color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .grid-icon {
+        width: 17px;
+        height: 14px;
+        display: grid;
+        gap: 2px;
+      }
+
+      .grid-icon.grid-one {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-icon.grid-four {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-icon.grid-nine {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .grid-icon i {
+        border: 1px solid currentColor;
+        background: transparent;
+      }
+
+      .screen-button {
+        border: 0;
+        font-size: 18px;
+      }
+
+      .device-layout,
+      .binding-layout {
+        height: calc(100% - 49px);
+        min-height: 0;
+      }
+
+      .page-header {
+        height: 49px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .page-header .page-title {
+        margin: 0;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .info-dot {
+        width: 18px;
+        height: 18px;
+        display: inline-grid;
+        place-items: center;
+        margin-left: 5px;
+        color: #315b84;
+        border: 1px solid #315b84;
+        border-radius: 50%;
+        font-size: 11px;
+        cursor: help;
+      }
+
+      .btn {
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 15px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        color: #17314d;
+        background: #fff;
+      }
+
+      .btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-primary {
+        color: #fff;
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+
+      .btn-primary:hover {
+        color: #fff;
+        border-color: var(--primary-dark);
+        background: var(--primary-dark);
+      }
+
+      .btn-danger {
+        color: var(--danger);
+      }
+
+      .content-panel {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .table-toolbar {
+        flex: 0 0 48px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 3px 0 10px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        z-index: 20;
+        overflow: visible;
+      }
+
+      .toolbar-spacer {
+        flex: 1;
+      }
+
+      .toolbar-search {
+        width: min(360px, 32vw);
+        margin: 0;
+      }
+
+      .toolbar-protocol-filter {
+        width: 180px;
+        flex: 0 0 180px;
+      }
+
+      .toolbar-dropdown {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .toolbar-dropdown-toggle {
+        min-width: 108px;
+        line-height: 1;
+      }
+
+      .toolbar-dropdown-toggle::after {
+        content: "";
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        flex: 0 0 14px;
+        margin-left: 7px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M4 5.5 7 8.5 10 5.5' fill='none' stroke='%236b7d90' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 14px 14px;
+      }
+
+      .toolbar-dropdown-menu {
+        position: absolute;
+        z-index: 120;
+        top: calc(100% + 5px);
+        left: 0;
+        min-width: 150px;
+        padding: 5px;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 0 8px 20px rgba(37, 55, 77, 0.16);
+        display: none;
+      }
+
+      .toolbar-dropdown.is-open .toolbar-dropdown-menu { display: block; }
+      .toolbar-dropdown.is-open .toolbar-dropdown-toggle::after { transform: rotate(180deg); }
+
+      .toolbar-dropdown-item {
         width: 100%;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 4px;
+        color: #263b52;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .toolbar-dropdown-item:hover { color: var(--primary); background: #edf5ff; }
+
+      .bulk-edit-summary {
+        margin-bottom: 18px;
+        padding: 10px 12px;
+        border-radius: 4px;
+        color: #244665;
+        background: #eaf4ff;
+      }
+
+      .bulk-credential-fields {
+        display: none;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border-light);
+      }
+
+      .bulk-credential-fields.is-visible {
+        display: grid;
+        gap: 16px;
+      }
+
+      .data-table-wrap {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+      }
+
+      .data-table {
+        width: 100%;
+        min-width: 1160px;
         border-collapse: collapse;
         table-layout: fixed;
       }
 
-      thead th {
-        height: 39px;
-        padding: 0 8px;
-        color: #001733;
-        text-align: left;
-        font-weight: 700;
-        border-bottom: 1px solid var(--border);
-        background: #fff;
-      }
-
-      thead th:not(:last-child) > span {
-        display: block;
-        border-right: 1px solid #d5dbe5;
-        line-height: 16px;
-      }
-
-      tbody td {
+      .data-table th,
+      .data-table td {
         height: 40px;
-        padding: 0 8px;
+        padding: 7px 9px;
         border-bottom: 1px solid var(--border-light);
-        color: #001733;
+        text-align: left;
+        vertical-align: middle;
       }
 
-      .col-order {
-        width: 78px;
+      .data-table th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        color: #0f2843;
+        background: #fff;
+        font-weight: 700;
       }
 
-      .col-id {
-        width: 180px;
+      .data-table tr:hover td {
+        background: #f8fbff;
       }
 
-      .col-name {
-        width: 330px;
+      .data-table .col-check {
+        width: 36px;
+        text-align: center;
       }
 
-      .col-location {
-        width: 330px;
+      .data-table .col-id {
+        width: 96px;
       }
 
-      .col-bound {
-        width: 320px;
+      .data-table .col-name {
+        width: 160px;
       }
 
-      .col-action {
-        width: 100px;
+      .data-table .col-protocol {
+        width: 140px;
+      }
+
+      .data-table .col-param {
+        width: 260px;
+      }
+
+      .data-table .col-space {
+        width: 210px;
+      }
+
+      #deviceTable tbody td:nth-child(6) {
+        max-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: default;
+      }
+
+      .data-table .col-status {
+        width: 105px;
+      }
+
+      .data-table .col-action {
+        width: 230px;
         text-align: right;
       }
 
-      .link {
-        color: #006cff;
-        text-decoration: none;
+      .status-tag {
+        display: inline-flex;
+        align-items: center;
+        height: 24px;
+        padding: 0 8px;
+        border-radius: 4px;
+        font-size: 13px;
       }
 
-      .link svg {
-        vertical-align: -2px;
+      .status-tag.success {
+        color: #389e0d;
+        background: #f0f9e8;
       }
 
-      .footer {
-        height: 37px;
+      .status-tag.error {
+        color: #f04438;
+        background: #fff0ed;
+      }
+
+      .action-link {
+        padding: 0 5px;
+        color: #087df0;
+        white-space: nowrap;
+      }
+
+      .action-link.delete {
+        color: #f04438;
+      }
+
+      .table-footer {
+        flex: 0 0 52px;
         display: flex;
-        align-items: end;
+        align-items: center;
         justify-content: space-between;
-        padding-bottom: 5px;
-        color: #001733;
+        padding: 0 2px;
       }
 
       .pagination {
         display: flex;
         align-items: center;
+        gap: 8px;
+      }
+
+      .page-select,
+      .page-input {
+        height: 32px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        background: #fff;
+      }
+
+      .page-select {
+        min-width: 122px;
+        padding: 0 34px 0 12px;
+      }
+
+      .page-number {
+        min-width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--primary);
+        border-radius: 6px;
+        color: var(--primary);
+      }
+
+      .page-input {
+        width: 56px;
+        padding: 0 8px;
+        text-align: center;
+      }
+
+      .history-layout {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr) 300px;
+        gap: 14px;
+        height: 100%;
+      }
+
+      .history-grid {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .history-info {
+        min-width: 0;
+        min-height: 0;
+        border-radius: var(--radius);
+        background: #fff;
+        overflow: hidden;
+      }
+
+      .history-info .range-input {
+        min-width: 0;
+        font-size: 12px;
+      }
+
+      .history-info-title,
+      .history-info-row {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 700;
+      }
+
+      .history-info-row {
+        font-weight: 400;
+      }
+
+      .range-input {
+        width: calc(100% - 16px);
+        height: 34px;
+        margin: 10px 8px;
+        padding: 0 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: #17314d;
+        background: #fff;
+      }
+
+      .timeline-panel {
+        flex: 0 0 118px;
+        margin-top: 14px;
+        padding: 9px 10px;
+        border-radius: 7px;
+        background: #fff;
+      }
+
+      .history-workbench .timeline-panel {
+        overflow: hidden;
+      }
+
+      .timeline-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .timeline-track {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        height: 55px;
+        margin-top: 3px;
+      }
+
+      .timeline-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 23px;
+        height: 2px;
+        background: repeating-linear-gradient(90deg, #b5c0cc 0 1px, transparent 1px 32px);
+      }
+
+      .timeline-line::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -8px;
+        width: 2px;
+        height: 43px;
+        background: var(--primary);
+      }
+
+      .time-labels {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 28px;
+        display: flex;
+        justify-content: space-between;
+        color: #8291a2;
+        font-size: 10px;
+      }
+
+      .date-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding-top: 2px;
+        color: #16304c;
+      }
+
+      .binding-table .col-id {
+        width: 180px;
+      }
+
+      .binding-table .col-name {
+        width: 230px;
+      }
+
+      .binding-table .col-space {
+        width: 260px;
+      }
+
+      .binding-table .col-bind {
+        width: 210px;
+      }
+
+      .mask {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: none;
+        background: rgba(0, 0, 0, 0.47);
+      }
+
+      .mask.is-open {
+        display: block;
+      }
+
+      .modal {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        z-index: 80;
+        display: none;
+        width: min(860px, calc(100vw - 80px));
+        max-height: calc(100vh - 80px);
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+        border-radius: 9px;
+        background: #fff;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+      }
+
+      .modal.is-open {
+        display: block;
+      }
+
+      .modal.small {
+        width: 420px;
+      }
+
+      .modal.medium {
+        width: 658px;
+      }
+
+      .batch-space-modal {
+        width: min(980px, calc(100vw - 80px));
+      }
+
+      .batch-space-modal .modal-body {
+        padding-top: 18px;
+      }
+
+      .batch-space-intro {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-height: 42px;
+        padding: 9px 12px;
+        border-radius: 4px;
+        color: #244665;
+        background: #eaf4ff;
+      }
+
+      .batch-space-intro::before {
+        content: "i";
+        width: 18px;
+        height: 18px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--primary);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .batch-space-toolbar {
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         gap: 16px;
       }
 
-      .select-like {
-        min-width: 128px;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 11px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: #fff;
+      .batch-selected-summary {
+        flex: none;
+        color: #66788d;
       }
 
-      .page-arrow {
-        color: #b7c0cd;
-        font-size: 19px;
-        line-height: 1;
+      .batch-selected-summary strong {
+        margin: 0 3px;
+        color: var(--primary);
       }
 
-      .page-current {
-        min-width: 32px;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #0d70ff;
-        border-radius: 6px;
-        color: #006cff;
-        background: #fff;
-      }
-
-      .jump {
-        display: inline-flex;
+      .batch-space-actions {
+        display: flex;
         align-items: center;
         gap: 8px;
       }
 
-      .page-input {
-        width: 58px;
-        height: 32px;
+      .batch-space-actions .select {
+        width: 360px;
+      }
+
+      .batch-space-table-wrap {
+        max-height: 390px;
+        overflow: auto;
         border: 1px solid var(--border);
-        border-radius: 6px;
+        border-radius: 5px;
+      }
+
+      .batch-space-table {
+        min-width: 760px;
+        table-layout: fixed;
+      }
+
+      .batch-space-table th {
+        background: #f7f9fc;
+      }
+
+      .batch-space-table .batch-col-check {
+        width: 48px;
         text-align: center;
+      }
+
+      .batch-space-table .batch-col-id {
+        width: 180px;
+      }
+
+      .batch-space-table .batch-col-name {
+        width: 210px;
+      }
+
+      .batch-space-table .batch-col-space {
+        width: auto;
+      }
+
+      .batch-space-table .select {
+        min-width: 320px;
+      }
+
+      .batch-space-table tr.is-selected td {
+        background: #f2f8ff;
+      }
+
+      .space-tree-trigger {
+        width: 100%;
+        height: 34px;
+        line-height: 32px;
+        padding: 0 34px 0 12px;
+        box-sizing: border-box;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        color: #21364d;
+        background: #fff;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .space-tree-trigger::after {
+        content: "";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        width: 14px;
+        height: 14px;
+        transform: translateY(-52%);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M4 5.5 7 8.5 10 5.5' fill='none' stroke='%236b7d90' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 14px 14px;
+      }
+
+      .space-tree-trigger.is-placeholder { color: #8a99aa; }
+
+      .space-tree-popover {
+        position: fixed;
+        z-index: 120;
+        width: 420px;
+        padding: 10px;
+        border: 1px solid #cfd9e6;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(31, 50, 72, 0.2);
+        display: none;
+      }
+
+      .space-tree-popover.is-open { display: block; }
+
+      .space-tree-search {
+        width: 100%;
+        height: 34px;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: 5px;
         outline: none;
       }
 
-      .svg-icon {
-        width: 16px;
-        height: 16px;
-        display: inline-block;
-        color: currentColor;
-        flex: 0 0 auto;
+      .space-tree-search:focus { border-color: var(--primary); }
+
+      .space-tree-list {
+        max-height: 230px;
+        margin-top: 8px;
+        overflow: auto;
+        color: #263b52;
       }
 
-      .park,
-      .building,
-      .floor,
-      .room {
-        color: #0078ff;
+      .space-tree-node { min-height: 30px; }
+      .space-tree-node[hidden] { display: none; }
+
+      .space-tree-row {
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 7px;
+        border-radius: 4px;
+        cursor: pointer;
       }
 
-      .drawer-mask {
-        position: fixed;
-        inset: 0;
-        display: none;
-        background: rgba(0, 18, 40, 0.28);
-        z-index: 20;
+      .space-tree-row:hover { background: #edf5ff; }
+      .space-tree-row[data-level="1"] { padding-left: 25px; }
+      .space-tree-row[data-level="2"] { padding-left: 43px; }
+      .space-tree-row[data-level="3"] { padding-left: 61px; }
+      .space-tree-row[data-level="4"] { padding-left: 79px; }
+      .space-tree-row[data-level="5"] { padding-left: 97px; }
+      .space-tree-arrow { width: 12px; color: #75869a; }
+      .space-tree-icon { color: #1687e8; }
+      .space-tree-label {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .batch-pagination {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #68798d;
+      }
+
+      .batch-pagination-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .batch-page-size,
+      .batch-page-button {
+        height: 32px;
+        padding: 0 11px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: #fff;
+        color: #354a61;
+      }
+
+      select.select,
+      select.page-select,
+      select.batch-page-size {
+        appearance: none;
+        -webkit-appearance: none;
+        box-sizing: border-box;
+        line-height: normal;
+        padding-right: 34px;
+        background-color: #fff;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath d='M4 5.5 7 8.5 10 5.5' fill='none' stroke='%236b7d90' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 11px center;
+        background-size: 14px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      select.select:disabled,
+      select.page-select:disabled,
+      select.batch-page-size:disabled {
+        color: #9aa8b8;
+        background-color: #f5f7fa;
+      }
+
+      .batch-page-button { min-width: 32px; cursor: pointer; }
+      .batch-page-button.is-active { color: #fff; border-color: var(--primary); background: var(--primary); }
+      .batch-page-button:disabled { color: #b0bac5; cursor: not-allowed; }
+
+      .modal-header,
+      .drawer-header {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .modal-title,
+      .drawer-title {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .close-button {
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        color: #17314d;
+        font-size: 24px;
+      }
+
+      .modal-body {
+        max-height: calc(100vh - 210px);
+        padding: 12px 24px 20px;
+        overflow: auto;
+      }
+
+      .modal-footer,
+      .drawer-footer {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 0 24px;
+        border-top: 1px solid var(--border-light);
+      }
+
+      .preview-modal {
+        width: min(930px, calc(100vw - 90px));
+      }
+
+      .preview-screen {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 8px;
+        color: #fff;
+        background: linear-gradient(rgba(0, 18, 38, 0.1), rgba(0, 18, 38, 0.32)), var(--camera-a) center / cover no-repeat;
+      }
+
+      .preview-screen .video-name {
+        padding: 3px 9px;
+        border-radius: 4px;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .confirm-icon {
+        display: inline-grid;
+        width: 19px;
+        height: 19px;
+        place-items: center;
+        margin-right: 8px;
+        border-radius: 50%;
+        color: #fff;
+        background: #f04438;
+        font-size: 12px;
+      }
+
+      .confirm-message {
+        padding: 8px 0 26px;
+        color: #41546a;
       }
 
       .drawer {
         position: fixed;
         top: 0;
         right: 0;
-        width: 430px;
-        height: 100vh;
+        z-index: 75;
+        width: min(560px, calc(100vw - 60px));
+        height: 100%;
         display: flex;
         flex-direction: column;
         background: #fff;
-        box-shadow: -8px 0 24px rgba(20, 45, 78, 0.18);
-        transform: translateX(100%);
-        transition: transform 0.2s ease;
-        z-index: 21;
+        transform: translateX(102%);
+        transition: transform 0.23s ease;
+        box-shadow: -16px 0 38px rgba(0, 0, 0, 0.14);
       }
 
-      body.drawer-open .drawer-mask {
-        display: block;
-      }
-
-      body.drawer-open .drawer {
+      .drawer.is-open {
         transform: translateX(0);
-      }
-
-      .drawer-header {
-        height: 58px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-        border-bottom: 1px solid var(--border-light);
-      }
-
-      .drawer-title {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 700;
-      }
-
-      .drawer-close {
-        width: 30px;
-        height: 30px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        color: #65758a;
-      }
-
-      .drawer-close:hover {
-        background: #f3f6fa;
       }
 
       .drawer-body {
         flex: 1;
-        padding: 20px;
+        min-height: 0;
+        padding: 18px 24px;
         overflow: auto;
       }
 
-      .form-block {
-        margin-bottom: 22px;
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
       }
 
-      .form-block.is-disabled {
-        color: #9aa7b8;
-        cursor: not-allowed;
-      }
-
-      .form-label {
+      .form-item label,
+      .section-label {
         display: block;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
+        color: #17314d;
         font-weight: 700;
       }
 
-      .form-label-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
+      .required {
+        color: #f04438;
       }
 
-      .form-label-row .form-label {
-        margin-bottom: 0;
-      }
-
-      .status-tag {
-        display: inline-flex;
-        align-items: center;
-        height: 20px;
-        padding: 0 8px;
-        border: 1px solid #d9dee8;
-        border-radius: 10px;
-        color: #8b98aa;
-        background: #f4f6f9;
+      .field-note {
+        margin: -2px 0 6px;
+        color: #98a6b5;
         font-size: 12px;
-        font-weight: 400;
       }
 
-      .duration-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #001733;
-      }
-
-      .duration-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .duration-input {
-        width: 82px;
-        height: 32px;
-        padding: 0 10px;
-        border: 1px solid var(--border);
-        border-radius: 4px;
+      .input,
+      .select {
+        width: 100%;
+        height: 34px;
+        padding: 0 12px;
         outline: none;
-      }
-
-      .check-row {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        color: #001733;
-      }
-
-      .form-block.is-disabled .check-row {
-        color: #9aa7b8;
-        cursor: not-allowed;
-      }
-
-      .form-block.is-disabled input {
-        cursor: not-allowed;
-      }
-
-      .drawer-note {
-        padding: 12px 14px;
-        border: 1px solid #cfe4ff;
-        border-radius: 6px;
-        color: #2e5b8f;
-        background: #f2f8ff;
-        line-height: 1.7;
-      }
-
-      .drawer-note + .drawer-note {
-        margin-top: 10px;
-      }
-
-      .drawer-footer {
-        height: 58px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-        padding: 0 20px;
-        border-top: 1px solid var(--border-light);
-      }
-
-      .btn-secondary,
-      .btn-primary {
-        height: 32px;
-        min-width: 72px;
-        padding: 0 14px;
-        border-radius: 4px;
-      }
-
-      .btn-secondary {
         border: 1px solid var(--border);
-        color: #001733;
+        border-radius: 6px;
+        color: var(--text);
+        background-color: #fff;
+      }
+
+      .input.is-error {
+        border-color: #f04438;
+      }
+
+      .field-error {
+        margin-top: 3px;
+        color: #f04438;
+        font-size: 12px;
+      }
+
+      .stepper {
+        display: grid;
+        grid-template-columns: 34px 1fr 34px;
+        height: 34px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .stepper button {
+        color: #17314d;
         background: #fff;
       }
 
-      .btn-primary {
+      .stepper button:first-child {
+        border-right: 1px solid var(--border);
+      }
+
+      .stepper button:last-child {
+        border-left: 1px solid var(--border);
+      }
+
+      .stepper input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: none;
+        text-align: center;
+      }
+
+      .inline-options {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        min-height: 32px;
+      }
+
+      .inline-options label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .drawer-tree {
+        height: calc(100% - 4px);
+      }
+
+      .drawer-tree .tree-scroll {
+        border: 1px solid var(--border);
+        border-radius: 7px;
+      }
+
+      .info-note {
+        display: flex;
+        gap: 9px;
+        padding: 14px 16px;
+        border-radius: 5px;
+        color: #245589;
+        background: #e5f2ff;
+        line-height: 1.7;
+      }
+
+      .info-note + .info-note {
+        margin-top: 14px;
+      }
+
+      .setting-block {
+        margin-bottom: 20px;
+      }
+
+      .setting-row {
+        display: grid;
+        grid-template-columns: 96px 1fr 24px;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      .config-card {
+        padding: 10px 10px 14px;
+        border: 1px solid var(--border);
+        border-radius: 7px;
+      }
+
+      .config-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        font-weight: 700;
+      }
+
+      .two-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        top: 62px;
+        z-index: 120;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: 6px;
+        color: #245589;
+        background: #eef7ff;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+        transform: translateX(-50%);
+      }
+
+      .toast.is-open {
+        display: flex;
+      }
+
+      .top-version-btn {
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 10px;
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        border-radius: 4px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+        white-space: nowrap;
+      }
+
+      .top-version-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .top-version-btn span {
+        padding: 1px 5px;
+        border-radius: 3px;
+        color: #0d74d5;
+        background: #fff;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .version-requirements-page {
+        position: fixed;
+        z-index: 160;
+        inset: var(--topbar-h) 0 0 var(--sidebar-w);
+        display: none;
+        flex-direction: column;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .version-requirements-page.is-open { display: flex; }
+
+      .version-req-page-head {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 24px;
+        border-bottom: 1px solid var(--border);
+        background: #fff;
+      }
+
+      .version-req-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 4px;
+        padding: 0;
+        color: #5b7087;
+        font-size: 13px;
+      }
+
+      .version-req-back:hover { color: var(--primary); }
+
+      .version-req-page-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .demand-mode-toggle {
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: 17px;
+        color: #51667d;
+        background: #fff;
+      }
+
+      .demand-mode-toggle::after {
+        content: "";
+        width: 28px;
+        height: 16px;
+        border-radius: 9px;
+        background: #c8d2df;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+      }
+
+      body.is-demand-mode .demand-mode-toggle {
+        color: var(--primary);
+        border-color: #9dcbf8;
+        background: #edf7ff;
+      }
+
+      body.is-demand-mode .demand-mode-toggle::after {
+        background: radial-gradient(circle at 20px 8px, #fff 0 5px, transparent 5.5px), var(--primary);
+      }
+
+      .version-req-page-body {
+        flex: 1;
+        min-height: 0;
+        padding: 20px 24px 28px;
+        overflow: auto;
+      }
+
+      .version-req-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .version-req-filter {
+        display: inline-flex;
+        padding: 3px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .version-req-filter button {
+        height: 30px;
+        padding: 0 13px;
+        border-radius: 4px;
+        color: #5f7287;
+      }
+
+      .version-req-filter button.is-active {
         color: #fff;
         background: var(--primary);
       }
 
-      @media (max-width: 1500px) {
-        body {
-          min-width: 1280px;
+      .version-req-summary { color: #718197; }
+
+      .version-req-version {
+        padding: 18px;
+        border: 1px solid #e1e8f0;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .version-req-version-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .version-req-version-title {
+        color: #17314d;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .version-req-version-goal {
+        margin-top: 4px;
+        color: #78889b;
+      }
+
+      .version-req-count {
+        padding: 3px 9px;
+        border-radius: 12px;
+        color: #216db8;
+        background: #eaf4ff;
+        font-size: 12px;
+      }
+
+      .version-req-group-title {
+        margin: 16px 0 9px;
+        color: #273d55;
+        font-weight: 700;
+      }
+
+      .version-req-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        align-items: stretch;
+      }
+
+      .version-req-item {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 13px 14px 12px;
+        border: 1px solid #dfe7f0;
+        border-left: 3px solid #28a86b;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .version-req-item:hover {
+        border-color: #91caff;
+        border-left-color: #28a86b;
+        box-shadow: 0 6px 16px rgba(23, 67, 112, 0.08);
+      }
+
+      .version-req-item:focus-visible {
+        outline: 2px solid rgba(13, 134, 248, 0.35);
+        outline-offset: 2px;
+      }
+
+      .version-req-item-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .version-req-item-title {
+        min-width: 0;
+        color: #20374f;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
+      .version-req-status {
+        flex: none;
+        padding: 2px 8px;
+        border-radius: 10px;
+        color: #168653;
+        background: #eaf8f0;
+        font-size: 12px;
+      }
+
+      .version-req-item-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 28px;
+      }
+
+      .version-req-item-actions {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .version-req-id { color: #73859a; font-size: 12px; }
+
+      .version-req-ticket {
+        padding: 0;
+        color: var(--primary);
+        background: transparent;
+        cursor: pointer;
+        font-size: 12px;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .version-req-ticket:hover { color: #0869c2; }
+
+      .version-req-locate {
+        height: 28px;
+        padding: 0 10px;
+        border: 1px solid #a9c9ed;
+        border-radius: 4px;
+        color: #2469b2;
+        background: #f3f8fe;
+      }
+
+      .version-req-locate:hover {
+        border-color: #77afe8;
+        background: #eaf4ff;
+      }
+
+      .version-req-story {
+        height: 28px;
+        padding: 0 10px;
+        border: 0;
+        border-radius: 4px;
+        color: var(--primary);
+        background: transparent;
+      }
+
+      .version-req-story:hover { background: #edf5ff; }
+
+      .version-story-layer {
+        position: fixed;
+        z-index: 220;
+        inset: var(--topbar-h) 0 0 var(--sidebar-w);
+        display: none;
+        background: rgba(21, 38, 57, 0.42);
+      }
+
+      .version-story-layer.is-open { display: block; }
+
+      .version-story-drawer {
+        width: min(520px, calc(100vw - var(--sidebar-w) - 40px));
+        height: 100%;
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        box-shadow: -12px 0 30px rgba(24, 45, 68, 0.2);
+      }
+
+      .version-story-head {
+        min-height: 72px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 22px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .version-story-head h3 { margin: 0; font-size: 17px; }
+      .version-story-meta { margin-top: 6px; color: #74869a; font-size: 12px; }
+
+      .version-story-body {
+        flex: 1;
+        min-height: 0;
+        padding: 20px 22px;
+        overflow: auto;
+      }
+
+      .version-story-section {
+        padding: 0 0 18px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #edf1f6;
+      }
+
+      .version-story-section:last-child { margin-bottom: 0; border-bottom: 0; }
+      .version-story-section h4 { margin: 0 0 9px; color: #253e57; font-size: 14px; }
+      .version-story-section p { margin: 0; color: #50667d; line-height: 1.75; }
+      .version-story-section ul { margin: 0; padding-left: 20px; color: #50667d; line-height: 1.8; }
+      .version-story-section.is-story { padding: 14px; border: 1px solid #d7e8fa; border-radius: 6px; background: #f4f9ff; }
+
+      .demand-anchor { position: relative; }
+      .space-tree-popover.demand-anchor,
+      .modal.demand-anchor { position: fixed; }
+
+      .demand-badge {
+        position: absolute;
+        z-index: 80;
+        top: -9px;
+        right: -9px;
+        display: none;
+      }
+
+      body.is-demand-mode .demand-badge { display: inline-flex; }
+
+      .demand-badge-trigger {
+        width: 20px;
+        height: 20px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        color: #fff;
+        background: #f04438;
+        box-shadow: 0 2px 7px rgba(153, 39, 31, 0.28);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .demand-badge-trigger:hover,
+      .demand-badge-trigger:focus-visible {
+        transform: scale(1.08);
+        outline: none;
+      }
+
+      .space-tree-popover > .demand-badge {
+        top: 6px;
+        right: 6px;
+        z-index: 130;
+      }
+
+      .modal > .demand-badge {
+        top: 8px;
+        right: 48px;
+        z-index: 130;
+      }
+
+      .demand-popover {
+        position: fixed;
+        z-index: 3000;
+        display: none;
+        width: min(390px, calc(100vw - 20px));
+        max-height: calc(100vh - 20px);
+        padding: 13px 14px;
+        overflow: auto;
+        border: 1px solid #dce5ef;
+        border-radius: 7px;
+        color: #43586f;
+        background: #fff;
+        box-shadow: 0 12px 32px rgba(23, 48, 77, 0.2);
+        line-height: 1.65;
+      }
+
+      .demand-popover strong {
+        display: block;
+        margin-bottom: 7px;
+        color: #18324d;
+        font-size: 14px;
+      }
+
+      .demand-popover p { margin: 5px 0; }
+
+      .demand-locate-highlight {
+        animation: demand-locate-pulse 1.6s ease 2;
+      }
+
+      @keyframes demand-locate-pulse {
+        0%, 100% { box-shadow: none; }
+        35%, 65% { box-shadow: 0 0 0 4px rgba(13, 134, 248, 0.25); }
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 1380px) {
+        :root {
+          --sidebar-w: 180px;
+        }
+
+        .brand {
+          padding-left: 25px;
         }
 
         .top-nav a {
-          padding: 0 20px;
+          padding: 0 11px;
         }
 
-        .content {
-          grid-template-columns: 296px 1fr;
-          column-gap: 14px;
+        .top-nav a:nth-last-child(-n + 2) {
+          display: none;
         }
 
-        .col-name,
-        .col-location,
-        .col-bound {
-          width: auto;
+        .split-layout,
+        .video-preview-layout {
+          grid-template-columns: 260px minmax(0, 1fr);
+        }
+
+        .history-layout {
+          grid-template-columns: 250px minmax(0, 1fr) 245px;
+        }
+
+        .data-table .col-param {
+          width: 220px;
+        }
+
+        .data-table .col-space {
+          width: 180px;
+        }
+
+        .data-table .col-action {
+          width: 205px;
+        }
+      }
+
+      @media (max-width: 1220px) {
+        .history-layout {
+          grid-template-columns: 235px minmax(0, 1fr) 210px;
+          gap: 10px;
+        }
+
+        .date-tabs {
+          gap: 18px;
         }
       }
     </style>
@@ -926,440 +2258,1573 @@
   <body>
     <div class="app">
       <header class="topbar">
-        <div class="brand" aria-label="XBROTHER">
-          <div class="brand-mark"><span>XBROTHER</span></div>
-        </div>
-        <div class="top-divider"></div>
-        <button class="app-switcher" aria-label="应用菜单">
-          <span class="dots" aria-hidden="true">
-            <i></i><i></i><i></i>
-            <i></i><i></i><i></i>
-            <i></i><i></i><i></i>
-          </span>
+        <div class="brand">X<span>BROTHER</span></div>
+        <button class="app-switcher" type="button" aria-label="应用菜单" title="应用菜单">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
         </button>
         <nav class="top-nav" aria-label="主导航">
           <a href="#" class="is-active">设施监控</a>
-          <a href="#">工程配置</a>
-          <a href="#">系统管理</a>
-          <a href="#">运营管理</a>
-          <a href="#">数据分析</a>
         </nav>
         <div class="top-actions">
-          <span class="action-divider"></span>
-          <button class="icon-btn" aria-label="消息">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-              <path d="m3 7 9 6 9-6"></path>
-            </svg>
-            <span class="badge">54</span>
-          </button>
-          <button class="icon-btn" aria-label="通知">
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6v-5a7 7 0 1 0-14 0v5l-2 2v1h18v-1l-2-2Z"></path>
-            </svg>
-            <span class="badge">9</span>
-          </button>
-          <button class="user-menu" aria-label="用户菜单">
-            <span>系统管理员</span>
-            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </button>
+          <button class="top-version-btn" type="button" data-open-version-requirements>版本需求 <span>v3.0</span></button>
+          <span class="top-icon" title="日程">▣</span>
+          <span class="top-icon" title="消息">✉<span class="badge">2.3k</span></span>
+          <span class="top-icon" title="通知">♟<span class="badge">46</span></span>
+          <span>系统管理员⌄</span>
         </div>
       </header>
 
       <aside class="sidebar">
-        <div class="side-title">
-          <svg class="svg-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M13.7 3a2.7 2.7 0 0 0-5.4 0H5a2 2 0 0 0-2 2v4h3.1a2.6 2.6 0 1 1 0 5.2H3V18a2 2 0 0 0 2 2h4.1v-2.8a2.6 2.6 0 1 1 5.2 0V20H19a2 2 0 0 0 2-2v-4.3h-2.7a2.6 2.6 0 1 1 0-5.2H21V5a2 2 0 0 0-2-2h-5.3Z"></path>
-          </svg>
-          <span>视频监控</span>
-        </div>
-        <div class="side-rule"></div>
-        <nav class="menu" aria-label="视频监控菜单">
-          <a href="#">视频预览</a>
-          <a href="#">设备管理</a>
-          <a href="#">历史回放</a>
-          <a href="#" class="is-active">设备绑定</a>
+        <div class="side-title">视频监控</div>
+        <nav class="menu" aria-label="视频管理菜单">
+          <button class="menu-item is-active" type="button" data-view="preview">视频预览</button>
+          <button class="menu-item" type="button" data-view="device">设备管理</button>
+          <button class="menu-item" type="button" data-view="history">历史回放</button>
+          <button class="menu-item" type="button" data-view="binding">设备绑定</button>
         </nav>
-        <div class="side-bottom">
-          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 7h14"></path>
-            <path d="M4 12h14"></path>
-            <path d="M4 17h14"></path>
-          </svg>
-        </div>
+        <button class="side-collapse" type="button" title="收起导航"><span>☷</span><span>收起导航</span></button>
       </aside>
 
       <main class="main">
-        <section class="workspace" aria-label="设备绑定">
-          <div class="page-header">
-            <div
-              class="title-group"
-              data-demand-title="标题悬浮提示"
-              data-demand-text="交互目的：在“设备绑定”标题旁增加提示图标。||悬停行为：鼠标悬停或键盘聚焦提示图标时，展示模块说明文案。||提示文案：本模块用于设备告警时查看关联摄像头的实时/历史视频。支持关联设备，也支持关联设备下的测点。"
-            >
-              <h1 class="page-title">设备绑定</h1>
-              <span class="hint-icon" data-tooltip="本模块用于设备告警时查看关联摄像头的实时/历史视频。支持关联设备，也支持关联设备下的测点。" aria-label="模块说明">
-                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 11v6"></path>
-                  <path d="M12 7h.01"></path>
-                </svg>
-              </span>
-            </div>
-            <span
-              class="settings-demand-anchor"
-              data-demand-title="告警历史视频设置"
-              data-demand-text="交互目的：打开右侧设置抽屉，配置告警历史视频的查看时长。||配置规则：告警发生前、告警发生后默认均为 30 秒，用于确定告警详情中关联视频的历史片段范围。||本期范围：存储至本地为非本期实现，实际开发不展示。"
-            >
-              <button class="settings-btn" id="openSettings" type="button">
-                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
-                  <path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.05.05a2.2 2.2 0 0 1-3.11 3.11l-.05-.05a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.08 1.65V21.5a2.2 2.2 0 0 1-4.4 0v-.08a1.8 1.8 0 0 0-1.08-1.65 1.8 1.8 0 0 0-1.98.36l-.05.05a2.2 2.2 0 0 1-3.11-3.11l.05-.05A1.8 1.8 0 0 0 3.4 15a1.8 1.8 0 0 0-1.65-1.08H1.7a2.2 2.2 0 0 1 0-4.4h.05A1.8 1.8 0 0 0 3.4 8.44a1.8 1.8 0 0 0-.36-1.98l-.05-.05A2.2 2.2 0 0 1 6.1 3.3l.05.05a1.8 1.8 0 0 0 1.98.36 1.8 1.8 0 0 0 1.08-1.65V2a2.2 2.2 0 0 1 4.4 0v.06a1.8 1.8 0 0 0 1.08 1.65 1.8 1.8 0 0 0 1.98-.36l.05-.05a2.2 2.2 0 0 1 3.11 3.11l-.05.05a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.65 1.08h.08a2.2 2.2 0 0 1 0 4.4h-.08A1.8 1.8 0 0 0 19.4 15Z"></path>
-                </svg>
-                <span>设置</span>
-              </button>
-            </span>
-          </div>
-          <div class="content">
-            <section class="space-panel" aria-label="空间列表">
-              <div class="panel-head">空间列表</div>
-              <div class="search-wrap">
-                <label class="search">
-                  <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="m20 20-3.5-3.5"></path>
-                  </svg>
-                  <input type="text" placeholder="搜索" />
-                </label>
-              </div>
-              <div class="tree">
-                <div class="tree-row root is-active">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon park" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z"></path>
-                  </svg>
-                  <span>共济科技园区</span>
-                </div>
-                <div class="tree-row level-2">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon building" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 3h12v18H6V3Zm3 3v2h2V6H9Zm4 0v2h2V6h-2ZM9 10v2h2v-2H9Zm4 0v2h2v-2h-2ZM9 14v2h2v-2H9Zm4 0v2h2v-2h-2Z"></path>
-                  </svg>
-                  <span>研发中心A栋</span>
-                </div>
-                <div class="tree-row level-3">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon floor" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 5h16v3H4V5Zm0 5h16v3H4v-3Zm0 5h16v4H4v-4Z"></path>
-                  </svg>
-                  <span>3层</span>
-                </div>
-                <div class="tree-row level-4">
-                  <span class="caret"></span>
-                  <svg class="svg-icon room" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M5 4h11a2 2 0 0 1 2 2v14H5V4Zm3 3v10h7V7H8Zm10 5h2v8h-2v-8Z"></path>
-                  </svg>
-                  <span>309机房</span>
-                </div>
-                <div class="tree-row level-4">
-                  <span class="caret"></span>
-                  <svg class="svg-icon room" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M5 4h11a2 2 0 0 1 2 2v14H5V4Zm3 3v10h7V7H8Zm10 5h2v8h-2v-8Z"></path>
-                  </svg>
-                  <span>310值班室</span>
-                </div>
-                <div class="tree-row level-3">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon floor" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 5h16v3H4V5Zm0 5h16v3H4v-3Zm0 5h16v4H4v-4Z"></path>
-                  </svg>
-                  <span>4层</span>
-                </div>
-                <div class="tree-row level-4">
-                  <span class="caret"></span>
-                  <svg class="svg-icon room" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M5 4h11a2 2 0 0 1 2 2v14H5V4Zm3 3v10h7V7H8Zm10 5h2v8h-2v-8Z"></path>
-                  </svg>
-                  <span>401监控室</span>
-                </div>
-                <div class="tree-row level-2">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon building" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 3h12v18H6V3Zm3 3v2h2V6H9Zm4 0v2h2V6h-2ZM9 10v2h2v-2H9Zm4 0v2h2v-2h-2ZM9 14v2h2v-2H9Zm4 0v2h2v-2h-2Z"></path>
-                  </svg>
-                  <span>运维楼B栋</span>
-                </div>
-                <div class="tree-row level-3">
-                  <span class="caret down"></span>
-                  <svg class="svg-icon floor" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 5h16v3H4V5Zm0 5h16v3H4v-3Zm0 5h16v4H4v-4Z"></path>
-                  </svg>
-                  <span>1层</span>
-                </div>
-                <div class="tree-row level-4">
-                  <span class="caret"></span>
-                  <svg class="svg-icon room" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M5 4h11a2 2 0 0 1 2 2v14H5V4Zm3 3v10h7V7H8Zm10 5h2v8h-2v-8Z"></path>
-                  </svg>
-                  <span>101大厅</span>
-                </div>
-                <div class="tree-row level-4">
-                  <span class="caret"></span>
-                  <svg class="svg-icon room" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M5 4h11a2 2 0 0 1 2 2v14H5V4Zm3 3v10h7V7H8Zm10 5h2v8h-2v-8Z"></path>
-                  </svg>
-                  <span>103配电间</span>
-                </div>
-                <div class="tree-row level-3">
-                  <span class="caret"></span>
-                  <svg class="svg-icon floor" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4 5h16v3H4V5Zm0 5h16v3H4v-3Zm0 5h16v4H4v-4Z"></path>
-                  </svg>
-                  <span>2层</span>
-                </div>
+        <section class="view-page is-active" id="view-preview">
+          <div class="split-layout video-preview-layout">
+            <section class="tree-panel">
+              <div class="tree-title">设备列表</div>
+              <div class="search-box"><input type="search" value="werr" aria-label="搜索设备" data-tree-search /></div>
+              <div class="tree-scroll" data-tree>
+                <div class="tree-row" data-depth="0"><span class="tree-arrow">▾</span><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">百度文心一言广州智算中心</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">AI节能演示专用</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">BlueSpace</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">JHHL数据中心园区</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">llh</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">lwt</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">wrtest</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">xpert园区</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">ZJ</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">中国共济</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">互盟南湾园区</span></div>
+                <div class="tree-row is-selected" data-depth="2"><span class="tree-arrow"></span><span class="tree-icon">▤</span><span class="tree-label">werr</span></div>
+                <div class="tree-row" data-depth="2"><span class="tree-arrow"></span><span class="tree-icon">▥</span><span class="tree-label">南湾数据楼</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">供冷房间</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">共济业务</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">北京</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">园区-bak</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">场景1</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">场景2</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">场景3</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">新建园区</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">深圳</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">演示用园区</span></div>
               </div>
             </section>
 
-            <section class="main-panel" aria-label="绑定设备表格">
-              <div class="table-shell">
-                <table>
-                  <thead>
-                    <tr>
-                      <th class="col-order"><span>序号</span></th>
-                      <th class="col-id"><span>设备ID</span></th>
-                      <th class="col-name"><span>设备名称</span></th>
-                      <th class="col-location"><span>所属位置</span></th>
-                      <th class="col-bound"><span>绑定设备</span></th>
-                      <th class="col-action"><span>操作</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>0_105</td>
-                      <td>
-                        <a class="link" href="#">
-                          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path>
-                            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path>
-                          </svg>
-                          Xbrother_板卡_V3R4虚拟设备
-                        </a>
-                      </td>
-                      <td>共济科技园区</td>
-                      <td>视频309</td>
-                      <td class="col-action"><a class="link" href="#">绑定</a></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>0_107</td>
-                      <td>
-                        <a class="link" href="#">
-                          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path>
-                            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path>
-                          </svg>
-                          共济_TH03_温湿度
-                        </a>
-                      </td>
-                      <td>共济科技园区</td>
-                      <td>309 门口</td>
-                      <td class="col-action"><a class="link" href="#">绑定</a></td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>0_109</td>
-                      <td>
-                        <a class="link" href="#">
-                          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path>
-                            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path>
-                          </svg>
-                          视频309
-                        </a>
-                      </td>
-                      <td>共济科技园区</td>
-                      <td>-</td>
-                      <td class="col-action"><a class="link" href="#">绑定</a></td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>0_763</td>
-                      <td>
-                        <a class="link" href="#">
-                          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path>
-                            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path>
-                          </svg>
-                          309 门口
-                        </a>
-                      </td>
-                      <td>共济科技园区</td>
-                      <td>-</td>
-                      <td class="col-action"><a class="link" href="#">绑定</a></td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>0_764</td>
-                      <td>
-                        <a class="link" href="#">
-                          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"></path>
-                            <path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"></path>
-                          </svg>
-                          309窗户
-                        </a>
-                      </td>
-                      <td>共济科技园区</td>
-                      <td>-</td>
-                      <td class="col-action"><a class="link" href="#">绑定</a></td>
-                    </tr>
-                  </tbody>
-                </table>
+            <section class="video-workbench">
+              <div class="video-grid grid-4" data-video-grid>
+                <article class="video-cell camera-a">
+                  <span class="video-name">309 门口</span>
+                  <span class="video-time">REC 2026-07-27 15:45:02</span>
+                  <button class="cell-close" type="button" title="关闭画面">×</button>
+                  <div class="cell-controls">
+                    <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button>
+                    <button class="cell-tool" type="button" title="上一帧">◀</button>
+                    <button class="cell-tool" type="button" title="下一帧">▶</button>
+                  </div>
+                  <div class="cell-side-tools">
+                    <button class="cell-tool" type="button" title="截屏">▣</button>
+                    <button class="cell-tool" type="button" title="全屏">⛶</button>
+                  </div>
+                </article>
+                <article class="video-cell camera-b">
+                  <span class="video-name">309 窗户</span>
+                  <span class="video-time">REC 2026-07-27 15:45:02</span>
+                  <button class="cell-close" type="button" title="关闭画面">×</button>
+                  <div class="cell-controls">
+                    <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button>
+                    <button class="cell-tool" type="button" title="上一帧">◀</button>
+                    <button class="cell-tool" type="button" title="下一帧">▶</button>
+                  </div>
+                  <div class="cell-side-tools">
+                    <button class="cell-tool" type="button" title="截屏">▣</button>
+                    <button class="cell-tool" type="button" title="全屏">⛶</button>
+                  </div>
+                </article>
+                <article class="video-cell camera-c">
+                  <span class="video-name">310 值班室</span>
+                  <span class="video-time">REC 2026-07-27 15:45:02</span>
+                  <button class="cell-close" type="button" title="关闭画面">×</button>
+                  <div class="cell-controls">
+                    <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button>
+                    <button class="cell-tool" type="button" title="上一帧">◀</button>
+                    <button class="cell-tool" type="button" title="下一帧">▶</button>
+                  </div>
+                  <div class="cell-side-tools">
+                    <button class="cell-tool" type="button" title="截屏">▣</button>
+                    <button class="cell-tool" type="button" title="全屏">⛶</button>
+                  </div>
+                </article>
+                <article class="video-cell camera-a is-focused">
+                  <span class="video-name">401 监控室</span>
+                  <span class="video-time">REC 2026-07-27 15:45:02</span>
+                  <button class="cell-close" type="button" title="关闭画面">×</button>
+                  <div class="cell-controls">
+                    <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button>
+                    <button class="cell-tool" type="button" title="上一帧">◀</button>
+                    <button class="cell-tool" type="button" title="下一帧">▶</button>
+                  </div>
+                  <div class="cell-side-tools">
+                    <button class="cell-tool" type="button" title="截屏">▣</button>
+                    <button class="cell-tool" type="button" title="全屏">⛶</button>
+                  </div>
+                </article>
+                <article class="video-cell camera-b extra-cell hidden"><span class="video-name">北门通道</span></article>
+                <article class="video-cell camera-c extra-cell hidden"><span class="video-name">配电间</span></article>
+                <article class="video-cell camera-a extra-cell hidden"><span class="video-name">冷站入口</span></article>
+                <article class="video-cell camera-b extra-cell hidden"><span class="video-name">楼层大厅</span></article>
+                <article class="video-cell camera-c extra-cell hidden"><span class="video-name">园区西门</span></article>
               </div>
-              <div class="footer">
-                <span>共 5 条</span>
-                <div class="pagination">
-                  <span class="select-like">10条/页
-                    <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="m6 9 6 6 6-6"></path>
-                    </svg>
-                  </span>
-                  <span class="page-arrow">‹</span>
-                  <span class="page-current">1</span>
-                  <span class="page-arrow">›</span>
-                  <span class="jump">前往 <input class="page-input" value="1" aria-label="页码" /> 页</span>
+              <div class="video-bottom-bar">
+                <div class="grid-switch" data-grid-switch>
+                  <button class="grid-button" type="button" data-grid="1" title="单画面"><span class="grid-icon grid-one"><i></i></span></button>
+                  <button class="grid-button is-active" type="button" data-grid="4" title="四画面"><span class="grid-icon grid-four"><i></i><i></i><i></i><i></i></span></button>
+                  <button class="grid-button" type="button" data-grid="9" title="九画面"><span class="grid-icon grid-nine"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+                </div>
+                <div class="screen-actions">
+                  <button class="screen-button" type="button" title="复制当前布局">▣</button>
+                  <button class="screen-button" type="button" title="全屏">⛶</button>
                 </div>
               </div>
             </section>
           </div>
         </section>
+
+        <section class="view-page" id="view-device">
+          <div class="page-card">
+            <div class="page-title-row">
+              <h1 class="page-title">设备管理</h1>
+              <div class="page-title-actions">
+                <button class="btn" type="button" data-open-drawer="add">＋ 添加</button>
+                <button class="btn" type="button" data-open-drawer="batch">▣ 批量添加</button>
+              </div>
+            </div>
+            <div class="split-layout device-layout">
+              <section class="tree-panel">
+                <div class="tree-title">空间列表</div>
+                <div class="search-box"><input type="search" placeholder="搜索" aria-label="搜索空间" data-tree-search /></div>
+                <div class="tree-scroll" data-tree>
+                  <div class="tree-row is-selected" data-depth="0"><span class="tree-arrow">▾</span><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">华南区域</span></div>
+                  <div class="tree-row" data-depth="2"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">深圳南湾数据中心</span></div>
+                  <div class="tree-row" data-depth="3"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">1号数据楼</span></div>
+                  <div class="tree-row" data-depth="4"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">3层</span></div>
+                  <div class="tree-row" data-depth="5"><span class="tree-arrow"></span><span class="tree-icon">▤</span><span class="tree-label">301主机房</span></div>
+                  <div class="tree-row" data-depth="5"><span class="tree-arrow"></span><span class="tree-icon">▤</span><span class="tree-label">302网络机房</span></div>
+                  <div class="tree-row" data-depth="4"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">4层</span></div>
+                  <div class="tree-row" data-depth="2"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">广州科学城数据中心</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">华东区域</span></div>
+                  <div class="tree-row" data-depth="2"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">上海临港数据中心</span></div>
+                  <div class="tree-row" data-depth="2"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">苏州高新区数据中心</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">华北区域</span></div>
+                </div>
+              </section>
+
+              <section class="content-panel">
+                <div class="table-toolbar">
+                  <button class="btn btn-danger" type="button" data-confirm-delete>♲ 批量删除</button>
+                  <div class="toolbar-dropdown" data-bulk-edit-dropdown>
+                    <button class="btn toolbar-dropdown-toggle" type="button" data-toggle-bulk-edit>批量修改</button>
+                    <div class="toolbar-dropdown-menu">
+                      <button class="toolbar-dropdown-item" type="button" data-open-bulk-space>所属空间</button>
+                      <button class="toolbar-dropdown-item" type="button" data-open-bulk-credential>协议账密</button>
+                    </div>
+                  </div>
+                  <div class="toolbar-spacer"></div>
+                  <select class="select toolbar-protocol-filter" aria-label="按通信方式筛选" data-protocol-filter>
+                    <option value="">全部通信方式</option>
+                    <option value="海康SDK_v1.0.0">海康SDK_v1.0.0</option>
+                    <option value="海康RTSP_v2.0.0">海康RTSP_v2.0.0</option>
+                    <option value="海康RTSP_v1.0.0">海康RTSP_v1.0.0</option>
+                  </select>
+                  <div class="search-box toolbar-search"><input type="search" placeholder="请输入摄像头名称" aria-label="搜索摄像头" data-table-search /></div>
+                </div>
+                <div class="data-table-wrap">
+                  <table class="data-table" id="deviceTable">
+                    <thead>
+                      <tr>
+                        <th class="col-check"><input type="checkbox" aria-label="全选" data-select-all /></th>
+                        <th class="col-id">设备ID</th>
+                        <th class="col-name">摄像头名称</th>
+                        <th class="col-protocol">通信方式</th>
+                        <th class="col-param">通信参数</th>
+                        <th class="col-space">所属空间</th>
+                        <th class="col-status">通信状态</th>
+                        <th class="col-action">操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_465</td><td>werr</td><td>海康SDK_v1.0.0</td><td>192.168.7.23:8000-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>werr预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_286</td><td>海康SDK_v1.0.0</td><td>海康SDK_v1.0.0</td><td>192.168.29.211:8000-admin</td><td>共济科技/lwt</td><td><span class="status-tag error">异常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_287</td><td>1.66</td><td>海康RTSP_v2.0.0</td><td>192.168.1.66:554-chenyanran</td><td>共济科技/lwt</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_288</td><td>3.129</td><td>海康RTSP_v1.0.0</td><td>192.168.3.129:554-admin</td><td>共济科技/lwt</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_404</td><td>01#摄像头</td><td>海康RTSP_v2.0.0</td><td>192.168.0.50:1554-chenyanran</td><td>共济科技/华东区域/上海临港数据中心/2号数据楼/B201机房</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_405</td><td>02#摄像头</td><td>海康RTSP_v2.0.0</td><td>192.168.0.50:1554-chenyanran</td><td>共济科技/华南区域/广州科学城数据中心/A栋数据楼/A101核心机房</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_406</td><td>03#摄像头</td><td>海康SDK_v1.0.0</td><td>192.168.0.50:1555-admin</td><td>共济科技/JHHL数据中心园区/D1</td><td><span class="status-tag error">异常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_445</td><td>04#摄像头</td><td>海康RTSP_v1.0.0</td><td>192.168.7.22:554-admin</td><td>共济科技/JHHL数据中心园区/D1</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_448</td><td>06#摄像头</td><td>海康RTSP_v1.0.0</td><td>192.168.7.24:554-admin</td><td>共济科技/JHHL数据中心园区/D1</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                      <tr>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_449</td><td>07#摄像头</td><td>海康RTSP_v1.0.0</td><td>192.168.51.254:554-admin</td><td>共济科技/JHHL数据中心园区/D1</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-footer">
+                  <span>共 12 条</span>
+                  <div class="pagination">
+                    <select class="page-select" aria-label="每页条数"><option>10条/页</option><option>20条/页</option></select>
+                    <span style="color:#9aa8b8">‹</span><span class="page-number">1</span><span>2</span><span>›</span>
+                    <span>前往</span><input class="page-input" value="1" aria-label="页码" /><span>页</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="view-page" id="view-history">
+          <div class="history-layout">
+            <section class="tree-panel">
+              <div class="tree-title">设备列表</div>
+              <div class="search-box"><input type="search" value="werr" aria-label="搜索设备" data-tree-search /></div>
+              <div class="tree-scroll" data-tree>
+                <div class="tree-row" data-depth="0"><span class="tree-arrow">▾</span><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">百度文心一言广州智算中心</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">AI节能演示专用</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">BlueSpace</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▾</span><span class="tree-icon">▥</span><span class="tree-label">互盟南湾园区</span></div>
+                <div class="tree-row is-selected" data-depth="2"><span class="tree-arrow"></span><span class="tree-icon">▤</span><span class="tree-label">werr</span></div>
+                <div class="tree-row" data-depth="2"><span class="tree-arrow"></span><span class="tree-icon">▥</span><span class="tree-label">南湾数据楼</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">供冷房间</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">共济业务</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">北京</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">场景1</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">场景2</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">新建园区</span></div>
+                <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">深圳</span></div>
+              </div>
+            </section>
+
+            <section class="history-workbench">
+              <div class="history-grid">
+                <article class="video-cell camera-a is-focused">
+                  <span class="video-name">309 门口</span>
+                  <span class="video-time">REC 2026-07-27 15:45:02</span>
+                  <div class="video-loading"><span class="spinner"></span><span>历史视频加载中...</span></div>
+                  <div class="cell-controls" style="opacity:1;transform:none">
+                    <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button>
+                    <button class="cell-tool" type="button" title="上一帧">◀</button>
+                    <button class="cell-tool" type="button" title="下一帧">▶</button>
+                    <button class="cell-tool" type="button" title="下载">↓</button>
+                  </div>
+                  <div class="cell-side-tools" style="opacity:1">
+                    <button class="cell-tool" type="button" title="截屏">▣</button>
+                    <button class="cell-tool" type="button" title="全屏">⛶</button>
+                  </div>
+                </article>
+                <article class="video-cell">
+                  <span class="video-name">309 窗户</span>
+                  <div class="video-empty"><span class="empty-icon"></span><span>暂无数据</span></div>
+                </article>
+                <article class="video-cell">
+                  <span class="video-name">310 值班室</span>
+                  <div class="video-empty"><span class="empty-icon"></span><span>暂无数据</span></div>
+                </article>
+                <article class="video-cell">
+                  <span class="video-name">401 监控室</span>
+                  <div class="video-empty"><span class="empty-icon"></span><span>暂无数据</span></div>
+                </article>
+              </div>
+              <div class="timeline-panel">
+                <div class="timeline-top">
+                  <div class="grid-switch">
+                    <button class="grid-button is-active" type="button" title="单画面"><span class="grid-icon grid-one"><i></i></span></button>
+                    <button class="grid-button" type="button" title="四画面"><span class="grid-icon grid-four"><i></i><i></i><i></i><i></i></span></button>
+                    <button class="grid-button" type="button" title="九画面"><span class="grid-icon grid-nine"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+                  </div>
+                  <div class="timeline-track">
+                    <div class="timeline-line"></div>
+                    <div class="time-labels"><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span><span>22:00</span><span>00:00</span><span>02:00</span><span>04:00</span><span>06:00</span></div>
+                  </div>
+                  <div class="screen-actions"><button class="screen-button" title="复制">▣</button><button class="screen-button" title="全屏">⛶</button></div>
+                </div>
+                <div class="date-tabs"><span>07/21</span><span>07/22</span><strong>07/23</strong><span>07/24</span><span>07/25</span><span>07/26</span><span>07/27</span></div>
+              </div>
+            </section>
+
+            <aside class="history-info">
+              <div class="history-info-title">设备名称：werr</div>
+              <div class="history-info-row">当前状态：回放</div>
+              <input class="range-input" value="2026-07-26 00:00  -  2026-07-27 00:00" aria-label="回放时间范围" />
+            </aside>
+          </div>
+        </section>
+
+        <section class="view-page" id="view-binding">
+          <div class="page-card">
+            <div class="page-header">
+              <h1 class="page-title">设备绑定 <span class="info-dot" title="本模块用于设备告警时查看关联摄像头的实时/历史视频。支持关联设备，也支持关联设备下的测点。">i</span></h1>
+              <div class="header-actions">
+                <button class="btn btn-primary" type="button" data-open-drawer="settings">历史视频设置</button>
+              </div>
+            </div>
+            <div class="split-layout binding-layout">
+              <section class="tree-panel">
+                <div class="tree-title">空间列表</div>
+                <div class="search-box"><input type="search" placeholder="搜索" aria-label="搜索空间" data-tree-search /></div>
+                <div class="tree-scroll" data-tree>
+                  <div class="tree-row is-selected" data-depth="0"><span class="tree-arrow">▾</span><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">百度文心一言广州智算中心</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">AI节能演示专用</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">BlueSpace</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">JHHL数据中心园区</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">llh</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">lwt</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">lyh</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">M01</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">test园区</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">test模板_楼宇</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">wrtest</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">xpert园区</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">ZJ</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">中国共济</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">互盟南湾园区</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">供冷房间</span></div>
+                  <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><span class="tree-icon">▥</span><span class="tree-label">共济业务</span></div>
+                </div>
+              </section>
+
+              <section class="content-panel">
+                <div class="data-table-wrap">
+                  <table class="data-table binding-table">
+                    <thead>
+                      <tr><th style="width:60px">序号</th><th class="col-id">设备ID</th><th class="col-name">设备名称</th><th class="col-space">所属位置</th><th class="col-bind">绑定设备</th><th class="col-action">操作</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>1</td><td>0_631_1_1057_0</td><td><button class="action-link">⌁ 功率负载率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>2</td><td>0_631_1_100_0</td><td><button class="action-link">⌁ 总电能</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>3</td><td>0_631_1_101_0</td><td><button class="action-link">⌁ 已用制冷量</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>4</td><td>0_631_1_102_0</td><td><button class="action-link">⌁ 可用制冷量</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>5</td><td>0_631_1_103_0</td><td><button class="action-link">⌁ 制冷负载率</button></td><td>共济科技/AI节能演示专用</td><td>werr</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>6</td><td>0_631_1_610_0</td><td><button class="action-link">⌁ 可用功率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>7</td><td>0_631_1_626_0</td><td><button class="action-link">⌁ 已用功率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="table-footer">
+                  <span>共 7 条</span>
+                  <div class="pagination"><select class="page-select"><option>10条/页</option></select><span style="color:#9aa8b8">‹</span><span class="page-number">1</span><span>›</span><span>前往</span><input class="page-input" value="1" /><span>页</span></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
-    <div class="drawer-mask" id="drawerMask"></div>
-    <aside class="drawer" id="settingsDrawer" aria-label="告警历史视频设置" aria-hidden="true">
-      <div class="drawer-header">
-        <h2 class="drawer-title">告警历史视频设置</h2>
-        <button class="drawer-close" id="closeSettings" type="button" aria-label="关闭">
-          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6 6 18"></path>
-            <path d="m6 6 12 12"></path>
-          </svg>
-        </button>
+
+    <section class="version-requirements-page" id="versionRequirementsPage" aria-hidden="true">
+      <div class="version-req-page-head">
+        <div>
+          <button class="version-req-back" type="button" data-close-version-requirements>← 返回原型</button>
+          <div class="version-req-page-title">版本需求管理</div>
+        </div>
+        <button class="demand-mode-toggle" type="button" data-toggle-demand-mode aria-pressed="true">需求角标</button>
       </div>
-      <div class="drawer-body">
-        <div class="form-block">
-          <span class="form-label">告警历史视频查看时长配置</span>
-          <div class="duration-group">
-            <label class="duration-row" for="historyBeforeDuration">
-              <span>告警发生前</span>
-              <input class="duration-input" id="historyBeforeDuration" type="number" min="1" value="30" />
-              <span>秒</span>
-            </label>
-            <label class="duration-row" for="historyAfterDuration">
-              <span>告警发生后</span>
-              <input class="duration-input" id="historyAfterDuration" type="number" min="1" value="30" />
-              <span>秒</span>
-            </label>
+      <div class="version-req-page-body">
+        <div class="version-req-toolbar">
+          <div class="version-req-filter" aria-label="版本需求筛选">
+            <button type="button">全部版本</button>
+            <button class="is-active" type="button">v3.0</button>
+          </div>
+          <div class="version-req-summary">当前显示 2 条需求</div>
+        </div>
+        <section class="version-req-version">
+          <div class="version-req-version-head">
+            <div>
+              <div class="version-req-version-title">v3.0</div>
+              <div class="version-req-version-goal">视频管理_v3.0_支持批量修改位置及账密</div>
+            </div>
+            <span class="version-req-count">2 条需求</span>
+          </div>
+          <div class="version-req-group-title">新增</div>
+          <div class="version-req-list">
+            <article class="version-req-item" role="button" tabindex="0" data-card-locate-demand="V3R5-5925">
+              <div class="version-req-item-head">
+                <div class="version-req-item-title">【视频管理】新增 支持批量修改协议账密</div>
+                <span class="version-req-status">设计完成</span>
+              </div>
+              <div class="version-req-item-foot">
+                <span class="version-req-id"><button class="version-req-ticket" type="button" data-open-ones-issue="V3R5-5925" title="在 ONES 中打开 V3R5-5925">V3R5-5925</button> · 设备管理</span>
+                <div class="version-req-item-actions">
+                  <button class="version-req-story" type="button" data-open-user-story="V3R5-5925">用户故事</button>
+                  <button class="version-req-locate" type="button" data-locate-demand="V3R5-5925">定位功能</button>
+                </div>
+              </div>
+            </article>
+            <article class="version-req-item" role="button" tabindex="0" data-card-locate-demand="V3R5-5620">
+              <div class="version-req-item-head">
+                <div class="version-req-item-title">【视频管理】新增 支持批量更改设备位置</div>
+                <span class="version-req-status">设计完成</span>
+              </div>
+              <div class="version-req-item-foot">
+                <span class="version-req-id"><button class="version-req-ticket" type="button" data-open-ones-issue="V3R5-5620" title="在 ONES 中打开 V3R5-5620">V3R5-5620</button> · 所属空间</span>
+                <div class="version-req-item-actions">
+                  <button class="version-req-story" type="button" data-open-user-story="V3R5-5620">用户故事</button>
+                  <button class="version-req-locate" type="button" data-locate-demand="V3R5-5620">定位功能</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="version-story-layer" id="versionStoryLayer" aria-hidden="true">
+      <aside class="version-story-drawer" role="dialog" aria-modal="true" aria-labelledby="versionStoryTitle">
+        <div class="version-story-head">
+          <div><h3 id="versionStoryTitle">用户故事</h3><div class="version-story-meta" id="versionStoryMeta"></div></div>
+          <button class="close-button" type="button" data-close-user-story aria-label="关闭">×</button>
+        </div>
+        <div class="version-story-body" id="versionStoryBody"></div>
+      </aside>
+    </section>
+
+    <div class="mask" id="mask"></div>
+
+    <section class="modal preview-modal" id="previewModal" aria-hidden="true">
+      <div class="modal-header"><h2 class="modal-title">视频预览</h2><button class="close-button" type="button" data-close>×</button></div>
+      <div class="modal-body">
+        <div class="preview-screen">
+          <span class="video-name">werr</span>
+          <span class="video-time">REC 2026-07-27 15:45:34</span>
+          <div class="cell-controls" style="opacity:1;transform:none">
+            <button class="cell-tool" type="button" title="播放/暂停">Ⅱ</button><button class="cell-tool" type="button" title="上一帧">◀</button><button class="cell-tool" type="button" title="下一帧">▶</button>
+          </div>
+          <div class="cell-side-tools" style="opacity:1"><button class="cell-tool" title="截屏">▣</button><button class="cell-tool" title="全屏">⛶</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal small" id="deleteModal" aria-hidden="true">
+      <div class="modal-header"><h2 class="modal-title"><span class="confirm-icon">×</span>删除</h2><button class="close-button" type="button" data-close>×</button></div>
+      <div class="modal-body"><div class="confirm-message">确定删除此摄像头吗？删除后不可恢复。</div></div>
+      <div class="modal-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" type="button" data-confirm-action>确定</button></div>
+    </section>
+
+    <section class="modal medium" id="popupConfigModal" aria-hidden="true">
+      <div class="modal-header"><h2 class="modal-title">弹窗配置</h2><button class="close-button" type="button" data-close>×</button></div>
+      <div class="modal-body">
+        <div class="info-note">ⓘ 按设备设置弹窗时会自动应用至设备下的测点</div>
+        <div class="form-grid" style="margin-top:16px">
+          <div class="form-item"><label>告警弹窗 <span class="required">*</span></label><div class="inline-options"><label><input type="checkbox" checked /> 自动弹出</label></div></div>
+          <div class="config-card">
+            <div class="config-head"><span>规则配置</span><button class="btn" style="height:27px;padding:0 11px">设为默认</button></div>
+            <div class="form-item"><label>事件类型 <span class="required">*</span></label><div class="inline-options"><label><input type="checkbox" checked /> 告警</label><label><input type="checkbox" /> 事件</label></div></div>
+            <div class="form-item" style="margin-top:12px"><label>告警级别判断 <span class="required">*</span></label><div class="two-fields"><select class="select"><option>请选择</option><option>告警级别</option></select><select class="select"><option>请选择</option><option>严重</option></select></div></div>
+            <div class="form-item" style="margin-top:12px"><label>发送屏蔽告警 <span class="required">*</span></label><select class="select"><option>不发送屏蔽告警</option><option>发送屏蔽告警</option></select></div>
+            <div class="form-item" style="margin-top:12px"><label>自动关闭 <span style="color:#9aa8b8;font-weight:400">（设置为0则不关闭）</span> <span class="required">*</span></label><div class="stepper"><button>−</button><input value="60" /><button>＋</button></div></div>
+            <div class="form-item" style="margin-top:12px"><label>权限角色 <span class="required">*</span></label><input class="input" placeholder="请选择" /></div>
+            <div class="form-item" style="margin-top:12px"><label>触发位置 <span class="required">*</span></label><div class="inline-options"><label><input type="radio" name="trigger" checked /> 仅设施监控/驾驶舱</label><label><input type="radio" name="trigger" /> 全局触发</label></div></div>
+          </div>
+          <div class="form-item"><label>摄像头点位 ⓘ</label><input class="input" placeholder="请输入预置点编号，整数，通常在300以内" /></div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" type="button" data-save>确认</button></div>
+    </section>
+
+    <section class="modal medium" id="bulkEditSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="【视频管理】新增 支持批量更改设备位置" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-所属空间”统一更改设备位置。||操作规则：未勾选设备时阻止进入；选择目标空间并确认后，统一更新所选设备的所属空间。||空间规则：目标空间支持输入搜索并按树形结构展示，可选择企业、区域、数据中心、数据楼、楼层或机房，回填从根节点到当前节点的完整路径。||异常处理：未选择所属空间时阻止提交并提示；切换分页时保留已勾选设备。">
+      <div class="modal-header">
+        <h2 class="modal-title">批量修改所属空间</h2>
+        <button class="close-button" type="button" data-close aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="bulk-edit-summary">已选择 <strong data-bulk-edit-count>0</strong> 台设备，修改后将统一更新所选设备的所属空间。</div>
+        <div class="form-item">
+          <label>所属空间 <span class="required">*</span></label>
+          <select class="select" data-bulk-edit-space>
+            <option value="">请选择所属空间</option>
+            <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房">共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option>
+            <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室">共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option>
+            <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室">共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option>
+            <option value="共济科技 / JHHL数据中心园区 / D1">共济科技 / JHHL数据中心园区 / D1</option>
+            <option value="共济科技 / AI节能演示专用">共济科技 / AI节能演示专用</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-close>取消</button>
+        <button class="btn btn-primary" type="button" data-confirm-bulk-space>确认修改</button>
+      </div>
+    </section>
+
+    <section class="modal medium" id="bulkEditCredentialModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5925" data-demand-title="【视频管理】新增 支持批量修改协议账密" data-demand-text="需求来源：v3.0，需求ID：V3R5-5925。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-协议账密”统一修改协议认证信息。||操作规则：先选择需要修改的通信方式，再填写新密钥ID/用户名和新密钥/密码；确认后对所选设备批量生效。||状态限制：未勾选设备时阻止进入；未选择通信方式或账密填写不完整时阻止提交并提示。||安全规则：密码输入默认掩码展示，界面不回显原密码。">
+      <div class="modal-header">
+        <h2 class="modal-title">批量修改协议账密</h2>
+        <button class="close-button" type="button" data-close aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="bulk-edit-summary">已选择 <strong data-bulk-credential-count>0</strong> 台设备，请先选择需要修改账密的通信方式。</div>
+        <div class="form-item">
+          <label>通信方式 <span class="required">*</span></label>
+          <select class="select" data-bulk-credential-protocol>
+            <option value="">请选择通信方式</option>
+            <option value="海康SDK_v1.0.0">海康SDK_v1.0.0</option>
+            <option value="海康RTSP_v2.0.0">海康RTSP_v2.0.0</option>
+            <option value="大华SDK_v5.0.12">大华SDK_v5.0.12</option>
+          </select>
+        </div>
+        <div class="bulk-credential-fields" data-bulk-credential-fields>
+          <div class="form-item">
+            <label>新密钥ID/用户名 <span class="required">*</span></label>
+            <input class="input" type="text" placeholder="请输入" data-bulk-credential-user />
+          </div>
+          <div class="form-item">
+            <label>新密钥/密码 <span class="required">*</span></label>
+            <input class="input" type="password" placeholder="请输入" data-bulk-credential-password />
           </div>
         </div>
-        <div class="form-block is-disabled">
-          <div class="form-label-row">
-            <span class="form-label">告警历史视频存储方式</span>
-            <span class="status-tag">非本期实现</span>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-close>取消</button>
+        <button class="btn btn-primary" type="button" data-confirm-bulk-credential>确认修改</button>
+      </div>
+    </section>
+
+    <section class="modal batch-space-modal" id="batchSpaceModal" aria-hidden="true">
+      <div class="modal-header">
+        <h2 class="modal-title">设置设备所属空间</h2>
+        <button class="close-button" type="button" data-close aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="batch-space-intro">已扫描到 6 台摄像头，请确认设备信息并设置所属空间。</div>
+        <div class="batch-space-toolbar">
+          <div class="batch-selected-summary">已选择 <strong data-batch-selected-count>0</strong> 台设备</div>
+          <div class="batch-space-actions">
+            <select class="select" data-batch-space-select aria-label="批量选择所属空间">
+              <option value="">请选择所属空间</option>
+              <option value="共济科技 / 互盟南湾园区">共济科技 / 互盟南湾园区</option>
+              <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房">共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option>
+              <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室">共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option>
+              <option value="共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室">共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option>
+              <option value="共济科技 / JHHL数据中心园区 / D1">共济科技 / JHHL数据中心园区 / D1</option>
+              <option value="共济科技 / AI节能演示专用">共济科技 / AI节能演示专用</option>
+            </select>
+            <button class="btn" type="button" data-apply-batch-space>应用到已选</button>
           </div>
-          <label class="check-row">
-            <input type="checkbox" id="saveLocal" disabled />
-            <span>存储至本地</span>
-          </label>
         </div>
-        <div class="form-block">
-          <span class="form-label">告警历史存储视频说明</span>
-          <div class="drawer-note">
-            发生告警时，系统会自动截取告警设备已关联摄像头在告警时间点前后指定时长的视频片段，用于后续追溯与核查。
-          </div>
-          <div class="drawer-note">
-            查看入口位于告警详情中的“关联视频”，可通过弹窗左上角的“实时视频 / 历史视频”切换查看。
-          </div>
+        <div class="batch-space-table-wrap">
+          <table class="data-table batch-space-table">
+            <thead>
+              <tr>
+                <th class="batch-col-check"><input type="checkbox" data-batch-select-all aria-label="全选设备" /></th>
+                <th class="batch-col-id">设备ID</th>
+                <th class="batch-col-name">摄像头名称</th>
+                <th class="batch-col-space">所属空间</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_001" /></td>
+                <td>X_001</td>
+                <td>南门入口</td>
+                <td><select class="select" data-row-space><option value="">请选择所属空间</option><option selected>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_002" /></td>
+                <td>X_002</td>
+                <td>研发中心走廊</td>
+                <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_003" /></td>
+                <td>X_003</td>
+                <td>309机房</td>
+                <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_004" /></td>
+                <td>X_004</td>
+                <td>310值班室</td>
+                <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_005" /></td>
+                <td>X_005</td>
+                <td>401监控室</td>
+                <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+              <tr>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_006" /></td>
+                <td>X_006</td>
+                <td>北门通道</td>
+                <td><select class="select" data-row-space><option value="" selected>请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="drawer-footer">
-        <button class="btn-secondary" id="cancelSettings" type="button">取消</button>
-        <button class="btn-primary" id="saveSettings" type="button">保存</button>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-close>取消</button>
+        <button class="btn btn-primary" type="button" data-batch-confirm>确认添加</button>
       </div>
+    </section>
+
+    <aside class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer-header"><h2 class="drawer-title" id="drawerTitle">编辑设备</h2><button class="close-button" type="button" data-close>×</button></div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" id="drawerSaveButton" type="button" data-save>保存</button></div>
     </aside>
+
+    <template id="tpl-edit">
+      <div class="form-grid">
+        <div class="form-item"><label>设备名称 <span class="required">*</span></label><input class="input" value="werr" /></div>
+        <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select" disabled><option>海康SDK_v1.0.0</option></select></div>
+        <div class="form-item"><label>设备地址 <span class="required">*</span></label><p class="field-note">摄像头或录像机的IP地址</p><input class="input" value="192.168.7.23" /></div>
+        <div class="form-item"><label>端口号 <span class="required">*</span></label><p class="field-note">摄像头或录像机的通信端口</p><div class="stepper"><button>−</button><input value="8000" /><button>＋</button></div></div>
+        <div class="form-item"><label>用户名 <span class="required">*</span></label><p class="field-note">摄像头或录像机的登录用户名</p><input class="input" value="admin" /></div>
+        <div class="form-item"><label>密码 <span class="required">*</span></label><p class="field-note">摄像头或录像机的登录密码</p><input class="input" value="xb123456" /></div>
+        <div class="form-item"><label>通道号 <span class="required">*</span></label><p class="field-note">直连摄像头默认为1，对接录像机需根据通道号填写</p><div class="stepper"><button>−</button><input value="1" /><button>＋</button></div></div>
+        <div class="form-item"><label>码流 <span class="required">*</span></label><p class="field-note">1主码流、2子码流、3三码流，以此类推</p><div class="stepper"><button>−</button><input value="3" /><button>＋</button></div></div>
+        <div class="form-item"><label>设备类型 <span class="required">*</span></label><select class="select"><option>录像机</option><option>摄像头</option></select></div>
+      </div>
+    </template>
+
+    <template id="tpl-add">
+      <div class="form-grid">
+        <div class="form-item"><label>设备名称 <span class="required">*</span></label><input class="input is-error" placeholder="请输入设备名称" /><div class="field-error">请输入设备名称</div></div>
+        <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select"><option>海康安防平台_v1.0.0</option><option>海康SDK_v1.0.0</option><option>海康RTSP_v2.0.0</option></select></div>
+        <div class="form-item"><label>设备地址 <span class="required">*</span></label><p class="field-note">摄像头或录像机的IP地址</p><input class="input" /></div>
+        <div class="form-item"><label>端口号 <span class="required">*</span></label><p class="field-note">摄像头或录像机的通信端口</p><div class="stepper"><button>−</button><input value="443" /><button>＋</button></div></div>
+        <div class="form-item"><label>密钥ID</label><p class="field-note">密钥ID和密钥一起使用，对请求进行加密签名</p><input class="input" /></div>
+        <div class="form-item"><label>密钥</label><p class="field-note">密钥ID和密钥一起使用，对请求进行加密签名</p><input class="input" /></div>
+        <div class="form-item"><label>摄像头编码</label><p class="field-note">安防平台中摄像头编码</p><input class="input" /></div>
+        <div class="form-item"><label>码流</label><p class="field-note">摄像头或录像机的预览码流</p><div class="stepper"><button>−</button><input value="0" /><button>＋</button></div></div>
+        <div class="form-item"><label>录像来源</label><select class="select"><option>平台录像</option><option>设备录像</option></select></div>
+      </div>
+    </template>
+
+    <template id="tpl-batch">
+      <div class="form-grid">
+        <div class="form-item"><label>添加方式 <span class="required">*</span></label><select class="select"><option>硬盘录像机扫描</option><option>按IP段扫描</option></select></div>
+        <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select"><option>大华SDK_v5.0.12</option><option>海康SDK_v1.0.0</option></select></div>
+        <div class="form-item"><label>设备地址 <span class="required">*</span></label><p class="field-note">录像机的IP地址</p><input class="input" /></div>
+        <div class="form-item"><label>端口号 <span class="required">*</span></label><p class="field-note">录像机的通信端口</p><div class="stepper"><button>−</button><input value="37777" /><button>＋</button></div></div>
+        <div class="form-item"><label>用户名 <span class="required">*</span></label><p class="field-note">录像机的登录用户名</p><input class="input" /></div>
+        <div class="form-item"><label>密码 <span class="required">*</span></label><p class="field-note">录像机的登录密码</p><input class="input" /></div>
+        <div class="form-item"><label>凭证ID <span class="required">*</span></label><p class="field-note">自定义（由ICC平台申请）</p><input class="input" /></div>
+        <div class="form-item"><label>凭证秘钥 <span class="required">*</span></label><p class="field-note">访问凭证必须与ICC平台申请的保持一致</p><input class="input" /></div>
+        <div class="form-item"><label>录像来源 <span class="required">*</span></label><select class="select"><option>录像机</option><option>摄像头</option></select></div>
+      </div>
+    </template>
+
+    <template id="tpl-device-bind">
+      <section class="tree-panel drawer-tree">
+        <div class="search-box"><input type="search" placeholder="搜索" data-tree-search /></div>
+        <div class="tree-scroll" data-tree>
+          <div class="tree-row is-selected" data-depth="0"><span class="tree-arrow">▾</span><input class="tree-check" type="checkbox" /><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">百度文心一言广州智算中心</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">AI节能演示专用</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">BlueSpace</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">JHHL数据中心园区</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">llh</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">lwt</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">lyh</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">M01</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">test园区</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">test模板_楼宇</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wrtest</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">xpert园区</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">ZJ</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">中国共济</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">互盟南湾园区</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">供冷房间</span></div>
+        </div>
+      </section>
+    </template>
+
+    <template id="tpl-alarm-bind">
+      <section class="tree-panel drawer-tree">
+        <div class="tree-title">设备列表</div>
+        <div class="search-box"><input type="search" placeholder="搜索" data-tree-search /></div>
+        <div class="tree-scroll" data-tree>
+          <div class="tree-row" data-depth="0"><span class="tree-arrow">▾</span><input class="tree-check" type="checkbox" /><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wrtest</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">xpert园区</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▾</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">互盟南湾园区</span></div>
+          <div class="tree-row is-selected" data-depth="2"><span class="tree-arrow"></span><input class="tree-check" type="checkbox" checked /><span class="tree-icon">▤</span><span class="tree-label">werr</span><button class="tree-link" type="button" data-popup-config>弹窗配置</button></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">南湾数据楼</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">供冷房间</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">共济业务</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">北京</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">园区-bak</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">场景1</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">场景2</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">场景3</span></div>
+          <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">新建园区</span></div>
+        </div>
+      </section>
+    </template>
+
+    <template id="tpl-settings">
+      <div class="setting-block">
+        <span class="section-label">告警历史视频查看时长配置</span>
+        <div class="setting-row"><span><span class="required">*</span> 告警发生前</span><div class="stepper"><button>−</button><input value="30" /><button>＋</button></div><span>秒</span></div>
+        <div class="setting-row"><span><span class="required">*</span> 告警发生后</span><div class="stepper"><button>−</button><input value="30" /><button>＋</button></div><span>秒</span></div>
+      </div>
+      <div class="setting-block">
+        <span class="section-label">告警历史视频存储说明</span>
+        <div class="info-note">ⓘ 发生告警时，系统会自动截取告警设备已关联摄像头在告警时间点前后指定时长的视频片段，用于后续追溯与核查。</div>
+        <div class="info-note">ⓘ 查看入口位于告警详情中的“关联视频”，可通过弹窗左上角的“实时画面 / 告警视频”切换查看。</div>
+      </div>
+    </template>
+
+    <div class="toast" id="toast">✓ 操作成功</div>
+
     <script>
-      const demandTargets = document.querySelectorAll("[data-demand-text]");
-      const demandPopover = document.createElement("div");
-      demandPopover.className = "demand-popover";
-      demandPopover.setAttribute("role", "tooltip");
-      document.body.appendChild(demandPopover);
+      (() => {
+        const body = document.body;
+        const mask = document.getElementById("mask");
+        const drawer = document.getElementById("drawer");
+        const drawerTitle = document.getElementById("drawerTitle");
+        const drawerBody = document.getElementById("drawerBody");
+        const drawerSaveButton = document.getElementById("drawerSaveButton");
+        const previewModal = document.getElementById("previewModal");
+        const deleteModal = document.getElementById("deleteModal");
+        const popupConfigModal = document.getElementById("popupConfigModal");
+        const batchSpaceModal = document.getElementById("batchSpaceModal");
+        const bulkEditSpaceModal = document.getElementById("bulkEditSpaceModal");
+        const bulkEditCredentialModal = document.getElementById("bulkEditCredentialModal");
+        const toast = document.getElementById("toast");
+        let toastTimer;
+        let activeDrawerType = "";
 
-      function showDemandPopover(trigger, target) {
-        const title = target.dataset.demandTitle || "需求说明";
-        const text = target.dataset.demandText || "";
-        demandPopover.innerHTML = `<div class="demand-popover-title">${title}</div><p>${text.split("||").join("</p><p>")}</p>`;
-        demandPopover.classList.add("is-visible");
+        const drawerConfig = {
+          edit: { title: "编辑设备", template: "tpl-edit" },
+          add: { title: "添加设备", template: "tpl-add" },
+          batch: { title: "批量添加设备", template: "tpl-batch" },
+          "device-bind": { title: "设备绑定", template: "tpl-device-bind" },
+          "alarm-bind": { title: "设备绑定", template: "tpl-alarm-bind" },
+          settings: { title: "告警历史视频设置", template: "tpl-settings" }
+        };
 
-        const triggerRect = trigger.getBoundingClientRect();
-        const popoverRect = demandPopover.getBoundingClientRect();
-        const gap = 10;
-        let left = triggerRect.right + gap;
-        let top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
-
-        if (left + popoverRect.width > window.innerWidth - 12) {
-          left = triggerRect.left - popoverRect.width - gap;
+        function setMask(open) {
+          mask.classList.toggle("is-open", open);
+          body.style.overflow = open ? "hidden" : "";
         }
 
-        left = Math.max(12, Math.min(left, window.innerWidth - popoverRect.width - 12));
-        top = Math.max(12, Math.min(top, window.innerHeight - popoverRect.height - 12));
+        function closeAll() {
+          drawer.classList.remove("is-open");
+          drawer.setAttribute("aria-hidden", "true");
+          activeDrawerType = "";
+          drawerSaveButton.textContent = "保存";
+          document.querySelectorAll(".modal.is-open").forEach((modal) => {
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+          });
+          setMask(false);
+        }
 
-        demandPopover.style.left = `${left}px`;
-        demandPopover.style.top = `${top}px`;
-      }
+        function openModal(modal) {
+          document.querySelectorAll(".modal.is-open").forEach((item) => item.classList.remove("is-open"));
+          modal.classList.add("is-open");
+          modal.setAttribute("aria-hidden", "false");
+          setMask(true);
+        }
 
-      function hideDemandPopover() {
-        demandPopover.classList.remove("is-visible");
-      }
+        function openDrawer(type) {
+          const config = drawerConfig[type];
+          if (!config) return;
+          const template = document.getElementById(config.template);
+          activeDrawerType = type;
+          drawerTitle.textContent = config.title;
+          drawerSaveButton.textContent = type === "batch" ? "下一步" : "保存";
+          drawerBody.replaceChildren(template.content.cloneNode(true));
+          drawerBody.querySelectorAll("[data-tree]").forEach(syncSpaceTree);
+          bindSpaceTreeInteractions(drawerBody);
+          drawer.classList.add("is-open");
+          drawer.setAttribute("aria-hidden", "false");
+          setMask(true);
+          bindDynamicEvents();
+        }
 
-      demandTargets.forEach((target) => {
-        const badge = document.createElement("span");
-        badge.className = "demand-badge";
-        badge.innerHTML = '<button class="demand-badge-trigger" type="button" aria-label="需求说明">需</button>';
-        target.appendChild(badge);
+        function showToast(text) {
+          toast.textContent = "✓ " + text;
+          toast.classList.add("is-open");
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => toast.classList.remove("is-open"), 1600);
+        }
 
-        const trigger = badge.querySelector(".demand-badge-trigger");
-        trigger.addEventListener("mouseenter", () => showDemandPopover(trigger, target));
-        trigger.addEventListener("focus", () => showDemandPopover(trigger, target));
-        trigger.addEventListener("mouseleave", hideDemandPopover);
-        trigger.addEventListener("blur", hideDemandPopover);
-        trigger.addEventListener("click", (event) => event.stopPropagation());
-      });
+        function bindTreeSearch(root = document) {
+          root.querySelectorAll("[data-tree-search]").forEach((input) => {
+            if (input.dataset.bound) return;
+            input.dataset.bound = "1";
+            input.addEventListener("input", () => {
+              const value = input.value.trim().toLowerCase();
+              const tree = input.closest(".tree-panel")?.querySelector("[data-tree]") || input.parentElement.parentElement.querySelector("[data-tree]");
+              if (!tree) return;
+              tree.querySelectorAll(".tree-row").forEach((row) => {
+                const text = row.textContent.toLowerCase();
+                row.classList.toggle("hidden", value && !text.includes(value));
+              });
+            });
+          });
+        }
 
-      const drawer = document.getElementById("settingsDrawer");
-      const openSettings = document.getElementById("openSettings");
-      const closeSettings = document.getElementById("closeSettings");
-      const cancelSettings = document.getElementById("cancelSettings");
-      const saveSettings = document.getElementById("saveSettings");
-      const drawerMask = document.getElementById("drawerMask");
+        function bindDynamicEvents() {
+          bindTreeSearch(drawer);
+          drawer.querySelectorAll("[data-popup-config]").forEach((button) => {
+            button.addEventListener("click", (event) => {
+              event.stopPropagation();
+              drawer.classList.remove("is-open");
+              openModal(popupConfigModal);
+            });
+          });
+          drawer.querySelectorAll(".tree-row").forEach((row) => {
+            row.addEventListener("click", (event) => {
+              if (event.target.closest("button,input")) return;
+              row.closest(".tree-scroll")?.querySelectorAll(".tree-row").forEach((item) => item.classList.remove("is-selected"));
+              row.classList.add("is-selected");
+            });
+          });
+        }
 
-      function openDrawer() {
-        document.body.classList.add("drawer-open");
-        drawer.setAttribute("aria-hidden", "false");
-      }
+        const batchSelectedIds = new Set();
+        let batchCurrentPage = 1;
+        const batchTotal = 436;
+        const batchPageSize = 200;
 
-      function closeDrawer() {
-        document.body.classList.remove("drawer-open");
-        drawer.setAttribute("aria-hidden", "true");
-      }
+        const spaceTreeData = [
+          { label: "共济科技", level: 0, branch: true, count: 436 },
+          { label: "华南区域", level: 1, branch: true, count: 286 },
+          { label: "深圳南湾数据中心", level: 2, branch: true, count: 196 },
+          { label: "1号数据楼", level: 3, branch: true, count: 196 },
+          { label: "3层", level: 4, branch: true, count: 128 },
+          { label: "301主机房", level: 5, count: 72 },
+          { label: "302网络机房", level: 5, count: 56 },
+          { label: "4层", level: 4, branch: true, count: 68 },
+          { label: "401电力机房", level: 5, count: 68 },
+          { label: "广州科学城数据中心", level: 2, branch: true, count: 90 },
+          { label: "A栋数据楼", level: 3, branch: true, count: 90 },
+          { label: "A101核心机房", level: 4, count: 90 },
+          { label: "华东区域", level: 1, branch: true, count: 112 },
+          { label: "上海临港数据中心", level: 2, branch: true, count: 76 },
+          { label: "2号数据楼", level: 3, branch: true, count: 76 },
+          { label: "B201机房", level: 4, count: 76 },
+          { label: "苏州高新区数据中心", level: 2, branch: true, count: 36 },
+          { label: "华北区域", level: 1, branch: true, count: 38 },
+          { label: "北京亦庄数据中心", level: 2, branch: true, count: 38 }
+        ];
 
-      openSettings.addEventListener("click", openDrawer);
-      closeSettings.addEventListener("click", closeDrawer);
-      cancelSettings.addEventListener("click", closeDrawer);
-      saveSettings.addEventListener("click", closeDrawer);
-      drawerMask.addEventListener("click", closeDrawer);
+        const spacePathStack = [];
+        spaceTreeData.forEach((node) => {
+          spacePathStack[node.level] = node.label;
+          spacePathStack.length = node.level + 1;
+          node.value = spacePathStack.join(" / ");
+        });
+
+        const spaceTreePopover = document.createElement("div");
+        spaceTreePopover.className = "space-tree-popover";
+        spaceTreePopover.innerHTML = `<input class="space-tree-search" placeholder="请输入空间名称搜索" aria-label="搜索所属空间" />
+          <div class="space-tree-list"></div>`;
+        document.body.appendChild(spaceTreePopover);
+        let activeSpaceSelect = null;
+        let activeSpaceTrigger = null;
+
+        function renderSpaceTree(keyword = "") {
+          const list = spaceTreePopover.querySelector(".space-tree-list");
+          const term = keyword.trim().toLowerCase();
+          list.innerHTML = spaceTreeData.map((node) => {
+            const matched = !term || node.label.toLowerCase().includes(term) || (node.value || "").toLowerCase().includes(term);
+            return `<div class="space-tree-node" ${matched ? "" : "hidden"}>
+              <div class="space-tree-row" data-level="${node.level}" ${node.branch ? "data-space-branch" : ""} ${node.value ? `data-space-value="${node.value}"` : ""}>
+                <span class="space-tree-arrow">${node.branch ? "▾" : ""}</span><span class="space-tree-icon">${node.branch ? "▦" : "□"}</span><span class="space-tree-label">${node.label}</span><span class="space-tree-count">${node.count}</span>
+              </div></div>`;
+          }).join("");
+        }
+
+        function closeSpaceTree() {
+          spaceTreePopover.classList.remove("is-open");
+          activeSpaceSelect = null;
+          activeSpaceTrigger = null;
+        }
+
+        function enhanceSpaceSelect(select) {
+          if (select.dataset.treeEnhanced) return;
+          select.dataset.treeEnhanced = "true";
+          select.hidden = true;
+          const trigger = document.createElement("button");
+          trigger.type = "button";
+          trigger.className = "space-tree-trigger";
+          const syncLabel = () => {
+            const label = select.options[select.selectedIndex]?.textContent || "请选择所属空间";
+            trigger.textContent = label;
+            trigger.classList.toggle("is-placeholder", !select.value);
+          };
+          syncLabel();
+          trigger.addEventListener("click", (event) => {
+            event.stopPropagation();
+            activeSpaceSelect = select;
+            activeSpaceTrigger = trigger;
+            renderSpaceTree();
+            const rect = trigger.getBoundingClientRect();
+            spaceTreePopover.style.left = `${Math.min(rect.left, window.innerWidth - 432)}px`;
+            spaceTreePopover.style.top = `${Math.min(rect.bottom + 4, window.innerHeight - 290)}px`;
+            spaceTreePopover.classList.add("is-open");
+            const search = spaceTreePopover.querySelector(".space-tree-search");
+            search.value = "";
+            search.focus();
+          });
+          select.after(trigger);
+          select._syncTreeLabel = syncLabel;
+        }
+
+        function enhanceAllSpaceSelects() {
+          const selectableSpaces = spaceTreeData.filter((node) => node.value).map((node) => node.value);
+          const leafSpaces = spaceTreeData.filter((node) => !node.branch).map((node) => node.value);
+          const rowDefaults = [leafSpaces[0], leafSpaces[1], leafSpaces[0], leafSpaces[2], leafSpaces[3], ""];
+          document.querySelectorAll("[data-row-space], [data-batch-space-select], [data-bulk-edit-space]").forEach((select, index) => {
+            const rowIndex = select.matches("[data-row-space]") ? [...document.querySelectorAll("[data-row-space]")].indexOf(select) : -1;
+            select.innerHTML = `<option value="">请选择所属空间</option>${selectableSpaces.map((space) => `<option value="${space}">${space}</option>`).join("")}`;
+            if (rowIndex >= 0) select.value = rowDefaults[rowIndex] || "";
+            enhanceSpaceSelect(select);
+          });
+        }
+
+        spaceTreePopover.querySelector(".space-tree-search").addEventListener("input", (event) => renderSpaceTree(event.target.value));
+        spaceTreePopover.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const row = event.target.closest("[data-space-value]");
+          const branch = event.target.closest(".space-tree-arrow")?.closest("[data-space-branch]");
+          if (branch) {
+            const level = Number(branch.dataset.level);
+            const node = branch.closest(".space-tree-node");
+            const nodes = [...spaceTreePopover.querySelectorAll(".space-tree-node")];
+            const start = nodes.indexOf(node);
+            const collapsed = !branch.classList.contains("is-collapsed");
+            branch.classList.toggle("is-collapsed", collapsed);
+            branch.querySelector(".space-tree-arrow").textContent = collapsed ? "▸" : "▾";
+            for (let index = start + 1; index < nodes.length; index += 1) {
+              const childRow = nodes[index].querySelector(".space-tree-row");
+              if (Number(childRow.dataset.level) <= level) break;
+              nodes[index].hidden = collapsed;
+            }
+            return;
+          }
+          if (!row || !activeSpaceSelect) return;
+          activeSpaceSelect.value = row.dataset.spaceValue;
+          activeSpaceSelect._syncTreeLabel?.();
+          activeSpaceSelect.dispatchEvent(new Event("change", { bubbles: true }));
+          closeSpaceTree();
+        });
+        bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]").addEventListener("change", (event) => {
+          bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.toggle("is-visible", Boolean(event.target.value));
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest(".space-tree-popover") && event.target !== activeSpaceTrigger) closeSpaceTree();
+        });
+
+        function deviceIdFor(page, rowIndex) {
+          const absoluteIndex = (page - 1) * batchPageSize + rowIndex + 1;
+          return `X_${String(absoluteIndex).padStart(3, "0")}`;
+        }
+
+        function renderBatchPage(page) {
+          batchCurrentPage = page;
+          const rows = [...batchSpaceModal.querySelectorAll(".batch-space-table tbody tr")];
+          rows.forEach((row, index) => {
+            const id = deviceIdFor(page, index);
+            const check = row.querySelector("[data-batch-device-check]");
+            row.children[1].textContent = id;
+            check.dataset.deviceId = id;
+            check.setAttribute("aria-label", `选择 ${id}`);
+            check.checked = batchSelectedIds.has(id);
+          });
+          batchSpaceModal.querySelectorAll("[data-page]").forEach((button) => button.classList.toggle("is-active", Number(button.dataset.page) === page));
+          batchSpaceModal.querySelector("[data-page-prev]").disabled = page === 1;
+          batchSpaceModal.querySelector("[data-page-next]").disabled = page === 3;
+          batchSpaceModal.querySelector("[data-page-range]").textContent = `${(page - 1) * batchPageSize + 1}-${Math.min(page * batchPageSize, batchTotal)}`;
+          updateBatchSelection();
+        }
+
+        const batchPagination = document.createElement("div");
+        batchPagination.className = "batch-pagination";
+        batchPagination.innerHTML = `<div>共 ${batchTotal} 条，当前显示 <span data-page-range>1-200</span> 条</div>
+          <div class="batch-pagination-actions"><select class="batch-page-size" aria-label="每页条数"><option>200条/页</option></select>
+          <button class="batch-page-button" type="button" data-page-prev>‹</button>
+          <button class="batch-page-button is-active" type="button" data-page="1">1</button>
+          <button class="batch-page-button" type="button" data-page="2">2</button>
+          <button class="batch-page-button" type="button" data-page="3">3</button>
+          <button class="batch-page-button" type="button" data-page-next>›</button></div>`;
+        batchSpaceModal.querySelector(".batch-space-table-wrap").after(batchPagination);
+        batchPagination.addEventListener("click", (event) => {
+          const pageButton = event.target.closest("[data-page]");
+          if (pageButton) renderBatchPage(Number(pageButton.dataset.page));
+          if (event.target.closest("[data-page-prev]") && batchCurrentPage > 1) renderBatchPage(batchCurrentPage - 1);
+          if (event.target.closest("[data-page-next]") && batchCurrentPage < 3) renderBatchPage(batchCurrentPage + 1);
+        });
+
+        enhanceAllSpaceSelects();
+        const deviceSpaceSamples = [
+          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房",
+          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/302网络机房",
+          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/4层/401电力机房",
+          "共济科技/华南区域/广州科学城数据中心/A栋数据楼/A101核心机房",
+          "共济科技/华东区域/上海临港数据中心/2号数据楼/B201机房"
+        ];
+        document.querySelectorAll("#deviceTable tbody tr").forEach((row, index) => {
+          const spaceCell = row.children[5];
+          const fullPath = deviceSpaceSamples[index % deviceSpaceSamples.length];
+          spaceCell.textContent = fullPath;
+          spaceCell.title = fullPath;
+        });
+        renderBatchPage(1);
+
+        function updateBatchSelection() {
+          const checks = [...batchSpaceModal.querySelectorAll("[data-batch-device-check]")];
+          const checked = checks.filter((item) => item.checked);
+          const selectAll = batchSpaceModal.querySelector("[data-batch-select-all]");
+          const count = batchSpaceModal.querySelector("[data-batch-selected-count]");
+          count.textContent = batchSelectedIds.size;
+          selectAll.checked = checks.length > 0 && checked.length === checks.length;
+          selectAll.indeterminate = checked.length > 0 && checked.length < checks.length;
+          checks.forEach((item) => item.closest("tr")?.classList.toggle("is-selected", item.checked));
+        }
+
+        document.querySelectorAll(".menu-item").forEach((button) => {
+          button.addEventListener("click", () => {
+            const view = button.dataset.view;
+            document.querySelectorAll(".menu-item").forEach((item) => item.classList.toggle("is-active", item === button));
+            document.querySelectorAll(".view-page").forEach((page) => page.classList.toggle("is-active", page.id === "view-" + view));
+          });
+        });
+
+        document.addEventListener("click", (event) => {
+          const openDrawerButton = event.target.closest("[data-open-drawer]");
+          const previewButton = event.target.closest("[data-preview]");
+          const deleteButton = event.target.closest("[data-confirm-delete]");
+          const closeButton = event.target.closest("[data-close]");
+          const saveButton = event.target.closest("[data-save]");
+          const confirmButton = event.target.closest("[data-confirm-action]");
+          const applyBatchSpaceButton = event.target.closest("[data-apply-batch-space]");
+          const batchConfirmButton = event.target.closest("[data-batch-confirm]");
+          const bulkEditToggle = event.target.closest("[data-toggle-bulk-edit]");
+          const openBulkSpaceButton = event.target.closest("[data-open-bulk-space]");
+          const confirmBulkSpaceButton = event.target.closest("[data-confirm-bulk-space]");
+          const openBulkCredentialButton = event.target.closest("[data-open-bulk-credential]");
+          const confirmBulkCredentialButton = event.target.closest("[data-confirm-bulk-credential]");
+
+          if (bulkEditToggle) {
+            event.stopPropagation();
+            document.querySelector("[data-bulk-edit-dropdown]").classList.toggle("is-open");
+          }
+          if (openBulkSpaceButton) {
+            const selected = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked")];
+            document.querySelector("[data-bulk-edit-dropdown]").classList.remove("is-open");
+            if (!selected.length) {
+              showToast("请先选择需要修改的设备");
+            } else {
+              bulkEditSpaceModal.querySelector("[data-bulk-edit-count]").textContent = selected.length;
+              openModal(bulkEditSpaceModal);
+            }
+          }
+          if (confirmBulkSpaceButton) {
+            const spaceSelect = bulkEditSpaceModal.querySelector("[data-bulk-edit-space]");
+            if (!spaceSelect.value) {
+              showToast("请选择所属空间");
+            } else {
+              const selectedRows = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked")].map((item) => item.closest("tr"));
+              selectedRows.forEach((row) => {
+                row.children[5].textContent = spaceSelect.value;
+                row.children[5].title = spaceSelect.value;
+              });
+              closeAll();
+              showToast(`已修改 ${selectedRows.length} 台设备的所属空间`);
+            }
+          }
+          if (openBulkCredentialButton) {
+            const selected = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked")];
+            document.querySelector("[data-bulk-edit-dropdown]").classList.remove("is-open");
+            if (!selected.length) {
+              showToast("请先选择需要修改的设备");
+            } else {
+              bulkEditCredentialModal.querySelector("[data-bulk-credential-count]").textContent = selected.length;
+              const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]");
+              protocol.value = "";
+              bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value = "";
+              bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value = "";
+              bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.remove("is-visible");
+              openModal(bulkEditCredentialModal);
+            }
+          }
+          if (confirmBulkCredentialButton) {
+            const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]").value;
+            const username = bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value.trim();
+            const password = bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value;
+            if (!protocol) {
+              showToast("请选择通信方式");
+            } else if (!username || !password) {
+              showToast("请完整填写新密钥ID/用户名和新密钥/密码");
+            } else {
+              const selectedCount = document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked").length;
+              closeAll();
+              showToast(`已修改 ${selectedCount} 台设备的协议账密`);
+            }
+          }
+
+          if (openDrawerButton) openDrawer(openDrawerButton.dataset.openDrawer);
+          if (previewButton) openModal(previewModal);
+          if (deleteButton) openModal(deleteModal);
+          if (closeButton) closeAll();
+          if (saveButton) {
+            if (activeDrawerType === "batch") {
+              drawer.classList.remove("is-open");
+              drawer.setAttribute("aria-hidden", "true");
+              activeDrawerType = "";
+              drawerSaveButton.textContent = "保存";
+              openModal(batchSpaceModal);
+              updateBatchSelection();
+            } else {
+              closeAll();
+              showToast("保存成功");
+            }
+          }
+          if (confirmButton) {
+            closeAll();
+            showToast("删除成功");
+          }
+          if (applyBatchSpaceButton) {
+            const targetSpace = batchSpaceModal.querySelector("[data-batch-space-select]").value;
+            const checked = [...batchSpaceModal.querySelectorAll("[data-batch-device-check]:checked")];
+            if (!batchSelectedIds.size) {
+              showToast("请先选择设备");
+            } else if (!targetSpace) {
+              showToast("请选择所属空间");
+            } else {
+              checked.forEach((item) => {
+                item.closest("tr").querySelector("[data-row-space]").value = targetSpace;
+              });
+              showToast(`已应用至 ${batchSelectedIds.size} 台设备（含其他分页已选设备）`);
+            }
+          }
+          if (batchConfirmButton) {
+            const emptySpace = [...batchSpaceModal.querySelectorAll("[data-row-space]")].some((item) => !item.value);
+            if (emptySpace) {
+              showToast("请为全部设备选择所属空间");
+            } else {
+              closeAll();
+              showToast("批量添加成功");
+            }
+          }
+          if (!event.target.closest("[data-bulk-edit-dropdown]")) {
+            document.querySelector("[data-bulk-edit-dropdown]").classList.remove("is-open");
+          }
+        });
+
+        batchSpaceModal.addEventListener("change", (event) => {
+          if (event.target.matches("[data-batch-select-all]")) {
+            batchSpaceModal.querySelectorAll("[data-batch-device-check]").forEach((item) => {
+              item.checked = event.target.checked;
+              if (item.checked) batchSelectedIds.add(item.dataset.deviceId);
+              else batchSelectedIds.delete(item.dataset.deviceId);
+            });
+            updateBatchSelection();
+          }
+          if (event.target.matches("[data-batch-device-check]")) {
+            if (event.target.checked) batchSelectedIds.add(event.target.dataset.deviceId);
+            else batchSelectedIds.delete(event.target.dataset.deviceId);
+            updateBatchSelection();
+          }
+        });
+
+        mask.addEventListener("click", closeAll);
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeAll();
+        });
+
+        document.querySelectorAll("[data-grid-switch] .grid-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const count = Number(button.dataset.grid);
+            const grid = document.querySelector("[data-video-grid]");
+            document.querySelectorAll("[data-grid-switch] .grid-button").forEach((item) => item.classList.toggle("is-active", item === button));
+            grid.className = "video-grid grid-" + count;
+            const cells = [...grid.querySelectorAll(".video-cell")];
+            cells.forEach((cell, index) => cell.classList.toggle("hidden", index >= count));
+          });
+        });
+
+        document.querySelectorAll(".video-cell").forEach((cell) => {
+          cell.addEventListener("click", (event) => {
+            if (event.target.closest("button")) return;
+            cell.parentElement.querySelectorAll(".video-cell").forEach((item) => item.classList.remove("is-focused"));
+            cell.classList.add("is-focused");
+          });
+        });
+
+        document.querySelectorAll(".cell-close").forEach((button) => {
+          button.addEventListener("click", () => {
+            const cell = button.closest(".video-cell");
+            cell.innerHTML = '<div class="video-empty"><span class="empty-icon"></span><span>请选择摄像头</span></div>';
+            cell.className = "video-cell";
+          });
+        });
+
+        document.querySelectorAll("[data-select-all]").forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            checkbox.closest("table").querySelectorAll("tbody input[type=checkbox]").forEach((item) => item.checked = checkbox.checked);
+          });
+        });
+
+        const tableSearch = document.querySelector("[data-table-search]");
+        const protocolFilter = document.querySelector("[data-protocol-filter]");
+        function filterDeviceTable() {
+          const keyword = tableSearch.value.trim().toLowerCase();
+          const protocol = protocolFilter.value;
+          document.querySelectorAll("#deviceTable tbody tr").forEach((row) => {
+            const cameraName = row.children[2].textContent.toLowerCase();
+            const communicationMode = row.children[3].textContent.trim();
+            const matchedKeyword = !keyword || cameraName.includes(keyword);
+            const matchedProtocol = !protocol || communicationMode === protocol;
+            row.classList.toggle("hidden", !matchedKeyword || !matchedProtocol);
+          });
+        }
+        tableSearch?.addEventListener("input", filterDeviceTable);
+        protocolFilter?.addEventListener("change", filterDeviceTable);
+
+        const commonSpaceTree = [
+          { label: "共济科技", depth: 0, branch: true, count: 436 },
+          { label: "华南区域", depth: 1, branch: true, count: 286 },
+          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 196 },
+          { label: "1号数据楼", depth: 3, branch: true, count: 196 },
+          { label: "3层", depth: 4, branch: true, count: 128 },
+          { label: "301主机房", depth: 5, count: 72 },
+          { label: "302网络机房", depth: 5, count: 56 },
+          { label: "4层", depth: 4, branch: true, count: 68 },
+          { label: "401电力机房", depth: 5, count: 68 },
+          { label: "广州科学城数据中心", depth: 2, branch: true, count: 90 },
+          { label: "A栋数据楼", depth: 3, branch: true, count: 90 },
+          { label: "A101核心机房", depth: 4, count: 90 },
+          { label: "华东区域", depth: 1, branch: true, count: 112 },
+          { label: "上海临港数据中心", depth: 2, branch: true, count: 76 },
+          { label: "2号数据楼", depth: 3, branch: true, count: 76 },
+          { label: "B201机房", depth: 4, count: 76 },
+          { label: "苏州高新区数据中心", depth: 2, branch: true, count: 36 },
+          { label: "华北区域", depth: 1, branch: true, count: 38 },
+          { label: "北京亦庄数据中心", depth: 2, branch: true, count: 38 }
+        ];
+
+        function syncSpaceTree(tree) {
+          const withChecks = Boolean(tree.querySelector(".tree-check"));
+          tree.innerHTML = commonSpaceTree.map((node, index) => `<div class="tree-row ${index === 0 ? "is-selected" : ""}" data-depth="${node.depth}" ${node.branch ? "data-tree-branch" : ""}>
+            <span class="tree-arrow">${node.branch ? "▾" : ""}</span>${withChecks ? '<input class="tree-check" type="checkbox" />' : ""}<span class="tree-icon">${node.depth === 0 ? "⌂" : node.branch ? "▥" : "▤"}</span><span class="tree-label">${node.label}</span><span class="tree-count">${node.count}</span></div>`).join("");
+          const search = tree.closest(".tree-panel, .drawer-tree")?.querySelector("[data-tree-search]");
+          if (search) search.value = "";
+        }
+
+        document.querySelectorAll("[data-tree]").forEach(syncSpaceTree);
+
+        function refreshTreeVisibility(tree) {
+          const collapsedDepths = [];
+          tree.querySelectorAll(".tree-row").forEach((row) => {
+            const depth = Number(row.dataset.depth);
+            while (collapsedDepths.length && collapsedDepths[collapsedDepths.length - 1] >= depth) collapsedDepths.pop();
+            row.classList.toggle("is-tree-hidden", collapsedDepths.length > 0);
+            if (row.matches("[data-tree-branch].is-collapsed")) collapsedDepths.push(depth);
+          });
+        }
+
+        function bindSpaceTreeInteractions(root = document) {
+          root.querySelectorAll("[data-tree] .tree-row").forEach((row) => {
+            row.addEventListener("click", (event) => {
+            const tree = row.closest(".tree-scroll");
+            if (row.matches("[data-tree-branch]") && !event.target.matches("input")) {
+              const collapsed = !row.classList.contains("is-collapsed");
+              row.classList.toggle("is-collapsed", collapsed);
+              row.querySelector(".tree-arrow").textContent = collapsed ? "▸" : "▾";
+              refreshTreeVisibility(tree);
+            }
+            tree.querySelectorAll(".tree-row").forEach((item) => item.classList.remove("is-selected"));
+            row.classList.add("is-selected");
+            });
+          });
+        }
+
+        bindSpaceTreeInteractions();
+
+        const versionRequirementsPage = document.getElementById("versionRequirementsPage");
+        const demandModeToggle = versionRequirementsPage.querySelector("[data-toggle-demand-mode]");
+        const versionStoryLayer = document.getElementById("versionStoryLayer");
+        const versionStoryTitle = document.getElementById("versionStoryTitle");
+        const versionStoryMeta = document.getElementById("versionStoryMeta");
+        const versionStoryBody = document.getElementById("versionStoryBody");
+        const requirementStories = {
+          "V3R5-5925": {
+            title: "V3R5-5925 · 用户故事",
+            meta: "v3.0 · 设备管理 · 设计完成",
+            story: "作为视频设备管理员，我希望勾选多台设备后一次性修改指定通信方式的认证账号和密码，以减少逐台维护的重复操作。",
+            scenarios: ["设备认证账号调整时，批量更新同一通信方式下的多台摄像头。", "密码轮换后，对选中设备统一替换新密码。"],
+            rules: ["必须先勾选至少一台设备。", "选择通信方式后才展示对应的账号与密码字段。", "密码默认掩码展示，不回显原密码。"],
+            acceptance: ["确认后，所有已选设备的协议账密同步更新。", "必填信息不完整时阻止提交并给出提示。"],
+            boundaries: ["不同通信方式的字段口径以所选协议为准。", "未选择设备或通信方式时不可提交。"]
+          },
+          "V3R5-5620": {
+            title: "V3R5-5620 · 用户故事",
+            meta: "v3.0 · 所属空间 · 设计完成",
+            story: "作为视频设备管理员，我希望将多台设备一次性调整到目标空间，并可选择区域、数据中心、数据楼、楼层或机房等任意层级节点。",
+            scenarios: ["机房调整时，将多台摄像头批量迁移到新的机房节点。", "设备只需要归属到数据中心或楼层时，直接选择对应的非叶子节点。"],
+            rules: ["空间树支持搜索及展开、收起。", "叶子节点和非叶子节点均可选择。", "选择后回填从企业到目标节点的完整路径。"],
+            acceptance: ["确认后，所有已选设备的所属空间统一更新。", "切换分页后仍保留已勾选设备。"],
+            boundaries: ["未选择所属空间时阻止提交。", "搜索无结果时展示空结果状态，不改变原选择。"]
+          }
+        };
+        const demandPopover = document.createElement("div");
+        demandPopover.className = "demand-popover";
+        document.body.appendChild(demandPopover);
+        let demandHideTimer = null;
+
+        function escapeDemandText(value) {
+          return String(value || "").replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[character]));
+        }
+
+        function cancelDemandHide() {
+          clearTimeout(demandHideTimer);
+          demandHideTimer = null;
+        }
+
+        function hideDemandPopover() {
+          demandPopover.style.display = "none";
+        }
+
+        function renderStoryList(items) {
+          return `<ul>${items.map((item) => `<li>${escapeDemandText(item)}</li>`).join("")}</ul>`;
+        }
+
+        function openUserStory(requirementId) {
+          const story = requirementStories[requirementId];
+          if (!story) return;
+          versionStoryTitle.textContent = story.title;
+          versionStoryMeta.textContent = story.meta;
+          versionStoryBody.innerHTML = `
+            <section class="version-story-section is-story"><h4>用户故事</h4><p>${escapeDemandText(story.story)}</p></section>
+            <section class="version-story-section"><h4>典型场景</h4>${renderStoryList(story.scenarios)}</section>
+            <section class="version-story-section"><h4>业务规则</h4>${renderStoryList(story.rules)}</section>
+            <section class="version-story-section"><h4>验收标准</h4>${renderStoryList(story.acceptance)}</section>
+            <section class="version-story-section"><h4>异常与边界</h4>${renderStoryList(story.boundaries)}</section>`;
+          versionStoryLayer.classList.add("is-open");
+          versionStoryLayer.setAttribute("aria-hidden", "false");
+        }
+
+        function closeUserStory() {
+          versionStoryLayer.classList.remove("is-open");
+          versionStoryLayer.setAttribute("aria-hidden", "true");
+        }
+
+        function scheduleDemandHide() {
+          cancelDemandHide();
+          demandHideTimer = setTimeout(hideDemandPopover, 220);
+        }
+
+        function positionDemandPopover(trigger) {
+          const rect = trigger.getBoundingClientRect();
+          const popoverRect = demandPopover.getBoundingClientRect();
+          const preferredLeft = rect.right + 8;
+          const left = preferredLeft + popoverRect.width <= window.innerWidth - 10
+            ? preferredLeft
+            : Math.max(10, rect.left - popoverRect.width - 8);
+          const top = Math.min(Math.max(10, rect.top - 4), window.innerHeight - popoverRect.height - 10);
+          demandPopover.style.left = `${left}px`;
+          demandPopover.style.top = `${top}px`;
+        }
+
+        function showDemandPopover(trigger) {
+          if (!document.body.classList.contains("is-demand-mode")) return;
+          cancelDemandHide();
+          const scope = trigger.closest(".demand-badge")?.parentElement;
+          if (!scope) return;
+          const parts = String(scope.dataset.demandText || "")
+            .split("||")
+            .map((item) => item.trim())
+            .filter(Boolean);
+          demandPopover.innerHTML = `<strong>${escapeDemandText(scope.dataset.demandVersion || "v3.0")} · ${escapeDemandText(scope.dataset.demandTitle || "需求说明")}</strong>${parts.map((item) => `<p>${escapeDemandText(item)}</p>`).join("")}`;
+          demandPopover.style.display = "block";
+          positionDemandPopover(trigger);
+        }
+
+        function mountDemandBadges() {
+          document.querySelectorAll("[data-demand-text]").forEach((scope) => {
+            if (scope.querySelector(":scope > .demand-badge")) return;
+            scope.classList.add("demand-anchor");
+            const badge = document.createElement("span");
+            badge.className = "demand-badge";
+            badge.innerHTML = '<button class="demand-badge-trigger" type="button" aria-label="查看需求说明">需</button>';
+            scope.appendChild(badge);
+            const trigger = badge.querySelector(".demand-badge-trigger");
+            trigger.addEventListener("mouseenter", () => showDemandPopover(trigger));
+            trigger.addEventListener("mouseleave", scheduleDemandHide);
+            trigger.addEventListener("focus", () => showDemandPopover(trigger));
+            trigger.addEventListener("blur", scheduleDemandHide);
+            trigger.addEventListener("click", (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              showDemandPopover(trigger);
+            });
+          });
+        }
+
+        function setDemandMode(enabled) {
+          document.body.classList.toggle("is-demand-mode", enabled);
+          demandModeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
+          if (!enabled) hideDemandPopover();
+        }
+
+        function openVersionRequirements() {
+          versionRequirementsPage.classList.add("is-open");
+          versionRequirementsPage.setAttribute("aria-hidden", "false");
+          hideDemandPopover();
+        }
+
+        function closeVersionRequirements() {
+          closeUserStory();
+          versionRequirementsPage.classList.remove("is-open");
+          versionRequirementsPage.setAttribute("aria-hidden", "true");
+        }
+
+        function activateDeviceView() {
+          document.querySelectorAll(".menu-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "device"));
+          document.querySelectorAll(".view-page").forEach((page) => page.classList.toggle("is-active", page.id === "view-device"));
+        }
+
+        function highlightDemandScope(scope) {
+          if (!scope) return;
+          scope.classList.remove("demand-locate-highlight");
+          window.requestAnimationFrame(() => scope.classList.add("demand-locate-highlight"));
+          setTimeout(() => scope.classList.remove("demand-locate-highlight"), 3400);
+          const trigger = scope.querySelector(":scope > .demand-badge .demand-badge-trigger");
+          if (trigger) showDemandPopover(trigger);
+        }
+
+        function locateVersionRequirement(requirementId) {
+          closeVersionRequirements();
+          setDemandMode(true);
+          activateDeviceView();
+          const selectedChecks = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]")].slice(0, 2);
+          selectedChecks.forEach((checkbox) => { checkbox.checked = true; });
+          if (requirementId === "V3R5-5925") {
+            bulkEditCredentialModal.querySelector("[data-bulk-credential-count]").textContent = selectedChecks.length;
+            const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]");
+            protocol.value = "";
+            bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value = "";
+            bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value = "";
+            bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.remove("is-visible");
+            openModal(bulkEditCredentialModal);
+            highlightDemandScope(bulkEditCredentialModal);
+            return;
+          }
+          if (requirementId === "V3R5-5620") {
+            bulkEditSpaceModal.querySelector("[data-bulk-edit-count]").textContent = selectedChecks.length;
+            openModal(bulkEditSpaceModal);
+            highlightDemandScope(bulkEditSpaceModal);
+          }
+        }
+
+        document.querySelector("[data-open-version-requirements]").addEventListener("click", openVersionRequirements);
+        versionRequirementsPage.querySelector("[data-close-version-requirements]").addEventListener("click", closeVersionRequirements);
+        demandModeToggle.addEventListener("click", () => setDemandMode(!document.body.classList.contains("is-demand-mode")));
+        versionRequirementsPage.querySelectorAll("[data-locate-demand]").forEach((button) => {
+          button.addEventListener("click", () => locateVersionRequirement(button.dataset.locateDemand));
+        });
+        versionRequirementsPage.querySelectorAll("[data-open-user-story]").forEach((button) => {
+          button.addEventListener("click", () => openUserStory(button.dataset.openUserStory));
+        });
+        versionRequirementsPage.querySelectorAll("[data-card-locate-demand]").forEach((card) => {
+          card.addEventListener("click", (event) => {
+            if (event.target.closest("button")) return;
+            locateVersionRequirement(card.dataset.cardLocateDemand);
+          });
+          card.addEventListener("keydown", (event) => {
+            if (event.target !== card || (event.key !== "Enter" && event.key !== " ")) return;
+            event.preventDefault();
+            locateVersionRequirement(card.dataset.cardLocateDemand);
+          });
+        });
+        versionStoryLayer.querySelector("[data-close-user-story]").addEventListener("click", closeUserStory);
+        versionStoryLayer.addEventListener("click", (event) => {
+          if (event.target === versionStoryLayer) closeUserStory();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && versionStoryLayer.classList.contains("is-open")) closeUserStory();
+        });
+        versionRequirementsPage.querySelectorAll("[data-open-ones-issue]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const issueId = button.dataset.openOnesIssue;
+            if (issueId) {
+              window.open("https://ones.xbrother.com:8443/project/#/team/TPfsXAwV/issue/" + encodeURIComponent(issueId), "_blank", "noopener");
+            }
+          });
+        });
+        demandPopover.addEventListener("mouseenter", cancelDemandHide);
+        demandPopover.addEventListener("mouseleave", scheduleDemandHide);
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest(".demand-popover") && !event.target.closest(".demand-badge")) hideDemandPopover();
+        });
+        window.addEventListener("resize", hideDemandPopover);
+        window.addEventListener("scroll", hideDemandPopover, true);
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && versionRequirementsPage.classList.contains("is-open")) closeVersionRequirements();
+        });
+
+        mountDemandBadges();
+        setDemandMode(true);
+
+        bindTreeSearch();
+      })();
     </script>
   </body>
 </html>
