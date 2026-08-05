@@ -263,7 +263,10 @@
         min-height: 0;
         padding: 14px 15px 15px;
         overflow: hidden;
+        transition: margin-right .2s ease;
       }
+
+      body.is-page-demand-panel-open .main { margin-right: 360px; }
 
       .view-page {
         display: none;
@@ -1012,6 +1015,13 @@
         cursor: default;
       }
 
+      #deviceTable .device-empty-cell {
+        height: 180px;
+        color: #8a99aa;
+        text-align: center;
+        white-space: normal;
+      }
+
       .data-table .col-status {
         width: 105px;
       }
@@ -1328,6 +1338,13 @@
         width: 360px;
       }
 
+      .batch-space-actions .btn {
+        flex: none;
+        min-width: 88px;
+        padding: 0 12px;
+        white-space: nowrap;
+      }
+
       .batch-space-table-wrap {
         max-height: 390px;
         overflow: auto;
@@ -1355,6 +1372,62 @@
 
       .batch-space-table .batch-col-name {
         width: 210px;
+      }
+
+      .batch-camera-name-cell {
+        position: relative;
+      }
+
+      .batch-camera-name-view {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .batch-camera-name-text {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .batch-camera-name-edit {
+        width: 24px;
+        height: 24px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border-radius: 4px;
+        color: var(--primary);
+        background: transparent;
+        opacity: 0;
+        cursor: pointer;
+        transition: opacity 0.15s ease, background 0.15s ease;
+      }
+
+      .batch-camera-name-cell:hover .batch-camera-name-edit,
+      .batch-camera-name-cell:focus-within .batch-camera-name-edit {
+        opacity: 1;
+      }
+
+      .batch-camera-name-edit:hover,
+      .batch-camera-name-edit:focus-visible {
+        background: #eaf4ff;
+        outline: none;
+      }
+
+      .batch-camera-name-input {
+        width: 100%;
+        height: 30px;
+        padding: 0 9px;
+        border: 1px solid var(--primary);
+        border-radius: 4px;
+        color: #21364d;
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(13, 134, 248, 0.12);
       }
 
       .batch-space-table .batch-col-space {
@@ -1605,12 +1678,17 @@
         flex-direction: column;
         background: #fff;
         transform: translateX(102%);
-        transition: transform 0.23s ease;
+        transition: transform 0.23s ease, right 0.2s ease, width 0.2s ease;
         box-shadow: -16px 0 38px rgba(0, 0, 0, 0.14);
       }
 
       .drawer.is-open {
         transform: translateX(0);
+      }
+
+      body.is-page-demand-panel-open .drawer[data-drawer-type="batch"] {
+        right: 360px;
+        width: min(560px, calc(100vw - 420px));
       }
 
       .drawer-body {
@@ -1823,6 +1901,7 @@
       }
 
       .version-requirements-page.is-open { display: flex; }
+      body.is-page-demand-panel-open .version-requirements-page.is-open { right: 360px; }
 
       .version-req-page-head {
         min-height: 74px;
@@ -1881,6 +1960,117 @@
       body.is-demand-mode .demand-mode-toggle::after {
         background: radial-gradient(circle at 20px 8px, #fff 0 5px, transparent 5.5px), var(--primary);
       }
+
+      .page-demand-switch {
+        position: fixed;
+        z-index: 175;
+        top: 50%;
+        right: 0;
+        height: 38px;
+        display: none;
+        align-items: center;
+        gap: 7px;
+        padding: 0 12px;
+        border: 1px solid #ffc4a8;
+        border-right: 0;
+        border-radius: 19px 0 0 19px;
+        color: #d84a0b;
+        background: #fff;
+        box-shadow: 0 5px 16px rgba(58, 75, 96, 0.14);
+        transform: translateY(-50%);
+        transition: right .2s ease;
+        cursor: ns-resize;
+        touch-action: none;
+        user-select: none;
+      }
+
+      body.is-demand-mode .page-demand-switch.has-demand { display: inline-flex; }
+      .page-demand-switch.is-on { right: 360px; }
+      .page-demand-switch.is-dragging { transition: none; cursor: grabbing; }
+
+      .page-demand-count {
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 9px;
+        color: #d84a0b;
+        background: #fff1e8;
+        font-size: 11px;
+        line-height: 18px;
+        text-align: center;
+      }
+
+      .page-demand-track {
+        position: relative;
+        width: 30px;
+        height: 16px;
+        border-radius: 8px;
+        background: #cbd7e3;
+      }
+
+      .page-demand-track::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(25, 48, 72, .25);
+        transition: transform .18s ease;
+      }
+
+      .page-demand-switch.is-on .page-demand-track { background: #ff7a45; }
+      .page-demand-switch.is-on .page-demand-track::after { transform: translateX(14px); }
+
+      .page-demand-panel {
+        position: fixed;
+        z-index: 174;
+        top: var(--topbar-h);
+        right: -360px;
+        bottom: 0;
+        width: 360px;
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid #e2e9f1;
+        background: #fff;
+        box-shadow: -10px 0 26px rgba(30, 53, 77, 0.16);
+        transition: right .2s ease;
+      }
+
+      .page-demand-panel.is-open { right: 0; }
+      .page-demand-panel-head { min-height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid var(--border); }
+      .page-demand-panel-title { color: #253e57; font-weight: 700; }
+      .page-demand-panel-title span { margin-left: 5px; color: #788a9d; font-size: 12px; font-weight: 400; }
+      .page-demand-panel-body { flex: 1; min-height: 0; padding: 12px; overflow: auto; }
+      .page-demand-panel-empty { padding: 40px 10px; color: #8b9aab; text-align: center; }
+
+      .page-demand-item {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        padding: 12px;
+        border: 1px solid #e0e8f1;
+        border-radius: 6px;
+        color: #3a5068;
+        background: #fff;
+        text-align: left;
+      }
+
+      .page-demand-item:hover { border-color: #ffb58f; background: #fff9f5; }
+      .page-demand-item strong { display: block; color: #243c54; line-height: 1.5; }
+      .page-demand-item-tags { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+      .page-demand-item-tags span {
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #6d8196;
+        background: #edf4fb;
+        font-size: 11px;
+        line-height: 18px;
+      }
+      .page-demand-item-description { margin-top: 8px; }
+      .page-demand-item-description .page-demand-item-line { display: block; margin-top: 5px; color: #526b84; font-size: 12px; line-height: 1.65; }
 
       .version-req-page-body {
         flex: 1;
@@ -2120,8 +2310,25 @@
       .version-story-section.is-story { padding: 14px; border: 1px solid #d7e8fa; border-radius: 6px; background: #f4f9ff; }
 
       .demand-anchor { position: relative; }
+      .tree-panel.demand-anchor {
+        position: relative;
+        overflow: visible;
+      }
+      .tree-panel.demand-anchor > .demand-badge {
+        top: -10px;
+        right: -8px;
+        z-index: 130;
+      }
+      .demand-inline-scope {
+        display: inline-flex;
+        align-items: center;
+      }
       .space-tree-popover.demand-anchor,
       .modal.demand-anchor { position: fixed; }
+
+      #drawer:not([data-drawer-type="batch"]) .drawer-step-demand > .demand-badge {
+        display: none;
+      }
 
       .demand-badge {
         position: absolute;
@@ -2192,12 +2399,23 @@
       .demand-popover p { margin: 5px 0; }
 
       .demand-locate-highlight {
-        animation: demand-locate-pulse 1.6s ease 2;
+        position: relative;
+        z-index: 90;
+        border-radius: 6px;
+        outline: 2px solid transparent;
+        outline-offset: 3px;
+        animation: demand-locate-orange-frame 1.5s ease-in-out 2;
       }
 
-      @keyframes demand-locate-pulse {
-        0%, 100% { box-shadow: none; }
-        35%, 65% { box-shadow: 0 0 0 4px rgba(13, 134, 248, 0.25); }
+      @keyframes demand-locate-orange-frame {
+        0%, 45%, 100% {
+          outline-color: transparent;
+          box-shadow: none;
+        }
+        18%, 72% {
+          outline-color: #ff7a45;
+          box-shadow: 0 0 0 5px rgba(255, 122, 69, 0.2), 0 0 18px rgba(255, 122, 69, 0.38);
+        }
       }
 
       .hidden {
@@ -2277,8 +2495,8 @@
       <aside class="sidebar">
         <div class="side-title">视频监控</div>
         <nav class="menu" aria-label="视频管理菜单">
-          <button class="menu-item is-active" type="button" data-view="preview">视频预览</button>
-          <button class="menu-item" type="button" data-view="device">设备管理</button>
+          <button class="menu-item" type="button" data-view="preview">视频预览</button>
+          <button class="menu-item is-active" type="button" data-view="device">设备管理</button>
           <button class="menu-item" type="button" data-view="history">历史回放</button>
           <button class="menu-item" type="button" data-view="binding">设备绑定</button>
         </nav>
@@ -2286,7 +2504,7 @@
       </aside>
 
       <main class="main">
-        <section class="view-page is-active" id="view-preview">
+        <section class="view-page" id="view-preview">
           <div class="split-layout video-preview-layout">
             <section class="tree-panel">
               <div class="tree-title">设备列表</div>
@@ -2399,18 +2617,18 @@
           </div>
         </section>
 
-        <section class="view-page" id="view-device">
+        <section class="view-page is-active" id="view-device">
           <div class="page-card">
             <div class="page-title-row">
               <h1 class="page-title">设备管理</h1>
               <div class="page-title-actions">
                 <button class="btn" type="button" data-open-drawer="add">＋ 添加</button>
-                <button class="btn" type="button" data-open-drawer="batch">▣ 批量添加</button>
+                <span class="demand-inline-scope" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量添加设备" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||入口说明：点击“批量添加”进入批量添加设备流程，先录入扫描方式、协议类型和设备连接信息，再继续设置设备所属空间。||点击后行为：打开“批量添加设备”抽屉，保留当前设备列表的筛选条件和勾选状态。||状态限制：批量添加流程未完成前不写入设备列表；关闭抽屉则取消本次未提交内容。"><button class="btn" type="button" data-open-drawer="batch">▣ 批量添加</button></span>
               </div>
             </div>
             <div class="split-layout device-layout">
               <section class="tree-panel">
-                <div class="tree-title">空间列表</div>
+                <div class="tree-title" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="空间树设备统计与筛选联动" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||统计口径：空间树节点数量表示当前节点及全部下级空间内的设备总数，根节点数量与右侧设备列表总数保持一致。||汇总规则：父节点数量等于其直接子节点数量之和；末级机房显示直接归属设备数，无设备节点显示0。||列表联动：选中任意层级空间后，右侧列表展示该空间及全部下级空间内的设备；无设备时显示0条。||联动规则：设备所属空间发生批量修改后，原空间与目标空间沿途各级节点数量应同步刷新。">空间列表</div>
                 <div class="search-box"><input type="search" placeholder="搜索" aria-label="搜索空间" data-tree-search /></div>
                 <div class="tree-scroll" data-tree>
                   <div class="tree-row is-selected" data-depth="0"><span class="tree-arrow">▾</span><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
@@ -2432,7 +2650,7 @@
               <section class="content-panel">
                 <div class="table-toolbar">
                   <button class="btn btn-danger" type="button" data-confirm-delete>♲ 批量删除</button>
-                  <div class="toolbar-dropdown" data-bulk-edit-dropdown>
+                  <div class="toolbar-dropdown" data-bulk-edit-dropdown data-demand-version="v3.0" data-demand-req-id="V3R5-5620、V3R5-5925" data-demand-title="批量修改设备信息" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620、V3R5-5925。||功能说明：对设备列表中已勾选的多台设备统一修改所属空间或协议账密。||点击后行为：展开批量修改菜单，可选择“所属空间”或“协议账密”，选择后进入对应的批量修改弹窗。||状态限制：未勾选设备时阻止进入批量修改流程并提示先选择设备；切换分页时保留已勾选结果。">
                     <button class="btn toolbar-dropdown-toggle" type="button" data-toggle-bulk-edit>批量修改</button>
                     <div class="toolbar-dropdown-menu">
                       <button class="toolbar-dropdown-item" type="button" data-open-bulk-space>所属空间</button>
@@ -2465,7 +2683,7 @@
                     <tbody>
                       <tr>
                         <td class="col-check"><input type="checkbox" /></td><td>0_465</td><td>werr</td><td>海康SDK_v1.0.0</td><td>192.168.7.23:8000-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房</td><td><span class="status-tag success">正常</span></td>
-                        <td class="col-action"><button class="action-link" data-preview>werr预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
+                        <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
                       </tr>
                       <tr>
                         <td class="col-check"><input type="checkbox" /></td><td>0_286</td><td>海康SDK_v1.0.0</td><td>海康SDK_v1.0.0</td><td>192.168.29.211:8000-admin</td><td>共济科技/lwt</td><td><span class="status-tag error">异常</span></td>
@@ -2661,6 +2879,17 @@
       </main>
     </div>
 
+    <button class="page-demand-switch" id="pageDemandSwitch" type="button" role="switch" aria-checked="false" aria-label="显示本页需求说明" title="可上下拖动，点击展开本页需求说明">
+      <span>本页需求</span><span class="page-demand-count" id="pageDemandCount">0</span><span class="page-demand-track" aria-hidden="true"></span>
+    </button>
+    <aside class="page-demand-panel" id="pageDemandPanel" aria-label="本页需求说明" aria-hidden="true">
+      <div class="page-demand-panel-head">
+        <div class="page-demand-panel-title">本页需求说明 <span id="pageDemandSummary">共 0 项</span></div>
+        <button class="close-button" id="pageDemandClose" type="button" aria-label="关闭本页需求说明">×</button>
+      </div>
+      <div class="page-demand-panel-body" id="pageDemandBody"></div>
+    </aside>
+
     <section class="version-requirements-page" id="versionRequirementsPage" aria-hidden="true">
       <div class="version-req-page-head">
         <div>
@@ -2771,7 +3000,7 @@
       <div class="modal-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" type="button" data-save>确认</button></div>
     </section>
 
-    <section class="modal medium" id="bulkEditSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="【视频管理】新增 支持批量更改设备位置" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-所属空间”统一更改设备位置。||操作规则：未勾选设备时阻止进入；选择目标空间并确认后，统一更新所选设备的所属空间。||空间规则：目标空间支持输入搜索并按树形结构展示，可选择企业、区域、数据中心、数据楼、楼层或机房，回填从根节点到当前节点的完整路径。||异常处理：未选择所属空间时阻止提交并提示；切换分页时保留已勾选设备。">
+      <section class="modal medium" id="bulkEditSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量修改设备所属空间" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-所属空间”统一更改设备位置。||操作规则：未勾选设备时阻止进入；选择目标空间并确认后，统一更新所选设备的所属空间。||空间规则：目标空间支持输入搜索并按树形结构展示，可选择企业、区域、数据中心、数据楼、楼层或机房，回填从根节点到当前节点的完整路径。||异常处理：未选择所属空间时阻止提交并提示；切换分页时保留已勾选设备。">
       <div class="modal-header">
         <h2 class="modal-title">批量修改所属空间</h2>
         <button class="close-button" type="button" data-close aria-label="关闭">×</button>
@@ -2796,7 +3025,7 @@
       </div>
     </section>
 
-    <section class="modal medium" id="bulkEditCredentialModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5925" data-demand-title="【视频管理】新增 支持批量修改协议账密" data-demand-text="需求来源：v3.0，需求ID：V3R5-5925。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-协议账密”统一修改协议认证信息。||操作规则：先选择需要修改的通信方式，再填写新密钥ID/用户名和新密钥/密码；确认后对所选设备批量生效。||状态限制：未勾选设备时阻止进入；未选择通信方式或账密填写不完整时阻止提交并提示。||安全规则：密码输入默认掩码展示，界面不回显原密码。">
+      <section class="modal medium" id="bulkEditCredentialModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5925" data-demand-title="批量修改设备协议账密" data-demand-text="需求来源：v3.0，需求ID：V3R5-5925。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-协议账密”统一修改协议认证信息。||操作规则：先选择需要修改的通信方式，再填写新密钥ID/用户名和新密钥/密码；确认后对所选设备批量生效。||状态限制：未勾选设备时阻止进入；未选择通信方式或账密填写不完整时阻止提交并提示。||安全规则：密码输入默认掩码展示，界面不回显原密码。">
       <div class="modal-header">
         <h2 class="modal-title">批量修改协议账密</h2>
         <button class="close-button" type="button" data-close aria-label="关闭">×</button>
@@ -2829,7 +3058,7 @@
       </div>
     </section>
 
-    <section class="modal batch-space-modal" id="batchSpaceModal" aria-hidden="true">
+      <section class="modal batch-space-modal" id="batchSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量设置待添加设备所属空间" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：扫描设备后集中确认设备信息，并为待添加设备逐台或批量设置所属空间。||空间规则：所属空间支持输入搜索并按树形结构展示，可选择非叶子节点；选中后回填从根节点到当前节点的完整路径。||批量规则：勾选设备后可将同一空间应用到已选设备；切换分页时保留跨页勾选结果，默认每页200条。||展示规则：设备ID按X_XXX格式展示；摄像头名称悬停显示编辑入口，点击后支持行内修改；路径单行显示，超出部分省略，悬停显示完整路径。||异常处理：摄像头名称为空或存在未设置所属空间的待添加设备时阻止确认，并提示补充。">
       <div class="modal-header">
         <h2 class="modal-title">设置设备所属空间</h2>
         <button class="close-button" type="button" data-close aria-label="关闭">×</button>
@@ -2863,38 +3092,38 @@
             </thead>
             <tbody>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_001" /></td>
-                <td>X_001</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_001" /></td>
+                <td>0_001</td>
                 <td>南门入口</td>
                 <td><select class="select" data-row-space><option value="">请选择所属空间</option><option selected>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_002" /></td>
-                <td>X_002</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_002" /></td>
+                <td>0_002</td>
                 <td>研发中心走廊</td>
                 <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_003" /></td>
-                <td>X_003</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_003" /></td>
+                <td>0_003</td>
                 <td>309机房</td>
                 <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_004" /></td>
-                <td>X_004</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_004" /></td>
+                <td>0_004</td>
                 <td>310值班室</td>
                 <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_005" /></td>
-                <td>X_005</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_005" /></td>
+                <td>0_005</td>
                 <td>401监控室</td>
                 <td><select class="select" data-row-space><option value="">请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option selected>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
               <tr>
-                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 X_006" /></td>
-                <td>X_006</td>
+                <td class="batch-col-check"><input type="checkbox" data-batch-device-check aria-label="选择 0_006" /></td>
+                <td>0_006</td>
                 <td>北门通道</td>
                 <td><select class="select" data-row-space><option value="" selected>请选择所属空间</option><option>共济科技 / 互盟南湾园区</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 309机房</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 3层 / 310值班室</option><option>共济科技 / 互盟南湾园区 / 研发中心A栋 / 4层 / 401监控室</option><option>共济科技 / JHHL数据中心园区 / D1</option><option>共济科技 / AI节能演示专用</option></select></td>
               </tr>
@@ -2911,7 +3140,7 @@
     <aside class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer-header"><h2 class="drawer-title" id="drawerTitle">编辑设备</h2><button class="close-button" type="button" data-close>×</button></div>
       <div class="drawer-body" id="drawerBody"></div>
-      <div class="drawer-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" id="drawerSaveButton" type="button" data-save>保存</button></div>
+        <div class="drawer-footer"><button class="btn" type="button" data-close>取消</button><span class="demand-inline-scope drawer-step-demand" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量添加设备进入下一步" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||步骤说明：批量添加设备时，该按钮显示为“下一步”，用于从设备连接信息录入进入所属空间设置。||点击后行为：校验当前步骤的必填信息；校验通过后关闭抽屉并打开“设置设备所属空间”弹窗。||状态限制：添加方式、协议类型、设备地址、端口号及对应协议账密未填写完整时不得进入下一步，并定位提示缺失项。||展示限制：该需求角标仅在“批量添加设备”抽屉中显示，编辑或单个添加设备时不展示。"><button class="btn btn-primary" id="drawerSaveButton" type="button" data-save>保存</button></span></div>
     </aside>
 
     <template id="tpl-edit">
@@ -3056,6 +3285,7 @@
         function closeAll() {
           drawer.classList.remove("is-open");
           drawer.setAttribute("aria-hidden", "true");
+          drawer.removeAttribute("data-drawer-type");
           activeDrawerType = "";
           drawerSaveButton.textContent = "保存";
           document.querySelectorAll(".modal.is-open").forEach((modal) => {
@@ -3063,20 +3293,26 @@
             modal.setAttribute("aria-hidden", "true");
           });
           setMask(false);
+          refreshPageDemandStats();
         }
 
         function openModal(modal) {
+          togglePageDemandPanel(false);
           document.querySelectorAll(".modal.is-open").forEach((item) => item.classList.remove("is-open"));
           modal.classList.add("is-open");
           modal.setAttribute("aria-hidden", "false");
           setMask(true);
+          refreshPageDemandStats();
         }
 
         function openDrawer(type) {
           const config = drawerConfig[type];
           if (!config) return;
+          const keepPageDemandOpen = type === "batch" && pageDemandPanel.classList.contains("is-open");
+          if (!keepPageDemandOpen) togglePageDemandPanel(false);
           const template = document.getElementById(config.template);
           activeDrawerType = type;
+          drawer.dataset.drawerType = type;
           drawerTitle.textContent = config.title;
           drawerSaveButton.textContent = type === "batch" ? "下一步" : "保存";
           drawerBody.replaceChildren(template.content.cloneNode(true));
@@ -3086,6 +3322,8 @@
           drawer.setAttribute("aria-hidden", "false");
           setMask(true);
           bindDynamicEvents();
+          mountDemandBadges();
+          refreshPageDemandStats();
         }
 
         function showToast(text) {
@@ -3122,7 +3360,7 @@
           });
           drawer.querySelectorAll(".tree-row").forEach((row) => {
             row.addEventListener("click", (event) => {
-              if (event.target.closest("button,input")) return;
+              if (event.target.closest("button,input,.tree-arrow")) return;
               row.closest(".tree-scroll")?.querySelectorAll(".tree-row").forEach((item) => item.classList.remove("is-selected"));
               row.classList.add("is-selected");
             });
@@ -3135,25 +3373,25 @@
         const batchPageSize = 200;
 
         const spaceTreeData = [
-          { label: "共济科技", level: 0, branch: true, count: 436 },
-          { label: "华南区域", level: 1, branch: true, count: 286 },
-          { label: "深圳南湾数据中心", level: 2, branch: true, count: 196 },
-          { label: "1号数据楼", level: 3, branch: true, count: 196 },
-          { label: "3层", level: 4, branch: true, count: 128 },
-          { label: "301主机房", level: 5, count: 72 },
-          { label: "302网络机房", level: 5, count: 56 },
-          { label: "4层", level: 4, branch: true, count: 68 },
-          { label: "401电力机房", level: 5, count: 68 },
-          { label: "广州科学城数据中心", level: 2, branch: true, count: 90 },
-          { label: "A栋数据楼", level: 3, branch: true, count: 90 },
-          { label: "A101核心机房", level: 4, count: 90 },
-          { label: "华东区域", level: 1, branch: true, count: 112 },
-          { label: "上海临港数据中心", level: 2, branch: true, count: 76 },
-          { label: "2号数据楼", level: 3, branch: true, count: 76 },
-          { label: "B201机房", level: 4, count: 76 },
-          { label: "苏州高新区数据中心", level: 2, branch: true, count: 36 },
-          { label: "华北区域", level: 1, branch: true, count: 38 },
-          { label: "北京亦庄数据中心", level: 2, branch: true, count: 38 }
+          { label: "共济科技", level: 0, branch: true, count: 12 },
+          { label: "华南区域", level: 1, branch: true, count: 10 },
+          { label: "深圳南湾数据中心", level: 2, branch: true, count: 8 },
+          { label: "1号数据楼", level: 3, branch: true, count: 8 },
+          { label: "3层", level: 4, branch: true, count: 6 },
+          { label: "301主机房", level: 5, count: 3 },
+          { label: "302网络机房", level: 5, count: 3 },
+          { label: "4层", level: 4, branch: true, count: 2 },
+          { label: "401电力机房", level: 5, count: 2 },
+          { label: "广州科学城数据中心", level: 2, branch: true, count: 2 },
+          { label: "A栋数据楼", level: 3, branch: true, count: 2 },
+          { label: "A101核心机房", level: 4, count: 2 },
+          { label: "华东区域", level: 1, branch: true, count: 2 },
+          { label: "上海临港数据中心", level: 2, branch: true, count: 2 },
+          { label: "2号数据楼", level: 3, branch: true, count: 2 },
+          { label: "B201机房", level: 4, count: 2 },
+          { label: "苏州高新区数据中心", level: 2, branch: true, count: 0 },
+          { label: "华北区域", level: 1, branch: true, count: 0 },
+          { label: "北京亦庄数据中心", level: 2, branch: true, count: 0 }
         ];
 
         const spacePathStack = [];
@@ -3267,7 +3505,72 @@
 
         function deviceIdFor(page, rowIndex) {
           const absoluteIndex = (page - 1) * batchPageSize + rowIndex + 1;
-          return `X_${String(absoluteIndex).padStart(3, "0")}`;
+          return `0_${String(absoluteIndex).padStart(3, "0")}`;
+        }
+
+        function renderBatchCameraName(cell, name) {
+          const view = document.createElement("div");
+          view.className = "batch-camera-name-view";
+          const text = document.createElement("span");
+          text.className = "batch-camera-name-text";
+          text.dataset.cameraNameText = "";
+          text.textContent = name;
+          text.title = name;
+          const editButton = document.createElement("button");
+          editButton.className = "batch-camera-name-edit";
+          editButton.type = "button";
+          editButton.dataset.editCameraName = "";
+          editButton.setAttribute("aria-label", `编辑摄像头名称：${name}`);
+          editButton.title = "编辑摄像头名称";
+          editButton.textContent = "✎";
+          view.append(text, editButton);
+          cell.replaceChildren(view);
+          cell.classList.remove("is-editing");
+        }
+
+        function startBatchCameraNameEdit(cell) {
+          if (!cell || cell.classList.contains("is-editing")) return;
+          const currentName = cell.querySelector("[data-camera-name-text]")?.textContent.trim() || "";
+          const input = document.createElement("input");
+          input.className = "batch-camera-name-input";
+          input.type = "text";
+          input.value = currentName;
+          input.maxLength = 50;
+          input.setAttribute("aria-label", "编辑摄像头名称");
+          cell.classList.add("is-editing");
+          cell.replaceChildren(input);
+          let finished = false;
+          const finish = (save) => {
+            if (finished) return;
+            finished = true;
+            const nextName = input.value.trim();
+            if (save && !nextName) showToast("摄像头名称不能为空");
+            renderBatchCameraName(cell, save && nextName ? nextName : currentName);
+          };
+          input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              event.stopPropagation();
+              finish(true);
+            }
+            if (event.key === "Escape") {
+              event.preventDefault();
+              event.stopPropagation();
+              finish(false);
+            }
+          });
+          input.addEventListener("blur", () => finish(true));
+          input.focus();
+          input.select();
+        }
+
+        function mountBatchCameraNameEditors() {
+          batchSpaceModal.querySelectorAll(".batch-space-table tbody tr").forEach((row) => {
+            const cell = row.children[2];
+            const name = cell.textContent.trim();
+            cell.classList.add("batch-camera-name-cell");
+            renderBatchCameraName(cell, name);
+          });
         }
 
         function renderBatchPage(page) {
@@ -3306,6 +3609,7 @@
         });
 
         enhanceAllSpaceSelects();
+        mountBatchCameraNameEditors();
         const deviceSpaceSamples = [
           "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房",
           "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/302网络机房",
@@ -3318,6 +3622,7 @@
           const fullPath = deviceSpaceSamples[index % deviceSpaceSamples.length];
           spaceCell.textContent = fullPath;
           spaceCell.title = fullPath;
+          row.dataset.spacePath = fullPath;
         });
         renderBatchPage(1);
 
@@ -3337,6 +3642,7 @@
             const view = button.dataset.view;
             document.querySelectorAll(".menu-item").forEach((item) => item.classList.toggle("is-active", item === button));
             document.querySelectorAll(".view-page").forEach((page) => page.classList.toggle("is-active", page.id === "view-" + view));
+            refreshPageDemandStats();
           });
         });
 
@@ -3378,6 +3684,7 @@
               selectedRows.forEach((row) => {
                 row.children[5].textContent = spaceSelect.value;
                 row.children[5].title = spaceSelect.value;
+                row.dataset.spacePath = spaceSelect.value.replace(/\s*\/\s*/g, "/");
               });
               closeAll();
               showToast(`已修改 ${selectedRows.length} 台设备的所属空间`);
@@ -3478,6 +3785,14 @@
           }
         });
 
+        batchSpaceModal.addEventListener("click", (event) => {
+          const editButton = event.target.closest("[data-edit-camera-name]");
+          if (!editButton) return;
+          event.preventDefault();
+          event.stopPropagation();
+          startBatchCameraNameEdit(editButton.closest(".batch-camera-name-cell"));
+        });
+
         mask.addEventListener("click", closeAll);
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape") closeAll();
@@ -3518,45 +3833,68 @@
 
         const tableSearch = document.querySelector("[data-table-search]");
         const protocolFilter = document.querySelector("[data-protocol-filter]");
+        const deviceTotalText = document.querySelector("#view-device .table-footer > span");
+        const deviceEmptyRow = document.createElement("tr");
+        deviceEmptyRow.dataset.deviceEmpty = "true";
+        deviceEmptyRow.className = "hidden";
+        deviceEmptyRow.innerHTML = '<td class="device-empty-cell" colspan="8">当前空间下暂无设备</td>';
+        document.querySelector("#deviceTable tbody").appendChild(deviceEmptyRow);
+        let activeDeviceSpacePath = "共济科技";
+        let activeDeviceSpaceCount = 12;
         function filterDeviceTable() {
           const keyword = tableSearch.value.trim().toLowerCase();
           const protocol = protocolFilter.value;
-          document.querySelectorAll("#deviceTable tbody tr").forEach((row) => {
+          let visibleOnCurrentPage = 0;
+          document.querySelectorAll("#deviceTable tbody tr:not([data-device-empty])").forEach((row) => {
             const cameraName = row.children[2].textContent.toLowerCase();
             const communicationMode = row.children[3].textContent.trim();
             const matchedKeyword = !keyword || cameraName.includes(keyword);
             const matchedProtocol = !protocol || communicationMode === protocol;
-            row.classList.toggle("hidden", !matchedKeyword || !matchedProtocol);
+            const matchedSpace = !activeDeviceSpacePath || row.dataset.spacePath.startsWith(activeDeviceSpacePath);
+            const visible = matchedKeyword && matchedProtocol && matchedSpace;
+            row.classList.toggle("hidden", !visible);
+            if (visible) visibleOnCurrentPage += 1;
           });
+          deviceEmptyRow.classList.toggle("hidden", visibleOnCurrentPage > 0);
+          deviceTotalText.textContent = keyword || protocol
+            ? `当前页匹配 ${visibleOnCurrentPage} 条`
+            : `共 ${activeDeviceSpaceCount} 条`;
         }
         tableSearch?.addEventListener("input", filterDeviceTable);
         protocolFilter?.addEventListener("change", filterDeviceTable);
 
         const commonSpaceTree = [
-          { label: "共济科技", depth: 0, branch: true, count: 436 },
-          { label: "华南区域", depth: 1, branch: true, count: 286 },
-          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 196 },
-          { label: "1号数据楼", depth: 3, branch: true, count: 196 },
-          { label: "3层", depth: 4, branch: true, count: 128 },
-          { label: "301主机房", depth: 5, count: 72 },
-          { label: "302网络机房", depth: 5, count: 56 },
-          { label: "4层", depth: 4, branch: true, count: 68 },
-          { label: "401电力机房", depth: 5, count: 68 },
-          { label: "广州科学城数据中心", depth: 2, branch: true, count: 90 },
-          { label: "A栋数据楼", depth: 3, branch: true, count: 90 },
-          { label: "A101核心机房", depth: 4, count: 90 },
-          { label: "华东区域", depth: 1, branch: true, count: 112 },
-          { label: "上海临港数据中心", depth: 2, branch: true, count: 76 },
-          { label: "2号数据楼", depth: 3, branch: true, count: 76 },
-          { label: "B201机房", depth: 4, count: 76 },
-          { label: "苏州高新区数据中心", depth: 2, branch: true, count: 36 },
-          { label: "华北区域", depth: 1, branch: true, count: 38 },
-          { label: "北京亦庄数据中心", depth: 2, branch: true, count: 38 }
+          { label: "共济科技", depth: 0, branch: true, count: 12 },
+          { label: "华南区域", depth: 1, branch: true, count: 10 },
+          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 8 },
+          { label: "1号数据楼", depth: 3, branch: true, count: 8 },
+          { label: "3层", depth: 4, branch: true, count: 6 },
+          { label: "301主机房", depth: 5, count: 3 },
+          { label: "302网络机房", depth: 5, count: 3 },
+          { label: "4层", depth: 4, branch: true, count: 2 },
+          { label: "401电力机房", depth: 5, count: 2 },
+          { label: "广州科学城数据中心", depth: 2, branch: true, count: 2 },
+          { label: "A栋数据楼", depth: 3, branch: true, count: 2 },
+          { label: "A101核心机房", depth: 4, count: 2 },
+          { label: "华东区域", depth: 1, branch: true, count: 2 },
+          { label: "上海临港数据中心", depth: 2, branch: true, count: 2 },
+          { label: "2号数据楼", depth: 3, branch: true, count: 2 },
+          { label: "B201机房", depth: 4, count: 2 },
+          { label: "苏州高新区数据中心", depth: 2, branch: true, count: 0 },
+          { label: "华北区域", depth: 1, branch: true, count: 0 },
+          { label: "北京亦庄数据中心", depth: 2, branch: true, count: 0 }
         ];
+
+        const commonSpacePathStack = [];
+        commonSpaceTree.forEach((node) => {
+          commonSpacePathStack[node.depth] = node.label;
+          commonSpacePathStack.length = node.depth + 1;
+          node.path = commonSpacePathStack.join("/");
+        });
 
         function syncSpaceTree(tree) {
           const withChecks = Boolean(tree.querySelector(".tree-check"));
-          tree.innerHTML = commonSpaceTree.map((node, index) => `<div class="tree-row ${index === 0 ? "is-selected" : ""}" data-depth="${node.depth}" ${node.branch ? "data-tree-branch" : ""}>
+          tree.innerHTML = commonSpaceTree.map((node, index) => `<div class="tree-row ${index === 0 ? "is-selected" : ""}" data-depth="${node.depth}" data-space-path="${node.path}" data-space-count="${node.count}" ${node.branch ? "data-tree-branch" : ""}>
             <span class="tree-arrow">${node.branch ? "▾" : ""}</span>${withChecks ? '<input class="tree-check" type="checkbox" />' : ""}<span class="tree-icon">${node.depth === 0 ? "⌂" : node.branch ? "▥" : "▤"}</span><span class="tree-label">${node.label}</span><span class="tree-count">${node.count}</span></div>`).join("");
           const search = tree.closest(".tree-panel, .drawer-tree")?.querySelector("[data-tree-search]");
           if (search) search.value = "";
@@ -3577,15 +3915,23 @@
         function bindSpaceTreeInteractions(root = document) {
           root.querySelectorAll("[data-tree] .tree-row").forEach((row) => {
             row.addEventListener("click", (event) => {
-            const tree = row.closest(".tree-scroll");
-            if (row.matches("[data-tree-branch]") && !event.target.matches("input")) {
-              const collapsed = !row.classList.contains("is-collapsed");
-              row.classList.toggle("is-collapsed", collapsed);
-              row.querySelector(".tree-arrow").textContent = collapsed ? "▸" : "▾";
-              refreshTreeVisibility(tree);
-            }
-            tree.querySelectorAll(".tree-row").forEach((item) => item.classList.remove("is-selected"));
-            row.classList.add("is-selected");
+              const tree = row.closest(".tree-scroll");
+              const clickedToggle = event.target.closest(".tree-arrow");
+              if (row.matches("[data-tree-branch]") && clickedToggle) {
+                const collapsed = !row.classList.contains("is-collapsed");
+                row.classList.toggle("is-collapsed", collapsed);
+                row.querySelector(".tree-arrow").textContent = collapsed ? "▸" : "▾";
+                refreshTreeVisibility(tree);
+                return;
+              }
+              if (event.target.matches("input")) return;
+              tree.querySelectorAll(".tree-row").forEach((item) => item.classList.remove("is-selected"));
+              row.classList.add("is-selected");
+              if (tree.closest("#view-device")) {
+                activeDeviceSpacePath = row.dataset.spacePath;
+                activeDeviceSpaceCount = Number(row.dataset.spaceCount || 0);
+                filterDeviceTable();
+              }
             });
           });
         }
@@ -3598,6 +3944,14 @@
         const versionStoryTitle = document.getElementById("versionStoryTitle");
         const versionStoryMeta = document.getElementById("versionStoryMeta");
         const versionStoryBody = document.getElementById("versionStoryBody");
+        const pageDemandSwitch = document.getElementById("pageDemandSwitch");
+        const pageDemandCount = document.getElementById("pageDemandCount");
+        const pageDemandPanel = document.getElementById("pageDemandPanel");
+        const pageDemandSummary = document.getElementById("pageDemandSummary");
+        const pageDemandBody = document.getElementById("pageDemandBody");
+        const pageDemandSwitchPositionKey = "video-page-demand-switch-top";
+        let pageDemandSwitchDrag = null;
+        let suppressPageDemandSwitchClick = false;
         const requirementStories = {
           "V3R5-5925": {
             title: "V3R5-5925 · 用户故事",
@@ -3613,8 +3967,8 @@
             meta: "v3.0 · 所属空间 · 设计完成",
             story: "作为视频设备管理员，我希望将多台设备一次性调整到目标空间，并可选择区域、数据中心、数据楼、楼层或机房等任意层级节点。",
             scenarios: ["机房调整时，将多台摄像头批量迁移到新的机房节点。", "设备只需要归属到数据中心或楼层时，直接选择对应的非叶子节点。"],
-            rules: ["空间树支持搜索及展开、收起。", "叶子节点和非叶子节点均可选择。", "选择后回填从企业到目标节点的完整路径。"],
-            acceptance: ["确认后，所有已选设备的所属空间统一更新。", "切换分页后仍保留已勾选设备。"],
+            rules: ["空间树支持搜索及展开、收起。", "叶子节点和非叶子节点均可选择。", "选择后回填从企业到目标节点的完整路径。", "空间树节点数量按当前节点及全部后代设备汇总，根节点与右侧列表总数一致。"],
+            acceptance: ["确认后，所有已选设备的所属空间统一更新。", "切换分页后仍保留已勾选设备。", "空间调整后原空间与目标空间沿途各级数量同步更新。"],
             boundaries: ["未选择所属空间时阻止提交。", "搜索无结果时展示空结果状态，不改变原选择。"]
           }
         };
@@ -3622,6 +3976,7 @@
         demandPopover.className = "demand-popover";
         document.body.appendChild(demandPopover);
         let demandHideTimer = null;
+        let demandScopeSequence = 0;
 
         function escapeDemandText(value) {
           return String(value || "").replace(/[&<>"']/g, (character) => ({
@@ -3666,6 +4021,89 @@
           versionStoryLayer.setAttribute("aria-hidden", "true");
         }
 
+        function currentPageRequirements() {
+          const openModalScope = document.querySelector(".modal.is-open");
+          const currentRoot = versionRequirementsPage.classList.contains("is-open")
+            ? versionRequirementsPage
+            : openModalScope || (drawer.classList.contains("is-open") ? drawer : document.querySelector(".view-page.is-active"));
+          if (!currentRoot) return [];
+          const scopes = [
+            ...(currentRoot.matches?.("[data-demand-text]") ? [currentRoot] : []),
+            ...currentRoot.querySelectorAll("[data-demand-text]")
+          ];
+          return scopes.filter((scope) => {
+            const badge = scope.querySelector(":scope > .demand-badge");
+            return badge && badge.getClientRects().length > 0;
+          }).map((scope) => {
+            const id = scope.dataset.demandReqId || "";
+            return {
+              id,
+              scopeId: scope.dataset.demandScopeId,
+              version: scope?.dataset.demandVersion || "v3.0",
+              demandTitle: scope?.dataset.demandTitle || "需求说明",
+              descriptions: String(scope?.dataset.demandText || "")
+                .split("||")
+                .map((item) => item.trim())
+                .filter(Boolean)
+            };
+          });
+        }
+
+        function refreshPageDemandStats() {
+          const entries = currentPageRequirements();
+          pageDemandCount.textContent = entries.length;
+          pageDemandSummary.textContent = `共 ${entries.length} 项`;
+          pageDemandSwitch.classList.add("has-demand");
+          pageDemandBody.innerHTML = entries.length
+            ? entries.map((entry) => `<button class="page-demand-item" type="button" data-page-demand-scope-id="${escapeDemandText(entry.scopeId)}">
+                <span class="page-demand-item-tags"><span>${escapeDemandText(entry.version)}</span><span>${escapeDemandText(entry.id)}</span></span>
+                <strong>${escapeDemandText(entry.demandTitle)}</strong>
+                <span class="page-demand-item-description">${entry.descriptions.map((item) => `<span class="page-demand-item-line">${escapeDemandText(item)}</span>`).join("")}</span>
+              </button>`).join("")
+            : '<div class="page-demand-panel-empty">当前页面暂无需求说明。</div>';
+        }
+
+        function togglePageDemandPanel(force) {
+          const open = typeof force === "boolean" ? force : !pageDemandPanel.classList.contains("is-open");
+          const nonBatchDrawerOpen = drawer.classList.contains("is-open") && drawer.dataset.drawerType !== "batch";
+          if (open && (nonBatchDrawerOpen || document.querySelector(".modal.is-open"))) {
+            closeAll();
+          }
+          pageDemandPanel.classList.toggle("is-open", open);
+          pageDemandSwitch.classList.toggle("is-on", open);
+          document.body.classList.toggle("is-page-demand-panel-open", open);
+          pageDemandSwitch.setAttribute("aria-checked", open ? "true" : "false");
+          pageDemandPanel.setAttribute("aria-hidden", open ? "false" : "true");
+        }
+
+        function clampPageDemandSwitchCenter(centerY) {
+          const topbarHeight = Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--topbar-h")) || 44;
+          const halfHeight = pageDemandSwitch.offsetHeight / 2 || 19;
+          const minCenter = topbarHeight + halfHeight + 8;
+          const maxCenter = window.innerHeight - halfHeight - 8;
+          return Math.min(Math.max(centerY, minCenter), Math.max(minCenter, maxCenter));
+        }
+
+        function setPageDemandSwitchCenter(centerY, persist = false) {
+          const nextCenter = clampPageDemandSwitchCenter(centerY);
+          pageDemandSwitch.style.top = `${nextCenter}px`;
+          if (!persist) return;
+          try {
+            localStorage.setItem(pageDemandSwitchPositionKey, String(nextCenter));
+          } catch (error) {
+            // 本地文件模式无法使用存储时，仍保留当前会话内的位置。
+          }
+        }
+
+        function restorePageDemandSwitchPosition() {
+          try {
+            const storedCenter = Number.parseFloat(localStorage.getItem(pageDemandSwitchPositionKey));
+            if (Number.isFinite(storedCenter)) setPageDemandSwitchCenter(storedCenter);
+          } catch (error) {
+            // 忽略本地存储不可用的情况。
+          }
+        }
+
         function scheduleDemandHide() {
           cancelDemandHide();
           demandHideTimer = setTimeout(hideDemandPopover, 220);
@@ -3692,13 +4130,17 @@
             .split("||")
             .map((item) => item.trim())
             .filter(Boolean);
-          demandPopover.innerHTML = `<strong>${escapeDemandText(scope.dataset.demandVersion || "v3.0")} · ${escapeDemandText(scope.dataset.demandTitle || "需求说明")}</strong>${parts.map((item) => `<p>${escapeDemandText(item)}</p>`).join("")}`;
+          demandPopover.innerHTML = `<strong>${escapeDemandText(scope.dataset.demandTitle || "需求说明")}</strong>${parts.map((item) => `<p>${escapeDemandText(item)}</p>`).join("")}`;
           demandPopover.style.display = "block";
           positionDemandPopover(trigger);
         }
 
         function mountDemandBadges() {
           document.querySelectorAll("[data-demand-text]").forEach((scope) => {
+            if (!scope.dataset.demandScopeId) {
+              demandScopeSequence += 1;
+              scope.dataset.demandScopeId = `demand-scope-${demandScopeSequence}`;
+            }
             if (scope.querySelector(":scope > .demand-badge")) return;
             scope.classList.add("demand-anchor");
             const badge = document.createElement("span");
@@ -3721,33 +4163,49 @@
         function setDemandMode(enabled) {
           document.body.classList.toggle("is-demand-mode", enabled);
           demandModeToggle.setAttribute("aria-pressed", enabled ? "true" : "false");
-          if (!enabled) hideDemandPopover();
+          if (!enabled) {
+            hideDemandPopover();
+            togglePageDemandPanel(false);
+          }
+          refreshPageDemandStats();
         }
 
         function openVersionRequirements() {
           versionRequirementsPage.classList.add("is-open");
           versionRequirementsPage.setAttribute("aria-hidden", "false");
           hideDemandPopover();
+          refreshPageDemandStats();
         }
 
         function closeVersionRequirements() {
           closeUserStory();
           versionRequirementsPage.classList.remove("is-open");
           versionRequirementsPage.setAttribute("aria-hidden", "true");
+          refreshPageDemandStats();
         }
 
         function activateDeviceView() {
           document.querySelectorAll(".menu-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "device"));
           document.querySelectorAll(".view-page").forEach((page) => page.classList.toggle("is-active", page.id === "view-device"));
+          refreshPageDemandStats();
         }
 
-        function highlightDemandScope(scope) {
+        function highlightDemandScope(scope, showPopover = true) {
           if (!scope) return;
           scope.classList.remove("demand-locate-highlight");
           window.requestAnimationFrame(() => scope.classList.add("demand-locate-highlight"));
           setTimeout(() => scope.classList.remove("demand-locate-highlight"), 3400);
           const trigger = scope.querySelector(":scope > .demand-badge .demand-badge-trigger");
-          if (trigger) showDemandPopover(trigger);
+          if (showPopover && trigger) showDemandPopover(trigger);
+        }
+
+        function locateCurrentDemandScope(scopeId) {
+          const scope = [...document.querySelectorAll("[data-demand-scope-id]")]
+            .find((item) => item.dataset.demandScopeId === scopeId);
+          if (!scope) return;
+          hideDemandPopover();
+          scope.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+          window.setTimeout(() => highlightDemandScope(scope, false), 220);
         }
 
         function locateVersionRequirement(requirementId) {
@@ -3777,6 +4235,65 @@
         document.querySelector("[data-open-version-requirements]").addEventListener("click", openVersionRequirements);
         versionRequirementsPage.querySelector("[data-close-version-requirements]").addEventListener("click", closeVersionRequirements);
         demandModeToggle.addEventListener("click", () => setDemandMode(!document.body.classList.contains("is-demand-mode")));
+        pageDemandSwitch.addEventListener("pointerdown", (event) => {
+          if (event.button !== 0) return;
+          const rect = pageDemandSwitch.getBoundingClientRect();
+          pageDemandSwitchDrag = {
+            pointerId: event.pointerId,
+            startY: event.clientY,
+            startCenter: rect.top + rect.height / 2,
+            moved: false
+          };
+          pageDemandSwitch.setPointerCapture(event.pointerId);
+          pageDemandSwitch.classList.add("is-dragging");
+        });
+        pageDemandSwitch.addEventListener("pointermove", (event) => {
+          if (!pageDemandSwitchDrag || pageDemandSwitchDrag.pointerId !== event.pointerId) return;
+          const deltaY = event.clientY - pageDemandSwitchDrag.startY;
+          if (Math.abs(deltaY) > 3) pageDemandSwitchDrag.moved = true;
+          if (!pageDemandSwitchDrag.moved) return;
+          event.preventDefault();
+          setPageDemandSwitchCenter(pageDemandSwitchDrag.startCenter + deltaY);
+        });
+        pageDemandSwitch.addEventListener("pointerup", (event) => {
+          if (!pageDemandSwitchDrag || pageDemandSwitchDrag.pointerId !== event.pointerId) return;
+          suppressPageDemandSwitchClick = pageDemandSwitchDrag.moved;
+          if (suppressPageDemandSwitchClick) {
+            window.setTimeout(() => { suppressPageDemandSwitchClick = false; }, 0);
+          }
+          if (pageDemandSwitchDrag.moved) {
+            const rect = pageDemandSwitch.getBoundingClientRect();
+            setPageDemandSwitchCenter(rect.top + rect.height / 2, true);
+          }
+          pageDemandSwitch.releasePointerCapture(event.pointerId);
+          pageDemandSwitch.classList.remove("is-dragging");
+          pageDemandSwitchDrag = null;
+        });
+        pageDemandSwitch.addEventListener("pointercancel", () => {
+          pageDemandSwitch.classList.remove("is-dragging");
+          pageDemandSwitchDrag = null;
+        });
+        pageDemandSwitch.addEventListener("click", (event) => {
+          if (suppressPageDemandSwitchClick) {
+            suppressPageDemandSwitchClick = false;
+            event.preventDefault();
+            return;
+          }
+          togglePageDemandPanel();
+        });
+        pageDemandSwitch.addEventListener("keydown", (event) => {
+          if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+          event.preventDefault();
+          const rect = pageDemandSwitch.getBoundingClientRect();
+          const direction = event.key === "ArrowUp" ? -1 : 1;
+          setPageDemandSwitchCenter(rect.top + rect.height / 2 + direction * 12, true);
+        });
+        document.getElementById("pageDemandClose").addEventListener("click", () => togglePageDemandPanel(false));
+        pageDemandBody.addEventListener("click", (event) => {
+          const item = event.target.closest("[data-page-demand-scope-id]");
+          if (!item) return;
+          locateCurrentDemandScope(item.dataset.pageDemandScopeId);
+        });
         versionRequirementsPage.querySelectorAll("[data-locate-demand]").forEach((button) => {
           button.addEventListener("click", () => locateVersionRequirement(button.dataset.locateDemand));
         });
@@ -3814,14 +4331,27 @@
         document.addEventListener("click", (event) => {
           if (!event.target.closest(".demand-popover") && !event.target.closest(".demand-badge")) hideDemandPopover();
         });
-        window.addEventListener("resize", hideDemandPopover);
+        window.addEventListener("resize", () => {
+          hideDemandPopover();
+          const currentCenter = Number.parseFloat(pageDemandSwitch.style.top);
+          if (Number.isFinite(currentCenter)) setPageDemandSwitchCenter(currentCenter);
+        });
         window.addEventListener("scroll", hideDemandPopover, true);
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape" && versionRequirementsPage.classList.contains("is-open")) closeVersionRequirements();
         });
 
+        const deviceTreeDemandTitle = document.querySelector("#view-device .tree-title[data-demand-text]");
+        const deviceTreeDemandPanel = deviceTreeDemandTitle?.closest(".tree-panel");
+        if (deviceTreeDemandTitle && deviceTreeDemandPanel) {
+          ["demandVersion", "demandReqId", "demandTitle", "demandText"].forEach((key) => {
+            deviceTreeDemandPanel.dataset[key] = deviceTreeDemandTitle.dataset[key];
+            delete deviceTreeDemandTitle.dataset[key];
+          });
+        }
         mountDemandBadges();
         setDemandMode(true);
+        restorePageDemandSwitchPosition();
 
         bindTreeSearch();
       })();
