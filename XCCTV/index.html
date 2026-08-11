@@ -475,6 +475,14 @@
         white-space: nowrap;
       }
 
+      .binding-device-row .tree-link[hidden] {
+        display: none;
+      }
+
+      .binding-device-row .tree-label {
+        flex: 1;
+      }
+
       .video-preview-layout {
         grid-template-columns: 300px minmax(0, 1fr);
       }
@@ -784,6 +792,18 @@
         margin: 0;
       }
 
+      .page-title-with-help {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .page-header-leading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
       .header-actions {
         display: flex;
         align-items: center;
@@ -791,16 +811,35 @@
       }
 
       .info-dot {
-        width: 18px;
-        height: 18px;
-        display: inline-grid;
+        width: 24px;
+        height: 24px;
+        flex: none;
+        display: grid;
         place-items: center;
-        margin-left: 5px;
-        color: #315b84;
-        border: 1px solid #315b84;
+        padding: 0;
+        color: #1677d2;
+        border: 1px solid #c7e1f8;
         border-radius: 50%;
-        font-size: 11px;
+        background: #f1f8ff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
         cursor: help;
+        transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+      }
+
+      .info-dot:hover {
+        color: #fff;
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+
+      .info-dot:focus-visible {
+        color: var(--primary);
+        border-color: var(--primary);
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(13, 132, 243, 0.18);
       }
 
       .btn {
@@ -1245,19 +1284,72 @@
       }
 
       .binding-table .col-id {
-        width: 180px;
+        width: 18%;
       }
 
       .binding-table .col-name {
-        width: 230px;
+        width: 20%;
       }
 
       .binding-table .col-space {
-        width: 260px;
+        width: 27%;
       }
 
       .binding-table .col-bind {
-        width: 210px;
+        width: 17%;
+      }
+
+      #view-binding .data-table-wrap {
+        overflow: hidden;
+      }
+
+      #view-binding .binding-table {
+        min-width: 0;
+      }
+
+      #view-binding .binding-table th:first-child {
+        width: 6% !important;
+      }
+
+      #view-binding .binding-table .col-action {
+        width: 12%;
+      }
+
+      #view-binding .binding-table td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .binding-search {
+        width: 250px;
+        margin: 0;
+      }
+
+      .binding-empty-cell {
+        height: 160px !important;
+        color: #8a99aa;
+        text-align: center !important;
+        white-space: normal !important;
+      }
+
+      .binding-device-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0;
+        font-size: 14px;
+      }
+
+      .binding-link-icon {
+        color: #087df0;
+        font-family: "Segoe UI Symbol", sans-serif;
+        font-size: 14px;
+        line-height: 1;
+      }
+
+      .binding-back-button[hidden] {
+        display: none;
       }
 
       .mask {
@@ -1847,6 +1939,65 @@
       .drawer-tree .tree-scroll {
         border: 1px solid var(--border);
         border-radius: 7px;
+      }
+
+      .drawer-tree .tree-row {
+        min-height: 34px;
+      }
+
+      body.is-popup-config-open .mask {
+        z-index: 78;
+      }
+
+      .popup-config-modal {
+        width: min(960px, calc(100vw - 80px));
+      }
+
+      .popup-config-modal [data-popup-rules][hidden] {
+        display: none;
+      }
+
+      .popup-rule-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 28px 28px;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+
+      .popup-rule-action {
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--primary);
+        font-size: 18px;
+        line-height: 1;
+      }
+
+      .popup-rule-action.is-remove {
+        background: #f04438;
+      }
+
+      .popup-input-action {
+        display: flex;
+        align-items: center;
+        min-height: 34px;
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .popup-input-action .input {
+        border: 0;
+        border-radius: 0;
+      }
+
+      .popup-input-action .tree-link {
+        margin: 0 12px;
       }
 
       .info-note {
@@ -2870,8 +3021,12 @@
         <section class="view-page" id="view-binding">
           <div class="page-card">
             <div class="page-header">
-              <h1 class="page-title">设备绑定 <span class="info-dot" title="本模块用于设备告警时查看关联摄像头的实时/历史视频。支持关联设备，也支持关联设备下的测点。">i</span></h1>
+              <div class="page-header-leading">
+                <h1 class="page-title page-title-with-help">设备绑定 <button class="info-dot" type="button" aria-label="查看设备绑定说明" title="本模块用于设备告警时查看关联摄像头的实时/历史视频。支持关联设备，也支持关联设备下的测点。">i</button></h1>
+                <button class="btn binding-back-button" type="button" data-binding-back hidden>‹ 返回设备列表</button>
+              </div>
               <div class="header-actions">
+                <div class="search-box binding-search" data-demand-version="v3.0" data-demand-req-id="V3R5-6091" data-demand-title="设备与测点搜索" data-demand-text="需求来源：v3.0，需求ID：V3R5-6091。||功能说明：设备绑定页支持按当前列表层级快速搜索绑定对象。||搜索范围：设备列表支持搜索设备ID和设备名称；进入测点列表后支持搜索测点ID和测点名称。||交互规则：输入内容后实时刷新列表和匹配条数；清空搜索内容后恢复当前层级全部数据。||状态规则：无匹配结果时展示明确的空结果提示；设备与测点列表切换时同步更新搜索提示文案。"><input type="search" placeholder="请输入设备ID或名称" aria-label="搜索设备ID或名称" data-binding-search /></div>
                 <button class="btn btn-primary" type="button" data-open-drawer="settings">历史视频设置</button>
               </div>
             </div>
@@ -2902,25 +3057,28 @@
                 </div>
               </section>
 
-              <section class="content-panel">
+              <section class="content-panel" data-demand-version="v3.0" data-demand-req-id="V3R5-6091" data-demand-title="设备与测点列表展示及钻取" data-demand-text="需求来源：v3.0，需求ID：V3R5-6091。||功能说明：设备绑定列表支持展示设备及其下级非标测点，满足消防集成等场景的视频告警关联配置。||设备列表：展示设备ID、设备名称、所属位置、绑定设备和操作；设备名称以链接样式展示。||钻取规则：点击设备名称进入该设备的测点列表，展示测点ID、测点名称及完整所属路径；点击“返回设备列表”恢复设备维度数据。||绑定规则：设备和测点均保留“绑定”入口，用于配置告警关联摄像头；未绑定时显示“-”。||展示状态：列表无横向滚动，无数据或搜索无匹配结果时展示空结果状态。">
                 <div class="data-table-wrap">
-                  <table class="data-table binding-table">
+                  <table class="data-table binding-table" id="bindingTable">
                     <thead>
                       <tr><th style="width:60px">序号</th><th class="col-id">设备ID</th><th class="col-name">设备名称</th><th class="col-space">所属位置</th><th class="col-bind">绑定设备</th><th class="col-action">操作</th></tr>
                     </thead>
                     <tbody>
-                      <tr><td>1</td><td>0_631_1_1057_0</td><td><button class="action-link">⌁ 功率负载率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>2</td><td>0_631_1_100_0</td><td><button class="action-link">⌁ 总电能</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>3</td><td>0_631_1_101_0</td><td><button class="action-link">⌁ 已用制冷量</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>4</td><td>0_631_1_102_0</td><td><button class="action-link">⌁ 可用制冷量</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>5</td><td>0_631_1_103_0</td><td><button class="action-link">⌁ 制冷负载率</button></td><td>共济科技/AI节能演示专用</td><td>werr</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>6</td><td>0_631_1_610_0</td><td><button class="action-link">⌁ 可用功率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
-                      <tr><td>7</td><td>0_631_1_626_0</td><td><button class="action-link">⌁ 已用功率</button></td><td>共济科技/AI节能演示专用</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>1</td><td>0_1091</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1091" data-device-name="0810"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>0810</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>2</td><td>0_1061</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1061" data-device-name="gyl001"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>gyl001</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>3</td><td>0_1088</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1088" data-device-name="sqqq"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>sqqq</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>4</td><td>0_1055</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1055" data-device-name="TH001"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH001</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>5</td><td>0_1056</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1056" data-device-name="TH002"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH002</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>6</td><td>0_1057</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1057" data-device-name="TH003"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH003</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>7</td><td>0_1058</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1058" data-device-name="TH004"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH004</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>8</td><td>0_1059</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1059" data-device-name="TH005"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH005</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>9</td><td>0_1053</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1053" data-device-name="TH031"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>TH031</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
+                      <tr><td>10</td><td>0_1054</td><td><button class="action-link binding-device-link" data-binding-device-link data-device-id="0_1054" data-device-name="UPS-1"><span class="binding-link-icon" aria-hidden="true">🔗</span><span data-binding-name>UPS-1</span></button></td><td>共济科技/lyh</td><td>-</td><td class="col-action"><button class="action-link" data-open-drawer="alarm-bind">绑定</button></td></tr>
                     </tbody>
                   </table>
                 </div>
                 <div class="table-footer">
-                  <span>共 7 条</span>
+                  <span data-binding-total>共 10 条</span>
                   <div class="pagination"><select class="page-select"><option>10条/页</option></select><span style="color:#9aa8b8">‹</span><span class="page-number">1</span><span>›</span><span>前往</span><input class="page-input" value="1" /><span>页</span></div>
                 </div>
               </section>
@@ -2955,7 +3113,7 @@
             <button type="button">全部版本</button>
             <button class="is-active" type="button">v3.0</button>
           </div>
-          <div class="version-req-summary">当前显示 2 条需求</div>
+          <div class="version-req-summary">当前显示 3 条需求</div>
         </div>
         <section class="version-req-version">
           <div class="version-req-version-head">
@@ -2963,10 +3121,23 @@
               <div class="version-req-version-title">v3.0</div>
               <div class="version-req-version-goal">视频管理_v3.0_支持批量修改位置及协议参数</div>
             </div>
-            <span class="version-req-count">2 条需求</span>
+            <span class="version-req-count">3 条需求</span>
           </div>
           <div class="version-req-group-title">新增</div>
           <div class="version-req-list">
+            <article class="version-req-item" role="button" tabindex="0" data-card-locate-demand="V3R5-6091">
+              <div class="version-req-item-head">
+                <div class="version-req-item-title">【视频管理】新增 设备绑定支持展示非标测点及搜索</div>
+                <span class="version-req-status">设计完成</span>
+              </div>
+              <div class="version-req-item-foot">
+                <span class="version-req-id"><button class="version-req-ticket" type="button" data-open-ones-issue="V3R5-6091" title="在 ONES 中打开 V3R5-6091">V3R5-6091</button> · 设备绑定</span>
+                <div class="version-req-item-actions">
+                  <button class="version-req-story" type="button" data-open-user-story="V3R5-6091">用户故事</button>
+                  <button class="version-req-locate" type="button" data-locate-demand="V3R5-6091">定位功能</button>
+                </div>
+              </div>
+            </article>
             <article class="version-req-item" role="button" tabindex="0" data-card-locate-demand="V3R5-5925">
               <div class="version-req-item-head">
                 <div class="version-req-item-title">【视频管理】新增 支持批量修改协议参数</div>
@@ -3030,25 +3201,28 @@
       <div class="modal-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" type="button" data-confirm-action>确定</button></div>
     </section>
 
-    <section class="modal medium" id="popupConfigModal" aria-hidden="true">
-      <div class="modal-header"><h2 class="modal-title">弹窗配置</h2><button class="close-button" type="button" data-close>×</button></div>
+    <section class="modal popup-config-modal" id="popupConfigModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="设备绑定" data-demand-title="摄像头弹窗配置" data-demand-text="需求来源：设备绑定优化。||入口说明：在设备绑定树中勾选摄像头后，摄像头行右侧显示“弹窗配置”入口。||应用范围：按设备保存的弹窗配置自动应用到该摄像头关联的测点。||开关规则：未勾选“自动弹出”时仅保存关闭状态；勾选后展示规则配置、屏蔽告警、自动关闭、权限角色及触发位置。||展示限制：无论从摄像头列表还是测点列表进入绑定，弹窗配置均不展示“摄像头点位”配置项。||返回规则：取消或确认后关闭配置弹窗并返回设备绑定抽屉，保留当前树勾选结果。">
+      <div class="modal-header"><h2 class="modal-title">弹窗配置</h2><button class="close-button" type="button" data-close-popup-config aria-label="关闭弹窗配置">×</button></div>
       <div class="modal-body">
         <div class="info-note">ⓘ 按设备设置弹窗时会自动应用至设备下的测点</div>
         <div class="form-grid" style="margin-top:16px">
-          <div class="form-item"><label>告警弹窗 <span class="required">*</span></label><div class="inline-options"><label><input type="checkbox" checked /> 自动弹出</label></div></div>
-          <div class="config-card">
-            <div class="config-head"><span>规则配置</span><button class="btn" style="height:27px;padding:0 11px">设为默认</button></div>
+          <div class="form-item"><label>告警弹窗 <span class="required">*</span></label><div class="inline-options"><label><input type="checkbox" data-popup-auto /> 自动弹出</label></div></div>
+          <div class="config-card" data-popup-rules hidden>
+            <div class="config-head"><span>规则配置</span><button class="btn" type="button" style="height:27px;padding:0 11px">设为默认</button></div>
             <div class="form-item"><label>事件类型 <span class="required">*</span></label><div class="inline-options"><label><input type="checkbox" checked /> 告警</label><label><input type="checkbox" /> 事件</label></div></div>
-            <div class="form-item" style="margin-top:12px"><label>告警级别判断 <span class="required">*</span></label><div class="two-fields"><select class="select"><option>请选择</option><option>告警级别</option></select><select class="select"><option>请选择</option><option>严重</option></select></div></div>
+            <div class="form-item" style="margin-top:12px"><label>告警级别判断 <span class="required">*</span></label>
+              <div class="popup-rule-row"><select class="select"><option>大于等于</option><option>等于</option><option>小于等于</option></select><select class="select"><option>紧急</option><option>重要</option><option>次要</option><option>提示</option></select><button class="popup-rule-action" type="button" aria-label="新增判断条件">＋</button><button class="popup-rule-action is-remove" type="button" aria-label="删除判断条件">−</button></div>
+              <div class="popup-rule-row"><select class="select"><option>请选择</option><option>大于等于</option><option>等于</option><option>小于等于</option></select><select class="select"><option>请选择</option><option>紧急</option><option>重要</option><option>次要</option><option>提示</option></select><button class="popup-rule-action" type="button" aria-label="新增判断条件">＋</button><button class="popup-rule-action is-remove" type="button" aria-label="删除判断条件">−</button></div>
+            </div>
             <div class="form-item" style="margin-top:12px"><label>发送屏蔽告警 <span class="required">*</span></label><select class="select"><option>不发送屏蔽告警</option><option>发送屏蔽告警</option></select></div>
-            <div class="form-item" style="margin-top:12px"><label>自动关闭 <span style="color:#9aa8b8;font-weight:400">（设置为0则不关闭）</span> <span class="required">*</span></label><div class="stepper"><button>−</button><input value="60" /><button>＋</button></div></div>
-            <div class="form-item" style="margin-top:12px"><label>权限角色 <span class="required">*</span></label><input class="input" placeholder="请选择" /></div>
+            <div class="form-item" style="margin-top:12px"><label>自动关闭 <span style="color:#9aa8b8;font-weight:400">（设置为0则不关闭）</span> <span class="required">*</span></label><div class="stepper"><button type="button">−</button><input value="60" /><span>秒</span><button type="button">＋</button></div></div>
+            <div class="form-item" style="margin-top:12px"><label>权限角色 <span class="required">*</span></label><div class="popup-input-action"><input class="input" value="系统管理员,坐席主管,坐席,工程师,工程师主管" readonly /><button class="tree-link" type="button">选择</button></div></div>
             <div class="form-item" style="margin-top:12px"><label>触发位置 <span class="required">*</span></label><div class="inline-options"><label><input type="radio" name="trigger" checked /> 仅设施监控/驾驶舱</label><label><input type="radio" name="trigger" /> 全局触发</label></div></div>
           </div>
-          <div class="form-item"><label>摄像头点位 ⓘ</label><input class="input" placeholder="请输入预置点编号，整数，通常在300以内" /></div>
+          <div class="form-item" data-popup-camera-point><label>摄像头点位 ⓘ</label><input class="input" placeholder="请输入预置点编号，整数，通常在300以内" /></div>
         </div>
       </div>
-      <div class="modal-footer"><button class="btn" type="button" data-close>取消</button><button class="btn btn-primary" type="button" data-save>确认</button></div>
+      <div class="modal-footer"><button class="btn" type="button" data-close-popup-config>取消</button><button class="btn btn-primary" type="button" data-confirm-popup-config>确认</button></div>
     </section>
 
       <section class="modal medium" id="bulkEditSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量修改设备所属空间" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-所属空间”统一更改设备位置。||操作规则：未勾选设备时阻止进入；选择目标空间并确认后，统一更新所选设备的所属空间。||空间规则：目标空间支持输入搜索并按树形结构展示，可选择企业、区域、数据中心、数据楼、楼层或机房，回填从根节点到当前节点的完整路径。||异常处理：未选择所属空间时阻止提交并提示；切换分页时保留已勾选设备。">
@@ -3261,8 +3435,9 @@
 
     <template id="tpl-device-bind">
       <section class="tree-panel drawer-tree">
-        <div class="search-box"><input type="search" placeholder="搜索" data-tree-search /></div>
-        <div class="tree-scroll" data-tree>
+        <div class="tree-title">设备列表</div>
+        <div class="search-box"><input type="search" placeholder="搜索空间或摄像头" data-tree-search /></div>
+        <div class="tree-scroll" data-tree data-binding-device-tree>
           <div class="tree-row is-selected" data-depth="0"><span class="tree-arrow">▾</span><input class="tree-check" type="checkbox" /><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
           <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">百度文心一言广州智算中心</span></div>
           <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">AI节能演示专用</span></div>
@@ -3288,8 +3463,8 @@
     <template id="tpl-alarm-bind">
       <section class="tree-panel drawer-tree">
         <div class="tree-title">设备列表</div>
-        <div class="search-box"><input type="search" placeholder="搜索" data-tree-search /></div>
-        <div class="tree-scroll" data-tree>
+        <div class="search-box"><input type="search" placeholder="搜索空间或摄像头" data-tree-search /></div>
+        <div class="tree-scroll" data-tree data-binding-device-tree>
           <div class="tree-row" data-depth="0"><span class="tree-arrow">▾</span><input class="tree-check" type="checkbox" /><span class="tree-icon">⌂</span><span class="tree-label">共济科技</span></div>
           <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wd1</span></div>
           <div class="tree-row" data-depth="1"><span class="tree-arrow">▸</span><input class="tree-check" type="checkbox" /><span class="tree-icon">▥</span><span class="tree-label">wrtest</span></div>
@@ -3341,6 +3516,7 @@
         const toast = document.getElementById("toast");
         let toastTimer;
         let activeDrawerType = "";
+        let alarmBindingTargetLevel = "device";
 
         const drawerConfig = {
           edit: { title: "编辑设备", template: "tpl-edit" },
@@ -3405,6 +3581,28 @@
             "紫光华智RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 0 } }
           }
         };
+
+        const batchRequiredDemoValues = {
+          address: "192.168.1.100",
+          startAddress: "192.168.1.100",
+          endAddress: "192.168.1.120",
+          username: "admin",
+          password: "Admin@123",
+          keyId: "demo-key-id",
+          keySecret: "DemoSecret@123",
+          credentialId: "demo-credential-id",
+          credentialSecret: "DemoCredential@123",
+          source: "2",
+          stream: "1"
+        };
+
+        function fillBatchRequiredDemoValues(container) {
+          container.querySelectorAll("[data-batch-required][data-batch-field]").forEach((control) => {
+            if (String(control.value || "").trim()) return;
+            const demoValue = batchRequiredDemoValues[control.dataset.batchField];
+            if (demoValue != null) control.value = demoValue;
+          });
+        }
 
         function appendBatchProtocolField(container, field) {
           const item = document.createElement("div");
@@ -3564,6 +3762,7 @@
             fieldsContainer.replaceChildren();
             if (!config) return;
             getBatchProtocolFields(modeSelect.value, config).forEach((field) => appendBatchProtocolField(fieldsContainer, field));
+            fillBatchRequiredDemoValues(fieldsContainer);
           };
           const renderProtocols = () => {
             protocolSelect.replaceChildren();
@@ -3627,6 +3826,7 @@
         }
 
         function closeAll() {
+          body.classList.remove("is-popup-config-open");
           drawer.classList.remove("is-open");
           drawer.setAttribute("aria-hidden", "true");
           drawer.removeAttribute("data-drawer-type");
@@ -3647,6 +3847,15 @@
           modal.setAttribute("aria-hidden", "false");
           setMask(true);
           refreshPageDemandStats();
+        }
+
+        function closePopupConfig(saved = false) {
+          popupConfigModal.classList.remove("is-open");
+          popupConfigModal.setAttribute("aria-hidden", "true");
+          body.classList.remove("is-popup-config-open");
+          setMask(drawer.classList.contains("is-open"));
+          refreshPageDemandStats();
+          if (saved) showToast("弹窗配置已保存");
         }
 
         function openDrawer(type) {
@@ -3696,11 +3905,15 @@
         function bindDynamicEvents() {
           initializeBatchProtocolForm();
           bindTreeSearch(drawer);
+          bindBindingDeviceTree();
           drawer.querySelectorAll("[data-popup-config]").forEach((button) => {
             button.addEventListener("click", (event) => {
               event.stopPropagation();
-              drawer.classList.remove("is-open");
+              popupAutoCheckbox.checked = false;
+              popupRules.hidden = true;
+              popupCameraPointField.hidden = true;
               openModal(popupConfigModal);
+              body.classList.add("is-popup-config-open");
             });
           });
           drawer.querySelectorAll(".tree-row").forEach((row) => {
@@ -3711,6 +3924,13 @@
             });
           });
         }
+
+        const popupAutoCheckbox = popupConfigModal.querySelector("[data-popup-auto]");
+        const popupRules = popupConfigModal.querySelector("[data-popup-rules]");
+        const popupCameraPointField = popupConfigModal.querySelector("[data-popup-camera-point]");
+        popupAutoCheckbox.addEventListener("change", () => {
+          popupRules.hidden = !popupAutoCheckbox.checked;
+        });
 
         const batchSelectedIds = new Set();
         let batchCurrentPage = 1;
@@ -4050,6 +4270,11 @@
           const confirmBulkSpaceButton = event.target.closest("[data-confirm-bulk-space]");
           const openBulkCredentialButton = event.target.closest("[data-open-bulk-credential]");
           const confirmBulkCredentialButton = event.target.closest("[data-confirm-bulk-credential]");
+          const closePopupConfigButton = event.target.closest("[data-close-popup-config]");
+          const confirmPopupConfigButton = event.target.closest("[data-confirm-popup-config]");
+
+          if (closePopupConfigButton) closePopupConfig();
+          if (confirmPopupConfigButton) closePopupConfig(true);
 
           if (bulkEditToggle) {
             event.stopPropagation();
@@ -4108,7 +4333,12 @@
             }
           }
 
-          if (openDrawerButton) openDrawer(openDrawerButton.dataset.openDrawer);
+          if (openDrawerButton) {
+            if (openDrawerButton.dataset.openDrawer === "alarm-bind") {
+              alarmBindingTargetLevel = openDrawerButton.dataset.bindingLevel || "device";
+            }
+            openDrawer(openDrawerButton.dataset.openDrawer);
+          }
           if (previewButton) openModal(previewModal);
           if (deleteButton) openModal(deleteModal);
           if (closeButton) closeAll();
@@ -4121,6 +4351,14 @@
               drawerSaveButton.textContent = "保存";
               openModal(batchSpaceModal);
               updateBatchSelection();
+            } else if (["device-bind", "alarm-bind"].includes(activeDrawerType)) {
+              const checkedDevices = drawerBody.querySelectorAll("[data-binding-device-row] .tree-check:checked");
+              if (!checkedDevices.length) {
+                showToast("请至少选择一个摄像头设备");
+                return;
+              }
+              closeAll();
+              showToast(`已绑定 ${checkedDevices.length} 个摄像头设备`);
             } else {
               closeAll();
               showToast("保存成功");
@@ -4182,9 +4420,14 @@
           startBatchCameraNameEdit(editButton.closest(".batch-camera-name-cell"));
         });
 
-        mask.addEventListener("click", closeAll);
+        mask.addEventListener("click", () => {
+          if (popupConfigModal.classList.contains("is-open") && drawer.classList.contains("is-open")) closePopupConfig();
+          else closeAll();
+        });
         document.addEventListener("keydown", (event) => {
-          if (event.key === "Escape") closeAll();
+          if (event.key !== "Escape") return;
+          if (popupConfigModal.classList.contains("is-open") && drawer.classList.contains("is-open")) closePopupConfig();
+          else closeAll();
         });
 
         document.querySelectorAll("[data-grid-switch] .grid-button").forEach((button) => {
@@ -4252,6 +4495,156 @@
         tableSearch?.addEventListener("input", filterDeviceTable);
         protocolFilter?.addEventListener("change", filterDeviceTable);
 
+        const bindingSearch = document.querySelector("[data-binding-search]");
+        const bindingTableHeadRow = document.querySelector("#bindingTable thead tr");
+        const bindingTableBody = document.querySelector("#bindingTable tbody");
+        const bindingDeviceRows = [...bindingTableBody.querySelectorAll("tr")];
+        const bindingTotalText = document.querySelector("[data-binding-total]");
+        const bindingBackButton = document.querySelector("[data-binding-back]");
+        const bindingEmptyRow = document.createElement("tr");
+        bindingEmptyRow.dataset.bindingEmpty = "true";
+        bindingEmptyRow.hidden = true;
+        bindingEmptyRow.innerHTML = '<td class="binding-empty-cell" colspan="6">未找到匹配的设备</td>';
+        bindingTableBody.appendChild(bindingEmptyRow);
+
+        const bindingPointSamples = [
+          { suffix: "1_9_0", name: "环境温度" },
+          { suffix: "1_14_0", name: "电池温度" },
+          { suffix: "1_181_0", name: "UPS设备输出电流最大值" },
+          { suffix: "1_212_0", name: "主路相电压Ua" },
+          { suffix: "1_213_0", name: "主路相电压Ub" },
+          { suffix: "1_214_0", name: "主路相电压Uc" },
+          { suffix: "1_215_0", name: "旁路相电压Ua" },
+          { suffix: "1_216_0", name: "旁路相电压Ub" },
+          { suffix: "1_217_0", name: "旁路相电压Uc" },
+          { suffix: "1_218_0", name: "输出相电压Ua" }
+        ];
+
+        function filterBindingTable() {
+          const keyword = bindingSearch.value.trim().toLowerCase();
+          const rows = [...bindingTableBody.querySelectorAll("tr:not([data-binding-empty])")];
+          let visibleCount = 0;
+          rows.forEach((row) => {
+            const deviceId = row.children[1].textContent.trim().toLowerCase();
+            const deviceName = (row.querySelector("[data-binding-name]")?.textContent || row.children[2].textContent).trim().toLowerCase();
+            const visible = !keyword || deviceId.includes(keyword) || deviceName.includes(keyword);
+            row.hidden = !visible;
+            if (visible) visibleCount += 1;
+          });
+          bindingEmptyRow.hidden = visibleCount > 0;
+          bindingTotalText.textContent = keyword ? `匹配 ${visibleCount} 条` : `共 ${rows.length} 条`;
+        }
+
+        bindingSearch.addEventListener("input", filterBindingTable);
+
+        function showBindingPointList(deviceId, deviceName, deviceLocation) {
+          bindingTableHeadRow.innerHTML = '<th style="width:60px">序号</th><th class="col-id">测点ID</th><th class="col-name">测点名称</th><th class="col-space">所属位置</th><th class="col-bind">绑定设备</th><th class="col-action">操作</th>';
+          const pointRows = bindingPointSamples.map((point, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${index + 1}</td><td>${deviceId}_${point.suffix}</td><td data-binding-name>${point.name}</td><td>${deviceLocation}/${deviceName}</td><td>-</td><td class="col-action"><button class="action-link" type="button" data-open-drawer="alarm-bind" data-binding-level="point">绑定</button></td>`;
+            return row;
+          });
+          bindingTableBody.replaceChildren(...pointRows, bindingEmptyRow);
+          bindingSearch.value = "";
+          bindingSearch.placeholder = "请输入测点ID或名称";
+          bindingSearch.setAttribute("aria-label", "搜索测点ID或名称");
+          bindingBackButton.hidden = false;
+          bindingEmptyRow.firstElementChild.textContent = "未找到匹配的测点";
+          filterBindingTable();
+        }
+
+        function showBindingDeviceList() {
+          bindingTableHeadRow.innerHTML = '<th style="width:60px">序号</th><th class="col-id">设备ID</th><th class="col-name">设备名称</th><th class="col-space">所属位置</th><th class="col-bind">绑定设备</th><th class="col-action">操作</th>';
+          bindingTableBody.replaceChildren(...bindingDeviceRows, bindingEmptyRow);
+          bindingSearch.value = "";
+          bindingSearch.placeholder = "请输入设备ID或名称";
+          bindingSearch.setAttribute("aria-label", "搜索设备ID或名称");
+          bindingBackButton.hidden = true;
+          bindingEmptyRow.firstElementChild.textContent = "未找到匹配的设备";
+          filterBindingTable();
+        }
+
+        bindingTableBody.addEventListener("click", (event) => {
+          const deviceLink = event.target.closest("[data-binding-device-link]");
+          if (!deviceLink) return;
+          const row = deviceLink.closest("tr");
+          showBindingPointList(deviceLink.dataset.deviceId, deviceLink.dataset.deviceName, row.children[3].textContent.trim());
+        });
+        bindingBackButton.addEventListener("click", showBindingDeviceList);
+
+        const bindingDeviceTree = [
+          { label: "共济科技", depth: 0, branch: true, count: 10 },
+          { label: "JHHL数据中心园区", depth: 1, branch: true, count: 6 },
+          { label: "D1", depth: 2, branch: true, count: 6 },
+          { label: "01#摄像头", depth: 3, device: true },
+          { label: "02#摄像头", depth: 3, device: true },
+          { label: "03#摄像头", depth: 3, device: true },
+          { label: "04#摄像头", depth: 3, device: true },
+          { label: "06#摄像头", depth: 3, device: true },
+          { label: "07#摄像头", depth: 3, device: true },
+          { label: "华南区域", depth: 1, branch: true, count: 2 },
+          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 2 },
+          { label: "1号数据楼", depth: 3, branch: true, count: 2 },
+          { label: "3层", depth: 4, branch: true, count: 2 },
+          { label: "南门入口", depth: 5, device: true },
+          { label: "研发中心走廊", depth: 5, device: true },
+          { label: "华东区域", depth: 1, branch: true, count: 2 },
+          { label: "上海临港数据中心", depth: 2, branch: true, count: 2 },
+          { label: "2号数据楼", depth: 3, branch: true, count: 2 },
+          { label: "B201机房", depth: 4, branch: true, count: 2 },
+          { label: "机房入口", depth: 5, device: true },
+          { label: "配电通道", depth: 5, device: true }
+        ];
+
+        function getTreeDescendants(row) {
+          const depth = Number(row.dataset.depth);
+          const rows = [...row.closest(".tree-scroll").querySelectorAll(".tree-row")];
+          const start = rows.indexOf(row);
+          const descendants = [];
+          for (let index = start + 1; index < rows.length; index += 1) {
+            if (Number(rows[index].dataset.depth) <= depth) break;
+            descendants.push(rows[index]);
+          }
+          return descendants;
+        }
+
+        function updateBindingTreeSelection(tree) {
+          const rows = [...tree.querySelectorAll(".tree-row")];
+          rows.filter((row) => row.matches("[data-binding-device-row]")).forEach((row) => {
+            const checked = row.querySelector(".tree-check").checked;
+            row.classList.toggle("is-checked", checked);
+            row.querySelector("[data-popup-config]").hidden = !checked;
+          });
+          rows.filter((row) => row.matches("[data-tree-branch]")).reverse().forEach((row) => {
+            const cameraChecks = getTreeDescendants(row)
+              .filter((child) => child.matches("[data-binding-device-row]"))
+              .map((child) => child.querySelector(".tree-check"));
+            const checkbox = row.querySelector(".tree-check");
+            const checkedCount = cameraChecks.filter((item) => item.checked).length;
+            checkbox.checked = cameraChecks.length > 0 && checkedCount === cameraChecks.length;
+            checkbox.indeterminate = checkedCount > 0 && checkedCount < cameraChecks.length;
+          });
+        }
+
+        function bindBindingDeviceTree() {
+          const tree = drawerBody.querySelector("[data-binding-device-tree]");
+          if (!tree || tree.dataset.bindingBound) return;
+          tree.dataset.bindingBound = "1";
+          tree.addEventListener("change", (event) => {
+            const checkbox = event.target.closest(".tree-check");
+            if (!checkbox) return;
+            const row = checkbox.closest(".tree-row");
+            if (row.matches("[data-tree-branch]")) {
+              getTreeDescendants(row).forEach((child) => {
+                const childCheck = child.querySelector(".tree-check");
+                if (childCheck) childCheck.checked = checkbox.checked;
+              });
+            }
+            updateBindingTreeSelection(tree);
+          });
+          updateBindingTreeSelection(tree);
+        }
+
         const commonSpaceTree = [
           { label: "共济科技", depth: 0, branch: true, count: 12 },
           { label: "华南区域", depth: 1, branch: true, count: 10 },
@@ -4283,8 +4676,10 @@
 
         function syncSpaceTree(tree) {
           const withChecks = Boolean(tree.querySelector(".tree-check"));
-          tree.innerHTML = commonSpaceTree.map((node, index) => `<div class="tree-row ${index === 0 ? "is-selected" : ""}" data-depth="${node.depth}" data-space-path="${node.path}" data-space-count="${node.count}" ${node.branch ? "data-tree-branch" : ""}>
-            <span class="tree-arrow">${node.branch ? "▾" : ""}</span>${withChecks ? '<input class="tree-check" type="checkbox" />' : ""}<span class="tree-icon">${node.depth === 0 ? "⌂" : node.branch ? "▥" : "▤"}</span><span class="tree-label">${node.label}</span><span class="tree-count">${node.count}</span></div>`).join("");
+          const isBindingTree = tree.matches("[data-binding-device-tree]");
+          const treeData = isBindingTree ? bindingDeviceTree : commonSpaceTree;
+          tree.innerHTML = treeData.map((node, index) => `<div class="tree-row ${index === 0 ? "is-selected" : ""} ${node.device ? "binding-device-row" : ""}" data-depth="${node.depth}" data-space-path="${node.path || ""}" data-space-count="${node.count || 0}" ${node.branch ? "data-tree-branch" : ""} ${node.device ? "data-binding-device-row" : ""}>
+            <span class="tree-arrow">${node.branch ? "▾" : ""}</span>${withChecks ? '<input class="tree-check" type="checkbox" />' : ""}<span class="tree-icon">${node.depth === 0 ? "⌂" : node.branch ? "▥" : "▤"}</span><span class="tree-label">${node.label}</span>${isBindingTree ? "" : `<span class="tree-count">${node.count}</span>`}${node.device ? '<button class="tree-link" type="button" data-popup-config hidden>弹窗配置</button>' : ""}</div>`).join("");
           const search = tree.closest(".tree-panel, .drawer-tree")?.querySelector("[data-tree-search]");
           if (search) search.value = "";
         }
@@ -4342,6 +4737,15 @@
         let pageDemandSwitchDrag = null;
         let suppressPageDemandSwitchClick = false;
         const requirementStories = {
+          "V3R5-6091": {
+            title: "V3R5-6091 · 用户故事",
+            meta: "v3.0 · 设备绑定 · 设计完成",
+            story: "作为视频告警配置人员，我希望在设备绑定中查看设备及其非标测点，并能按ID或名称快速搜索，以便为消防集成等非标点配置视频告警联动。",
+            scenarios: ["从设备列表点击设备名称，查看该设备下可配置的视频告警测点。", "设备或测点数量较多时，通过ID或名称快速定位目标对象。"],
+            rules: ["设备名称以链接样式展示，点击后进入对应测点列表。", "设备列表搜索范围为设备ID和设备名称；测点列表搜索范围为测点ID和测点名称。", "切换到测点列表后展示返回设备列表入口。", "设备与测点均提供绑定操作，未绑定时显示“-”。"],
+            acceptance: ["能够展示标准点与非标测点，并显示所属设备路径。", "搜索结果实时刷新，条数与当前可见结果一致。", "无匹配结果时展示明确的空结果提示。"],
+            boundaries: ["本期仅扩展可展示和可搜索的绑定对象范围，不改变原有摄像头绑定流程。", "返回设备列表后恢复设备维度的表头、搜索提示和列表数据。"]
+          },
           "V3R5-5925": {
             title: "V3R5-5925 · 用户故事",
             meta: "v3.0 · 设备管理 · 设计完成",
@@ -4579,6 +4983,12 @@
           refreshPageDemandStats();
         }
 
+        function activateBindingView() {
+          document.querySelectorAll(".menu-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === "binding"));
+          document.querySelectorAll(".view-page").forEach((page) => page.classList.toggle("is-active", page.id === "view-binding"));
+          refreshPageDemandStats();
+        }
+
         function highlightDemandScope(scope, showPopover = true) {
           if (!scope) return;
           scope.classList.remove("demand-locate-highlight");
@@ -4600,6 +5010,14 @@
         function locateVersionRequirement(requirementId) {
           closeVersionRequirements();
           setDemandMode(true);
+          if (requirementId === "V3R5-6091") {
+            showBindingDeviceList();
+            activateBindingView();
+            const bindingScope = document.querySelector("#view-binding .content-panel[data-demand-req-id='V3R5-6091']");
+            bindingScope?.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+            window.setTimeout(() => highlightDemandScope(bindingScope), 220);
+            return;
+          }
           activateDeviceView();
           const selectedChecks = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]")].slice(0, 2);
           selectedChecks.forEach((checkbox) => { checkbox.checked = true; });
