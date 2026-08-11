@@ -944,7 +944,29 @@
 
       .bulk-credential-fields.is-visible {
         display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
+      }
+
+      .modal.bulk-parameter-modal {
+        width: min(760px, calc(100vw - 48px));
+      }
+
+      .bulk-parameter-note {
+        grid-column: 1 / -1;
+        margin: -2px 0 0;
+        color: #71839a;
+        font-size: 12px;
+      }
+
+      @media (max-width: 700px) {
+        .bulk-credential-fields.is-visible {
+          grid-template-columns: 1fr;
+        }
+
+        .bulk-parameter-note {
+          grid-column: auto;
+        }
       }
 
       .data-table-wrap {
@@ -1392,6 +1414,13 @@
         white-space: nowrap;
       }
 
+      .batch-camera-name-edit-scope {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        flex: none;
+      }
+
       .batch-camera-name-edit {
         width: 24px;
         height: 24px;
@@ -1405,6 +1434,12 @@
         opacity: 0;
         cursor: pointer;
         transition: opacity 0.15s ease, background 0.15s ease;
+      }
+
+      .batch-camera-name-edit-icon {
+        display: block;
+        line-height: 1;
+        transform: scaleX(-1);
       }
 
       .batch-camera-name-cell:hover .batch-camera-name-edit,
@@ -1722,6 +1757,20 @@
         font-size: 12px;
       }
 
+      .batch-upload-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .batch-file-name {
+        overflow: hidden;
+        color: #71839a;
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .input,
       .select {
         width: 100%;
@@ -1734,7 +1783,9 @@
         background-color: #fff;
       }
 
-      .input.is-error {
+      .input.is-error,
+      .select.is-error,
+      .stepper.is-error {
         border-color: #f04438;
       }
 
@@ -2650,11 +2701,11 @@
               <section class="content-panel">
                 <div class="table-toolbar">
                   <button class="btn btn-danger" type="button" data-confirm-delete>♲ 批量删除</button>
-                  <div class="toolbar-dropdown" data-bulk-edit-dropdown data-demand-version="v3.0" data-demand-req-id="V3R5-5620、V3R5-5925" data-demand-title="批量修改设备信息" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620、V3R5-5925。||功能说明：对设备列表中已勾选的多台设备统一修改所属空间或协议账密。||点击后行为：展开批量修改菜单，可选择“所属空间”或“协议账密”，选择后进入对应的批量修改弹窗。||状态限制：未勾选设备时阻止进入批量修改流程并提示先选择设备；切换分页时保留已勾选结果。">
+                  <div class="toolbar-dropdown" data-bulk-edit-dropdown data-demand-version="v3.0" data-demand-req-id="V3R5-5620、V3R5-5925" data-demand-title="批量修改设备信息" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620、V3R5-5925。||功能说明：对设备列表中已勾选的多台设备统一修改所属空间或协议参数。||点击后行为：展开批量修改菜单，可选择“所属空间”或“协议参数”，选择后进入对应的批量修改弹窗。||状态限制：未勾选设备时阻止进入批量修改流程并提示先选择设备；切换分页时保留已勾选结果。">
                     <button class="btn toolbar-dropdown-toggle" type="button" data-toggle-bulk-edit>批量修改</button>
                     <div class="toolbar-dropdown-menu">
                       <button class="toolbar-dropdown-item" type="button" data-open-bulk-space>所属空间</button>
-                      <button class="toolbar-dropdown-item" type="button" data-open-bulk-credential>协议账密</button>
+                      <button class="toolbar-dropdown-item" type="button" data-open-bulk-credential>协议参数</button>
                     </div>
                   </div>
                   <div class="toolbar-spacer"></div>
@@ -2910,7 +2961,7 @@
           <div class="version-req-version-head">
             <div>
               <div class="version-req-version-title">v3.0</div>
-              <div class="version-req-version-goal">视频管理_v3.0_支持批量修改位置及账密</div>
+              <div class="version-req-version-goal">视频管理_v3.0_支持批量修改位置及协议参数</div>
             </div>
             <span class="version-req-count">2 条需求</span>
           </div>
@@ -2918,7 +2969,7 @@
           <div class="version-req-list">
             <article class="version-req-item" role="button" tabindex="0" data-card-locate-demand="V3R5-5925">
               <div class="version-req-item-head">
-                <div class="version-req-item-title">【视频管理】新增 支持批量修改协议账密</div>
+                <div class="version-req-item-title">【视频管理】新增 支持批量修改协议参数</div>
                 <span class="version-req-status">设计完成</span>
               </div>
               <div class="version-req-item-foot">
@@ -3025,13 +3076,13 @@
       </div>
     </section>
 
-      <section class="modal medium" id="bulkEditCredentialModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5925" data-demand-title="批量修改设备协议账密" data-demand-text="需求来源：v3.0，需求ID：V3R5-5925。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-协议账密”统一修改协议认证信息。||操作规则：先选择需要修改的通信方式，再填写新密钥ID/用户名和新密钥/密码；确认后对所选设备批量生效。||状态限制：未勾选设备时阻止进入；未选择通信方式或账密填写不完整时阻止提交并提示。||安全规则：密码输入默认掩码展示，界面不回显原密码。">
+      <section class="modal bulk-parameter-modal" id="bulkEditCredentialModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5925" data-demand-title="批量修改设备协议参数" data-demand-text="需求来源：v3.0，需求ID：V3R5-5925。||功能说明：设备管理列表支持勾选多台设备，通过“批量修改-协议参数”统一修改端口号、通道号、码流、用户名、密码、凭证信息及录像来源。||通信方式回显：已选设备仅包含一种通信方式时自动回显并展开参数区；包含多种通信方式时，下拉列表仅展示已选设备实际包含的通信方式，由用户选择本次修改对象。||操作规则：选择通信方式后填写本次需要更新的参数；未填写项保持设备原值，确认后对所选设备批量生效。||状态限制：未勾选设备、存在多种通信方式但尚未选择，或未填写任何待修改参数时阻止提交并提示。||安全规则：密码和凭证秘钥默认掩码展示，界面不回显原值。">
       <div class="modal-header">
-        <h2 class="modal-title">批量修改协议账密</h2>
+        <h2 class="modal-title">批量修改协议参数</h2>
         <button class="close-button" type="button" data-close aria-label="关闭">×</button>
       </div>
       <div class="modal-body">
-        <div class="bulk-edit-summary">已选择 <strong data-bulk-credential-count>0</strong> 台设备，请先选择需要修改账密的通信方式。</div>
+        <div class="bulk-edit-summary">已选择 <strong data-bulk-credential-count>0</strong> 台设备，请选择通信方式并填写需要批量更新的协议参数。</div>
         <div class="form-item">
           <label>通信方式 <span class="required">*</span></label>
           <select class="select" data-bulk-credential-protocol>
@@ -3042,13 +3093,42 @@
           </select>
         </div>
         <div class="bulk-credential-fields" data-bulk-credential-fields>
+          <p class="bulk-parameter-note">仅填写需要修改的参数，未填写项保持设备原值。</p>
           <div class="form-item">
-            <label>新密钥ID/用户名 <span class="required">*</span></label>
-            <input class="input" type="text" placeholder="请输入" data-bulk-credential-user />
+            <label>端口号</label>
+            <div class="stepper"><button type="button" data-bulk-step="-1" aria-label="减少端口号">−</button><input type="number" min="1" max="65535" placeholder="保持原值" data-bulk-credential-port /><button type="button" data-bulk-step="1" aria-label="增加端口号">＋</button></div>
           </div>
           <div class="form-item">
-            <label>新密钥/密码 <span class="required">*</span></label>
-            <input class="input" type="password" placeholder="请输入" data-bulk-credential-password />
+            <label>通道号</label>
+            <div class="stepper"><button type="button" data-bulk-step="-1" aria-label="减少通道号">−</button><input type="number" min="1" placeholder="保持原值" data-bulk-credential-channel /><button type="button" data-bulk-step="1" aria-label="增加通道号">＋</button></div>
+          </div>
+          <div class="form-item">
+            <label>码流</label>
+            <div class="stepper"><button type="button" data-bulk-step="-1" aria-label="减少码流值">−</button><input type="number" min="0" placeholder="保持原值" data-bulk-credential-stream /><button type="button" data-bulk-step="1" aria-label="增加码流值">＋</button></div>
+          </div>
+          <div class="form-item">
+            <label>用户名</label>
+            <input class="input" type="text" placeholder="保持原值" data-bulk-credential-user />
+          </div>
+          <div class="form-item">
+            <label>密码</label>
+            <input class="input" type="password" placeholder="保持原值" data-bulk-credential-password />
+          </div>
+          <div class="form-item">
+            <label>凭证ID</label>
+            <input class="input" type="text" placeholder="保持原值" data-bulk-credential-id />
+          </div>
+          <div class="form-item">
+            <label>凭证秘钥</label>
+            <input class="input" type="password" placeholder="保持原值" data-bulk-credential-secret />
+          </div>
+          <div class="form-item">
+            <label>录像来源</label>
+            <select class="select" data-bulk-credential-source>
+              <option value="">保持原值</option>
+              <option value="录像机">录像机</option>
+              <option value="摄像头">摄像头</option>
+            </select>
           </div>
         </div>
       </div>
@@ -3058,7 +3138,7 @@
       </div>
     </section>
 
-      <section class="modal batch-space-modal" id="batchSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量设置待添加设备所属空间" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：扫描设备后集中确认设备信息，并为待添加设备逐台或批量设置所属空间。||空间规则：所属空间支持输入搜索并按树形结构展示，可选择非叶子节点；选中后回填从根节点到当前节点的完整路径。||批量规则：勾选设备后可将同一空间应用到已选设备；切换分页时保留跨页勾选结果，默认每页200条。||展示规则：设备ID按X_XXX格式展示；摄像头名称悬停显示编辑入口，点击后支持行内修改；路径单行显示，超出部分省略，悬停显示完整路径。||异常处理：摄像头名称为空或存在未设置所属空间的待添加设备时阻止确认，并提示补充。">
+      <section class="modal batch-space-modal" id="batchSpaceModal" aria-hidden="true" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量设置待添加设备所属空间" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||功能说明：扫描设备后集中确认设备信息，并为待添加设备逐台或批量设置所属空间。||空间规则：所属空间支持输入搜索并按树形结构展示，可选择非叶子节点；选中后回填从根节点到当前节点的完整路径。||批量规则：勾选设备后可将同一空间应用到已选设备；切换分页时保留跨页勾选结果，默认每页200条。||展示规则：摄像头名称悬停显示编辑入口，点击后支持行内修改；路径单行显示，超出部分省略，悬停显示完整路径。||异常处理：摄像头名称为空或存在未设置所属空间的待添加设备时阻止确认，并提示补充。">
       <div class="modal-header">
         <h2 class="modal-title">设置设备所属空间</h2>
         <button class="close-button" type="button" data-close aria-label="关闭">×</button>
@@ -3140,7 +3220,7 @@
     <aside class="drawer" id="drawer" aria-hidden="true">
       <div class="drawer-header"><h2 class="drawer-title" id="drawerTitle">编辑设备</h2><button class="close-button" type="button" data-close>×</button></div>
       <div class="drawer-body" id="drawerBody"></div>
-        <div class="drawer-footer"><button class="btn" type="button" data-close>取消</button><span class="demand-inline-scope drawer-step-demand" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量添加设备进入下一步" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||步骤说明：批量添加设备时，该按钮显示为“下一步”，用于从设备连接信息录入进入所属空间设置。||点击后行为：校验当前步骤的必填信息；校验通过后关闭抽屉并打开“设置设备所属空间”弹窗。||状态限制：添加方式、协议类型、设备地址、端口号及对应协议账密未填写完整时不得进入下一步，并定位提示缺失项。||展示限制：该需求角标仅在“批量添加设备”抽屉中显示，编辑或单个添加设备时不展示。"><button class="btn btn-primary" id="drawerSaveButton" type="button" data-save>保存</button></span></div>
+        <div class="drawer-footer"><button class="btn" type="button" data-close>取消</button><span class="demand-inline-scope drawer-step-demand" data-demand-version="v3.0" data-demand-req-id="V3R5-5620" data-demand-title="批量添加设备进入下一步" data-demand-text="需求来源：v3.0，需求ID：V3R5-5620。||步骤说明：批量添加设备时，该按钮显示为“下一步”，用于从设备连接信息录入进入所属空间设置。||参数联动：添加方式支持“硬盘录像机扫描”“ip段-ips”“ip段-chs”；切换添加方式后刷新可选协议，切换协议后按协议展示设备地址、端口、认证信息、通道、码流及扩展参数。||点击后行为：校验当前组合下展示的必填参数；校验通过后关闭抽屉并打开“设置设备所属空间”弹窗。||状态限制：任一必填参数缺失或数值超出范围时不得进入下一步，并定位提示缺失项。||展示限制：该需求角标仅在“批量添加设备”抽屉中显示，编辑或单个添加设备时不展示。"><button class="btn btn-primary" id="drawerSaveButton" type="button" data-save>保存</button></span></div>
     </aside>
 
     <template id="tpl-edit">
@@ -3173,15 +3253,9 @@
 
     <template id="tpl-batch">
       <div class="form-grid">
-        <div class="form-item"><label>添加方式 <span class="required">*</span></label><select class="select"><option>硬盘录像机扫描</option><option>按IP段扫描</option></select></div>
-        <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select"><option>大华SDK_v5.0.12</option><option>海康SDK_v1.0.0</option></select></div>
-        <div class="form-item"><label>设备地址 <span class="required">*</span></label><p class="field-note">录像机的IP地址</p><input class="input" /></div>
-        <div class="form-item"><label>端口号 <span class="required">*</span></label><p class="field-note">录像机的通信端口</p><div class="stepper"><button>−</button><input value="37777" /><button>＋</button></div></div>
-        <div class="form-item"><label>用户名 <span class="required">*</span></label><p class="field-note">录像机的登录用户名</p><input class="input" /></div>
-        <div class="form-item"><label>密码 <span class="required">*</span></label><p class="field-note">录像机的登录密码</p><input class="input" /></div>
-        <div class="form-item"><label>凭证ID <span class="required">*</span></label><p class="field-note">自定义（由ICC平台申请）</p><input class="input" /></div>
-        <div class="form-item"><label>凭证秘钥 <span class="required">*</span></label><p class="field-note">访问凭证必须与ICC平台申请的保持一致</p><input class="input" /></div>
-        <div class="form-item"><label>录像来源 <span class="required">*</span></label><select class="select"><option>录像机</option><option>摄像头</option></select></div>
+        <div class="form-item"><label>添加方式 <span class="required">*</span></label><select class="select" data-batch-add-mode data-batch-required data-batch-label="添加方式"><option>硬盘录像机扫描</option><option>ip段-ips</option><option>ip段-chs</option></select></div>
+        <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select" data-batch-protocol data-batch-required data-batch-label="协议类型"></select></div>
+        <div class="form-grid" data-batch-protocol-fields></div>
       </div>
     </template>
 
@@ -3277,6 +3351,276 @@
           settings: { title: "告警历史视频设置", template: "tpl-settings" }
         };
 
+        const batchProtocolMatrix = {
+          "硬盘录像机扫描": {
+            "大华视频_v3.1": {
+              port: 80,
+              auth: "key",
+              authRequired: true,
+              source: { value: "cloud", required: true, hint: "cloud=平台录像，device=设备录像，3rdCloud=第三方平台录像" },
+              stream: { label: "码流类型", type: "number", value: "", required: true }
+            },
+            "大华SDK_v5.0.12": {
+              port: 3,
+              auth: "user",
+              credentials: true,
+              source: { value: "", required: true, hint: "2=录像机，3=服务器" },
+              stream: { label: "码流类型", type: "text", value: "", required: true, hint: "1主码流，2辅码流，3辅码流2" }
+            },
+            "海康安防平台_v1.0.0": {
+              port: 443,
+              auth: "key",
+              authRequired: false,
+              source: { value: "0", required: false, hint: "0为中心存储，1为设备存储，不填默认为中心存储" }
+            },
+            "海康SDK_v1.0.0": { port: 8000, auth: "user" },
+            "IBMS-RTSP_v1.0.0": {
+              port: 443,
+              auth: "key",
+              authRequired: true,
+              source: { value: "0", required: true, hint: "0为中心存储，1为设备存储，不填默认为中心存储" },
+              spatialUuid: true,
+              uuidUpload: true
+            },
+            "ONVIF_v1.0.0": { port: 80, auth: "user", authHintPrefix: "ONVIF中配置" }
+          },
+          "ip段-ips": {
+            "长迅士-RTSP_v1.0.0": { range: true, auth: "user" },
+            "大华-RTSP_v1.0.0": { range: true, port: 554, auth: "user", channel: 1, stream: { type: "number", value: 0 } },
+            "海康ONVIF_RTSP_v1.0.0": { range: true, port: 554, auth: "user", channel: 1, stream: { type: "number", value: 1 } },
+            "海康RTSP_v1.0.0": { range: true, port: 554, auth: "user", channel: 1, stream: { type: "text", value: "main" } },
+            "海康RTSP_v2.0.0": { range: true, port: 554, auth: "user", channel: 1, stream: { type: "number", value: 1 } },
+            "海康SDK_v1.0.0": { range: true, port: 8000, auth: "user", channel: 1, stream: { type: "number", value: 0 } },
+            "华为SDC-RTSP_v1.0.0": { range: true, port: 554, auth: "user", channel: 1, stream: { type: "number", value: 1 } },
+            "蓝色星际-RTSP_v1.0.0": { range: true, auth: "user" }
+          },
+          "ip段-chs": {
+            "大华-RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 0 } },
+            "海康ONVIF_RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 1 } },
+            "海康RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "text", value: "" } },
+            "海康RTSP_v2.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 1 } },
+            "海康SDK_v1.0.0": { range: true, port: 8000, auth: "user", channelRange: 33, stream: { type: "number", value: 0 } },
+            "华为SDC-RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 1 } },
+            "中电RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 1 } },
+            "紫光华智RTSP_v1.0.0": { range: true, port: 554, auth: "user", channelRange: 1, stream: { type: "number", value: 0 } }
+          }
+        };
+
+        function appendBatchProtocolField(container, field) {
+          const item = document.createElement("div");
+          item.className = "form-item";
+          const label = document.createElement("label");
+          label.textContent = field.label + " ";
+          if (field.required) {
+            const required = document.createElement("span");
+            required.className = "required";
+            required.textContent = "*";
+            label.appendChild(required);
+          }
+          item.appendChild(label);
+          if (field.hint) {
+            const hint = document.createElement("p");
+            hint.className = "field-note";
+            hint.textContent = field.hint;
+            item.appendChild(hint);
+          }
+
+          let control;
+          if (field.type === "number") {
+            const stepper = document.createElement("div");
+            stepper.className = "stepper";
+            const minus = document.createElement("button");
+            minus.type = "button";
+            minus.textContent = "−";
+            minus.dataset.batchDrawerStep = "-1";
+            minus.setAttribute("aria-label", `减少${field.label}`);
+            control = document.createElement("input");
+            control.type = "number";
+            control.value = field.value ?? "";
+            control.min = String(field.min ?? 0);
+            if (field.max != null) control.max = String(field.max);
+            const plus = document.createElement("button");
+            plus.type = "button";
+            plus.textContent = "＋";
+            plus.dataset.batchDrawerStep = "1";
+            plus.setAttribute("aria-label", `增加${field.label}`);
+            stepper.append(minus, control, plus);
+            item.appendChild(stepper);
+          } else if (field.type === "select") {
+            control = document.createElement("select");
+            control.className = "select";
+            field.options.forEach((optionValue) => control.add(new Option(optionValue, optionValue)));
+            control.value = field.value ?? field.options[0];
+            control.disabled = Boolean(field.disabled);
+            item.appendChild(control);
+          } else if (field.type === "upload") {
+            const actions = document.createElement("div");
+            actions.className = "batch-upload-actions";
+            control = document.createElement("input");
+            control.type = "file";
+            control.accept = ".xlsx,.xls";
+            control.hidden = true;
+            control.dataset.batchUuidFile = "";
+            const importButton = document.createElement("button");
+            importButton.className = "btn btn-primary";
+            importButton.type = "button";
+            importButton.textContent = "批量导入";
+            importButton.dataset.batchImportUuid = "";
+            const downloadButton = document.createElement("button");
+            downloadButton.className = "tree-link";
+            downloadButton.type = "button";
+            downloadButton.textContent = "模板下载";
+            downloadButton.dataset.batchDownloadUuidTemplate = "";
+            const fileName = document.createElement("span");
+            fileName.className = "batch-file-name";
+            fileName.dataset.batchUuidFileName = "";
+            actions.append(importButton, downloadButton, fileName, control);
+            item.appendChild(actions);
+          } else {
+            control = document.createElement("input");
+            control.className = "input";
+            control.type = field.type === "password" ? "password" : "text";
+            control.value = field.value ?? "";
+            item.appendChild(control);
+          }
+
+          if (control && field.type !== "upload") {
+            control.dataset.batchField = field.key;
+            control.dataset.batchLabel = field.label;
+            if (field.required) control.dataset.batchRequired = "";
+          }
+          container.appendChild(item);
+        }
+
+        function getBatchProtocolFields(mode, config) {
+          const subject = mode === "硬盘录像机扫描" ? "录像机" : "摄像头或录像机";
+          const fields = config.range
+            ? [
+                { key: "startAddress", label: "起始设备地址", hint: `${subject}的IP地址`, required: true },
+                { key: "endAddress", label: "结束设备地址", hint: `${subject}的IP地址`, required: true }
+              ]
+            : [{ key: "address", label: "设备地址", hint: `${subject}的IP地址`, required: true }];
+
+          if (config.port != null) {
+            fields.push({ key: "port", label: "端口号", hint: `${subject}的通信端口`, type: "number", value: config.port, min: 1, max: 65535, required: true });
+          }
+          if (config.auth === "key") {
+            const hint = "密钥ID和密钥一起使用，对请求进行加密签名";
+            fields.push(
+              { key: "keyId", label: "密钥ID", hint, required: Boolean(config.authRequired) },
+              { key: "keySecret", label: "密钥", hint, type: "password", required: Boolean(config.authRequired) }
+            );
+          } else if (config.auth === "user") {
+            const prefix = config.authHintPrefix || subject;
+            fields.push(
+              { key: "username", label: "用户名", hint: `${prefix}的登录用户名`, required: true },
+              { key: "password", label: "密码", hint: `${prefix}的登录密码`, type: "password", required: true }
+            );
+          }
+          if (config.credentials) {
+            fields.push(
+              { key: "credentialId", label: "凭证ID", hint: "自定义（由ICC平台申请）", required: true },
+              { key: "credentialSecret", label: "凭证秘钥", hint: "访问凭证必须与ICC平台申请的保持一致", type: "password", required: true }
+            );
+          }
+          if (config.source) {
+            fields.push({ key: "source", label: "录像来源", hint: config.source.hint, value: config.source.value, required: config.source.required });
+          }
+          if (config.channel != null) {
+            fields.push({ key: "channel", label: "通道号", hint: "直连摄像头默认为1，对接录像机需根据摄像头在录像机的通道号填写", type: "number", value: config.channel, min: 1, required: true });
+          }
+          if (config.channelRange != null) {
+            const hint = "对接录像机需根据摄像头在录像机的通道号填写";
+            fields.push(
+              { key: "startChannel", label: "起始通道号", hint, type: "number", value: config.channelRange, min: 1, required: true },
+              { key: "endChannel", label: "结束通道号", hint, type: "number", value: config.channelRange, min: 1, required: true }
+            );
+          }
+          if (config.stream) {
+            fields.push({
+              key: "stream",
+              label: config.stream.label || "码流",
+              hint: config.stream.hint || "摄像头或录像机的预览码流：1=主码流，2=子码流，3=三码流，以此类推",
+              type: config.stream.type || "number",
+              value: config.stream.value,
+              min: 0,
+              required: config.stream.required ?? true
+            });
+          }
+          fields.push({ key: "deviceType", label: "设备类型", hint: "录像机或摄像头", type: "select", options: ["录像机", "摄像头"], value: "录像机", disabled: mode === "硬盘录像机扫描", required: true });
+          if (config.spatialUuid) fields.push({ key: "spatialUuid", label: "空间uuid", hint: "空间区域的uuid" });
+          if (config.uuidUpload) fields.push({ key: "uuidFile", label: "uuid文件", hint: "空间区域uuid的列表文件", type: "upload" });
+          return fields;
+        }
+
+        function initializeBatchProtocolForm() {
+          const modeSelect = drawerBody.querySelector("[data-batch-add-mode]");
+          const protocolSelect = drawerBody.querySelector("[data-batch-protocol]");
+          const fieldsContainer = drawerBody.querySelector("[data-batch-protocol-fields]");
+          if (!modeSelect || !protocolSelect || !fieldsContainer) return;
+
+          const renderFields = () => {
+            const config = batchProtocolMatrix[modeSelect.value]?.[protocolSelect.value];
+            fieldsContainer.replaceChildren();
+            if (!config) return;
+            getBatchProtocolFields(modeSelect.value, config).forEach((field) => appendBatchProtocolField(fieldsContainer, field));
+          };
+          const renderProtocols = () => {
+            protocolSelect.replaceChildren();
+            Object.keys(batchProtocolMatrix[modeSelect.value] || {}).forEach((protocol) => protocolSelect.add(new Option(protocol, protocol)));
+            renderFields();
+          };
+
+          modeSelect.addEventListener("change", renderProtocols);
+          protocolSelect.addEventListener("change", renderFields);
+          fieldsContainer.addEventListener("click", (event) => {
+            const stepButton = event.target.closest("[data-batch-drawer-step]");
+            if (stepButton) {
+              const input = stepButton.parentElement.querySelector("input");
+              const min = Number(input.min || 0);
+              const max = input.max ? Number(input.max) : Number.POSITIVE_INFINITY;
+              const current = input.value === "" ? min : Number(input.value);
+              const next = input.value === "" ? min : current + Number(stepButton.dataset.batchDrawerStep);
+              input.value = Math.min(max, Math.max(min, next));
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+            if (event.target.closest("[data-batch-import-uuid]")) fieldsContainer.querySelector("[data-batch-uuid-file]")?.click();
+            if (event.target.closest("[data-batch-download-uuid-template]")) showToast("uuid导入模板已准备下载（演示）");
+          });
+          fieldsContainer.addEventListener("change", (event) => {
+            if (!event.target.matches("[data-batch-uuid-file]")) return;
+            fieldsContainer.querySelector("[data-batch-uuid-file-name]").textContent = event.target.files?.[0]?.name || "";
+          });
+          fieldsContainer.addEventListener("input", (event) => {
+            event.target.classList.remove("is-error");
+            event.target.closest(".stepper")?.classList.remove("is-error");
+          });
+          renderProtocols();
+        }
+
+        function validateBatchProtocolForm() {
+          const controls = [...drawerBody.querySelectorAll("[data-batch-required]")];
+          controls.forEach((control) => {
+            control.classList.remove("is-error");
+            control.closest(".stepper")?.classList.remove("is-error");
+          });
+          const missing = controls.find((control) => !String(control.value || "").trim());
+          if (missing) {
+            (missing.closest(".stepper") || missing).classList.add("is-error");
+            missing.focus();
+            showToast(`请填写${missing.dataset.batchLabel}`);
+            return false;
+          }
+          const invalid = controls.find((control) => control.type === "number" && !control.checkValidity());
+          if (invalid) {
+            invalid.closest(".stepper")?.classList.add("is-error");
+            invalid.focus();
+            showToast(`请填写有效的${invalid.dataset.batchLabel}`);
+            return false;
+          }
+          return true;
+        }
+
         function setMask(open) {
           mask.classList.toggle("is-open", open);
           body.style.overflow = open ? "hidden" : "";
@@ -3350,6 +3694,7 @@
         }
 
         function bindDynamicEvents() {
+          initializeBatchProtocolForm();
           bindTreeSearch(drawer);
           drawer.querySelectorAll("[data-popup-config]").forEach((button) => {
             button.addEventListener("click", (event) => {
@@ -3495,8 +3840,41 @@
           activeSpaceSelect.dispatchEvent(new Event("change", { bubbles: true }));
           closeSpaceTree();
         });
+        const bulkParameterControls = [
+          "[data-bulk-credential-port]",
+          "[data-bulk-credential-channel]",
+          "[data-bulk-credential-stream]",
+          "[data-bulk-credential-user]",
+          "[data-bulk-credential-password]",
+          "[data-bulk-credential-id]",
+          "[data-bulk-credential-secret]",
+          "[data-bulk-credential-source]"
+        ].map((selector) => bulkEditCredentialModal.querySelector(selector));
+
+        function resetBulkParameterForm(selectedChecks = [...document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked")]) {
+          const protocolSelect = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]");
+          const selectedProtocols = [...new Set(selectedChecks.map((checkbox) => checkbox.closest("tr")?.children[3]?.textContent.trim()).filter(Boolean))];
+          protocolSelect.replaceChildren();
+          if (selectedProtocols.length !== 1) protocolSelect.add(new Option("请选择通信方式", ""));
+          selectedProtocols.forEach((protocol) => protocolSelect.add(new Option(protocol, protocol)));
+          protocolSelect.value = selectedProtocols.length === 1 ? selectedProtocols[0] : "";
+          bulkParameterControls.forEach((control) => { control.value = ""; });
+          bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.toggle("is-visible", selectedProtocols.length === 1);
+        }
+
         bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]").addEventListener("change", (event) => {
           bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.toggle("is-visible", Boolean(event.target.value));
+        });
+
+        bulkEditCredentialModal.addEventListener("click", (event) => {
+          const stepButton = event.target.closest("[data-bulk-step]");
+          if (!stepButton) return;
+          const input = stepButton.parentElement.querySelector("input");
+          const min = Number(input.min || 0);
+          const max = input.max ? Number(input.max) : Number.POSITIVE_INFINITY;
+          const current = input.value === "" ? min : Number(input.value);
+          const next = input.value === "" ? min : current + Number(stepButton.dataset.bulkStep);
+          input.value = Math.min(max, Math.max(min, next));
         });
 
         document.addEventListener("click", (event) => {
@@ -3522,8 +3900,18 @@
           editButton.dataset.editCameraName = "";
           editButton.setAttribute("aria-label", `编辑摄像头名称：${name}`);
           editButton.title = "编辑摄像头名称";
-          editButton.textContent = "✎";
-          view.append(text, editButton);
+          editButton.innerHTML = '<span class="batch-camera-name-edit-icon" aria-hidden="true">✎</span>';
+          const editScope = document.createElement("span");
+          editScope.className = "batch-camera-name-edit-scope";
+          const row = cell.closest("tr");
+          if (row && row === row.parentElement.firstElementChild) {
+            editScope.dataset.demandVersion = "v3.0";
+            editScope.dataset.demandReqId = "V3R5-5620";
+            editScope.dataset.demandTitle = "行内修改摄像头名称";
+            editScope.dataset.demandText = "需求来源：v3.0，需求ID：V3R5-5620。||功能说明：扫描结果中的摄像头名称支持在所属空间设置弹窗内直接修改，该规则适用于全部扫描结果行。||入口规则：鼠标悬停名称单元格时显示编辑图标，点击图标后当前名称切换为行内输入框并自动获得焦点。||保存规则：按 Enter 或输入框失去焦点时保存本次修改；按 Esc 取消并恢复修改前名称。||字段规则：名称必填，最多50个字符；内容为空时不保存并提示“摄像头名称不能为空”。";
+          }
+          editScope.appendChild(editButton);
+          view.append(text, editScope);
           cell.replaceChildren(view);
           cell.classList.remove("is-editing");
         }
@@ -3546,6 +3934,8 @@
             const nextName = input.value.trim();
             if (save && !nextName) showToast("摄像头名称不能为空");
             renderBatchCameraName(cell, save && nextName ? nextName : currentName);
+            mountDemandBadges();
+            refreshPageDemandStats();
           };
           input.addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
@@ -3697,26 +4087,24 @@
               showToast("请先选择需要修改的设备");
             } else {
               bulkEditCredentialModal.querySelector("[data-bulk-credential-count]").textContent = selected.length;
-              const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]");
-              protocol.value = "";
-              bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value = "";
-              bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value = "";
-              bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.remove("is-visible");
+              resetBulkParameterForm(selected);
               openModal(bulkEditCredentialModal);
             }
           }
           if (confirmBulkCredentialButton) {
             const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]").value;
-            const username = bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value.trim();
-            const password = bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value;
+            const invalidNumber = bulkParameterControls.some((control) => control.type === "number" && control.value && !control.checkValidity());
+            const hasParameter = bulkParameterControls.some((control) => control.value.trim());
             if (!protocol) {
               showToast("请选择通信方式");
-            } else if (!username || !password) {
-              showToast("请完整填写新密钥ID/用户名和新密钥/密码");
+            } else if (!hasParameter) {
+              showToast("请至少填写一个需要修改的协议参数");
+            } else if (invalidNumber) {
+              showToast("请填写有效的端口号、通道号和码流");
             } else {
               const selectedCount = document.querySelectorAll("#deviceTable tbody input[type=checkbox]:checked").length;
               closeAll();
-              showToast(`已修改 ${selectedCount} 台设备的协议账密`);
+              showToast(`已修改 ${selectedCount} 台设备的协议参数`);
             }
           }
 
@@ -3726,6 +4114,7 @@
           if (closeButton) closeAll();
           if (saveButton) {
             if (activeDrawerType === "batch") {
+              if (!validateBatchProtocolForm()) return;
               drawer.classList.remove("is-open");
               drawer.setAttribute("aria-hidden", "true");
               activeDrawerType = "";
@@ -3956,10 +4345,10 @@
           "V3R5-5925": {
             title: "V3R5-5925 · 用户故事",
             meta: "v3.0 · 设备管理 · 设计完成",
-            story: "作为视频设备管理员，我希望勾选多台设备后一次性修改指定通信方式的认证账号和密码，以减少逐台维护的重复操作。",
-            scenarios: ["设备认证账号调整时，批量更新同一通信方式下的多台摄像头。", "密码轮换后，对选中设备统一替换新密码。"],
-            rules: ["必须先勾选至少一台设备。", "选择通信方式后才展示对应的账号与密码字段。", "密码默认掩码展示，不回显原密码。"],
-            acceptance: ["确认后，所有已选设备的协议账密同步更新。", "必填信息不完整时阻止提交并给出提示。"],
+            story: "作为视频设备管理员，我希望勾选多台设备后一次性修改指定通信方式的协议参数，以减少逐台维护的重复操作。",
+            scenarios: ["端口、通道或码流调整时，批量更新同一通信方式下的多台摄像头。", "账号、密码或凭证轮换后，对选中设备统一替换对应参数。"],
+            rules: ["必须先勾选至少一台设备。", "已选设备仅有一种通信方式时自动回显；包含多种通信方式时，下拉列表仅展示已选设备实际包含的通信方式。", "选择通信方式后展示端口号、通道号、码流、用户名、密码、凭证信息及录像来源。", "仅填写本次需要修改的参数，未填写项保持原值。", "密码与凭证秘钥默认掩码展示，不回显原值。"],
+            acceptance: ["确认后，所有已选设备的已填写协议参数同步更新。", "未填写任何待修改参数时阻止提交并给出提示。"],
             boundaries: ["不同通信方式的字段口径以所选协议为准。", "未选择设备或通信方式时不可提交。"]
           },
           "V3R5-5620": {
@@ -4216,11 +4605,7 @@
           selectedChecks.forEach((checkbox) => { checkbox.checked = true; });
           if (requirementId === "V3R5-5925") {
             bulkEditCredentialModal.querySelector("[data-bulk-credential-count]").textContent = selectedChecks.length;
-            const protocol = bulkEditCredentialModal.querySelector("[data-bulk-credential-protocol]");
-            protocol.value = "";
-            bulkEditCredentialModal.querySelector("[data-bulk-credential-user]").value = "";
-            bulkEditCredentialModal.querySelector("[data-bulk-credential-password]").value = "";
-            bulkEditCredentialModal.querySelector("[data-bulk-credential-fields]").classList.remove("is-visible");
+            resetBulkParameterForm(selectedChecks);
             openModal(bulkEditCredentialModal);
             highlightDemandScope(bulkEditCredentialModal);
             return;
