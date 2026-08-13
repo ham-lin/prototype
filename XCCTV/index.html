@@ -25,7 +25,7 @@
         --radius: 8px;
         --camera-a: url("https://images.unsplash.com/photo-1580106815433-a5b1d1d53d85?auto=format&fit=crop&fm=jpg&q=78&w=1200");
         --camera-b: url("https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&fm=jpg&q=78&w=1200");
-        --camera-c: url("https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&fm=jpg&q=78&w=1200");
+        --camera-c: url("https://images.pexels.com/photos/32845700/pexels-photo-32845700/free-photo-of-engineer-at-control-room-monitoring-screens.jpeg?auto=compress&dpr=1&h=900&w=1600");
       }
 
       * {
@@ -1014,6 +1014,10 @@
         overflow: auto;
       }
 
+      #view-device .data-table-wrap {
+        overflow-x: hidden;
+      }
+
       .data-table {
         width: 100%;
         min-width: 1160px;
@@ -1068,11 +1072,79 @@
         width: 210px;
       }
 
-      #deviceTable tbody td:nth-child(6) {
-        max-width: 0;
+      #deviceTable {
+        width: 100%;
+        min-width: 0;
+      }
+
+      #deviceTable .col-check {
+        font-size: 0;
+        line-height: 0;
+      }
+
+      #deviceTable .col-check input[type="checkbox"] {
+        display: block;
+        margin: 0 auto;
+      }
+
+      #deviceTable .col-name {
+        width: 250px;
+      }
+
+      #deviceTable .col-protocol {
+        width: 160px;
+      }
+
+      #deviceTable .col-param {
+        width: 230px;
+      }
+
+      #deviceTable .col-space {
+        width: 300px;
+      }
+
+      #deviceTable tbody td {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      #deviceTable th.is-resizable {
+        position: sticky;
+      }
+
+      .column-resizer {
+        position: absolute;
+        top: 0;
+        right: -4px;
+        bottom: 0;
+        z-index: 4;
+        width: 8px;
+        cursor: col-resize;
+        touch-action: none;
+      }
+
+      .column-resizer::after {
+        content: "";
+        position: absolute;
+        top: 8px;
+        bottom: 8px;
+        left: 3px;
+        width: 1px;
+        background: transparent;
+      }
+
+      #deviceTable th:hover .column-resizer::after,
+      .column-resizer.is-dragging::after {
+        background: var(--primary);
+      }
+
+      body.is-column-resizing {
+        cursor: col-resize;
+        user-select: none;
+      }
+
+      #deviceTable tbody td:nth-child(6) {
         cursor: default;
       }
 
@@ -1090,6 +1162,11 @@
       .data-table .col-action {
         width: 230px;
         text-align: right;
+      }
+
+      #deviceTable td.col-action {
+        overflow: visible;
+        white-space: nowrap;
       }
 
       .status-tag {
@@ -1157,6 +1234,22 @@
         border: 1px solid var(--primary);
         border-radius: 6px;
         color: var(--primary);
+      }
+
+      .page-button {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        background: #fff;
+        cursor: pointer;
+      }
+
+      .page-button:disabled {
+        color: #b9c4d0;
+        background: #f7f9fb;
+        cursor: not-allowed;
       }
 
       .page-input {
@@ -2884,19 +2977,19 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="col-check"><input type="checkbox" /></td><td>0_465</td><td>werr</td><td>海康SDK_v1.0.0</td><td>192.168.7.23:8000-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_465</td><td>301主机房-北通道-摄像机001</td><td>海康SDK_v1.0.0</td><td>192.168.7.23:8000-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房</td><td><span class="status-tag success">正常</span></td>
                         <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
                       </tr>
                       <tr>
-                        <td class="col-check"><input type="checkbox" /></td><td>0_286</td><td>海康SDK_v1.0.0</td><td>海康SDK_v1.0.0</td><td>192.168.29.211:8000-admin</td><td>共济科技/lwt</td><td><span class="status-tag error">异常</span></td>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_286</td><td>301主机房-机柜A列-摄像机002</td><td>海康SDK_v1.0.0</td><td>192.168.29.211:8000-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房</td><td><span class="status-tag error">异常</span></td>
                         <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
                       </tr>
                       <tr>
-                        <td class="col-check"><input type="checkbox" /></td><td>0_287</td><td>1.66</td><td>海康RTSP_v2.0.0</td><td>192.168.1.66:554-chenyanran</td><td>共济科技/lwt</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_287</td><td>302网络机房-核心交换区-摄像机001</td><td>海康RTSP_v2.0.0</td><td>192.168.1.66:554-operator</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/302网络机房</td><td><span class="status-tag success">正常</span></td>
                         <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
                       </tr>
                       <tr>
-                        <td class="col-check"><input type="checkbox" /></td><td>0_288</td><td>3.129</td><td>海康RTSP_v1.0.0</td><td>192.168.3.129:554-admin</td><td>共济科技/lwt</td><td><span class="status-tag success">正常</span></td>
+                        <td class="col-check"><input type="checkbox" /></td><td>0_288</td><td>401电力机房-低压配电区-摄像机001</td><td>海康RTSP_v1.0.0</td><td>192.168.3.129:554-admin</td><td>共济科技/华南区域/深圳南湾数据中心/1号数据楼/4层/401电力机房</td><td><span class="status-tag success">正常</span></td>
                         <td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>
                       </tr>
                       <tr>
@@ -2927,11 +3020,11 @@
                   </table>
                 </div>
                 <div class="table-footer">
-                  <span>共 12 条</span>
+                  <span>共 2000 条</span>
                   <div class="pagination">
-                    <select class="page-select" aria-label="每页条数"><option>10条/页</option><option>20条/页</option></select>
-                    <span style="color:#9aa8b8">‹</span><span class="page-number">1</span><span>2</span><span>›</span>
-                    <span>前往</span><input class="page-input" value="1" aria-label="页码" /><span>页</span>
+                    <select class="page-select" aria-label="每页条数" data-device-page-size><option value="10">10条/页</option><option value="20" selected>20条/页</option><option value="50">50条/页</option><option value="100">100条/页</option><option value="200">200条/页</option></select>
+                    <button class="page-button" type="button" aria-label="上一页" data-device-page-prev>‹</button><span class="page-number" data-device-page-current>1</span><span>/ <span data-device-page-total>100</span></span><button class="page-button" type="button" aria-label="下一页" data-device-page-next>›</button>
+                    <span>前往</span><input class="page-input" type="number" min="1" value="1" aria-label="页码" data-device-page-jump /><span>页</span>
                   </div>
                 </div>
               </section>
@@ -3427,7 +3520,7 @@
 
     <template id="tpl-batch">
       <div class="form-grid">
-        <div class="form-item"><label>添加方式 <span class="required">*</span></label><select class="select" data-batch-add-mode data-batch-required data-batch-label="添加方式"><option>硬盘录像机扫描</option><option>ip段-ips</option><option>ip段-chs</option></select></div>
+        <div class="form-item"><label>添加方式 <span class="required">*</span></label><p class="field-note" data-batch-mode-note>扫描指定录像机及其下属摄像头。</p><select class="select" data-batch-add-mode data-batch-required data-batch-label="添加方式"><option>硬盘录像机扫描</option><option>ip段-ips</option><option>ip段-chs</option></select></div>
         <div class="form-item"><label>协议类型 <span class="required">*</span></label><select class="select" data-batch-protocol data-batch-required data-batch-label="协议类型"></select></div>
         <div class="form-grid" data-batch-protocol-fields></div>
       </div>
@@ -3753,9 +3846,16 @@
 
         function initializeBatchProtocolForm() {
           const modeSelect = drawerBody.querySelector("[data-batch-add-mode]");
+          const modeNote = drawerBody.querySelector("[data-batch-mode-note]");
           const protocolSelect = drawerBody.querySelector("[data-batch-protocol]");
           const fieldsContainer = drawerBody.querySelector("[data-batch-protocol-fields]");
           if (!modeSelect || !protocolSelect || !fieldsContainer) return;
+
+          const modeDescriptions = {
+            "硬盘录像机扫描": "扫描指定录像机及其下属摄像头。",
+            "ip段-ips": "按起止 IP 范围扫描设备。",
+            "ip段-chs": "按起止 IP 和通道范围扫描设备。"
+          };
 
           const renderFields = () => {
             const config = batchProtocolMatrix[modeSelect.value]?.[protocolSelect.value];
@@ -3765,6 +3865,7 @@
             fillBatchRequiredDemoValues(fieldsContainer);
           };
           const renderProtocols = () => {
+            if (modeNote) modeNote.textContent = modeDescriptions[modeSelect.value] || "";
             protocolSelect.replaceChildren();
             Object.keys(batchProtocolMatrix[modeSelect.value] || {}).forEach((protocol) => protocolSelect.add(new Option(protocol, protocol)));
             renderFields();
@@ -4220,20 +4321,112 @@
 
         enhanceAllSpaceSelects();
         mountBatchCameraNameEditors();
-        const deviceSpaceSamples = [
-          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房",
-          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/302网络机房",
-          "共济科技/华南区域/深圳南湾数据中心/1号数据楼/4层/401电力机房",
-          "共济科技/华南区域/广州科学城数据中心/A栋数据楼/A101核心机房",
-          "共济科技/华东区域/上海临港数据中心/2号数据楼/B201机房"
+        const deviceDemoSpaces = [
+          { room: "301主机房", path: "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/301主机房", count: 420, network: 11 },
+          { room: "302网络机房", path: "共济科技/华南区域/深圳南湾数据中心/1号数据楼/3层/302网络机房", count: 360, network: 12 },
+          { room: "401电力机房", path: "共济科技/华南区域/深圳南湾数据中心/1号数据楼/4层/401电力机房", count: 280, network: 13 },
+          { room: "A101核心机房", path: "共济科技/华南区域/广州科学城数据中心/A栋数据楼/A101核心机房", count: 340, network: 21 },
+          { room: "B201机房", path: "共济科技/华东区域/上海临港数据中心/2号数据楼/B201机房", count: 320, network: 31 },
+          { room: "C301监控中心", path: "共济科技/华东区域/苏州高新区数据中心/3号数据楼/C301监控中心", count: 160, network: 32 },
+          { room: "D101运维中心", path: "共济科技/华北区域/北京亦庄数据中心/1号数据楼/D101运维中心", count: 120, network: 41 }
         ];
-        document.querySelectorAll("#deviceTable tbody tr").forEach((row, index) => {
-          const spaceCell = row.children[5];
-          const fullPath = deviceSpaceSamples[index % deviceSpaceSamples.length];
-          spaceCell.textContent = fullPath;
-          spaceCell.title = fullPath;
-          row.dataset.spacePath = fullPath;
+        const devicePositionNames = ["东入口", "西入口", "北通道", "南通道", "机柜A列", "机柜B列", "冷通道", "热通道", "UPS区", "精密空调区", "低压配电区", "消防通道", "值班区", "货运通道"];
+        const deviceProtocols = ["海康SDK_v1.0.0", "海康RTSP_v2.0.0", "海康RTSP_v1.0.0"];
+        const deviceDemoData = [];
+        let deviceSequence = 0;
+        deviceDemoSpaces.forEach((space, spaceIndex) => {
+          for (let localIndex = 0; localIndex < space.count; localIndex += 1) {
+            deviceSequence += 1;
+            const protocol = deviceProtocols[(deviceSequence + spaceIndex) % deviceProtocols.length];
+            const port = protocol === "海康SDK_v1.0.0" ? 8000 : 554;
+            const username = ["admin", "operator", "videoops"][(deviceSequence + 1) % 3];
+            const devicePrefix = Math.floor((deviceSequence - 1) / 999);
+            const deviceSuffix = ((deviceSequence - 1) % 999) + 1;
+            const subnet = Math.floor(localIndex / 240) + 1;
+            const host = (localIndex % 240) + 10;
+            deviceDemoData.push({
+              id: `${devicePrefix}_${String(deviceSuffix).padStart(3, "0")}`,
+              name: `${space.room}-${devicePositionNames[localIndex % devicePositionNames.length]}-摄像机${String(localIndex + 1).padStart(3, "0")}`,
+              protocol,
+              parameter: `10.${space.network}.${subnet}.${host}:${port}-${username}`,
+              space: space.path,
+              normal: deviceSequence % 19 !== 0
+            });
+          }
         });
+
+        const deviceTableBody = document.querySelector("#deviceTable tbody");
+        deviceTableBody.replaceChildren();
+        deviceDemoData.forEach((device) => {
+          const row = document.createElement("tr");
+          row.dataset.deviceId = device.id;
+          row.dataset.spacePath = device.space;
+          row.innerHTML = `<td class="col-check"><input type="checkbox" aria-label="选择 ${device.name}" /></td><td title="${device.id}">${device.id}</td><td title="${device.name}">${device.name}</td><td title="${device.protocol}">${device.protocol}</td><td title="${device.parameter}">${device.parameter}</td><td title="${device.space}">${device.space}</td><td><span class="status-tag ${device.normal ? "success" : "error"}">${device.normal ? "正常" : "异常"}</span></td><td class="col-action"><button class="action-link" data-preview>视频预览</button><button class="action-link" data-open-drawer="edit">编辑</button><button class="action-link" data-open-drawer="device-bind">绑定</button><button class="action-link delete" data-confirm-delete>删除</button></td>`;
+          deviceTableBody.appendChild(row);
+        });
+
+        function initializeResizableDeviceTable() {
+          const table = document.getElementById("deviceTable");
+          if (!table || table.dataset.resizableBound) return;
+          table.dataset.resizableBound = "1";
+          const headers = [...table.querySelectorAll("thead th")];
+          const baseWidths = [36, 96, 250, 160, 230, 300, 105, 230];
+          const minimumWidths = [36, 76, 160, 120, 150, 180, 88, 210];
+          const availableWidth = table.parentElement.clientWidth || baseWidths.reduce((total, width) => total + width, 0);
+          const scale = availableWidth / baseWidths.reduce((total, width) => total + width, 0);
+          const initialWidths = baseWidths.map((width, index) => Math.max(minimumWidths[index], Math.floor(width * scale)));
+          const colgroup = document.createElement("colgroup");
+          const columns = headers.map((header, index) => {
+            const column = document.createElement("col");
+            column.style.width = `${initialWidths[index]}px`;
+            colgroup.appendChild(column);
+            return column;
+          });
+          table.insertBefore(colgroup, table.firstChild);
+
+          headers.slice(0, -1).forEach((header, index) => {
+            header.classList.add("is-resizable");
+            const resizer = document.createElement("span");
+            resizer.className = "column-resizer";
+            resizer.setAttribute("aria-hidden", "true");
+            resizer.title = "拖拽调整列宽";
+            header.appendChild(resizer);
+            resizer.addEventListener("pointerdown", (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              const startX = event.clientX;
+              const startWidth = Number.parseFloat(columns[index].style.width);
+              const nextStartWidth = Number.parseFloat(columns[index + 1].style.width);
+              resizer.classList.add("is-dragging");
+              document.body.classList.add("is-column-resizing");
+              resizer.setPointerCapture?.(event.pointerId);
+              const handleMove = (moveEvent) => {
+                const requestedDelta = Math.round(moveEvent.clientX - startX);
+                const minimumDelta = minimumWidths[index] - startWidth;
+                const maximumDelta = nextStartWidth - minimumWidths[index + 1];
+                const delta = Math.min(maximumDelta, Math.max(minimumDelta, requestedDelta));
+                columns[index].style.width = `${startWidth + delta}px`;
+                columns[index + 1].style.width = `${nextStartWidth - delta}px`;
+              };
+              const handleEnd = () => {
+                resizer.classList.remove("is-dragging");
+                document.body.classList.remove("is-column-resizing");
+                resizer.removeEventListener("pointermove", handleMove);
+                resizer.removeEventListener("pointerup", handleEnd);
+                resizer.removeEventListener("pointercancel", handleEnd);
+              };
+              resizer.addEventListener("pointermove", handleMove);
+              resizer.addEventListener("pointerup", handleEnd);
+              resizer.addEventListener("pointercancel", handleEnd);
+            });
+            resizer.addEventListener("dblclick", () => {
+              columns[index].style.width = `${initialWidths[index]}px`;
+              columns[index + 1].style.width = `${initialWidths[index + 1]}px`;
+            });
+          });
+        }
+
+        initializeResizableDeviceTable();
         renderBatchPage(1);
 
         function updateBatchSelection() {
@@ -4459,7 +4652,9 @@
 
         document.querySelectorAll("[data-select-all]").forEach((checkbox) => {
           checkbox.addEventListener("change", () => {
-            checkbox.closest("table").querySelectorAll("tbody input[type=checkbox]").forEach((item) => item.checked = checkbox.checked);
+            const table = checkbox.closest("table");
+            const selector = table.id === "deviceTable" ? "tbody tr:not(.hidden) input[type=checkbox]" : "tbody input[type=checkbox]";
+            table.querySelectorAll(selector).forEach((item) => item.checked = checkbox.checked);
           });
         });
 
@@ -4470,30 +4665,79 @@
         deviceEmptyRow.dataset.deviceEmpty = "true";
         deviceEmptyRow.className = "hidden";
         deviceEmptyRow.innerHTML = '<td class="device-empty-cell" colspan="8">当前空间下暂无设备</td>';
-        document.querySelector("#deviceTable tbody").appendChild(deviceEmptyRow);
+        deviceTableBody.appendChild(deviceEmptyRow);
         let activeDeviceSpacePath = "共济科技";
-        let activeDeviceSpaceCount = 12;
+        let activeDeviceSpaceCount = 2000;
+        let deviceCurrentPage = 1;
+        let devicePageSize = 20;
+        const devicePageSizeSelect = document.querySelector("[data-device-page-size]");
+        const devicePageCurrent = document.querySelector("[data-device-page-current]");
+        const devicePageTotal = document.querySelector("[data-device-page-total]");
+        const devicePagePrev = document.querySelector("[data-device-page-prev]");
+        const devicePageNext = document.querySelector("[data-device-page-next]");
+        const devicePageJump = document.querySelector("[data-device-page-jump]");
+
         function filterDeviceTable() {
           const keyword = tableSearch.value.trim().toLowerCase();
           const protocol = protocolFilter.value;
-          let visibleOnCurrentPage = 0;
-          document.querySelectorAll("#deviceTable tbody tr:not([data-device-empty])").forEach((row) => {
+          const allRows = [...deviceTableBody.querySelectorAll("tr:not([data-device-empty])")];
+          const matchedRows = allRows.filter((row) => {
+            const deviceId = row.children[1].textContent.toLowerCase();
             const cameraName = row.children[2].textContent.toLowerCase();
             const communicationMode = row.children[3].textContent.trim();
-            const matchedKeyword = !keyword || cameraName.includes(keyword);
+            const matchedKeyword = !keyword || cameraName.includes(keyword) || deviceId.includes(keyword);
             const matchedProtocol = !protocol || communicationMode === protocol;
             const matchedSpace = !activeDeviceSpacePath || row.dataset.spacePath.startsWith(activeDeviceSpacePath);
-            const visible = matchedKeyword && matchedProtocol && matchedSpace;
-            row.classList.toggle("hidden", !visible);
-            if (visible) visibleOnCurrentPage += 1;
+            return matchedKeyword && matchedProtocol && matchedSpace;
           });
-          deviceEmptyRow.classList.toggle("hidden", visibleOnCurrentPage > 0);
-          deviceTotalText.textContent = keyword || protocol
-            ? `当前页匹配 ${visibleOnCurrentPage} 条`
-            : `共 ${activeDeviceSpaceCount} 条`;
+          const totalPages = Math.max(1, Math.ceil(matchedRows.length / devicePageSize));
+          deviceCurrentPage = Math.min(Math.max(1, deviceCurrentPage), totalPages);
+          const start = (deviceCurrentPage - 1) * devicePageSize;
+          const currentRows = matchedRows.slice(start, start + devicePageSize);
+          const currentRowSet = new Set(currentRows);
+          allRows.forEach((row) => row.classList.toggle("hidden", !currentRowSet.has(row)));
+          deviceEmptyRow.classList.toggle("hidden", matchedRows.length > 0);
+          const rangeStart = matchedRows.length ? start + 1 : 0;
+          const rangeEnd = matchedRows.length ? Math.min(start + devicePageSize, matchedRows.length) : 0;
+          deviceTotalText.textContent = `共 ${matchedRows.length} 条，当前显示 ${rangeStart}-${rangeEnd} 条`;
+          devicePageCurrent.textContent = deviceCurrentPage;
+          devicePageTotal.textContent = totalPages;
+          devicePageJump.value = deviceCurrentPage;
+          devicePageJump.max = totalPages;
+          devicePagePrev.disabled = deviceCurrentPage <= 1;
+          devicePageNext.disabled = deviceCurrentPage >= totalPages;
+          const visibleChecks = currentRows.map((row) => row.querySelector("input[type=checkbox]"));
+          const checkedCount = visibleChecks.filter((checkbox) => checkbox.checked).length;
+          const selectAll = document.querySelector("#deviceTable [data-select-all]");
+          selectAll.checked = visibleChecks.length > 0 && checkedCount === visibleChecks.length;
+          selectAll.indeterminate = checkedCount > 0 && checkedCount < visibleChecks.length;
         }
-        tableSearch?.addEventListener("input", filterDeviceTable);
-        protocolFilter?.addEventListener("change", filterDeviceTable);
+        tableSearch?.addEventListener("input", () => { deviceCurrentPage = 1; filterDeviceTable(); });
+        protocolFilter?.addEventListener("change", () => { deviceCurrentPage = 1; filterDeviceTable(); });
+        devicePageSizeSelect?.addEventListener("change", () => {
+          devicePageSize = Number(devicePageSizeSelect.value);
+          deviceCurrentPage = 1;
+          filterDeviceTable();
+        });
+        devicePagePrev?.addEventListener("click", () => {
+          if (deviceCurrentPage > 1) {
+            deviceCurrentPage -= 1;
+            filterDeviceTable();
+          }
+        });
+        devicePageNext?.addEventListener("click", () => {
+          deviceCurrentPage += 1;
+          filterDeviceTable();
+        });
+        const jumpToDevicePage = () => {
+          deviceCurrentPage = Number(devicePageJump.value || 1);
+          filterDeviceTable();
+        };
+        devicePageJump?.addEventListener("change", jumpToDevicePage);
+        devicePageJump?.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") jumpToDevicePage();
+        });
+        filterDeviceTable();
 
         const bindingSearch = document.querySelector("[data-binding-search]");
         const bindingTableHeadRow = document.querySelector("#bindingTable thead tr");
@@ -4646,25 +4890,29 @@
         }
 
         const commonSpaceTree = [
-          { label: "共济科技", depth: 0, branch: true, count: 12 },
-          { label: "华南区域", depth: 1, branch: true, count: 10 },
-          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 8 },
-          { label: "1号数据楼", depth: 3, branch: true, count: 8 },
-          { label: "3层", depth: 4, branch: true, count: 6 },
-          { label: "301主机房", depth: 5, count: 3 },
-          { label: "302网络机房", depth: 5, count: 3 },
-          { label: "4层", depth: 4, branch: true, count: 2 },
-          { label: "401电力机房", depth: 5, count: 2 },
-          { label: "广州科学城数据中心", depth: 2, branch: true, count: 2 },
-          { label: "A栋数据楼", depth: 3, branch: true, count: 2 },
-          { label: "A101核心机房", depth: 4, count: 2 },
-          { label: "华东区域", depth: 1, branch: true, count: 2 },
-          { label: "上海临港数据中心", depth: 2, branch: true, count: 2 },
-          { label: "2号数据楼", depth: 3, branch: true, count: 2 },
-          { label: "B201机房", depth: 4, count: 2 },
-          { label: "苏州高新区数据中心", depth: 2, branch: true, count: 0 },
-          { label: "华北区域", depth: 1, branch: true, count: 0 },
-          { label: "北京亦庄数据中心", depth: 2, branch: true, count: 0 }
+          { label: "共济科技", depth: 0, branch: true, count: 2000 },
+          { label: "华南区域", depth: 1, branch: true, count: 1400 },
+          { label: "深圳南湾数据中心", depth: 2, branch: true, count: 1060 },
+          { label: "1号数据楼", depth: 3, branch: true, count: 1060 },
+          { label: "3层", depth: 4, branch: true, count: 780 },
+          { label: "301主机房", depth: 5, count: 420 },
+          { label: "302网络机房", depth: 5, count: 360 },
+          { label: "4层", depth: 4, branch: true, count: 280 },
+          { label: "401电力机房", depth: 5, count: 280 },
+          { label: "广州科学城数据中心", depth: 2, branch: true, count: 340 },
+          { label: "A栋数据楼", depth: 3, branch: true, count: 340 },
+          { label: "A101核心机房", depth: 4, count: 340 },
+          { label: "华东区域", depth: 1, branch: true, count: 480 },
+          { label: "上海临港数据中心", depth: 2, branch: true, count: 320 },
+          { label: "2号数据楼", depth: 3, branch: true, count: 320 },
+          { label: "B201机房", depth: 4, count: 320 },
+          { label: "苏州高新区数据中心", depth: 2, branch: true, count: 160 },
+          { label: "3号数据楼", depth: 3, branch: true, count: 160 },
+          { label: "C301监控中心", depth: 4, count: 160 },
+          { label: "华北区域", depth: 1, branch: true, count: 120 },
+          { label: "北京亦庄数据中心", depth: 2, branch: true, count: 120 },
+          { label: "1号数据楼", depth: 3, branch: true, count: 120 },
+          { label: "D101运维中心", depth: 4, count: 120 }
         ];
 
         const commonSpacePathStack = [];
@@ -4714,6 +4962,7 @@
               if (tree.closest("#view-device")) {
                 activeDeviceSpacePath = row.dataset.spacePath;
                 activeDeviceSpaceCount = Number(row.dataset.spaceCount || 0);
+                deviceCurrentPage = 1;
                 filterDeviceTable();
               }
             });
