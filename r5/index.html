@@ -971,10 +971,8 @@
         flex-direction: column;
       }
 
-      .inbound-form-page:has([data-action="back-it-inbound-list"]),
-      .inbound-process-page:has([data-action="back-it-inbound-list"]),
-      .inbound-form-page:has([data-action="back-it-asset-workflow-list"]),
-      .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) {
+      .inbound-form-page.is-global-flow-route,
+      .inbound-process-page.is-global-flow-route {
         position: fixed;
         inset: 0;
         z-index: 120;
@@ -991,10 +989,8 @@
       }
 
       @media (min-width: 761px) {
-        body.is-demand-page-panel-open .inbound-form-page:has([data-action="back-it-inbound-list"]),
-        body.is-demand-page-panel-open .inbound-process-page:has([data-action="back-it-inbound-list"]),
-        body.is-demand-page-panel-open .inbound-form-page:has([data-action="back-it-asset-workflow-list"]),
-        body.is-demand-page-panel-open .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) {
+        body.is-demand-page-panel-open .inbound-form-page.is-global-flow-route,
+        body.is-demand-page-panel-open .inbound-process-page.is-global-flow-route {
           right: 390px;
           width: calc(100vw - 390px);
         }
@@ -1018,8 +1014,8 @@
         font-size: 13px;
       }
 
-      [data-action="back-it-inbound-list"].inbound-form-back,
-      [data-action="back-it-asset-workflow-list"].inbound-form-back {
+      .is-global-flow-route [data-action="back-it-inbound-list"].inbound-form-back,
+      .is-global-flow-route [data-action="back-it-asset-workflow-list"].inbound-form-back {
         grid-column: 3;
         grid-row: 1;
         justify-self: end;
@@ -1036,16 +1032,16 @@
         font-size: 0;
       }
 
-      [data-action="back-it-inbound-list"].inbound-form-back::after,
-      [data-action="back-it-asset-workflow-list"].inbound-form-back::after {
+      .is-global-flow-route [data-action="back-it-inbound-list"].inbound-form-back::after,
+      .is-global-flow-route [data-action="back-it-asset-workflow-list"].inbound-form-back::after {
         color: #60758b;
         content: "×";
         font-size: 22px;
         line-height: 1;
       }
 
-      [data-action="back-it-inbound-list"].inbound-form-back:hover,
-      [data-action="back-it-asset-workflow-list"].inbound-form-back:hover {
+      .is-global-flow-route [data-action="back-it-inbound-list"].inbound-form-back:hover,
+      .is-global-flow-route [data-action="back-it-asset-workflow-list"].inbound-form-back:hover {
         border-color: #d9e5f1;
         background: #f3f7fb;
       }
@@ -1061,10 +1057,8 @@
         justify-self: end;
       }
 
-      .inbound-form-page:has([data-action="back-it-inbound-list"]) .inbound-form-actions,
-      .inbound-process-page:has([data-action="back-it-inbound-list"]) .inbound-process-actions,
-      .inbound-form-page:has([data-action="back-it-asset-workflow-list"]) .inbound-form-actions,
-      .inbound-process-page:has([data-action="back-it-asset-workflow-list"]) .inbound-process-actions {
+      .is-global-flow-route .inbound-form-actions,
+      .is-global-flow-route .inbound-process-actions {
         grid-column: 3;
         grid-row: 1;
         justify-self: end;
@@ -2871,8 +2865,146 @@
       .cabinet-space-stats {
         flex: none;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 12px;
+      }
+
+      .cabinet-space-stat.is-power {
+        border-color: #cfe4ff;
+        background: #f6faff;
+      }
+
+      .cabinet-space-stat.is-power .cabinet-space-stat-value {
+        color: #1267d6;
+      }
+
+      .cabinet-space-stat.is-status .cabinet-space-stat-value { color: #178b50; }
+
+      .cabinet-space-metric-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        padding: 3px;
+        border: 1px solid #d7e3f0;
+        border-radius: 5px;
+        background: #f3f7fb;
+      }
+
+      .cabinet-space-metric-btn {
+        min-width: 66px;
+        height: 28px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 3px;
+        background: transparent;
+        color: #5b7087;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .cabinet-space-metric-btn:hover { color: var(--primary); }
+
+      .cabinet-space-metric-btn.is-active {
+        background: #fff;
+        color: var(--primary);
+        font-weight: 600;
+        box-shadow: 0 1px 4px rgba(34, 91, 158, 0.16);
+      }
+
+      .cabinet-power-status-filter {
+        width: 132px;
+        height: 36px;
+        padding: 0 32px 0 12px;
+        border: 1px solid #d7e3f0;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #334e68;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .cabinet-power-status-filter:hover,
+      .cabinet-power-status-filter:focus {
+        border-color: var(--primary);
+        outline: none;
+      }
+
+      .cabinet-power-status-tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        height: 24px;
+        padding: 0 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .cabinet-power-status-tag.is-on { color: #15803d; background: #e8f8ee; }
+      .cabinet-power-status-tag.is-off { color: #64748b; background: #eef2f6; }
+      .cabinet-power-status-tag.is-standby { color: #b96b00; background: #fff4dd; }
+      .cabinet-power-status-tag.is-unknown { color: #6b7280; background: #f1f3f5; }
+
+      .cabinet-power-warning {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        margin-left: 2px;
+        border: 1px solid #f0a020;
+        border-radius: 50%;
+        background: #fff7e6;
+        color: #d46b08;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: help;
+      }
+
+      .cabinet-power-warning::before {
+        content: "!";
+      }
+
+      .cabinet-power-warning::after {
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 8px);
+        z-index: 30;
+        width: 250px;
+        padding: 8px 10px;
+        border: 1px solid #f5d08a;
+        border-radius: 6px;
+        background: #fffaf0;
+        box-shadow: 0 6px 18px rgba(51, 42, 20, .16);
+        color: #754b00;
+        content: attr(data-tooltip);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.6;
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 4px);
+        transition: opacity .15s ease, transform .15s ease;
+        white-space: normal;
+      }
+
+      .cabinet-power-warning:hover::after,
+      .cabinet-power-warning:focus-visible::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .cabinet-power-fix-btn {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--primary);
+        font-size: 12px;
+        cursor: pointer;
       }
 
       .cabinet-space-stat {
@@ -3161,15 +3293,133 @@
         background: #2da7e8;
       }
 
+      .cabinet-mini-rack.is-power .cabinet-mini-rack-unit.is-used {
+        border-color: rgba(43, 155, 233, 0.72);
+        background: linear-gradient(90deg, #46b9f4, #1686df);
+        box-shadow: 0 0 5px rgba(39, 157, 231, 0.28);
+      }
+
+      .cabinet-mini-rack.is-power.is-warning .cabinet-mini-rack-unit.is-used {
+        border-color: rgba(245, 158, 11, 0.76);
+        background: linear-gradient(90deg, #ffc85a, #f59e0b);
+        box-shadow: 0 0 5px rgba(245, 158, 11, 0.28);
+      }
+
+      .cabinet-mini-rack.is-power.is-danger .cabinet-mini-rack-unit.is-used {
+        border-color: rgba(239, 68, 68, 0.76);
+        background: linear-gradient(90deg, #fb7b7b, #e53e3e);
+        box-shadow: 0 0 5px rgba(229, 62, 62, 0.3);
+      }
+
+      .cabinet-mini-rack.is-status {
+        transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+      }
+
+      .cabinet-mini-rack.is-status .cabinet-mini-rack-unit {
+        border-color: transparent;
+      }
+
+      .cabinet-mini-rack.is-status.is-on {
+        border-color: #188b50;
+        background: linear-gradient(90deg, #174d38, #0c2f23 45%, #1d5d43);
+        box-shadow: 0 0 0 3px rgba(24, 139, 80, 0.12), 0 7px 16px rgba(21, 128, 61, 0.16);
+      }
+
+      .cabinet-mini-rack.is-status.is-on .cabinet-mini-rack-unit {
+        background: #31aa68;
+      }
+
+      .cabinet-mini-rack.is-status.is-standby {
+        border-color: #d78a12;
+        background: linear-gradient(90deg, #5a4318, #342408 45%, #62491c);
+        box-shadow: 0 0 0 3px rgba(215, 138, 18, 0.12), 0 7px 16px rgba(215, 138, 18, 0.14);
+      }
+
+      .cabinet-mini-rack.is-status.is-standby .cabinet-mini-rack-unit {
+        background: #e8a52d;
+      }
+
+      .cabinet-mini-rack.is-status.is-off {
+        border-color: #7e8b99;
+        background: linear-gradient(90deg, #3b4651, #242d36 45%, #46525e);
+        box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.1);
+      }
+
+      .cabinet-mini-rack.is-status.is-off .cabinet-mini-rack-unit {
+        background: #657383;
+      }
+
+      .cabinet-mini-rack.is-status.is-unknown {
+        border-color: #9ca3af;
+        background: linear-gradient(90deg, #4b5563, #303844 45%, #5b6470);
+        box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
+      }
+
+      .cabinet-mini-rack.is-status.is-unknown .cabinet-mini-rack-unit {
+        background: #8a95a3;
+      }
+
+      .cabinet-mini-rack-label {
+        align-self: center;
+        margin-top: -2px;
+        color: #71849a;
+        font-size: 11px;
+        line-height: 1;
+      }
+
       .cabinet-usage-line {
         display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
         justify-content: space-between;
+        gap: 4px 8px;
         color: #53667f;
         font-size: 12px;
       }
 
+      .cabinet-usage-line > span:first-child {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
+
       .cabinet-usage-line strong {
         color: #18365f;
+      }
+
+      .cabinet-usage-value-group {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1 1 112px;
+        flex-wrap: wrap;
+        min-width: 0;
+        gap: 4px 8px;
+        text-align: right;
+      }
+
+      .cabinet-usage-value-group > strong,
+      .cabinet-usage-value-group > .cabinet-power-rate,
+      .cabinet-usage-value-group > .cabinet-power-status-tag,
+      .cabinet-usage-value-group > .cabinet-status-updated-at {
+        white-space: nowrap;
+      }
+
+      .cabinet-power-rate {
+        color: #1267d6;
+        font-weight: 600;
+      }
+
+      .cabinet-status-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        min-height: 24px;
+      }
+
+      .cabinet-space-stats.is-status-mode {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
       }
 
       .cabinet-card-meta {
@@ -9594,10 +9844,22 @@
         min-width: 0;
         min-height: 0;
         display: grid;
-        grid-template-rows: auto minmax(0, 1.15fr) minmax(0, .85fr);
+        grid-template-rows: minmax(380px, 1fr) 500px;
         gap: 14px;
         height: 100%;
         overflow: hidden;
+        align-content: start;
+      }
+
+      .cabinet-contains-top {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding-top: 1px;
+        background: #fff;
       }
 
       .cabinet-capacity-summary {
@@ -9638,6 +9900,41 @@
         color: #078b9a;
       }
 
+      .cabinet-power-summary {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(110px, 1fr));
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid #cfe4ff;
+        border-radius: 6px;
+        background: #f6faff;
+      }
+
+      .cabinet-power-item {
+        min-width: 0;
+        padding: 8px 10px;
+        border-right: 1px solid #dce9f8;
+      }
+
+      .cabinet-power-item:last-child {
+        border-right: 0;
+      }
+
+      .cabinet-power-label {
+        display: block;
+        color: #73879c;
+        font-size: 11px;
+      }
+
+      .cabinet-power-value {
+        display: block;
+        margin-top: 4px;
+        color: #185fae;
+        font-size: 16px;
+        line-height: 1.2;
+        font-weight: 700;
+      }
+
       .cabinet-section-title-note {
         margin-left: 8px;
         color: #7c8fa4;
@@ -9666,6 +9963,8 @@
 
       @media (max-width: 1350px) {
         .cabinet-capacity-summary { grid-template-columns: repeat(3, minmax(90px, 1fr)); }
+        .cabinet-power-summary { grid-template-columns: repeat(3, minmax(110px, 1fr)); }
+        .cabinet-power-item { border-right: 0; }
       }
 
       .cabinet-section {
@@ -11345,6 +11644,9 @@
         margin: 6px 0 0;
         font-size: 11px;
         line-height: 1.55;
+        overflow-wrap: anywhere;
+        white-space: normal;
+        word-break: break-word;
       }
 
       .demand-page-panel-item p.is-demand-highlight {
@@ -11972,6 +12274,58 @@
         background: #f8fbff;
         border: 1px solid #e4edf8;
         border-radius: 6px;
+      }
+
+      .requirement-description-attachments {
+        display: grid;
+        gap: 10px;
+      }
+
+      .requirement-description-attachments-title {
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .requirement-description-attachment {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 14px;
+        border: 1px solid #dfe8f3;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .requirement-description-attachment-info {
+        min-width: 0;
+      }
+
+      .requirement-description-attachment-name {
+        overflow: hidden;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 500;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .requirement-description-attachment-type {
+        margin-top: 4px;
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+
+      .requirement-description-attachment-actions {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .requirement-description-attachment-actions .btn {
+        text-decoration: none;
       }
 
       .relation-current {
@@ -14293,6 +14647,473 @@
         color: var(--primary);
         background: #f1f7ff;
       }
+
+      .maintenance-page {
+        height: 100%;
+        min-height: 620px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .maintenance-page-head {
+        min-height: 64px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e5eaf0;
+      }
+
+      .maintenance-page-title {
+        margin: 0;
+        color: #14263d;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .maintenance-tabs {
+        height: 50px;
+        padding: 0 20px;
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        border-bottom: 1px solid #e5eaf0;
+      }
+
+      .maintenance-tabs button {
+        min-width: 108px;
+        height: 50px;
+        padding: 0 18px;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: #34495e;
+        cursor: pointer;
+      }
+
+      .maintenance-tabs button.is-active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+      }
+
+      .maintenance-list-body {
+        flex: 1;
+        min-height: 0;
+        padding: 16px 20px 12px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .maintenance-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .maintenance-search {
+        width: 260px;
+        height: 34px;
+        position: relative;
+      }
+
+      .maintenance-search::after {
+        content: "⌕";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-52%);
+        color: #91a3b5;
+        pointer-events: none;
+      }
+
+      .maintenance-search input {
+        width: 100%;
+        height: 34px;
+        padding: 0 34px 0 12px;
+        border: 1px solid #d7e0ea;
+        border-radius: 3px;
+        outline: none;
+        color: #1f3349;
+      }
+
+      .maintenance-search input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(22, 119, 255, .1);
+      }
+
+      .maintenance-text-action {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--primary);
+        cursor: pointer;
+      }
+
+      .maintenance-table-wrap {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        border-top: 1px solid #edf1f5;
+      }
+
+      .maintenance-table {
+        width: 100%;
+        min-width: 1180px;
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .maintenance-table th {
+        height: 42px;
+        padding: 0 12px;
+        background: #f2f8fc;
+        color: #21364c;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .maintenance-table td {
+        height: 46px;
+        padding: 0 12px;
+        border-bottom: 1px solid #edf1f5;
+        color: #2e4054;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .maintenance-table tr:hover td {
+        background: #f8fbfe;
+      }
+
+      .maintenance-list-page .maintenance-table {
+        width: 100%;
+        min-width: 1180px;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 12px;
+      }
+
+      .maintenance-list-page .maintenance-table th,
+      .maintenance-list-page .maintenance-table td {
+        height: 42px;
+        padding: 0 12px;
+        border-bottom: 1px solid #edf2f7;
+        color: #31485f;
+        font-size: 12px;
+        text-align: left;
+        white-space: nowrap;
+      }
+
+      .maintenance-list-page .maintenance-table th {
+        background: #eff8ff;
+        color: #49657f;
+        font-weight: 600;
+      }
+
+      .maintenance-list-page .maintenance-table tr:hover td {
+        background: #fbfdff;
+      }
+
+      .maintenance-list-page .maintenance-table th:first-child,
+      .maintenance-list-page .maintenance-table td:first-child {
+        padding-right: 0;
+        padding-left: 0;
+        text-align: center;
+      }
+
+      .maintenance-list-page .maintenance-table th:first-child .th-content {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        padding-right: 0;
+      }
+
+      .maintenance-list-page .maintenance-table th:first-child input[type="checkbox"],
+      .maintenance-list-page .maintenance-table td:first-child input[type="checkbox"] {
+        display: block;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .maintenance-list-page .maintenance-link {
+        color: var(--primary);
+        font-size: 12px;
+      }
+
+      .maintenance-list-page .maintenance-status {
+        min-width: 52px;
+        height: 22px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+
+      .maintenance-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .maintenance-link {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--primary);
+        cursor: pointer;
+      }
+
+      .maintenance-status {
+        display: inline-flex;
+        align-items: center;
+        min-width: 42px;
+        height: 24px;
+        padding: 0 9px;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 12px;
+      }
+
+      .maintenance-status.is-active {
+        color: #0b8f55;
+        background: #e8f8ef;
+      }
+
+      .maintenance-status.is-expired {
+        color: #e85d2a;
+        background: #fff0e9;
+      }
+
+      .maintenance-pager {
+        min-height: 48px;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+        color: #52677d;
+      }
+
+      .maintenance-form-page {
+        height: 100%;
+        min-height: 680px;
+        overflow: auto;
+        padding: 18px;
+        background: #f5f7fa;
+      }
+
+      .maintenance-form-card {
+        width: min(1420px, calc(100% - 12px));
+        min-height: calc(100% - 12px);
+        margin: 0 auto;
+        background: #fff;
+        border: 1px solid #e5eaf0;
+        box-shadow: 0 1px 5px rgba(29, 50, 73, .06);
+      }
+
+      .maintenance-form-head {
+        height: 62px;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        border-bottom: 1px solid #e7ecf2;
+      }
+
+      .maintenance-form-head h2 {
+        margin: 0;
+        color: #132a42;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .maintenance-back {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 0;
+        background: none;
+        color: #52677d;
+        cursor: pointer;
+      }
+
+      .maintenance-form-body {
+        padding: 22px 24px 18px;
+      }
+
+      .maintenance-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 20px;
+      }
+
+      .maintenance-form-grid.is-three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .maintenance-field {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+
+      .maintenance-field.span-2 {
+        grid-column: 1 / -1;
+      }
+
+      .maintenance-field label {
+        color: #24394f;
+        font-size: 13px;
+      }
+
+      .maintenance-required {
+        color: #f53f3f;
+        margin-right: 3px;
+      }
+
+      .maintenance-control {
+        width: 100%;
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid #cfdae6;
+        border-radius: 3px;
+        outline: none;
+        color: #24394f;
+        background: #fff;
+      }
+
+      textarea.maintenance-control {
+        min-height: 74px;
+        padding-top: 9px;
+        resize: vertical;
+      }
+
+      .maintenance-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(22, 119, 255, .08);
+      }
+
+      .maintenance-control:disabled,
+      .maintenance-control[readonly] {
+        color: #65788c;
+        background: #f3f5f7;
+      }
+
+      .maintenance-inline-fields {
+        display: grid;
+        grid-template-columns: 72px 1fr 1fr;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .maintenance-radio-row {
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .maintenance-form-section {
+        margin-top: 22px;
+      }
+
+      .maintenance-section-head {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .maintenance-section-head h3 {
+        margin: 0;
+        color: #21364c;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .maintenance-form-footer {
+        padding: 18px 24px 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .maintenance-modal-mask {
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        display: grid;
+        place-items: center;
+        background: rgba(8, 22, 38, .52);
+      }
+
+      .maintenance-asset-dialog {
+        width: min(1040px, calc(100vw - 80px));
+        height: min(700px, calc(100vh - 90px));
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 20px 60px rgba(8, 22, 38, .24);
+      }
+
+      .maintenance-dialog-head {
+        height: 58px;
+        padding: 0 18px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e5eaf0;
+      }
+
+      .maintenance-dialog-head h3 {
+        margin: 0;
+        color: #14263d;
+        font-size: 17px;
+      }
+
+      .maintenance-dialog-close {
+        margin-left: auto;
+        border: 0;
+        background: none;
+        color: #52677d;
+        font-size: 22px;
+        cursor: pointer;
+      }
+
+      .maintenance-dialog-body {
+        flex: 1;
+        min-height: 0;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .maintenance-dialog-footer {
+        height: 62px;
+        padding: 0 18px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        border-top: 1px solid #e5eaf0;
+      }
+
+      @media (max-width: 1080px) {
+        .maintenance-form-grid,
+        .maintenance-form-grid.is-three {
+          grid-template-columns: 1fr;
+        }
+
+        .maintenance-field.span-2 {
+          grid-column: auto;
+        }
+      }
     </style>
   </head>
   <body>
@@ -15065,6 +15886,9 @@
           TOOL_TRANSFER: "toolTransfer",
           TOOL_INVENTORY: "toolInventory",
           TOOL_HISTORY: "toolHistory",
+          MAINTENANCE_CONTRACT: "maintenanceContract",
+          MAINTENANCE_MANAGEMENT: "maintenanceManagement",
+          MAINTENANCE_EXPIRED: "maintenanceExpired",
           RETIRED_ASSET: "retiredAsset",
           TEMPLATE_CONFIG: "templateConfig",
           FORM_DESIGN: "formDesign",
@@ -15247,6 +16071,25 @@
           [VIEW_IDS.TOOL_TRANSFER]: Object.freeze({ title: "工具仪表库区调拨", creator: "系统管理员", assignee: "刘婷", approver: "周明", executor: "刘婷", remark: "将巡检工具由A区调拨至B区，便于现场班组领用。", assetIndexes: [8, 9] }),
           [VIEW_IDS.TOOL_INVENTORY]: Object.freeze({ title: "7月工具仪表月度盘点", creator: "系统管理员", assignee: "刘婷", approver: "周明", executor: "刘婷", remark: "盘点工具仪表库A区、B区在库及领用中资产。", assetIndexes: [0, 1, 2, 3, 4] })
         });
+        const MAINTENANCE_CONTRACT_SEED = Object.freeze([
+          Object.freeze({ id: "MC2026081100003", contractNo: "FW-2026-0811-001", name: "核心机房设备年度维保合同", vendor: "共济科技", type: "年度服务", startDate: "2026-08-11", endDate: "2027-08-04", status: "在保", creator: "系统管理员", createdAt: "2026-08-11 11:06:52", costCenter: "集中监控部", feeType: "资本性", serviceMode: "7×24小时上门服务", warrantyType: "原厂承保", contact: "张三", phone: "17800998099", advanceValue: "1", advanceUnit: "周", frequencyValue: "1", frequencyUnit: "天", reminderTime: "05:00", reminderPeople: "系统管理员", description: "覆盖核心机房服务器、网络设备与存储设备的年度维保服务。" }),
+          Object.freeze({ id: "MC2025101600001", contractNo: "FW-2025-1016-001", name: "网络设备年度维保服务", vendor: "新华三技术服务", type: "年度服务", startDate: "2025-10-16", endDate: "2026-10-15", status: "在保", creator: "陈浩", createdAt: "2025-10-16 09:20:12", costCenter: "网络运维组", feeType: "费用性", serviceMode: "5×8小时上门服务", warrantyType: "原厂承保", contact: "李工", phone: "13800138002", advanceValue: "2", advanceUnit: "周", frequencyValue: "1", frequencyUnit: "天", reminderTime: "09:00", reminderPeople: "陈浩", description: "覆盖核心交换机与接入交换机巡检、备件更换及故障响应。" }),
+          Object.freeze({ id: "MC2025080400002", contractNo: "SZSJ_DHWB_20220022", name: "上海上证数据服务维保合同", vendor: "上海上证数据服务有限责任公司", type: "年度服务", startDate: "2024-07-01", endDate: "2026-06-30", status: "过保", creator: "刘婷", createdAt: "2025-08-04 14:35:10", costCenter: "基础设施运维部", feeType: "费用性", serviceMode: "驻场服务", warrantyType: "第三方承保", contact: "王经理", phone: "13900139003", advanceValue: "1", advanceUnit: "月", frequencyValue: "3", frequencyUnit: "天", reminderTime: "08:30", reminderPeople: "刘婷", description: "数据中心场地设施及动力环境监控系统维保。" }),
+          Object.freeze({ id: "MC2025080400001", contractNo: "SSETECH-ASCO ATS-20210116-TYD", name: "ATS设备综合维保合同", vendor: "施耐德电气", type: "综合", startDate: "2021-01-22", endDate: "2023-07-22", status: "过保", creator: "周明", createdAt: "2025-08-04 10:12:36", costCenter: "动力运维组", feeType: "资本性", serviceMode: "按需上门服务", warrantyType: "第三方承保", contact: "赵工", phone: "13600136004", advanceValue: "1", advanceUnit: "月", frequencyValue: "7", frequencyUnit: "天", reminderTime: "09:30", reminderPeople: "周明", description: "ATS设备巡检、预防性维护与故障处理。" })
+        ]);
+        const MAINTENANCE_ASSET_POOL = Object.freeze([
+          Object.freeze({ id: "MA-001", assetCode: "IT-SRV-202607-001", name: "核心数据库服务器-01", serialCode: "DLR760-26A07001", category: "IT硬件>服务器>机架式服务器", status: "在用", location: "A栋-2层-机房A-A01机柜-18U" }),
+          Object.freeze({ id: "MA-002", assetCode: "IT-NET-202607-002", name: "核心汇聚交换机-01", serialCode: "H3CS6520X26A002", category: "IT硬件>网络设备>交换机", status: "在用", location: "A栋-2层-机房A-A02机柜-32U" }),
+          Object.freeze({ id: "MA-003", assetCode: "IT-STO-202607-003", name: "全闪存储阵列-01", serialCode: "HWOS550026A003", category: "IT硬件>存储设备>存储阵列", status: "在用", location: "A栋-2层-机房A-A03机柜-10U" }),
+          Object.freeze({ id: "MA-004", assetCode: "SF-HVAC-202607-001", name: "精密空调-01", serialCode: "VTPX4-26A001", category: "暖通系统>空调系统>精密空调", status: "在用", location: "A栋-2层-机房A-空调区01" }),
+          Object.freeze({ id: "MA-005", assetCode: "SF-PDC-202607-003", name: "低压配电柜-03", serialCode: "SCH-PDC-26A003", category: "电气系统>配电系统>低压配电柜", status: "在用", location: "A栋-B1层-低压配电室-03位" }),
+          Object.freeze({ id: "MA-006", assetCode: "TOOL-202607-003", name: "红外热像仪", serialCode: "FLK-TI480-26003", category: "测试仪表>热成像>红外热像仪", status: "空闲", location: "2号楼-B1层-工具仪表库A区" })
+        ]);
+        const MAINTENANCE_RELATION_SEED = Object.freeze([
+          Object.freeze({ id: "MM2026081100002", contractId: "MC2026081100003", assetIds: ["MA-001", "MA-002", "MA-003"], creator: "系统管理员", createdAt: "2026-08-11 11:10:16", status: "在保" }),
+          Object.freeze({ id: "MM2025101600001", contractId: "MC2025101600001", assetIds: ["MA-002", "MA-006"], creator: "陈浩", createdAt: "2025-10-16 10:05:30", status: "在保" }),
+          Object.freeze({ id: "MM2025080400002", contractId: "MC2025080400002", assetIds: ["MA-004", "MA-005"], creator: "刘婷", createdAt: "2025-08-04 15:08:28", status: "过保" })
+        ]);
         const SIDEBAR_MENU = [
           { type: "static", id: "deviceOverview", viewId: VIEW_IDS.ASSET_OVERVIEW, label: "资产概览" },
           {
@@ -15302,6 +16145,11 @@
             { id: VIEW_IDS.TOOL_TRANSFER, label: "调拨" },
             { id: VIEW_IDS.TOOL_INVENTORY, label: "盘点" },
             { id: VIEW_IDS.TOOL_HISTORY, label: "履历" }
+          ] },
+          { type: "group", id: "maintenance", label: "维保信息", children: [
+            { id: VIEW_IDS.MAINTENANCE_CONTRACT, label: "维保合同" },
+            { id: VIEW_IDS.MAINTENANCE_MANAGEMENT, label: "维保管理" },
+            { id: VIEW_IDS.MAINTENANCE_EXPIRED, label: "过保统计" }
           ] },
           {
             type: "group",
@@ -18190,6 +19038,18 @@
             status: "设计完成"
           },
           {
+            id: "V3R5-4660",
+            ticketId: "V3R5-4660",
+            version: "v1.5",
+            type: "新增",
+            title: "【资产管理】新增 维保信息模块",
+            description: "【资产管理】新增 维保信息模块",
+            scope: "资产管理",
+            targetView: VIEW_IDS.MAINTENANCE_CONTRACT,
+            targetLabel: "维保合同",
+            status: "设计完成"
+          },
+          {
             id: "V3R5-4662",
             ticketId: "V3R5-4662",
             version: "v1.5",
@@ -18202,6 +19062,29 @@
             status: "挂起"
           },
           {
+            id: "V3R5-6171",
+            ticketId: "V3R5-6171",
+            version: "v1.5",
+            type: "新增",
+            title: "【资产管理】新增 机柜上电情况及功率使用率统计",
+            description: "【资产管理】新增 机柜上电情况及功率使用率统计",
+            scope: "机柜管理",
+            targetView: VIEW_IDS.CABINET,
+            targetLabel: "机柜上电情况及功率使用率",
+            status: "设计中"
+          },
+          {
+            id: "V3R5-5658",
+            ticketId: "V3R5-5658",
+            version: "v1.5",
+            type: "新增",
+            title: "【台账】新增 支持切换分类视图",
+            description: "【台账】新增 支持切换分类视图",
+            scope: "资产台账",
+            targetLabel: "待补充原型定位",
+            status: "设计中"
+          },
+          {
             id: "V3R5-5571",
             ticketId: "V3R5-5571",
             version: "v1.4",
@@ -18212,7 +19095,23 @@
             targetView: VIEW_IDS.IT_FACILITY,
             targetAction: "批量上架",
             targetLabel: "资产活动字段禁用/隐藏规则",
-            status: "设计中"
+            showDescriptionDialog: true,
+            descriptionDialogTitle: "需求说明",
+            hideDescriptionMeta: true,
+            detail: ["编辑/入库/初始化读取json字段隐藏/禁用规则，其他活动统一将所有字段设置为禁用"],
+            attachments: [
+              {
+                name: "台账流程动作字段规则说明.md",
+                type: "Markdown 规则说明",
+                path: "../v1.1-主从设备及电子表格替换/03-配置脚本/台账流程动作字段规则说明.md"
+              },
+              {
+                name: "ledger-action-field-rules.json",
+                type: "JSON 配置文件",
+                path: "../v1.1-主从设备及电子表格替换/03-配置脚本/ledger-action-field-rules.json"
+              }
+            ],
+            status: "设计完成"
           },
           {
             id: "V3R5-4997",
@@ -18312,7 +19211,9 @@
           "V3R5-4421": { role: "系统管理员", need: "通过表单配置控制台账厂商字段的显示", value: "保持表单、台账和详情的字段口径一致", scenario: "不同资产分类不需要展示厂商字段时，通过配置统一隐藏。", rules: ["表单启用厂商字段时台账可展示厂商列。", "表单隐藏厂商字段时台账同步隐藏。"], boundary: "配置缺失时使用产品默认规则，不得导致台账渲染失败。" },
           "V3R5-4418": { role: "资产管理员", need: "在高级搜索中按厂商筛选资产", value: "快速定位指定来源或品牌的设备", scenario: "处理维保、替换或批次问题时，需要查询同厂商资产。", rules: ["高级搜索默认提供厂商条件。", "厂商选项来自当前台账可见数据并去重。"], boundary: "无厂商数据时保留请选择状态，不影响其他条件查询。" },
           "V3R5-4868": { role: "资产管理员", need: "在后台持续查看资产导出任务进度并下载结果", value: "避免长时间导出阻塞当前页面操作", scenario: "导出大量资产或多个导出任务并行时，需要查看进度。", rules: ["导出任务进入进度管理器并展示状态。", "任务可收起、取消，完成后支持下载。", "任务完成不弹窗且不展示右上角提示；进度管理器展开时自动定位并闪烁对应任务行，收起时通过结果数量和强调动画触达，展开后定位任务。"], boundary: "任务失败、取消、数据为空或浏览器拦截下载时，应在任务列表中保留可识别状态和后续操作。" },
+          "V3R5-4660": { role: "资产管理员", need: "集中查看资产维保信息", value: "掌握资产维保状态并支持后续维保管理", scenario: "查看资产台账或详情时，需要确认资产是否处于维保期以及对应维保信息。", rules: ["维保信息以独立模块纳入资产管理。"], boundary: "维保信息缺失时应明确显示未维护，不得影响资产基础信息查询。" },
           "V3R5-4662": { role: "系统管理员", need: "统一维护资产表单与详情字段并支持配置复用", value: "减少两套配置不一致和重复维护", scenario: "新增资产模型或调整字段后，需要同步表单与详情展示。", rules: ["表单字段来源于详情设计基本信息字段。", "支持保持模型上下文互相跳转并将配置应用到其他模型。"], boundary: "目标模型字段缺失或当前节点不是模型时，应提示差异并禁止无效应用。" },
+          "V3R5-6171": { role: "机房运维人员", need: "在机柜空间卡片视图中切换查看U位、功率和上下电状态，并按项目配置选择机柜上电状态的数据来源", value: "快速判断机柜容量、供电负载和整柜供电状态", scenario: "进行设备上架规划、容量核查或供电巡检时，需要在同一空间范围内按不同指标比较机柜。", rules: ["机柜卡片支持U位、功率、上下电状态三种模式，默认展示U位模式。", "机柜上电状态来源默认从采集测点读取，也可在资产基础配置中切换为从属性读取。", "采集测点状态包含未上电、A路上电、B路上电、双路上电；属性状态包含上电、下电、待机。", "上下电状态统计、卡片和筛选统一使用当前状态来源对应的枚举，筛选后同步更新结果总数和分页。", "机柜额定功率由人工维护，实时总功率由监控系统采集。", "功率利用率=实时总功率÷额定功率×100%，不提供统计口径配置。", "功率卡片使用‘功率使用 实时/额定kW（使用率%）’格式；上下电状态标签展示在机柜图下方，更新时间不存在时显示‘-’。", "状态与实时功率数据不一致时仅提示用户前往资产信息编辑修改，不提供快捷修改按钮。"], boundary: "实时总功率缺失、额定功率为空或为0时不计算利用率；使用率超过100%时应明确标识容量风险；状态筛选无结果时展示空态。" },
           "V3R5-5571": { role: "资产管理员", need: "在不同资产活动中只看到符合当前业务规则的可编辑字段", value: "减少误填、误改和无关字段干扰", scenario: "执行入库、上架、部署、变动、回库等资产活动时，不同字段需要按活动类型禁用或隐藏。", rules: ["字段禁用与隐藏规则按资产类型和业务活动分别配置。", "隐藏字段不在活动表单中展示，禁用字段保留显示但不可修改。", "字段规则调整后应与表单必填和提交校验保持一致。"], boundary: "字段规则冲突、配置缺失或必填字段被隐藏时不得直接提交，应使用默认规则或提示管理员修正配置。" },
           "V3R5-4997": { role: "系统管理员", need: "按资产模块整体或按业务活动分项配置是否通过流程办理", value: "让同一套产品兼容有流程和无流程项目，并避免用户从其他业务入口绕过流程", scenario: "不同项目或不同业务活动需要在流程审批与直接办理之间切换；运维人员也可能从机柜详情对设备执行上架、下架或迁出。", rules: ["仅 IT设备和场地设施纳入配置，台账及机柜详情业务入口文案保持稳定，机柜空闲U位入口显示“上架设备”。", "机柜详情中的设备上架、下架、迁出分别复用 IT设备对应活动的流程开关。", "机柜详情新建设备采用分步录入：先选择资产分类，再按分类配置渲染基础字段和专属字段。", "流程开启时，台账入口直接进入全屏流程发起页；机柜详情上架需先选择已有设备或填写新设备信息，确认后再进入流程单，并带入机柜、U位及设备信息；通过右上角关闭按钮返回来源页面。", "流程关闭时使用原直接办理交互，确认后立即更新资产数据。", "上架写入机柜与U位，下架更新IT设备状态与库房位置，迁出将设备移入已迁出/已废弃。", "模块整体关闭或业务活动分项关闭前必须校验未完结流程单。"], boundary: "存在未完结流程单时禁止关闭，并提供对应流程单入口；本需求不为机柜资产本身新增流程。" },
           "V3R5-4931": { role: "机房管理员", need: "在机柜详情中同时识别正式上架设备和预占设备", value: "准确掌握机柜真实可分配容量，避免同一U位被重复分配", scenario: "设备上架流程提交后尚未执行完成，但已经预占目标机柜U位时，需要在机柜图中识别预占位置并追溯来源流程单。", rules: ["右侧包含设备列表只展示正式上架设备，不展示预占中的设备。", "总U位由已使用U位、预占U位和剩余可分配U位组成；预占减少可分配容量，但不计入正式设备数和正式利用率。", "草稿不生成预占；流程提交后生成预占；驳回、取消或超期释放；执行完成后转为正式上架。", "左侧机柜图中的预占设备使用与在架设备一致的悬浮信息卡，展示资产编号、资产名称、U位范围和来源流程单；流程单号支持点击进入对应流程单。"], boundary: "预占与正式占用冲突、U位超限、机柜失效或来源流程单状态异常时禁止提交并明确提示。" },
@@ -18931,6 +19832,7 @@
                   retired: true,
                   consumable: true,
                   toolInstrument: true,
+                  maintenance: true,
                   assetConfig: true,
                   assetDetection: true,
                   deviceOverview: true
@@ -18956,6 +19858,8 @@
                 columnWidths: {},
                 listViewModes: {},
                 cabinetSpaceDisplayMode: "card",
+                cabinetSpaceMetricMode: "u",
+                cabinetPowerStatusFilter: "all",
                 listViewModeMenuOpen: null,
                 assetActivityMenuOpen: null,
                 processConfig: {
@@ -19008,6 +19912,17 @@
                   activeAssetId: "",
                   historyKeyword: "",
                   workflows: {}
+                },
+                maintenance: {
+                  views: {
+                    [VIEW_IDS.MAINTENANCE_CONTRACT]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false },
+                    [VIEW_IDS.MAINTENANCE_MANAGEMENT]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false },
+                    [VIEW_IDS.MAINTENANCE_EXPIRED]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: true }
+                  },
+                  contracts: MAINTENANCE_CONTRACT_SEED.map((item) => ({ ...item })),
+                  relations: MAINTENANCE_RELATION_SEED.map((item) => ({ ...item, assetIds: [...item.assetIds] })),
+                  draftAssets: [],
+                  assetDialog: null
                 },
                 itInbound: {
                   tab: "all",
@@ -19127,7 +20042,8 @@
                     [VIEW_IDS.STATION_FACILITY]: true,
                     [VIEW_IDS.CABINET]: true,
                     [VIEW_IDS.SPARE_PART]: true
-                  }
+                  },
+                  cabinetPowerStatusSource: "telemetry"
                 },
                 formDesign: {
                   activeNode: "model_collection_root",
@@ -19382,7 +20298,12 @@
               assetSummary: getAssetFlowStatus(VIEW_IDS.CABINET, index, index % 3 === 0 ? "空闲" : "在用"),
               serialCode: item[1] + (round > 0 ? "-" + pad(round + 1) : ""),
               assetLocation: locations[index % locations.length],
-              cabinetHeight: "42"
+              cabinetHeight: "42",
+              ratedPower: String(8 + ((index % 5) * 2)) + "kW",
+              realtimeTotalPower: String(index % 6 === 0 ? 2.4 : 3.2 + ((index % 5) * 0.8)) + "kW",
+              powerStatus: ["上电", "待机", "下电", "未知"][index % 4],
+              powerMeterStatus: ["未上电", "A路上电", "B路上电", "双路上电"][index % 4],
+              powerStatusUpdatedAt: "2026-08-12 " + pad(9 + (index % 3), 2) + ":" + pad((index * 7) % 60, 2)
             }));
             return disambiguateNames(rows);
           }
@@ -19658,6 +20579,13 @@
               this.state.ui.itInbound.mode = "list";
               this.state.ui.itInbound.activeId = "";
               this.state.ui.itInbound.readonly = false;
+            }
+            if ([VIEW_IDS.MAINTENANCE_CONTRACT, VIEW_IDS.MAINTENANCE_MANAGEMENT, VIEW_IDS.MAINTENANCE_EXPIRED].includes(viewId)) {
+              const maintenanceView = this.ensureMaintenanceView(viewId);
+              maintenanceView.mode = "list";
+              maintenanceView.activeId = "";
+              maintenanceView.readonly = viewId === VIEW_IDS.MAINTENANCE_EXPIRED;
+              this.ensureMaintenanceState().assetDialog = null;
             }
             this.state.ui.integrationConfigEditing = false;
             this.state.ui.operationPage = null;
@@ -20215,6 +21143,41 @@
             this.emit();
           }
 
+          getCabinetSpaceMetricMode() {
+            return ["u", "power", "status"].includes(this.state.ui.cabinetSpaceMetricMode)
+              ? this.state.ui.cabinetSpaceMetricMode
+              : "u";
+          }
+
+          setCabinetSpaceMetricMode(mode) {
+            if (!["u", "power", "status"].includes(mode)) return;
+            this.state.ui.cabinetSpaceMetricMode = mode;
+            this.emit();
+          }
+
+          getCabinetPowerStatusFilter() {
+            return ["all", ...this.getCabinetPowerStatusOptions()].includes(this.state.ui.cabinetPowerStatusFilter)
+              ? this.state.ui.cabinetPowerStatusFilter
+              : "all";
+          }
+
+          setCabinetPowerStatusFilter(status) {
+            if (!["all", ...this.getCabinetPowerStatusOptions()].includes(status)) return;
+            this.state.ui.cabinetPowerStatusFilter = status;
+            this.state.ui.pagers[VIEW_IDS.CABINET] = 1;
+            this.emit();
+          }
+
+          getCabinetPowerStatusSource() {
+            return this.state.ui.templateConfig?.cabinetPowerStatusSource === "attribute" ? "attribute" : "telemetry";
+          }
+
+          getCabinetPowerStatusOptions() {
+            return this.getCabinetPowerStatusSource() === "attribute"
+              ? ["上电", "下电", "待机"]
+              : ["未上电", "A路上电", "B路上电", "双路上电"];
+          }
+
           getSpaceTreeRootId(viewId) {
             return this.createSpaceTreeNodeId(viewId, ["工程"]);
           }
@@ -20502,6 +21465,62 @@
               freeU: Math.max(0, height - usedU),
               percent
             };
+          }
+
+          parsePowerWatts(value, plainNumberAsKilowatts = false) {
+            const text = String(value ?? "").trim();
+            const number = Number.parseFloat(text.replace(/[^\d.]/g, ""));
+            if (!Number.isFinite(number)) return null;
+            if (/kw/i.test(text) || (plainNumberAsKilowatts && !/[a-z]/i.test(text))) return number * 1000;
+            return number;
+          }
+
+          formatPowerWatts(value) {
+            if (!Number.isFinite(value)) return "-";
+            if (value >= 1000) return (value / 1000).toFixed(value % 1000 === 0 ? 0 : 2) + "kW";
+            return Math.round(value) + "W";
+          }
+
+          getCabinetPowerStats(row, index = 0, devices = null) {
+            const seed = Number(String(row?.id || "").replace(/\D/g, "")) || index + 1;
+            const source = this.getCabinetPowerStatusSource();
+            const attributeStatus = ["上电", "下电", "待机"].includes(row?.powerStatus)
+              ? row.powerStatus
+              : ["上电", "待机", "下电"][seed % 3];
+            const telemetryStatus = ["未上电", "A路上电", "B路上电", "双路上电"].includes(row?.powerMeterStatus)
+              ? row.powerMeterStatus
+              : ["未上电", "A路上电", "B路上电", "双路上电"][seed % 4];
+            const powerStatus = source === "attribute" ? attributeStatus : telemetryStatus;
+            const realtimeTotalPower = this.parsePowerWatts(row?.realtimeTotalPower, true);
+            const cabinetRatedPower = this.parsePowerWatts(row?.ratedPower, true);
+            const inconsistent = (powerStatus === "下电" || powerStatus === "未上电") && Number.isFinite(realtimeTotalPower) && realtimeTotalPower > 0;
+            return {
+              source,
+              powerStatus,
+              statusTone: ["上电", "A路上电", "双路上电"].includes(powerStatus) ? "is-on" : ["待机", "B路上电"].includes(powerStatus) ? "is-standby" : ["下电", "未上电"].includes(powerStatus) ? "is-off" : "is-unknown",
+              realtimeTotalPower,
+              realtimeTotalPowerLabel: this.formatPowerWatts(realtimeTotalPower),
+              cabinetRatedPower,
+              cabinetRatedPowerLabel: this.formatPowerWatts(cabinetRatedPower),
+              usageRate: Number.isFinite(realtimeTotalPower) && cabinetRatedPower > 0
+                ? Math.round((realtimeTotalPower / cabinetRatedPower) * 100)
+                : null,
+              powerUsageLabel: Number.isFinite(realtimeTotalPower) && cabinetRatedPower > 0
+                ? `${(realtimeTotalPower / 1000).toFixed(2)}/${Number((cabinetRatedPower / 1000).toFixed(2))}kW（${((realtimeTotalPower / cabinetRatedPower) * 100).toFixed(2)}%）`
+                : "-",
+              dataStatus: Number.isFinite(realtimeTotalPower) ? "采集正常" : "暂无实时数据",
+              inconsistent,
+              statusUpdatedAt: row?.powerStatusUpdatedAt || "-"
+            };
+          }
+
+          updateCabinetPowerStatus(rowId, status = "上电") {
+            const row = this.getRowById(VIEW_IDS.CABINET, rowId);
+            if (!row || !["上电", "下电", "待机"].includes(status)) return;
+            row.powerStatus = status;
+            row.powerStatusUpdatedAt = "2026-08-12 10:30";
+            this.pushToast("状态已更新", `机柜上下电状态已修改为“${status}”，变更已记录至操作履历。`, "success");
+            this.emit();
           }
 
           getColumnWidth(viewId, columnKey) {
@@ -21442,6 +22461,22 @@
                 this.pushToast("已定位需求范围", "已跳转到机柜详情“包含设备”，可查看预占设备与U位容量。", "success");
                 this.emit();
               }
+              return;
+            }
+            if (requirement.id === "V3R5-6171") {
+              this.state.ui.currentTopNav = "运营管理";
+              this.state.ui.currentView = VIEW_IDS.CABINET;
+              this.state.ui.guidePage = null;
+              this.state.ui.operationPage = null;
+              this.state.ui.detailPage = null;
+              this.state.ui.listViewModes[VIEW_IDS.CABINET] = "space";
+              this.state.ui.cabinetSpaceDisplayMode = "card";
+              this.state.ui.cabinetSpaceMetricMode = "power";
+              this.state.ui.versionRequirementFilter = requirement.version || "all";
+              this.state.ui.focusedRequirementId = requirement.id;
+              this.state.ui.demandExplainEnabled = true;
+              this.pushToast("已定位需求范围", "已跳转到机柜空间卡片视图，可切换查看U位、功率和上下电状态。", "success");
+              this.emit();
               return;
             }
             if (requirement.id === "V3R5-4890") {
@@ -22592,6 +23627,10 @@
               { label: "机柜高度", value: normalize(row.cabinetHeight) },
               { label: "端口数量", value: normalize(row.portCount) },
               { label: "额定功率", value: normalize(row.ratedPower) },
+              ...(detailPage.viewId === VIEW_IDS.CABINET ? [
+                { label: "实时总功率", value: normalize(row.realtimeTotalPower) },
+                { label: "上下电状态", value: normalize(row.powerStatus) }
+              ] : []),
               { label: "关联资产", value: normalize(row.relatedAsset) },
               { label: "描述", value: normalize(row.description || row.assetSummary) },
               { label: "验收日期", value: "2025-09-18" },
@@ -23393,8 +24432,9 @@
             this.emit();
           }
 
-          openItInboundForm() {
+          openItInboundForm(fromFlowEntry = false) {
             const inbound = this.ensureItInboundState();
+            if (fromFlowEntry) inbound.returnContext = null;
             inbound.mode = "form";
             inbound.activeId = "";
             inbound.readonly = false;
@@ -24217,7 +25257,7 @@
             if (shouldEmit) this.emit();
           }
 
-          openItAssetWorkflowForm(viewId) {
+          openItAssetWorkflowForm(viewId, fromFlowEntry = false) {
             const workflow = this.ensureItAssetWorkflowState(viewId);
             const config = this.getItAssetWorkflowConfig(viewId);
             const scenario = ASSET_WORKFLOW_SCENARIOS[viewId] || {};
@@ -24226,6 +25266,7 @@
             workflow.activeId = "";
             workflow.readonly = false;
             workflow.sourceContext = null;
+            if (fromFlowEntry) workflow.returnContext = null;
             workflow.draftAssets = (scenario.assetIndexes?.length ? scenario.assetIndexes : [0])
               .map((assetIndex) => this.buildItAssetWorkflowAsset(config, assetIndex));
             this.emit();
@@ -25178,7 +26219,7 @@
               if (operationPage.viewId === VIEW_IDS.IT_FACILITY) {
                 const readonlyColumnKeysByAction = {
                   "上架": baseColumnKeys,
-                  "编辑": editableDisabledKeys,
+                  "编辑": [...editableDisabledKeys, "uHeight"],
                   "迁出": allColumnKeys,
                   "变动": baseColumnKeys,
                   "下架": baseColumnKeys
@@ -27442,6 +28483,211 @@
             this.pushToast("上传入口已触发", "原型中未接入真实文件上传，已模拟打开 Logo 上传区域。", "info");
           }
 
+          ensureMaintenanceState() {
+            if (!this.state.ui.maintenance) {
+              this.state.ui.maintenance = {
+                views: {
+                  [VIEW_IDS.MAINTENANCE_CONTRACT]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false },
+                  [VIEW_IDS.MAINTENANCE_MANAGEMENT]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false },
+                  [VIEW_IDS.MAINTENANCE_EXPIRED]: { tab: "all", keyword: "", mode: "list", activeId: "", readonly: true }
+                },
+                contracts: MAINTENANCE_CONTRACT_SEED.map((item) => ({ ...item })),
+                relations: MAINTENANCE_RELATION_SEED.map((item) => ({ ...item, assetIds: [...item.assetIds] })),
+                draftAssets: [],
+                assetDialog: null
+              };
+            }
+            return this.state.ui.maintenance;
+          }
+
+          ensureMaintenanceView(viewId) {
+            const maintenance = this.ensureMaintenanceState();
+            if (!maintenance.views[viewId]) {
+              maintenance.views[viewId] = { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false };
+            }
+            return maintenance.views[viewId];
+          }
+
+          setMaintenanceTab(viewId, tab) {
+            const view = this.ensureMaintenanceView(viewId);
+            view.tab = ["all", "mine", "draft"].includes(tab) ? tab : "all";
+            this.emit();
+          }
+
+          setMaintenanceKeyword(viewId, keyword, shouldEmit = true) {
+            this.ensureMaintenanceView(viewId).keyword = String(keyword || "");
+            if (shouldEmit) this.emit();
+          }
+
+          openMaintenanceForm(viewId, id = "", readonly = false) {
+            const maintenance = this.ensureMaintenanceState();
+            const view = this.ensureMaintenanceView(viewId);
+            view.mode = "form";
+            view.activeId = String(id || "");
+            view.readonly = Boolean(readonly);
+            if (viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT) {
+              const relation = maintenance.relations.find((item) => item.id === view.activeId);
+              maintenance.draftAssets = relation ? [...relation.assetIds] : [];
+            }
+            maintenance.assetDialog = null;
+            this.emit();
+          }
+
+          backMaintenanceList(viewId) {
+            const maintenance = this.ensureMaintenanceState();
+            const view = this.ensureMaintenanceView(viewId);
+            view.mode = "list";
+            view.activeId = "";
+            view.readonly = viewId === VIEW_IDS.MAINTENANCE_EXPIRED;
+            maintenance.draftAssets = [];
+            maintenance.assetDialog = null;
+            this.emit();
+          }
+
+          saveMaintenanceContract() {
+            const maintenance = this.ensureMaintenanceState();
+            const view = this.ensureMaintenanceView(VIEW_IDS.MAINTENANCE_CONTRACT);
+            const valueOf = (id) => {
+              const node = document.getElementById(id);
+              return node && "value" in node ? String(node.value || "").trim() : "";
+            };
+            const name = valueOf("maintenanceContractName");
+            const contractNo = valueOf("maintenanceContractNo");
+            const startDate = valueOf("maintenanceContractStart");
+            const endDate = valueOf("maintenanceContractEnd");
+            if (!name || !contractNo || !startDate || !endDate) {
+              this.pushToast("请完善合同信息", "合同名称、合同编号和维保起止时间为必填项。", "warning");
+              return;
+            }
+            if (endDate < startDate) {
+              this.pushToast("时间范围有误", "维保结束时间不能早于维保开始时间。", "warning");
+              return;
+            }
+            const existing = maintenance.contracts.find((item) => item.id === view.activeId);
+            const id = existing?.id || ("MC" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + String(maintenance.contracts.length + 1).padStart(5, "0"));
+            const record = {
+              ...(existing || {}),
+              id,
+              contractNo,
+              name,
+              vendor: valueOf("maintenanceContractVendor"),
+              type: valueOf("maintenanceContractType") || "年度服务",
+              startDate,
+              endDate,
+              status: valueOf("maintenanceContractStatus") || "在保",
+              creator: existing?.creator || "系统管理员",
+              createdAt: existing?.createdAt || new Date().toLocaleString("zh-CN", { hour12: false }).replace(/\//g, "-"),
+              costCenter: valueOf("maintenanceContractCostCenter"),
+              feeType: valueOf("maintenanceContractFeeType"),
+              serviceMode: valueOf("maintenanceContractServiceMode"),
+              warrantyType: document.querySelector('input[name="maintenanceWarrantyType"]:checked')?.value || "原厂承保",
+              contact: valueOf("maintenanceContractContact"),
+              phone: valueOf("maintenanceContractPhone"),
+              advanceValue: valueOf("maintenanceAdvanceValue"),
+              advanceUnit: valueOf("maintenanceAdvanceUnit"),
+              frequencyValue: valueOf("maintenanceFrequencyValue"),
+              frequencyUnit: valueOf("maintenanceFrequencyUnit"),
+              reminderTime: valueOf("maintenanceReminderTime"),
+              reminderPeople: valueOf("maintenanceReminderPeople"),
+              description: valueOf("maintenanceContractDescription")
+            };
+            if (existing) Object.assign(existing, record);
+            else maintenance.contracts.unshift(record);
+            view.mode = "list";
+            view.activeId = "";
+            this.pushToast(existing ? "合同已更新" : "合同已创建", `${record.name} 已保存。`, "success");
+            this.emit();
+          }
+
+          saveMaintenanceRelation() {
+            const maintenance = this.ensureMaintenanceState();
+            const view = this.ensureMaintenanceView(VIEW_IDS.MAINTENANCE_MANAGEMENT);
+            const contractId = String(document.getElementById("maintenanceRelationContract")?.value || "");
+            const contract = maintenance.contracts.find((item) => item.id === contractId);
+            if (!contract) {
+              this.pushToast("请选择关联合同", "维保管理记录必须关联一份维保合同。", "warning");
+              return;
+            }
+            if (!maintenance.draftAssets.length) {
+              this.pushToast("请选择关联资产", "请至少添加一项需要纳入维保的资产。", "warning");
+              return;
+            }
+            const existing = maintenance.relations.find((item) => item.id === view.activeId);
+            const record = {
+              ...(existing || {}),
+              id: existing?.id || ("MM" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + String(maintenance.relations.length + 1).padStart(5, "0")),
+              contractId,
+              assetIds: [...maintenance.draftAssets],
+              creator: existing?.creator || "系统管理员",
+              createdAt: existing?.createdAt || new Date().toLocaleString("zh-CN", { hour12: false }).replace(/\//g, "-"),
+              status: contract.status
+            };
+            if (existing) Object.assign(existing, record);
+            else maintenance.relations.unshift(record);
+            view.mode = "list";
+            view.activeId = "";
+            maintenance.draftAssets = [];
+            this.pushToast(existing ? "维保记录已更新" : "维保记录已创建", `已关联 ${record.assetIds.length} 项资产。`, "success");
+            this.emit();
+          }
+
+          openMaintenanceAssetDialog() {
+            const maintenance = this.ensureMaintenanceState();
+            maintenance.assetDialog = { keyword: "", selectedIds: [...maintenance.draftAssets] };
+            this.emit();
+          }
+
+          setMaintenanceAssetDialogKeyword(keyword) {
+            const dialog = this.ensureMaintenanceState().assetDialog;
+            if (!dialog) return;
+            dialog.keyword = String(keyword || "");
+            this.emit();
+          }
+
+          toggleMaintenanceAssetDialogAsset(id) {
+            const dialog = this.ensureMaintenanceState().assetDialog;
+            if (!dialog) return;
+            const selected = new Set(dialog.selectedIds || []);
+            if (selected.has(id)) selected.delete(id);
+            else selected.add(id);
+            dialog.selectedIds = [...selected];
+            this.emit();
+          }
+
+          confirmMaintenanceAssets() {
+            const maintenance = this.ensureMaintenanceState();
+            if (!maintenance.assetDialog) return;
+            maintenance.draftAssets = [...(maintenance.assetDialog.selectedIds || [])];
+            maintenance.assetDialog = null;
+            this.emit();
+          }
+
+          closeMaintenanceAssetDialog() {
+            const maintenance = this.ensureMaintenanceState();
+            if (!maintenance.assetDialog) return;
+            maintenance.assetDialog = null;
+            this.emit();
+          }
+
+          removeMaintenanceDraftAsset(id) {
+            const maintenance = this.ensureMaintenanceState();
+            maintenance.draftAssets = maintenance.draftAssets.filter((item) => item !== id);
+            this.emit();
+          }
+
+          clearMaintenanceDraftAssets() {
+            const maintenance = this.ensureMaintenanceState();
+            if (!maintenance.draftAssets.length) return;
+            maintenance.draftAssets = [];
+            this.emit();
+          }
+
+          handleMaintenanceTool(label) {
+            const title = String(label || "操作");
+            const message = title === "导出" ? "已按当前筛选条件生成维保数据导出任务。" : title === "打印" ? "已打开维保信息打印预览。" : `${title}条件入口已打开。`;
+            this.pushToast(title, message, "info");
+          }
+
           configureBinding() {
             this.pushToast("字段绑定", "已打开配置字段绑定入口，可继续扩展为真实字段映射。", "info");
           }
@@ -28766,7 +30012,7 @@
 
           decorateWorkflowListColumnResizers(state) {
             const viewId = state.ui.currentView;
-            const tables = this.nodes.content.querySelectorAll(".inbound-list-page .inbound-order-table");
+            const tables = this.nodes.content.querySelectorAll(".inbound-list-page .inbound-order-table, .maintenance-list-page .maintenance-table");
             tables.forEach((table, tableIndex) => {
               if (!(table instanceof HTMLTableElement) || table.dataset.resizableReady === "true") return;
               const headers = Array.from(table.querySelectorAll(":scope > thead > tr > th"));
@@ -29249,6 +30495,10 @@
                 return this.renderToolWorkflow(state, state.ui.currentView);
               case VIEW_IDS.TOOL_HISTORY:
                 return this.renderToolHistory(state);
+              case VIEW_IDS.MAINTENANCE_CONTRACT:
+              case VIEW_IDS.MAINTENANCE_MANAGEMENT:
+              case VIEW_IDS.MAINTENANCE_EXPIRED:
+                return this.renderMaintenancePage(state, state.ui.currentView);
               case VIEW_IDS.IT_FACILITY:
               case VIEW_IDS.PENDING_IT_ASSET:
               case VIEW_IDS.STATION_FACILITY:
@@ -29375,7 +30625,7 @@
                   </div>
                   <div class="version-req-item-actions">
                     <button class="version-req-item-action is-link" type="button" data-action="open-requirement-user-story" data-id="${escapeHtml(item.id)}">用户故事</button>
-                    <button class="version-req-item-action is-primary" type="button" data-action="open-version-req-target" data-id="${escapeHtml(item.id)}">定位功能</button>
+                    <button class="version-req-item-action is-primary" type="button" data-action="open-version-req-target" data-id="${escapeHtml(item.id)}">${item.showDescriptionDialog ? "查看说明" : "定位功能"}</button>
                   </div>
                 </div>
               </article>
@@ -29611,7 +30861,10 @@
 
           renderItInboundWorkflow(state) {
             const inbound = state.ui.itInbound || { tab: "all", mode: "list", activeId: "", readonly: false, orders: [] };
-            if (inbound.mode === "form") return this.renderItInboundForm();
+            if (inbound.mode === "form") {
+              const formPage = this.renderItInboundForm();
+              return inbound.returnContext ? formPage.replace("inbound-form-page", "inbound-form-page is-global-flow-route") : formPage;
+            }
             if (inbound.mode === "process") return this.renderItInboundProcess(inbound);
             return this.renderItInboundList(inbound);
           }
@@ -29687,7 +30940,7 @@
               "上架": [],
               "变动": baseColumnKeys,
               "下架": baseColumnKeys,
-              "编辑": ["assetStatus", "assetSummary", "assetLocation", "assetCategory"],
+              "编辑": ["assetStatus", "assetSummary", "assetLocation", "assetCategory", "uHeight"],
               "迁出": allColumnKeys,
               "部署": baseColumnKeys,
               "场地编辑": ["assetCategory", "assetLocation"],
@@ -29788,7 +31041,10 @@
             const workflow = this.store.ensureItAssetWorkflowState(viewId);
             const config = this.store.getItAssetWorkflowConfig(viewId);
             if (!workflow || !config) return "";
-            if (workflow.mode === "form") return this.renderItAssetWorkflowForm(viewId, workflow, config);
+            if (workflow.mode === "form") {
+              const formPage = this.renderItAssetWorkflowForm(viewId, workflow, config);
+              return workflow.returnContext ? formPage.replace("inbound-form-page", "inbound-form-page is-global-flow-route") : formPage;
+            }
             if (workflow.mode === "process") return this.renderItAssetWorkflowProcess(viewId, workflow, config);
             return this.renderItAssetWorkflowList(viewId, workflow, config);
           }
@@ -30794,6 +32050,7 @@
                   </div>
                 </div>
                 <div class="cabinet-contains-main">
+                  <div class="cabinet-contains-top">
                   <div class="cabinet-capacity-summary" data-demand-version="v1.3" data-demand-req-id="V3R5-4931" data-demand-title="设备预占机柜展示" data-demand-text="需求来源：V3R5-4931。||交互目的：在机柜详情中识别正式上架设备和预占U位，避免机柜容量被重复分配。||容量口径：总U位=已使用U位+预占U位+剩余可分配U位；预占U位占用可分配容量，但不计入正式设备数和正式利用率。||列表规则：右侧包含设备列表只展示正式上架设备，不展示预占中的设备；列表字段为资产编号、名称、资产分类、U位范围和操作。||机柜图规则：正式上架使用深色设备块，预占使用青色虚线设备块；鼠标悬停或键盘聚焦设备时展示统一的信息卡，鼠标可移入信息卡且卡片保持显示；预占信息卡展示资产编号、资产名称、U位范围和来源流程单，流程单号支持点击进入对应流程单。||状态流转：草稿不占用U位；流程提交后生成预占；流程驳回、取消或超期释放预占；执行完成后预占转为正式上架。||异常判断：预占与正式占用冲突、U位超出机柜高度、机柜失效或流程单状态异常时，应阻止提交并明确提示。">
                     <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">机柜总U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.totalU))}U</strong></div>
                     <div class="cabinet-capacity-item"><span class="cabinet-capacity-label">已使用U位</span><strong class="cabinet-capacity-value">${escapeHtml(String(summary.usedU))}U</strong></div>
@@ -30852,7 +32109,8 @@
                         </tbody>
                       </table>
                     </div>
-                  </section>
+                   </section>
+                  </div>
                   <section class="cabinet-section cabinet-u-panel">
                     <div class="cabinet-section-head">
                       <div class="cabinet-section-title">${escapeHtml(cabinet.uTitle)}</div>
@@ -31235,13 +32493,139 @@
             `;
           }
 
+          renderMaintenancePage(state, viewId) {
+            const maintenance = state.ui.maintenance || { views: {}, contracts: [], relations: [], draftAssets: [], assetDialog: null };
+            const view = maintenance.views?.[viewId] || { tab: "all", keyword: "", mode: "list", activeId: "", readonly: false };
+            if (viewId === VIEW_IDS.MAINTENANCE_CONTRACT && view.mode === "form") {
+              return this.renderMaintenanceContractForm(maintenance, view);
+            }
+            if (viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT && view.mode === "form") {
+              return this.renderMaintenanceManagementForm(maintenance, view);
+            }
+            return this.renderMaintenanceList(maintenance, viewId, view);
+          }
+
+          renderMaintenanceList(maintenance, viewId, view) {
+            const tabs = [["all", "全部"], ["mine", "我创建的"], ["draft", "草稿"]];
+            const keyword = String(view.keyword || "").trim().toLowerCase();
+            const title = viewId === VIEW_IDS.MAINTENANCE_CONTRACT ? "合同列表" : viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT ? "关联列表" : "过保资产列表";
+            let rows = [];
+            if (viewId === VIEW_IDS.MAINTENANCE_CONTRACT) {
+              rows = [...maintenance.contracts];
+              if (view.tab === "mine") rows = rows.filter((item) => item.creator === "系统管理员");
+              if (view.tab === "draft") rows = [];
+              if (keyword) rows = rows.filter((item) => [item.id, item.contractNo, item.name, item.vendor, item.type, item.status].some((value) => String(value || "").toLowerCase().includes(keyword)));
+            } else if (viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT) {
+              rows = maintenance.relations.map((item) => ({ ...item, contract: maintenance.contracts.find((contract) => contract.id === item.contractId) }));
+              if (view.tab === "mine") rows = rows.filter((item) => item.creator === "系统管理员");
+              if (view.tab === "draft") rows = [];
+              if (keyword) rows = rows.filter((item) => [item.id, item.contract?.contractNo, item.contract?.name, item.contract?.vendor, item.status].some((value) => String(value || "").toLowerCase().includes(keyword)));
+            } else {
+              rows = maintenance.relations.flatMap((relation) => {
+                const contract = maintenance.contracts.find((item) => item.id === relation.contractId);
+                if (!contract || contract.status !== "过保") return [];
+                return relation.assetIds.map((assetId) => ({ relation, contract, asset: MAINTENANCE_ASSET_POOL.find((item) => item.id === assetId) })).filter((item) => item.asset);
+              });
+              if (view.tab === "mine") rows = rows.filter((item) => item.relation.creator === "系统管理员");
+              if (view.tab === "draft") rows = [];
+              if (keyword) rows = rows.filter((item) => [item.asset.assetCode, item.asset.name, item.contract.vendor, item.contract.contact].some((value) => String(value || "").toLowerCase().includes(keyword)));
+            }
+            const searchPlaceholder = viewId === VIEW_IDS.MAINTENANCE_EXPIRED ? "请输入资产编号/资产名称" : "请输入单据号/合同名称";
+            return `
+              <div class="page-surface inbound-list-page maintenance-list-page"${viewId === VIEW_IDS.MAINTENANCE_CONTRACT ? ' data-demand-version="v1.5" data-demand-req-id="V3R5-4660" data-demand-title="维保信息模块" data-demand-text="需求来源：V3R5-4660。\n|功能范围：提供维保合同、维保管理和过保统计三个入口，支持合同建档、资产关联和过保资产查询。\n|联动规则：维保管理关联合同及资产后，过保统计根据合同状态自动汇总关联资产。"' : ""}>
+                <div class="inbound-list-head"><h1>${title}</h1></div>
+                <div class="inbound-tabs" role="tablist">
+                  ${tabs.map(([id, label]) => `<button type="button" class="${view.tab === id ? "is-active" : ""}" data-action="set-maintenance-tab" data-view="${viewId}" data-tab="${id}">${label}</button>`).join("")}
+                </div>
+                <div class="inbound-toolbar">
+                  <label class="inbound-search"><input id="maintenanceListSearch" type="search" value="${escapeHtml(view.keyword || "")}" placeholder="${searchPlaceholder}" /></label>
+                  <button class="inbound-text-action" type="button" data-action="search-maintenance-list" data-view="${viewId}">查询</button>
+                  <button class="inbound-text-action" type="button" data-action="maintenance-tool" data-label="高级查询">高级查询</button>
+                  <button class="inbound-text-action" type="button" data-action="maintenance-tool" data-label="快捷查询">快捷查询</button>
+                  <span style="flex:1 1 auto;"></span>
+                  <div class="inbound-toolbar-actions">
+                    ${viewId !== VIEW_IDS.MAINTENANCE_EXPIRED ? `<button class="btn btn-primary" type="button" data-action="open-maintenance-form" data-view="${viewId}">新建</button>` : ""}
+                    <button class="btn" type="button" data-action="maintenance-tool" data-label="导出">导出</button>
+                  </div>
+                </div>
+                <div class="inbound-order-table-wrap">
+                  ${viewId === VIEW_IDS.MAINTENANCE_CONTRACT ? this.renderMaintenanceContractTable(rows) : viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT ? this.renderMaintenanceRelationTable(rows) : this.renderMaintenanceExpiredTable(rows)}
+                </div>
+                <div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div>
+              </div>
+            `;
+          }
+
+          renderMaintenanceContractTable(rows) {
+            return `<table class="maintenance-table"><thead><tr><th style="width:46px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:170px;">单据号</th><th style="width:165px;">合同编号</th><th>合同名称</th><th style="width:150px;">维保厂商</th><th style="width:115px;">维保类型</th><th style="width:125px;">维保起始时间</th><th style="width:125px;">维保结束时间</th><th style="width:90px;">维保状态</th><th style="width:160px;">操作</th></tr></thead><tbody>${rows.length ? rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.id)}" /></td><td>${index + 1}</td><td title="${escapeHtml(item.id)}">${escapeHtml(item.id)}</td><td title="${escapeHtml(item.contractNo)}">${escapeHtml(item.contractNo)}</td><td title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td><td title="${escapeHtml(item.vendor)}">${escapeHtml(item.vendor)}</td><td>${escapeHtml(item.type)}</td><td>${escapeHtml(item.startDate)}</td><td>${escapeHtml(item.endDate)}</td><td><span class="maintenance-status ${item.status === "在保" ? "is-active" : "is-expired"}">${escapeHtml(item.status)}</span></td><td><span class="maintenance-actions"><button class="maintenance-link" type="button" data-action="open-maintenance-form" data-view="${VIEW_IDS.MAINTENANCE_CONTRACT}" data-id="${escapeHtml(item.id)}" data-readonly="true">查看</button><button class="maintenance-link" type="button" data-action="open-maintenance-form" data-view="${VIEW_IDS.MAINTENANCE_CONTRACT}" data-id="${escapeHtml(item.id)}">编辑</button><button class="maintenance-link" type="button" data-action="maintenance-tool" data-label="打印">打印</button></span></td></tr>`).join("") : `<tr><td colspan="11" style="height:180px;text-align:center;color:#91a3b5;">暂无维保合同</td></tr>`}</tbody></table>`;
+          }
+
+          renderMaintenanceRelationTable(rows) {
+            return `<table class="maintenance-table"><thead><tr><th style="width:46px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:175px;">单据号</th><th style="width:170px;">关联合同</th><th>合同名称</th><th style="width:110px;">关联资产数量</th><th style="width:155px;">维保厂商</th><th style="width:120px;">维保类型</th><th style="width:90px;">维保状态</th><th style="width:160px;">操作</th></tr></thead><tbody>${rows.length ? rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.id)}</td><td title="${escapeHtml(item.contract?.contractNo || "-")}">${escapeHtml(item.contract?.contractNo || "-")}</td><td title="${escapeHtml(item.contract?.name || "-")}">${escapeHtml(item.contract?.name || "-")}</td><td>${item.assetIds.length}</td><td title="${escapeHtml(item.contract?.vendor || "-")}">${escapeHtml(item.contract?.vendor || "-")}</td><td>${escapeHtml(item.contract?.type || "-")}</td><td><span class="maintenance-status ${item.status === "在保" ? "is-active" : "is-expired"}">${escapeHtml(item.status)}</span></td><td><span class="maintenance-actions"><button class="maintenance-link" type="button" data-action="open-maintenance-form" data-view="${VIEW_IDS.MAINTENANCE_MANAGEMENT}" data-id="${escapeHtml(item.id)}" data-readonly="true">查看</button><button class="maintenance-link" type="button" data-action="open-maintenance-form" data-view="${VIEW_IDS.MAINTENANCE_MANAGEMENT}" data-id="${escapeHtml(item.id)}">编辑</button><button class="maintenance-link" type="button" data-action="maintenance-tool" data-label="打印">打印</button></span></td></tr>`).join("") : `<tr><td colspan="10" style="height:180px;text-align:center;color:#91a3b5;">暂无维保关联记录</td></tr>`}</tbody></table>`;
+          }
+
+          renderMaintenanceExpiredTable(rows) {
+            return `<table class="maintenance-table"><thead><tr><th style="width:46px;"><input type="checkbox" aria-label="全选" /></th><th style="width:58px;">序号</th><th style="width:190px;">资产编号</th><th>资产名称</th><th style="width:140px;">维保起始时间</th><th style="width:140px;">维保结束时间</th><th style="width:210px;">维保厂商</th><th style="width:130px;">维保联系人</th><th style="width:120px;">联系电话</th></tr></thead><tbody>${rows.length ? rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.asset.assetCode)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.asset.assetCode)}</td><td title="${escapeHtml(item.asset.name)}">${escapeHtml(item.asset.name)}</td><td>${escapeHtml(item.contract.startDate)}</td><td>${escapeHtml(item.contract.endDate)}</td><td title="${escapeHtml(item.contract.vendor)}">${escapeHtml(item.contract.vendor)}</td><td>${escapeHtml(item.contract.contact)}</td><td>${escapeHtml(item.contract.phone)}</td></tr>`).join("") : `<tr><td colspan="9" style="height:180px;text-align:center;color:#91a3b5;">暂无过保资产</td></tr>`}</tbody></table>`;
+          }
+
+          renderMaintenanceContractForm(maintenance, view) {
+            const record = maintenance.contracts.find((item) => item.id === view.activeId) || {
+              id: "自动生成", creator: "系统管理员", createdAt: new Date().toLocaleString("zh-CN", { hour12: false }).replace(/\//g, "-"), status: "在保", name: "", contractNo: "", startDate: "", endDate: "", costCenter: "集中监控部", feeType: "资本性", type: "年度服务", serviceMode: "7×24小时上门服务", vendor: "", warrantyType: "原厂承保", contact: "", phone: "", advanceValue: "1", advanceUnit: "周", frequencyValue: "1", frequencyUnit: "天", reminderTime: "05:00", reminderPeople: "系统管理员", description: ""
+            };
+            const readonly = Boolean(view.readonly);
+            const lock = readonly ? " disabled" : "";
+            const selectOptions = (values, current) => values.map((value) => `<option value="${escapeHtml(value)}"${value === current ? " selected" : ""}>${escapeHtml(value)}</option>`).join("");
+            return `<div class="maintenance-form-page"><section class="maintenance-form-card"><header class="maintenance-form-head"><button class="maintenance-back" type="button" data-action="back-maintenance-list" data-view="${VIEW_IDS.MAINTENANCE_CONTRACT}">‹ 返回列表</button><h2>${readonly ? "查看维保合同" : view.activeId ? "编辑维保合同" : "新建维保合同"}</h2><span></span></header><div class="maintenance-form-body"><div class="maintenance-form-grid">
+              <div class="maintenance-field"><label>单据号</label><input class="maintenance-control" value="${escapeHtml(record.id)}" disabled /></div><div class="maintenance-field"><label>创建人</label><input class="maintenance-control" value="${escapeHtml(record.creator)}" disabled /></div>
+              <div class="maintenance-field"><label>创建时间</label><input class="maintenance-control" value="${escapeHtml(record.createdAt)}" disabled /></div><div class="maintenance-field"><label>维保状态</label><select id="maintenanceContractStatus" class="maintenance-control"${lock}>${selectOptions(["在保", "过保"], record.status)}</select></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>合同名称</label><input id="maintenanceContractName" class="maintenance-control" value="${escapeHtml(record.name)}"${lock} /></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>合同编号</label><input id="maintenanceContractNo" class="maintenance-control" value="${escapeHtml(record.contractNo)}"${lock} /></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>维保起始时间</label><input id="maintenanceContractStart" class="maintenance-control" type="date" value="${escapeHtml(record.startDate)}"${lock} /></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>维保结束时间</label><input id="maintenanceContractEnd" class="maintenance-control" type="date" value="${escapeHtml(record.endDate)}"${lock} /></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>成本中心</label><select id="maintenanceContractCostCenter" class="maintenance-control"${lock}>${selectOptions(["集中监控部", "网络运维组", "基础设施运维部", "动力运维组"], record.costCenter)}</select></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>费用类型</label><select id="maintenanceContractFeeType" class="maintenance-control"${lock}>${selectOptions(["资本性", "费用性"], record.feeType)}</select></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>维保类型</label><select id="maintenanceContractType" class="maintenance-control"${lock}>${selectOptions(["年度服务", "综合", "专项服务"], record.type)}</select></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>维保服务方式</label><select id="maintenanceContractServiceMode" class="maintenance-control"${lock}>${selectOptions(["7×24小时上门服务", "5×8小时上门服务", "驻场服务", "按需上门服务"], record.serviceMode)}</select></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>维保厂商</label><input id="maintenanceContractVendor" class="maintenance-control" value="${escapeHtml(record.vendor)}"${lock} /></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>承保类型</label><div class="maintenance-radio-row"><label><input type="radio" name="maintenanceWarrantyType" value="原厂承保"${record.warrantyType === "原厂承保" ? " checked" : ""}${lock} /> 原厂承保</label><label><input type="radio" name="maintenanceWarrantyType" value="第三方承保"${record.warrantyType === "第三方承保" ? " checked" : ""}${lock} /> 第三方承保</label></div></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>维保联系人</label><input id="maintenanceContractContact" class="maintenance-control" value="${escapeHtml(record.contact)}"${lock} /></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>维保联系方式</label><input id="maintenanceContractPhone" class="maintenance-control" value="${escapeHtml(record.phone)}"${lock} /></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>提前时间</label><div class="maintenance-inline-fields"><span>到期前</span><input id="maintenanceAdvanceValue" class="maintenance-control" type="number" min="1" value="${escapeHtml(record.advanceValue)}"${lock} /><select id="maintenanceAdvanceUnit" class="maintenance-control"${lock}>${selectOptions(["天", "周", "月"], record.advanceUnit)}</select></div></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>提醒频次</label><div class="maintenance-inline-fields"><span>每</span><input id="maintenanceFrequencyValue" class="maintenance-control" type="number" min="1" value="${escapeHtml(record.frequencyValue)}"${lock} /><select id="maintenanceFrequencyUnit" class="maintenance-control"${lock}>${selectOptions(["天", "周"], record.frequencyUnit)}</select></div></div>
+              <div class="maintenance-field"><label><span class="maintenance-required">*</span>提醒时间</label><input id="maintenanceReminderTime" class="maintenance-control" type="time" value="${escapeHtml(record.reminderTime)}"${lock} /></div><div class="maintenance-field"><label><span class="maintenance-required">*</span>过保提醒人</label><input id="maintenanceReminderPeople" class="maintenance-control" value="${escapeHtml(record.reminderPeople)}"${lock} /></div>
+              <div class="maintenance-field span-2"><label>描述</label><textarea id="maintenanceContractDescription" class="maintenance-control"${lock}>${escapeHtml(record.description)}</textarea></div>
+            </div></div><footer class="maintenance-form-footer"><button class="btn" type="button" data-action="back-maintenance-list" data-view="${VIEW_IDS.MAINTENANCE_CONTRACT}">${readonly ? "关闭" : "取消"}</button>${readonly ? "" : `<button class="btn btn-primary" type="button" data-action="save-maintenance-contract">提交</button>`}</footer></section></div>`;
+          }
+
+          renderMaintenanceManagementForm(maintenance, view) {
+            const relation = maintenance.relations.find((item) => item.id === view.activeId);
+            const selectedContractId = relation?.contractId || maintenance.contracts[0]?.id || "";
+            const contract = maintenance.contracts.find((item) => item.id === selectedContractId);
+            const assets = (maintenance.draftAssets || []).map((id) => MAINTENANCE_ASSET_POOL.find((item) => item.id === id)).filter(Boolean);
+            const readonly = Boolean(view.readonly);
+            const lock = readonly ? " disabled" : "";
+            return `<div class="maintenance-form-page"><section class="maintenance-form-card"><header class="maintenance-form-head"><button class="maintenance-back" type="button" data-action="back-maintenance-list" data-view="${VIEW_IDS.MAINTENANCE_MANAGEMENT}">‹ 返回列表</button><h2>${readonly ? "查看维保管理" : view.activeId ? "编辑维保管理" : "新建维保管理"}</h2><span></span></header><div class="maintenance-form-body"><div class="maintenance-form-grid is-three"><div class="maintenance-field"><label>单据号</label><input class="maintenance-control" value="${escapeHtml(relation?.id || "自动生成")}" disabled /></div><div class="maintenance-field"><label>创建人</label><input class="maintenance-control" value="${escapeHtml(relation?.creator || "系统管理员")}" disabled /></div><div class="maintenance-field"><label>创建时间</label><input class="maintenance-control" value="${escapeHtml(relation?.createdAt || new Date().toLocaleString("zh-CN", { hour12: false }).replace(/\//g, "-"))}" disabled /></div></div><div class="maintenance-form-grid" style="margin-top:18px;"><div class="maintenance-field"><label><span class="maintenance-required">*</span>关联合同</label><select id="maintenanceRelationContract" data-role="maintenance-relation-contract" class="maintenance-control"${lock}>${maintenance.contracts.map((item) => `<option value="${escapeHtml(item.id)}"${item.id === selectedContractId ? " selected" : ""}>${escapeHtml(item.contractNo)}｜${escapeHtml(item.name)}</option>`).join("")}</select></div><div class="maintenance-field"><label>合同名称</label><input id="maintenanceRelationContractName" class="maintenance-control" value="${escapeHtml(contract?.name || "")}" disabled /></div></div><section class="maintenance-form-section"><div class="maintenance-section-head"><h3><span class="maintenance-required">*</span>关联资产</h3><span style="flex:1 1 auto;"></span>${readonly ? "" : `<button class="btn" type="button" data-action="open-maintenance-assets">添加设备</button><button class="btn" style="color:#f53f3f;border-color:#f53f3f;" type="button" data-action="clear-maintenance-assets">全部删除</button>`}</div><div class="maintenance-table-wrap" style="min-height:280px;border:1px solid #e5eaf0;"><table class="maintenance-table" style="min-width:980px;"><thead><tr><th style="width:56px;">序号</th><th style="width:180px;">资产编号</th><th>资产名称</th><th style="width:190px;">序列号</th><th style="width:220px;">资产分类</th><th style="width:90px;">资产状态</th><th style="width:250px;">资产位置</th>${readonly ? "" : `<th style="width:80px;">操作</th>`}</tr></thead><tbody>${assets.length ? assets.map((asset, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(asset.assetCode)}</td><td>${escapeHtml(asset.name)}</td><td>${escapeHtml(asset.serialCode)}</td><td title="${escapeHtml(asset.category)}">${escapeHtml(asset.category)}</td><td>${escapeHtml(asset.status)}</td><td title="${escapeHtml(asset.location)}">${escapeHtml(asset.location)}</td>${readonly ? "" : `<td><button class="maintenance-link" type="button" data-action="remove-maintenance-asset" data-id="${escapeHtml(asset.id)}">删除</button></td>`}</tr>`).join("") : `<tr><td colspan="${readonly ? 7 : 8}" style="height:200px;text-align:center;color:#91a3b5;">暂无关联资产</td></tr>`}</tbody></table></div><div class="maintenance-pager"><span>共 ${assets.length} 条</span><span>100条/页⌄</span><span>‹　1　›</span></div></section></div><footer class="maintenance-form-footer"><button class="btn" type="button" data-action="back-maintenance-list" data-view="${VIEW_IDS.MAINTENANCE_MANAGEMENT}">${readonly ? "关闭" : "取消"}</button>${readonly ? "" : `<button class="btn btn-primary" type="button" data-action="save-maintenance-relation">提交</button>`}</footer></section></div>`;
+          }
+
+          renderMaintenanceAssetDialog(dialog) {
+            const keyword = String(dialog.keyword || "").trim().toLowerCase();
+            const selected = new Set(dialog.selectedIds || []);
+            const rows = keyword ? MAINTENANCE_ASSET_POOL.filter((item) => [item.assetCode, item.name, item.serialCode, item.category, item.location].some((value) => String(value || "").toLowerCase().includes(keyword))) : [...MAINTENANCE_ASSET_POOL];
+            return `<div class="maintenance-modal-mask"><section class="maintenance-asset-dialog" role="dialog" aria-modal="true" aria-labelledby="maintenanceAssetDialogTitle"><header class="maintenance-dialog-head"><h3 id="maintenanceAssetDialogTitle">关联资产</h3><button class="maintenance-dialog-close" type="button" data-action="close-maintenance-assets" aria-label="关闭">×</button></header><div class="maintenance-dialog-body"><div class="maintenance-toolbar"><label class="maintenance-search"><input id="maintenanceAssetSearch" type="search" value="${escapeHtml(dialog.keyword || "")}" placeholder="资产编号/资产名称" /></label><button class="btn" type="button" data-action="search-maintenance-assets">查询</button><span style="color:#65788c;">已选择 ${selected.size} 项</span></div><div class="maintenance-table-wrap"><table class="maintenance-table" style="min-width:900px;"><thead><tr><th style="width:54px;">选择</th><th style="width:180px;">资产编号</th><th>资产名称</th><th style="width:190px;">序列号</th><th style="width:210px;">资产分类</th><th style="width:90px;">资产状态</th><th style="width:240px;">资产位置</th></tr></thead><tbody>${rows.length ? rows.map((asset) => `<tr><td><input type="checkbox"${selected.has(asset.id) ? " checked" : ""} data-action="toggle-maintenance-asset" data-id="${escapeHtml(asset.id)}" aria-label="选择${escapeHtml(asset.name)}" /></td><td>${escapeHtml(asset.assetCode)}</td><td>${escapeHtml(asset.name)}</td><td>${escapeHtml(asset.serialCode)}</td><td title="${escapeHtml(asset.category)}">${escapeHtml(asset.category)}</td><td>${escapeHtml(asset.status)}</td><td title="${escapeHtml(asset.location)}">${escapeHtml(asset.location)}</td></tr>`).join("") : `<tr><td colspan="7" style="height:220px;text-align:center;color:#91a3b5;">暂无匹配资产</td></tr>`}</tbody></table></div><div class="maintenance-pager"><span>共 ${rows.length} 条</span><span>10条/页⌄</span><span>‹　1　›</span></div></div><footer class="maintenance-dialog-footer"><button class="btn" type="button" data-action="close-maintenance-assets">取消</button><button class="btn btn-primary" type="button" data-action="confirm-maintenance-assets">确定</button></footer></section></div>`;
+          }
+
           renderListPage(viewId, state) {
             const meta = LIST_PAGE_META[viewId];
             const viewMode = this.store.getListViewMode(viewId);
             const baseFilteredRows = this.store.getFilteredRows(viewId);
-            const filteredRows = viewMode === "space"
+            let filteredRows = viewMode === "space"
               ? this.store.filterRowsByActiveSpaceNode(viewId, baseFilteredRows)
               : baseFilteredRows;
+            if (
+              viewId === VIEW_IDS.CABINET
+              && viewMode === "space"
+              && this.store.getCabinetSpaceMetricMode() === "status"
+            ) {
+              const powerStatusFilter = this.store.getCabinetPowerStatusFilter();
+              if (powerStatusFilter !== "all") {
+                filteredRows = filteredRows.filter((row, index) => (
+                  this.store.getCabinetPowerStats(row, index).powerStatus === powerStatusFilter
+                ));
+              }
+            }
             const pageMeta = this.store.getListPageMeta(viewId, filteredRows);
             const rows = this.store.getCurrentPageRows(viewId, filteredRows);
             const renderHeaderTools = meta.showTools && viewId !== VIEW_IDS.SPARE_PART;
@@ -31348,25 +32732,66 @@
             `;
           }
 
+          renderCabinetPowerRack(power) {
+            const slots = 10;
+            const rate = Number.isFinite(power.usageRate) ? Math.min(100, Math.max(0, power.usageRate)) : null;
+            const usedSlots = rate === null || rate <= 0 ? 0 : Math.max(1, Math.round((rate / 100) * slots));
+            const tone = rate !== null && rate >= 90 ? "is-danger" : rate !== null && rate >= 75 ? "is-warning" : "";
+            return `
+              <div class="cabinet-mini-rack is-power ${tone}" aria-label="功率使用率${rate === null ? "暂无数据" : rate + "%"}">
+                ${Array.from({ length: slots }, (_, index) => `
+                  <span class="cabinet-mini-rack-unit ${index >= slots - usedSlots ? "is-used" : ""}"></span>
+                `).join("")}
+              </div>
+            `;
+          }
+
+          renderCabinetStatusRack(power) {
+            return `
+              <div class="cabinet-mini-rack is-status ${escapeHtml(power.statusTone)}" aria-label="上下电状态${escapeHtml(power.powerStatus)}">
+                ${Array.from({ length: 10 }, () => '<span class="cabinet-mini-rack-unit"></span>').join("")}
+              </div>
+              <div class="cabinet-status-line">
+                <span class="cabinet-power-status-tag ${escapeHtml(power.statusTone)}">${escapeHtml(power.powerStatus)}</span>
+                ${power.inconsistent ? `<span class="cabinet-power-warning" role="img" tabindex="0" aria-label="状态与实时功率数据不一致，可通过编辑维护上下电状态标识" data-tooltip="系统检测到状态与实时采集功率不一致，可通过编辑维护上下电状态标识"></span>` : ""}
+              </div>
+            `;
+          }
+
           renderCabinetSpaceView(rows, filteredRows, pageMeta) {
             const meta = LIST_PAGE_META[VIEW_IDS.CABINET];
             const displayMode = this.store.getCabinetSpaceDisplayMode();
+            const metricMode = this.store.getCabinetSpaceMetricMode();
+            const powerStatusFilter = this.store.getCabinetPowerStatusFilter();
             const statRows = filteredRows.length ? filteredRows : rows;
             const stats = statRows.reduce((acc, row, index) => {
               const usage = this.getCabinetUsage(row, index);
+              const power = this.store.getCabinetPowerStats(row, index);
               acc.cabinets += 1;
               acc.devices += usage.deviceCount;
               acc.usedU += usage.usedU;
               acc.totalU += usage.height;
+              if (Number.isFinite(power.realtimeTotalPower)) acc.realtimeTotalPower += power.realtimeTotalPower;
+              if (Number.isFinite(power.cabinetRatedPower)) acc.ratedPower += power.cabinetRatedPower;
+               if (power.powerStatus === "上电") acc.powerOn += 1;
+               if (power.powerStatus === "下电") acc.powerOff += 1;
+               if (power.powerStatus === "待机") acc.standby += 1;
+               if (power.powerStatus === "未知") acc.unknown += 1;
+               if (power.powerStatus === "未上电") acc.unpowered += 1;
+               if (power.powerStatus === "A路上电") acc.phaseA += 1;
+               if (power.powerStatus === "B路上电") acc.phaseB += 1;
+               if (power.powerStatus === "双路上电") acc.dualPower += 1;
               return acc;
-            }, { cabinets: 0, devices: 0, usedU: 0, totalU: 0 });
+             }, { cabinets: 0, devices: 0, usedU: 0, totalU: 0, realtimeTotalPower: 0, ratedPower: 0, powerOn: 0, powerOff: 0, standby: 0, unknown: 0, unpowered: 0, phaseA: 0, phaseB: 0, dualPower: 0 });
             const usageRate = stats.totalU > 0 ? Math.round((stats.usedU / stats.totalU) * 100) : 0;
+            const powerUsageRate = stats.ratedPower > 0 ? Math.round((stats.realtimeTotalPower / stats.ratedPower) * 100) : null;
             const cardRows = rows.length ? rows : statRows;
             const selectedIds = this.store.getSelectedRowIds(VIEW_IDS.CABINET);
             const allCardsSelected = cardRows.length > 0 && cardRows.every((row) => selectedIds.includes(row.id));
             return `
               <div class="cabinet-space-panel" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="机柜空间视图展示" data-demand-text="需求来源：V3R5-4419。||交互目的：在空间树限定的范围内，通过卡片或列表两种方式查看机柜资源。||默认规则：IT设备、场地设施、机柜和备件台账首次进入默认展示空间视图；机柜空间视图默认使用卡片模式。||展示规则：空间视图始终保留左侧空间树和机柜数、设备数、利用率统计；卡片展示突出U位占用和容量，列表展示复用标准台账字段、勾选和操作能力。||滚动规则：顶部统计卡片和卡片/列表切换区域固定在可视区域顶部，底部分页器固定在可视区域底部；鼠标滚动仅作用于中间机柜卡片或列表结果区域。||U位颜色规则：蓝色表示已占用U位比例，灰色表示空闲U位；缩略图将整柜等分为10个示意格，每格代表10%的容量区间，蓝色格数按已用U除以总U换算并四舍五入，从底部向上填充，已用U大于0时至少显示1格。蓝色格数不代表设备数量，也不代表精确物理U位；精确值以卡片的已用U/总U和百分比为准，具体位置进入机柜详情查看。||切换规则：卡片/列表切换只在空间视图中出现，切换后保留当前空间节点、查询条件、分页与已选数据；进入详情再返回时恢复离开前的展示方式。||数据范围：统计卡片、机柜卡片和空间列表均按当前空间节点及查询条件计算。||异常判断：当前空间无机柜时展示空态；机柜U高、设备数或位置缺失时用“-”兜底，不影响查看入口。">
-                <div class="cabinet-space-stats">
+                <div class="cabinet-space-stats ${metricMode === "status" ? "is-status-mode" : ""}" data-demand-version="v1.5" data-demand-req-id="V3R5-6171" data-demand-title="机柜功率与上下电汇总统计" data-demand-text="需求来源：V3R5-6171。||交互目的：随当前指标模式展示机柜U位、功率或上下电状态的汇总结果。||功率规则：实时总功率取监控采集值，额定功率取人工维护值，功率利用率=实时总功率÷额定功率×100%。||状态规则：上下电统计使用资产基础配置中当前选定的数据来源；采集测点来源统计未上电、A路上电、B路上电、双路上电，属性来源统计上电、下电、待机。||数据范围：汇总结果随空间节点、查询条件和状态筛选同步更新。||异常判断：实时功率、额定功率或状态缺失时使用明确的缺失口径，不将缺失数据计入正常状态。">
+                  ${metricMode === "u" ? `
                   <section class="cabinet-space-stat">
                     <div>
                       <div class="cabinet-space-stat-title">机柜数</div>
@@ -31395,9 +32820,9 @@
                   </section>
                   <section class="cabinet-space-stat">
                     <div>
-                      <div class="cabinet-space-stat-title">利用率</div>
-                      <div class="cabinet-space-stat-value">${usageRate}%</div>
-                      <div class="cabinet-space-stat-sub">已使用：${stats.usedU}U　未使用：${Math.max(0, stats.totalU - stats.usedU)}U</div>
+                      <div class="cabinet-space-stat-title">已使用U位</div>
+                      <div class="cabinet-space-stat-value">${stats.usedU}U</div>
+                      <div class="cabinet-space-stat-sub">U位利用率 ${usageRate}%</div>
                     </div>
                     <div class="cabinet-space-stat-icon" aria-label="利用率">
                       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -31407,6 +32832,30 @@
                       </svg>
                     </div>
                   </section>
+                  <section class="cabinet-space-stat">
+                    <div>
+                      <div class="cabinet-space-stat-title">剩余U位</div>
+                      <div class="cabinet-space-stat-value">${Math.max(0, stats.totalU - stats.usedU)}U</div>
+                      <div class="cabinet-space-stat-sub">总U位 ${stats.totalU}U</div>
+                    </div>
+                    <div class="cabinet-space-stat-icon" aria-label="功率使用率">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M13.5 2.8L6.8 13h5l-1.3 8.2L17.2 11h-5l1.3-8.2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                      </svg>
+                    </div>
+                  </section>
+                  ` : metricMode === "power" ? `
+                  <section class="cabinet-space-stat"><div><div class="cabinet-space-stat-title">机柜数</div><div class="cabinet-space-stat-value">${stats.cabinets}</div><div class="cabinet-space-stat-sub">当前筛选范围</div></div><div class="cabinet-space-stat-icon">柜</div></section>
+                  <section class="cabinet-space-stat is-power"><div><div class="cabinet-space-stat-title">实时总功率合计</div><div class="cabinet-space-stat-value">${escapeHtml(this.store.formatPowerWatts(stats.realtimeTotalPower))}</div><div class="cabinet-space-stat-sub">监控采集值</div></div><div class="cabinet-space-stat-icon">实</div></section>
+                  <section class="cabinet-space-stat is-power"><div><div class="cabinet-space-stat-title">额定功率合计</div><div class="cabinet-space-stat-value">${escapeHtml(this.store.formatPowerWatts(stats.ratedPower))}</div><div class="cabinet-space-stat-sub">人工维护值</div></div><div class="cabinet-space-stat-icon">额</div></section>
+                  <section class="cabinet-space-stat is-power"><div><div class="cabinet-space-stat-title">功率利用率</div><div class="cabinet-space-stat-value">${powerUsageRate === null ? "-" : powerUsageRate + "%"}</div><div class="cabinet-space-stat-sub">实时总功率 / 额定功率</div></div><div class="cabinet-space-stat-icon">率</div></section>
+                  ` : `
+                  <section class="cabinet-space-stat"><div><div class="cabinet-space-stat-title">机柜数</div><div class="cabinet-space-stat-value">${stats.cabinets}</div><div class="cabinet-space-stat-sub">当前筛选范围</div></div><div class="cabinet-space-stat-icon">柜</div></section>
+                   ${(this.store.getCabinetPowerStatusSource() === "telemetry"
+                     ? [["未上电", stats.unpowered, "未"], ["A路上电", stats.phaseA, "A"], ["B路上电", stats.phaseB, "B"], ["双路上电", stats.dualPower, "双"]]
+                     : [["上电", stats.powerOn, "上"], ["下电", stats.powerOff, "下"], ["待机", stats.standby, "待"], ["未知", stats.unknown, "?"]]
+                   ).map(([label, value, icon]) => `<section class="cabinet-space-stat ${label === "上电" || label === "双路上电" ? "is-status" : ""}"><div><div class="cabinet-space-stat-title">${label}机柜</div><div class="cabinet-space-stat-value">${value}</div><div class="cabinet-space-stat-sub">整柜供电${label}</div></div><div class="cabinet-space-stat-icon">${icon}</div></section>`).join("")}
+                  `}
                 </div>
                 <div class="cabinet-space-content-head">
                   <div class="cabinet-space-head-left">
@@ -31416,6 +32865,14 @@
                         <span>全选当前页${selectedIds.length ? `（已选 ${selectedIds.length} 条）` : ""}</span>
                       </label>
                     ` : `<span class="cabinet-space-selection">当前空间共 ${pageMeta.total} 个机柜${selectedIds.length ? `，已选 ${selectedIds.length} 条` : ""}</span>`}
+                    ${displayMode === "card" ? `<div class="cabinet-space-metric-switch" role="group" aria-label="机柜卡片指标" data-demand-version="v1.3,v1.5" data-demand-req-id="V3R5-4419,V3R5-6171" data-demand-title-v13="机柜U位卡片指标" data-demand-text-v13="需求来源：V3R5-4419。||交互目的：在空间视图卡片中查看机柜U位占用和剩余容量。||默认规则：机柜空间视图默认使用卡片展示，并以U位作为默认指标。||展示规则：机柜图按已用U位比例从底部填充，精确容量以已用U/总U和利用率为准。" data-demand-title-v15="机柜功率与上下电指标切换" data-demand-text-v15="需求来源：V3R5-6171。||交互目的：在同一机柜卡片中切换查看U位、功率和上下电状态。||默认规则：首次进入默认展示U位模式。||点击后行为：功率模式展示功率使用情况，上下电状态模式展示当前状态及更新时间。||状态保留：切换指标时保留空间节点、查询条件、分页、已选机柜及当前滚动位置。||异常判断：指标数据缺失时显示“-”，不影响查看机柜详情。">
+                      ${[["u", "U位"], ["power", "功率"], ["status", "上下电状态"]].map(([value, label]) => `<button class="cabinet-space-metric-btn ${metricMode === value ? "is-active" : ""}" type="button" data-action="set-cabinet-space-metric-mode" data-mode="${value}" aria-pressed="${metricMode === value ? "true" : "false"}">${label}</button>`).join("")}
+                    </div>` : ""}
+                    ${displayMode === "card" && metricMode === "status" ? `
+                      <select class="cabinet-power-status-filter" data-role="cabinet-power-status-filter" aria-label="筛选机柜上下电状态" data-demand-version="v1.5" data-demand-req-id="V3R5-6171" data-demand-title="机柜上下电状态筛选" data-demand-text="需求来源：V3R5-6171。||交互目的：按当前状态来源对应的枚举快速筛选机柜。||筛选范围：从采集测点读取时支持全部状态、未上电、A路上电、B路上电、双路上电；从属性读取时支持全部状态、上电、下电、待机。||联动规则：筛选同步作用于结果总数、机柜卡片和分页，切换条件后回到第1页。||状态保留：保留当前空间节点、查询条件及上下电状态查看模式。||异常判断：无匹配机柜时展示空态，不改变机柜原始状态数据。">
+                      ${[["all", "全部状态"], ...this.store.getCabinetPowerStatusOptions().map((value) => [value, value])].map(([value, label]) => `<option value="${value}"${powerStatusFilter === value ? " selected" : ""}>${label}</option>`).join("")}
+                      </select>
+                    ` : ""}
                   </div>
                   <div class="cabinet-space-display-switch" role="group" aria-label="空间视图展示方式" data-demand-version="v1.3" data-demand-req-id="V3R5-4419" data-demand-title="空间视图卡片与列表切换" data-demand-text="需求来源：V3R5-4419。||交互目的：在同一个空间节点下切换容量可视化和台账明细查看。||点击后行为：卡片展示突出机柜U位、设备数和利用情况；列表展示复用标准台账列、勾选及操作入口。||默认规则：首次进入空间视图默认选中卡片展示。||状态保留：切换时保留空间节点、搜索条件、分页和当前已选数据；切换到标准视图后隐藏本控件。||异常判断：当前空间无数据时仍保留切换控件和空态，避免用户误以为页面加载失败。">
                     <button class="cabinet-space-display-btn ${displayMode === "card" ? "is-active" : ""}" type="button" data-action="set-cabinet-space-display-mode" data-mode="card" aria-pressed="${displayMode === "card" ? "true" : "false"}">卡片展示</button>
@@ -31428,9 +32885,10 @@
                       ? `<div class="cabinet-space-list-panel"><div class="table-wrap">${this.renderListTable(VIEW_IDS.CABINET, cardRows)}</div></div>`
                       : `<div class="cabinet-space-empty">当前空间暂无机柜数据</div>`)
                     : (cardRows.length
-                    ? `<div class="cabinet-card-grid">
+                    ? `<div class="cabinet-card-grid" data-demand-version="v1.3,v1.5" data-demand-req-id="V3R5-4419,V3R5-6171" data-demand-title-v13="机柜空间卡片展示" data-demand-text-v13="需求来源：V3R5-4419。||交互目的：以机柜图和容量信息快速识别机柜U位使用情况。||展示规则：蓝色表示已占用U位，灰色表示空闲U位；卡片展示已用U/总U、利用率、设备数和空间位置。||点击后行为：点击查看进入机柜详情，点击更多打开机柜业务操作。" data-demand-title-v15="机柜功率与上下电状态卡片" data-demand-text-v15="需求来源：V3R5-6171。||功率展示：机柜图按功率使用率从底部填充，75%及以上使用橙色、90%及以上使用红色；文案使用‘功率使用 实时/额定kW（使用率%）’，数值保留两位小数，空间不足时允许换行。||状态展示：机柜图按当前状态来源对应的枚举着色，状态标签固定在机柜图正下方；更新时间不存在时显示‘-’。||异常处理：状态与实时功率不一致时，仅在状态右侧提示用户前往资产信息编辑修改，不提供快捷修改按钮。">
                       ${cardRows.map((row, index) => {
                         const usage = this.getCabinetUsage(row, index);
+                        const power = this.store.getCabinetPowerStats(row, index);
                         const percent = Math.min(100, Math.max(0, usage.percent));
                         const name = row.name || row.assetCode || "-";
                         const selected = selectedIds.includes(row.id);
@@ -31442,13 +32900,9 @@
                               <span class="cabinet-visual-u">${escapeHtml(String(usage.height))}U</span>
                             </div>
                             <button class="cabinet-visual-main" type="button" data-action="row-action" data-view="${escapeHtml(VIEW_IDS.CABINET)}" data-id="${escapeHtml(row.id)}" data-label="查看">
-                              ${this.renderCabinetMiniRack(usage)}
-                              <div class="cabinet-usage-line">
-                                <span>U位使用</span>
-                                <strong>${usage.usedU}/${usage.height}（${percent}%）</strong>
-                              </div>
+                              ${metricMode === "u" ? `${this.renderCabinetMiniRack(usage)}<div class="cabinet-usage-line"><span>U位使用</span><strong>${usage.usedU}/${usage.height}（${percent}%）</strong></div>` : metricMode === "power" ? `${this.renderCabinetPowerRack(power)}<div class="cabinet-usage-line"><span>功率使用</span><strong>${escapeHtml(power.powerUsageLabel)}</strong></div>` : `${this.renderCabinetStatusRack(power)}<div class="cabinet-usage-line"><span>状态更新时间</span><strong class="cabinet-status-updated-at">${escapeHtml(power.statusUpdatedAt || "-")}</strong></div>`}
                               <div class="cabinet-card-meta" title="${escapeHtml(row.assetLocation || "-")}">${escapeHtml(row.assetLocation || "-")}</div>
-                              <div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>
+                              ${metricMode === "u" ? `<div class="cabinet-card-meta">设备数：${usage.deviceCount} 台</div>` : ""}
                             </button>
                             <div class="cabinet-visual-actions">
                               ${this.renderRowActions(VIEW_IDS.CABINET, row)}
@@ -32190,6 +33644,19 @@
                           <div class="field-hint">控制台账列表顶部“层级”入口是否展示；隐藏后不影响已维护的主从关系数据。</div>
                         </div>
                         <div class="field-hint">台账页负责层级开关，开启后固定树状结构并默认全部展开；本页维护主从关系数据，并控制台账页层级入口显示。点击“下载模板”后，可选择导出全量台账数据或部分台账数据，并配置从设备自动填充规则。</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="config-section" data-demand-version="v1.5" data-demand-req-id="V3R5-6171" data-demand-title="机柜上电状态来源配置" data-demand-text="需求来源：V3R5-6171。||交互目的：配置机柜空间视图上下电状态的数据来源。||默认规则：默认从采集测点读取。||采集测点枚举：未上电、A路上电、B路上电、双路上电。||属性枚举：上电、下电、待机。||联动规则：保存后，机柜上下电汇总统计、卡片状态和状态筛选统一切换为对应来源及枚举。||状态限制：切换来源不修改机柜原始资产数据；来源数据缺失时以“-”展示，不自动推断状态。">
+                    <div class="config-section-title">机柜上电状态</div>
+                    <div class="config-form-grid single">
+                      <div class="field-block">
+                        <span>状态来源</span>
+                        <select data-field="cabinetPowerStatusSource" data-config="template">
+                          <option value="telemetry"${templateConfig.cabinetPowerStatusSource !== "attribute" ? " selected" : ""}>从采集测点读取</option>
+                          <option value="attribute"${templateConfig.cabinetPowerStatusSource === "attribute" ? " selected" : ""}>从属性读取</option>
+                        </select>
+                        <div class="field-hint">采集测点：未上电 / A路上电 / B路上电 / 双路上电；属性：上电 / 下电 / 待机。</div>
                       </div>
                     </div>
                   </div>
@@ -33934,6 +35401,9 @@
           }
 
           renderOverlay(state) {
+            if (state.ui.maintenance?.assetDialog) {
+              return this.renderMaintenanceAssetDialog(state.ui.maintenance.assetDialog);
+            }
             if (state.ui.assetOperationViewDialog) {
               return this.renderAssetOperationViewDialog(state.ui.assetOperationViewDialog);
             }
@@ -34240,13 +35710,14 @@
             const detailRows = Array.isArray(requirement.detail) && requirement.detail.length
               ? requirement.detail
               : [requirement.description || "暂无需求说明。"];
+            const attachments = Array.isArray(requirement.attachments) ? requirement.attachments : [];
             return `
               <div class="relation-modal-backdrop" data-action="close-requirement-description"></div>
               <section class="relation-modal requirement-description-dialog" role="dialog" aria-modal="true" aria-labelledby="requirementDescriptionTitle">
                 <header class="relation-modal-head">
                   <div>
-                    <div class="relation-modal-title" id="requirementDescriptionTitle">${escapeHtml(requirement.ticketId || requirement.id)} · ${escapeHtml(requirement.title || requirement.description)}</div>
-                    <div class="relation-modal-subtitle">${escapeHtml(requirement.version || "")} · ${escapeHtml(requirement.scope || "")} · ${escapeHtml(requirement.targetLabel || "")} · ${escapeHtml(requirement.status || "")}</div>
+                    <div class="relation-modal-title" id="requirementDescriptionTitle">${escapeHtml(requirement.descriptionDialogTitle || ((requirement.ticketId || requirement.id) + " · " + (requirement.title || requirement.description)))}</div>
+                    ${requirement.hideDescriptionMeta ? "" : `<div class="relation-modal-subtitle">${escapeHtml(requirement.version || "")} · ${escapeHtml(requirement.scope || "")} · ${escapeHtml(requirement.targetLabel || "")} · ${escapeHtml(requirement.status || "")}</div>`}
                   </div>
                   <button class="relation-modal-close" type="button" data-action="close-requirement-description" aria-label="关闭">×</button>
                 </header>
@@ -34254,6 +35725,23 @@
                   <div class="requirement-description-content">
                     ${detailRows.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}
                   </div>
+                  ${attachments.length ? `
+                    <div class="requirement-description-attachments">
+                      <div class="requirement-description-attachments-title">附件</div>
+                      ${attachments.map((attachment) => `
+                        <div class="requirement-description-attachment">
+                          <div class="requirement-description-attachment-info">
+                            <div class="requirement-description-attachment-name" title="${escapeHtml(attachment.name)}">${escapeHtml(attachment.name)}</div>
+                            <div class="requirement-description-attachment-type">${escapeHtml(attachment.type || "附件")}</div>
+                          </div>
+                          <div class="requirement-description-attachment-actions">
+                            <a class="btn" href="${escapeHtml(attachment.path)}" target="_blank" rel="noopener">预览</a>
+                            <a class="btn btn-primary" href="${escapeHtml(attachment.path)}" download="${escapeHtml(attachment.name)}">下载</a>
+                          </div>
+                        </div>
+                      `).join("")}
+                    </div>
+                  ` : ""}
                 </div>
                 <footer class="relation-modal-footer">
                   <div></div>
@@ -35383,6 +36871,16 @@
                 this.store.setCabinetSpaceDisplayMode(actionTarget.getAttribute("data-mode"));
                 return;
               }
+              if (action === "set-cabinet-space-metric-mode") {
+                const cabinetSpaceScroll = this.captureCabinetSpaceScroll();
+                this.store.setCabinetSpaceMetricMode(actionTarget.getAttribute("data-mode"));
+                this.restoreCabinetSpaceScroll(cabinetSpaceScroll);
+                return;
+              }
+              if (action === "set-cabinet-power-status") {
+                this.store.updateCabinetPowerStatus(actionTarget.getAttribute("data-id"), actionTarget.getAttribute("data-status"));
+                return;
+              }
               if (action === "toggle-asset-activity-menu") {
                 this.store.toggleAssetActivityMenu(actionTarget.getAttribute("data-view"));
                 return;
@@ -35601,12 +37099,70 @@
                 this.store.setView(actionTarget.getAttribute("data-view"));
                 return;
               }
+              if (action === "set-maintenance-tab") {
+                this.store.setMaintenanceTab(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-tab"));
+                return;
+              }
+              if (action === "search-maintenance-list") {
+                const input = document.getElementById("maintenanceListSearch");
+                this.store.setMaintenanceKeyword(actionTarget.getAttribute("data-view"), input instanceof HTMLInputElement ? input.value : "");
+                return;
+              }
+              if (action === "open-maintenance-form") {
+                this.store.openMaintenanceForm(actionTarget.getAttribute("data-view"), actionTarget.getAttribute("data-id") || "", actionTarget.getAttribute("data-readonly") === "true");
+                return;
+              }
+              if (action === "back-maintenance-list") {
+                this.store.backMaintenanceList(actionTarget.getAttribute("data-view"));
+                return;
+              }
+              if (action === "save-maintenance-contract") {
+                this.store.saveMaintenanceContract();
+                return;
+              }
+              if (action === "save-maintenance-relation") {
+                this.store.saveMaintenanceRelation();
+                return;
+              }
+              if (action === "maintenance-tool") {
+                this.store.handleMaintenanceTool(actionTarget.getAttribute("data-label"));
+                return;
+              }
+              if (action === "open-maintenance-assets") {
+                this.store.openMaintenanceAssetDialog();
+                return;
+              }
+              if (action === "search-maintenance-assets") {
+                const input = document.getElementById("maintenanceAssetSearch");
+                this.store.setMaintenanceAssetDialogKeyword(input instanceof HTMLInputElement ? input.value : "");
+                return;
+              }
+              if (action === "toggle-maintenance-asset") {
+                this.store.toggleMaintenanceAssetDialogAsset(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "confirm-maintenance-assets") {
+                this.store.confirmMaintenanceAssets();
+                return;
+              }
+              if (action === "close-maintenance-assets") {
+                this.store.closeMaintenanceAssetDialog();
+                return;
+              }
+              if (action === "remove-maintenance-asset") {
+                this.store.removeMaintenanceDraftAsset(actionTarget.getAttribute("data-id"));
+                return;
+              }
+              if (action === "clear-maintenance-assets") {
+                this.store.clearMaintenanceDraftAssets();
+                return;
+              }
               if (action === "set-it-inbound-tab") {
                 this.store.setItInboundTab(actionTarget.getAttribute("data-tab"));
                 return;
               }
               if (action === "open-it-inbound-form") {
-                this.store.openItInboundForm();
+                this.store.openItInboundForm(true);
                 return;
               }
               if (action === "back-it-inbound-list") {
@@ -35653,7 +37209,7 @@
                 return;
               }
               if (action === "open-it-asset-workflow-form") {
-                this.store.openItAssetWorkflowForm(actionTarget.getAttribute("data-view"));
+                this.store.openItAssetWorkflowForm(actionTarget.getAttribute("data-view"), true);
                 return;
               }
               if (action === "back-it-asset-workflow-list") {
@@ -36744,6 +38300,12 @@
               if (!(target instanceof HTMLElement)) {
                 return;
               }
+              if (target.matches('[data-role="maintenance-relation-contract"]')) {
+                const contract = this.store.ensureMaintenanceState().contracts.find((item) => item.id === target.value);
+                const nameInput = document.getElementById("maintenanceRelationContractName");
+                if (nameInput instanceof HTMLInputElement) nameInput.value = contract?.name || "";
+                return;
+              }
               if (target.matches('[data-role="consumable-inventory-cell"]')) {
                 this.store.updateConsumableWorkflowItem(
                   target.getAttribute("data-view"),
@@ -36793,6 +38355,10 @@
               }
               if (target.matches('[data-role="asset-history-filter"]')) {
                 this.store.setAssetHistoryFilter(target.getAttribute("data-field"), target.value);
+                return;
+              }
+              if (target.matches('[data-role="cabinet-power-status-filter"]')) {
+                this.store.setCabinetPowerStatusFilter(target.value);
                 return;
               }
               if (target.matches('[data-role="design-apply-target"]')) {
@@ -37089,6 +38655,35 @@
               }
               tableWrap.scrollLeft = scrollState.left || 0;
               tableWrap.scrollTop = scrollState.top || 0;
+            });
+          }
+
+          captureCabinetSpaceScroll() {
+            const results = document.querySelector(".cabinet-space-results");
+            const workspace = this.renderer?.nodes?.content?.closest(".workspace");
+            return {
+              resultsLeft: results instanceof HTMLElement ? results.scrollLeft : 0,
+              resultsTop: results instanceof HTMLElement ? results.scrollTop : 0,
+              workspaceLeft: workspace instanceof HTMLElement ? workspace.scrollLeft : 0,
+              workspaceTop: workspace instanceof HTMLElement ? workspace.scrollTop : 0
+            };
+          }
+
+          restoreCabinetSpaceScroll(scrollState) {
+            if (!scrollState) {
+              return;
+            }
+            window.requestAnimationFrame(() => {
+              const results = document.querySelector(".cabinet-space-results");
+              if (results instanceof HTMLElement) {
+                results.scrollLeft = scrollState.resultsLeft || 0;
+                results.scrollTop = scrollState.resultsTop || 0;
+              }
+              const workspace = this.renderer?.nodes?.content?.closest(".workspace");
+              if (workspace instanceof HTMLElement) {
+                workspace.scrollLeft = scrollState.workspaceLeft || 0;
+                workspace.scrollTop = scrollState.workspaceTop || 0;
+              }
             });
           }
 
@@ -37781,7 +39376,7 @@
             };
             this.pagePanelBody.innerHTML = entries.map((entry) => {
               const parts = String(entry.text || "")
-                .split("||")
+                .split(/\|\||(?:\r?\n)+\s*\|?/)
                 .map((part) => part.trim())
                 .filter(Boolean);
               const meta = [entry.version, entry.reqId].filter(Boolean);
@@ -39563,13 +41158,13 @@
       loc: { path: ["华东园区", "1号楼", "3F", "空调机房"], space: "3F空调机房", peers: ["ST-001"] } },
     /* ---- 机柜 ---- */
     { id: "CB-001", type: "cabinet", name: "A-01机柜", code: "ZC-JG-2023-0001", sn: "RK42U23A0001", model: "NetCol 42U", vendor: "华为", category: "机柜", status: "在用", turnover: "2023-05-10", install: "2023-05-08", expire: "2031-05-09",
-      loc: { path: ["华东园区", "1号楼", "3F", "机房301"], units: 42, mounted: ["IT-001", "IT-002", "IT-003", "IT-004"] } },
+      loc: { path: ["华东园区", "1号楼", "3F", "机房301"], cabinetLine: "A列", units: 42, mounted: ["IT-001", "IT-002", "IT-003", "IT-004"] } },
     { id: "CB-002", type: "cabinet", name: "A-02机柜", code: "ZC-JG-2023-0002", sn: "RK42U23A0002", model: "NetCol 42U", vendor: "华为", category: "机柜", status: "在用", turnover: "2023-05-10", install: "2023-05-08", expire: "2031-05-09",
-      loc: { path: ["华东园区", "1号楼", "3F", "机房301"], units: 42, mounted: ["IT-005", "IT-006"] } },
+      loc: { path: ["华东园区", "1号楼", "3F", "机房301"], cabinetLine: "A列", units: 42, mounted: ["IT-005", "IT-006"] } },
     { id: "CB-003", type: "cabinet", name: "B-01机柜", code: "ZC-JG-2023-0011", sn: "RK42U23B0011", model: "TS-8642", vendor: "图腾", category: "机柜", status: "在用", turnover: "2023-10-20", install: "2023-10-18", expire: "2031-10-19",
-      loc: { path: ["华东园区", "1号楼", "3F", "机房302"], units: 42, mounted: ["IT-007", "IT-008"] } },
+      loc: { path: ["华东园区", "1号楼", "3F", "机房302"], cabinetLine: "B列", units: 42, mounted: ["IT-007", "IT-008"] } },
     { id: "CB-004", type: "cabinet", name: "B-02机柜", code: "ZC-JG-2023-0012", sn: "RK42U23B0012", model: "TS-8642", vendor: "图腾", category: "机柜", status: "空闲", turnover: "2023-10-20", install: "2023-10-18", expire: "2031-10-19",
-      loc: { path: ["华东园区", "1号楼", "3F", "机房302"], units: 42, mounted: ["IT-009", "IT-010"] } },
+      loc: { path: ["华东园区", "1号楼", "3F", "机房302"], cabinetLine: "B列", units: 42, mounted: ["IT-009", "IT-010"] } },
     /* ---- 备件 ---- */
     { id: "SP-001", type: "spare", name: "服务器电源模块", code: "ZC-BJ-2024-0101", sn: "PSU80023H101", model: "PSU-800W", vendor: "华为", category: "电源备件", status: "空闲", turnover: "2024-04-15", install: "—", expire: "2026-07-10",
       loc: { path: ["华东园区", "1号楼", "2F", "备件库房"], space: "备件库房A区", peers: ["SP-002", "SP-003", "SP-004"] } },
@@ -39587,7 +41182,7 @@
     { id: "ST-007", type: "station", name: "精密空调-A201", code: "ZC-CD-2024-0071", sn: "AC12P24E071", model: "Liebert PEX P12", vendor: "维谛", category: "精密空调", status: "在用", power: "已上电", turnover: "2024-11-06", install: "2024-11-03", expire: "2029-11-05",
       loc: { path: ["华南园区", "A栋", "2F", "机房A201"], space: "机房A201 空调区", peers: [] } },
     { id: "CB-005", type: "cabinet", name: "C-01机柜", code: "ZC-JG-2024-0021", sn: "RK42U24C0021", model: "NetCol 42U", vendor: "华为", category: "机柜", status: "在用", turnover: "2024-10-28", install: "2024-10-25", expire: "2032-10-27",
-      loc: { path: ["华南园区", "A栋", "2F", "机房A201"], units: 42, mounted: ["IT-011", "IT-012"] } },
+      loc: { path: ["华南园区", "A栋", "2F", "机房A201"], cabinetLine: "A列", units: 42, mounted: ["IT-011", "IT-012"] } },
     { id: "SP-005", type: "spare", name: "光模块 25G-SFP28", code: "ZC-BJ-2025-0105", sn: "OPT25G25E105", model: "SFP28-25G-SR", vendor: "华为", category: "光通信备件", status: "空闲", turnover: "2025-04-10", install: "—", expire: "2030-04-09",
       loc: { path: ["华南园区", "A栋", "1F", "备件柜A"], space: "备件柜A", peers: [] } }
   ];
@@ -39795,10 +41390,10 @@
     dtSummary: { t: "资产摘要卡", d: "展示规则：使用通用资产图标，并显示名称、状态徽标、资产编号、台账类型、分类；主/从设备补充角色标识。||交互目的：进入详情后第一眼确认资产身份。" },
     dtTabs: { t: "详情页签", d: "展示规则：基本信息、位置信息、履历信息、关联工单正常可用；机柜类型额外提供「包含设备」页签且排在位置信息前。关系拓扑本期暂不实现，页签置灰并显示「暂不实现」，不可点击。||点击后行为：点击可用页签刷新下方内容区，页签吸顶。" },
     dtBasic: { t: "基本信息字段", d: "展示规则：字段按 资产标识/运行状态/网络信息(仅IT设备)/生命周期 分组展示；字段口径与Web端资产详情设计一致。||异常判断：无值字段显示「—」；到期时间早于预警阈值时追加「即将到期」标识。" },
-    dtPosition: { t: "位置信息（按类型区分）", d: "展示规则：IT设备显示位置路径+所在机柜U位局部图（当前资产高亮）；机柜显示U位占用图与上架设备数；场地设施及备件不使用机柜/U位图，改为显示所属空间与同空间设备（与V3R5-4427口径一致）。||点击后行为：同空间设备可点击跳转对应资产详情。" },
+     dtPosition: { t: "位置信息（按类型区分）", d: "展示规则：IT设备显示位置路径+所在机柜U位局部图（当前资产高亮）；机柜显示位置路径、所属机柜列视图、机柜规格与上架设备数，并高亮当前机柜；场地设施及备件不使用机柜/U位图，改为显示所属空间与同空间设备（与V3R5-4427口径一致）。||点击后行为：机柜列视图中的机柜可点击跳转详情，同空间设备可点击跳转对应资产详情。" },
     dtHistory: { t: "履历信息", d: "展示规则：与 Web 端操作记录采用同一数据口径，按时间倒序展示操作类型、具体业务入口、操作人、关联单据及字段旧值/新值；不展示执行人和操作结果。||筛选规则：App 端仅支持全部/近7日/近10日/近15日时间范围筛选，不提供组合查询和全局操作记录入口。||合并规则（重点）：同一次业务操作涉及的属性、位置和关系变化合并为一条履历。||数据口径：资产详情仅展示已成功生效并实际改变资产数据的记录；失败或未生效记录在 Web 端全局操作记录中查看。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，时间范围内无记录时展示空态。" },
     dtRelation: { t: "关系拓扑（暂不实现）", d: "版本说明：移动端关系拓扑本期暂不实现。||展示规则：关系拓扑页签置灰并显示「暂不实现」，不可点击，不进入关系拓扑内容区。||后续规划：待关系数据与移动端拓扑交互方案确认后再开放。" },
-    dtContains: { t: "包含设备（机柜）", d: "展示规则：列出机柜上架设备的名称、状态、资产编号、分类与U位区间。||点击后行为：点击设备名称跳转其详情。||异常判断：无上架设备时显示「没有找到匹配的记录」。" },
+    dtContains: { t: "包含设备（机柜）", d: "展示规则：先展示机柜上架视图，按U位呈现已上架设备，再列出设备名称、状态、资产编号、分类与U位区间。||点击后行为：点击机柜上架视图中的设备或设备名称跳转其详情。||异常判断：无上架设备时视图显示空闲U位，列表显示「没有找到匹配的记录」。" },
     scanFrame: { t: "扫码识别", d: "交互目的：扫描资产标签二维码直达资产详情。||交互行为：取景框内扫描线动画表示识别中；识别成功短暂提示后自动跳转资产详情。||异常判断：非本系统资产标签提示「未识别到资产」，扫描线暂停，可重新扫码；资产已删除或无权限时同样走异常提示。||支持范围：识别资产标签配置生成的二维码。" },
     scanSim: { t: "模拟扫码（原型演示）", d: "展示规则：仅原型演示用，点击标签模拟扫码结果，覆盖四类资产及无效二维码分支；实际App调用系统相机识别。" }
   };
@@ -40306,8 +41901,38 @@
       html += '<div class="umap-row"><span class="umap-no">' + u + 'U</span><div class="umap-cell ' + cls + '">' + esc(label) + '</div></div>';
     }
     html += '</div>';
-    html += '<div class="umap-legend"><span><i class="li-empty"></i>空闲</span><span><i class="li-occ"></i>占用</span><span><i class="li-cur"></i>当前资产</span></div>';
+    html += '<div class="umap-legend"><span><i class="li-empty"></i>空闲</span><span><i class="li-occ"></i>占用</span><span><i class="li-cur"></i>上架</span></div>';
     return html;
+  }
+
+  function cabinetColumnViewHtml(a) {
+    var currentLine = a.loc.cabinetLine || a.loc.rackRow || "A列";
+    var pathKey = (a.loc.path || []).join(">");
+    var columns = ["A列", "B列", "C列", "D列", "E列", "F列"];
+    if (columns.indexOf(currentLine) < 0) columns.unshift(currentLine);
+    var html = '<div style="overflow-x:auto;overflow-y:hidden;padding-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:auto;">';
+    html += '<div style="display:grid;grid-template-columns:repeat(' + columns.length + ', minmax(148px, 148px));gap:8px;min-width:' + (columns.length * 148 + (columns.length - 1) * 8) + 'px;">';
+    columns.forEach(function (line) {
+      var rows = ASSETS.filter(function (item) {
+        return item.type === "cabinet" && (item.loc.cabinetLine || item.loc.rackRow || "A列") === line && (item.loc.path || []).join(">") === pathKey;
+      }).sort(function (left, right) { return String(left.name).localeCompare(String(right.name), "zh-CN"); });
+      html += '<div style="border:1px solid var(--border);border-radius:8px;background:var(--surface-subtle);overflow:hidden;">';
+      html += '<div style="padding:8px 10px;background:var(--surface-muted);font-weight:700;color:var(--text-primary);text-align:center;">' + esc(line) + '</div>';
+      for (var slot = 0; slot < 10; slot++) {
+        var item = rows[slot] || null;
+        var isCurrent = item && item.id === a.id;
+        html += item ? '<button type="button" data-action="open-detail" data-id="' + esc(item.id) + '"' : '<div';
+        html += ' style="display:grid;grid-template-columns:22px 44px minmax(0,1fr);align-items:center;gap:5px;width:100%;min-height:48px;padding:5px 6px;border:0;border-top:1px solid var(--border);background:' + (isCurrent ? "#e8fff5" : "transparent") + ';color:var(--text-primary);text-align:left;">';
+        html += '<span style="font-size:11px;color:var(--text-tertiary);text-align:center;">' + String(slot + 1).padStart(2, "0") + '</span>';
+        html += '<span style="display:flex;flex-direction:column;gap:3px;padding:5px;border:2px solid ' + (isCurrent ? "#20b486" : item ? "#1677ff" : "#cbd8e7") + ';border-radius:4px;background:' + (isCurrent ? "#22d6a2" : item ? "#dff1ff" : "#fff") + ';">';
+        for (var rackLine = 0; rackLine < 4; rackLine++) html += '<i style="display:block;height:2px;background:' + (item ? "#8cc6eb" : "#e1e8f0") + ';"></i>';
+        html += '</span>';
+        html += '<span style="min-width:0;font-size:11px;line-height:1.3;color:' + (item ? "var(--text-primary)" : "var(--text-tertiary)") + ';overflow-wrap:anywhere;">' + (item ? esc(item.name) : "空位") + (isCurrent ? '<em style="display:block;color:#168b68;font-style:normal;">当前机柜</em>' : '') + '</span>';
+        html += item ? '</button>' : '</div>';
+      }
+      html += '</div>';
+    });
+    return html + '</div></div>';
   }
 
   function renderDetailPosition(a) {
@@ -40342,20 +41967,12 @@
       html += '<div class="field-group">' + dmBadge("dtPosition") + '<div class="fg-title">位置路径</div><div style="padding:10px 14px">';
       html += locPathHtml(a.loc.path);
       html += '</div>';
-      html += fieldRow("机柜规格", a.loc.units + "U");
+       html += fieldRow("所属机柜列", a.loc.cabinetLine || a.loc.rackRow || "—");
+       html += fieldRow("机柜规格", a.loc.units + "U");
       html += fieldRow("上架设备数", (a.loc.mounted || []).length + " 台");
       html += '</div>';
-      var occ = [];
-      (a.loc.mounted || []).forEach(function (mid) {
-        var m = byId(mid);
-        if (m && m.loc.uStart) occ.push({ start: m.loc.uStart, height: m.loc.uHeight, name: m.name });
-      });
-      var lo = 42, hi = 1;
-      occ.forEach(function (o) { lo = Math.min(lo, o.start); hi = Math.max(hi, o.start + o.height - 1); });
-      if (!occ.length) { lo = 18; hi = 26; }
-      var f2 = Math.max(1, lo - 2), t2 = Math.min(42, hi + 2);
-      html += '<div class="field-group"><div class="fg-title">U位占用图（局部 ' + f2 + 'U - ' + t2 + 'U）</div><div style="padding:10px 14px 14px">';
-      html += umapHtml(a.loc.units, occ, null, f2, t2);
+      html += '<div class="field-group"><div class="fg-title">所属机柜列视图（' + esc(a.loc.cabinetLine || a.loc.rackRow || "A列") + '）</div><div style="padding:10px 14px 14px">';
+      html += cabinetColumnViewHtml(a);
       html += '</div></div>';
     } else {
       /* 场地设施 / 备件：所属空间 + 同空间设备（V3R5-4427 口径） */
@@ -40470,8 +42087,19 @@
   }
 
   function renderDetailContains(a) {
-    var html = '<div class="field-group">' + dmBadge("dtContains") + '<div class="fg-title">上架设备（' + (a.loc.mounted || []).length + '）</div><div style="padding:2px 14px 8px">';
     var rows = (a.loc.mounted || []).map(byId).filter(Boolean);
+    var rackOccupied = rows.filter(function (m) { return m.loc && m.loc.uStart; }).map(function (m) {
+      return { start: m.loc.uStart, height: m.loc.uHeight || 1, name: m.name };
+    });
+    var rackLow = 42, rackHigh = 1;
+    rackOccupied.forEach(function (item) { rackLow = Math.min(rackLow, item.start); rackHigh = Math.max(rackHigh, item.start + item.height - 1); });
+    if (!rackOccupied.length) { rackLow = 18; rackHigh = 26; }
+    rackLow = Math.max(1, rackLow - 2);
+    rackHigh = Math.min(a.loc.units || 42, rackHigh + 2);
+    var html = '<div class="field-group">' + dmBadge("dtContains") + '<div class="fg-title">机柜上架视图（' + esc(a.loc.cabinetLine || a.loc.rackRow || "A列") + '）</div><div style="padding:10px 14px 14px">';
+    html += umapHtml(a.loc.units || 42, rackOccupied, null, rackLow, rackHigh);
+    html += '</div></div>';
+    html += '<div class="field-group"><div class="fg-title">上架设备（' + (a.loc.mounted || []).length + '）</div><div style="padding:2px 14px 8px">';
     if (!rows.length) {
       html += '<div style="padding:20px 0;text-align:center;color:var(--text-tertiary);font-size:12px">没有找到匹配的记录</div>';
     } else {
