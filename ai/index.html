@@ -289,6 +289,35 @@
       border-bottom: 1px solid var(--line-soft);
       font-weight: 700;
     }
+    .train-panel > .card-head,
+    .train-detail-card > .card-head,
+    .train-video-card > .card-head {
+      min-height: 64px;
+      align-items: center;
+    }
+    .tr-end-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+    }
+    .tr-end-hint {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      opacity: .72;
+      line-height: 1.2;
+      text-align: right;
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+    .tr-end-hint.warn {
+      color: var(--warning);
+      opacity: .9;
+    }
+    body.dark .tr-end-hint { opacity: .55; }
+    body.dark .tr-end-hint.warn { opacity: .85; }
     .card-body { padding: 16px; }
     .stat-grid {
       display: grid;
@@ -422,6 +451,17 @@
     .score-dist-bar-area { flex:1; width:100%; display:flex; align-items:flex-end; }
     .score-dist-bar { width:100%; border-radius:3px 3px 0 0; min-height:3px; }
     .score-dist-label { font-size:10px; color:var(--muted); white-space:nowrap; }
+    .rank-panel { border:1px solid var(--line-soft); border-radius:10px; background:var(--card); margin:14px 0 16px; overflow:hidden; }
+    .rank-panel-head { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 14px; flex-wrap:wrap; }
+    .rank-table-scroll { max-height:380px; overflow:auto; }
+    .rank-table-scroll table { min-width:720px; table-layout:auto; }
+    .rank-search { height:28px; border:1px solid var(--line); border-radius:6px; padding:0 9px; font-size:12px; background:var(--bg); color:var(--text); width:180px; outline:none; }
+    .rank-search:focus { border-color:var(--primary); }
+    .rank-no { font-weight:800; }
+    .rank-no.top1 { color:#d48806; }
+    .rank-no.top2 { color:#8c8c8c; }
+    .rank-no.top3 { color:#d46b08; }
+    .report-scope { margin:0 0 12px; padding-left:18px; font-size:13px; color:var(--text); line-height:1.8; }
     .exam-q-card { border:1px solid var(--line-soft); border-radius:8px; padding:12px 14px; margin-bottom:8px; cursor:pointer; transition:all .16s; }
     .exam-q-card:hover { border-color:var(--primary); background:var(--primary-light); }
     .exam-q-card .eq-title { font-size:13px; font-weight:600; margin-bottom:6px; display:flex; align-items:flex-start; gap:6px; }
@@ -1907,19 +1947,21 @@
               <span class="req-toggle">点击展开/收起</span>
             </div>
             <div class="req-panel-body">
-              <p><strong>字段说明</strong>：培训名称（必填）/ 培训编号（系统自动生成4位唯一数字，只读）/ 项目（必填）/ 培训类型 / 计划开始时间 / 计划结束时间 / 参与学员（多选）/ 关联设备（多选）/ 综合得分权重（仅待开始可配置）/ 备注。</p>
+              <p><strong>字段说明</strong>：培训名称（必填）/ 培训编号（系统自动生成4位唯一数字，只读）/ 项目（必填）/ 培训类型 / 计划开始时间 / 计划结束时间 / 最长培训时长（默认 4 小时，范围 1～12 小时，仅待开始可改）/ 参与学员（多选）/ 关联设备（多选）/ 综合得分权重（仅待开始可配置）/ 备注。</p>
               <table>
                 <tr><th>状态</th><th>含义</th><th>允许操作</th><th>禁止操作</th></tr>
-                <tr><td>待开始</td><td>培训已创建，未正式开始</td><td>编辑、配置考卷、设置综合得分权重、上传/删除附件及视频、删除培训</td><td>—</td></tr>
-                <tr><td>进行中</td><td>培训正在进行，学员可接入</td><td>查看脑机数据（含状态标签）、查看交卷详情、查看学员答题详情</td><td>删除培训、删除视频附件、编辑字段（全部只读）</td></tr>
-                <tr><td>已结束</td><td>培训已结束，数据归档</td><td>查看报告、导出数据（全部只读）</td><td>—</td></tr>
+                <tr><td>待开始</td><td>培训已创建，未正式开始</td><td>编辑、配置考卷、设置最长培训时长、设置综合得分权重、上传/删除附件及视频、删除培训</td><td>—</td></tr>
+                <tr><td>进行中</td><td>培训正在进行，学员可接入</td><td>查看脑机数据（含状态标签）、查看交卷详情、查看学员答题详情、手动结束培训</td><td>删除培训、删除视频附件、编辑字段（全部只读，含最长培训时长）</td></tr>
+                <tr><td>已结束</td><td>培训已结束，数据归档；含手动结束与超时自动结束</td><td>查看详情（含个人评分结论）、查看考试分数排名、导出培训报告（全部只读）</td><td>编辑、重新开始、删除考卷</td></tr>
               </table>
-              <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"弹出二次确认（蓝色提示框，说明学员加入方式及答题规则）→ 进行中（全部字段只读，考卷锁定）→ 点击"结束培训"弹出二次确认（红色警告框，提示不可逆操作）→ 已结束（不可逆）。</p>
+              <p><strong>交互 — 状态流转</strong>：待开始 → 点击"开始培训"弹出二次确认（蓝色提示框，说明学员加入方式、答题规则及超时自动结束）→ 进行中（全部字段只读，考卷锁定）→ 管理员点击"结束培训"二次确认，或超过最长培训时长后由系统自动结束 → 已结束（不可逆）。计划开始/结束时间仅作排期，不替代强制结束。</p>
+              <p><strong>交互 — 超时自动结束</strong>：创建/编辑培训时配置「最长培训时长」，默认 4 小时，范围 1～12 小时。从管理员实际点击「开始培训」的时刻起算。到达上限后系统自动将培训置为已结束：停止脑机采集、进行中答卷自动提交、培训时长按上限封顶，并在事件流记录「超过最长培训时长，系统自动结束」。详情头部「结束培训」按钮下方展示上限与剩余时间，剩余不足 15 分钟时标为预警。</p>
               <p><strong>交互 — Tab 联动</strong>：详情面板内脑机/考试/附件三个 Tab 在同一面板切换，不重新请求培训基本信息；脑机 Tab 进入时自动建立推流连接，切出 Tab 或关闭面板时立即断开，避免空跑。</p>
               <p><strong>数据流 — 脑机指标</strong>：实时推送每位学员的注意力、情绪、疲劳度三个维度，每项附带状态标签（注意力：集中≥75 / 一般60~75 / 不集中&lt;60；情绪：良好≥75 / 一般60~75 / 不佳&lt;60；疲劳：不疲劳≥75 / 一般60~75 / 疲劳&lt;60）；综合得分按权重前端计算，折线图滚动展示最近 60 个数据点。</p>
-              <p><strong>数据流 — 评分结论</strong>：综合评分结论展示在"综合脑机数据"下方，按综合得分分为 S/A/B/C/D 五档，用于概括整场培训效果；个人评分结论展示在"学员脑机数据"列表标签、右侧详情及学员脑机详情弹窗中，按注意力、情绪和精力状态分判定为卓越沉浸态、稳定吸收态、波动起伏态、精力预警态或游离懈怠态。</p>
-              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则随机抽题生成考卷快照；生成后在考试 Tab 的外侧考题列表调整每题分值，列表实时汇总试卷总分；总分必须等于 100 分才允许开始培训。考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）及学员逐题答题详情（展示正确答案与学员作答对比）。</p>
-              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；若某学员设备未连接或指标缺失，个人评分结论不参与综合判定并提示数据不足；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。</p>
+              <p><strong>数据流 — 评分结论</strong>：综合评分结论展示在"综合脑机数据"下方，按综合得分分为 S/A/B/C/D 五档，用于概括整场培训效果；个人评分结论仅已结束培训展示，进行中培训不展示。已结束时展示在"学员脑机数据"列表标签、右侧详情及学员脑机详情弹窗中，按注意力、情绪和精力状态分判定为卓越沉浸态、稳定吸收态、波动起伏态、精力预警态或游离懈怠态。</p>
+              <p><strong>数据流 — 考卷</strong>：自动组卷按"标签 + 数量"规则随机抽题生成考卷快照；生成后在考试 Tab 的外侧考题列表调整每题分值，列表实时汇总试卷总分；总分必须等于 100 分才允许开始培训。考卷一旦培训开始即锁定；考试 Tab 支持查看交卷详情（含交卷状态/得分/用时）、考试分数排名及学员逐题答题详情（展示正确答案与学员作答对比）。排名按考试得分降序，得分相同按交卷时间升序；未交卷排在末尾、名次显示为 —；二次答题取最新成绩。</p>
+              <p><strong>交互 — 报告导出</strong>：仅已结束培训在详情头部显示「报告导出」。公司管理员、项目管理员可导出，学员不可。一次只导当前这一场，格式仅为 PDF，不提供 HTML 文件。点击后不弹确认窗、不打开 HTML 预览，直接下载 PDF。学习曲线与脑机监测图标注 XY 轴及最大/最小值；分数分布以柱状图展示人数与分数区间，并给出平均分、最高分、最低分。报告含：封面基本信息、综合脑机与结论及曲线、学员脑机汇总表、考试概况与分数分布、考题统计、考试分数排名。不含附件原文、培训视频、事件流和每人逐题全文。视频培训或脑机数据不足时，脑机章节展示空态，考试与排名仍可导出。无考卷或无人交卷时允许导出，对应章节显示空态。文件名：培训报告_培训名称_编号_日期.pdf。</p>
+              <p><strong>异常处理</strong>：脑机推流中断超过 15 秒显示"设备信号丢失"警告条，数据断点以虚线连接；若某学员设备未连接或指标缺失，个人评分结论不参与综合判定并提示数据不足；开始/结束培训操作失败时 toast 提示原因，状态不变；进行中培训的删除按钮前端置灰禁用，不发请求。管理员未点击「结束培训」时，系统仍按最长培训时长强制收口，避免培训记录持续累计至数百小时；自动结束失败时保持进行中并 toast 提示，可继续手动结束。</p>
             </div>
           </div>
           <div class="toolbar">
@@ -1941,12 +1983,12 @@
               <div class="card-body train-list" id="trainingCards"></div>
             </div>
             <div class="card train-detail-card" style="min-width:0;overflow:hidden;">
-              <div class="card-head" style="flex-wrap:wrap;gap:8px;">
+              <div class="card-head" style="flex-wrap:nowrap;gap:12px;">
                 <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
                   <span id="trainingTitle" style="font-size:15px;font-weight:800;">培训名称</span>
                   <span class="tag blue" id="trainingState">进行中</span>
                 </div>
-                <div id="trainingHeaderBtns" style="display:flex;gap:6px;flex-shrink:0;"></div>
+                <div id="trainingHeaderBtns" class="tr-end-actions"></div>
               </div>
               <div class="card-body">
                 <div class="tabbar" id="trainingTabbar">
@@ -2205,10 +2247,10 @@
                       <span class="tag orange">待开始</span>
                       <span style="color:var(--muted);">→ 管理员点击「开始培训」→</span>
                       <span class="tag blue">进行中</span>
-                      <span style="color:var(--muted);">→ 管理员点击「结束培训」→</span>
+                      <span style="color:var(--muted);">→ 管理员点击「结束培训」，或超过最长培训时长自动结束 →</span>
                       <span class="tag green">已结束</span>
                     </div>
-                    <div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.8;">· 仅「待开始」状态可编辑培训信息及配置考卷；「进行中」为只读。<br>· 「待开始」→「进行中」需至少有 1 名学员设备连接成功。<br>· 删除培训：进行中状态不可删除，需先结束。</div>
+                    <div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.8;">· 仅「待开始」状态可编辑培训信息、最长培训时长及配置考卷；「进行中」为只读。<br>· 「待开始」→「进行中」需至少有 1 名学员设备连接成功。<br>· 删除培训：进行中状态不可删除，需先结束。<br>· 超时自动结束：从实际开始时刻起算，默认 4 小时；计划结束时间仅作排期，不替代本规则。</div>
                   </div>
                   <div>
                     <h4 style="margin:0 0 10px;font-size:14px;">创建培训字段</h4>
@@ -2219,8 +2261,9 @@
                         <tr><td>所属项目</td><td>enum</td><td class="yes">✓</td><td>关联项目表</td></tr>
                         <tr><td>培训类型</td><td>enum</td><td class="no">—</td><td>脑机培训 / 视频培训 / 线上 / 线下 / 实践</td></tr>
                         <tr><td>培训编号</td><td>string(4)</td><td class="yes">✓</td><td>系统自动生成，4位数字，学员凭此入场</td></tr>
-                        <tr><td>开始时间</td><td>datetime</td><td class="yes">✓</td><td>ISO 8601</td></tr>
-                        <tr><td>结束时间</td><td>datetime</td><td class="yes">✓</td><td>须晚于开始时间</td></tr>
+                        <tr><td>开始时间</td><td>datetime</td><td class="yes">✓</td><td>ISO 8601，计划排期</td></tr>
+                        <tr><td>结束时间</td><td>datetime</td><td class="yes">✓</td><td>须晚于开始时间，计划排期，不触发强制结束</td></tr>
+                        <tr><td>最长培训时长</td><td>integer</td><td class="yes">✓</td><td>默认 4 小时，范围 1～12；从实际开始时刻起算，超时自动结束本场培训</td></tr>
                         <tr><td>参与人数</td><td>integer</td><td class="no">—</td><td>默认 50，上限 500</td></tr>
                         <tr><td>培训负责人</td><td>userId</td><td class="no">—</td><td>关联用户表，角色须为管理员</td></tr>
                         <tr><td>培训描述</td><td>text</td><td class="no">—</td><td>最长 500 字</td></tr>
@@ -2233,9 +2276,9 @@
                     · <strong>综合得分</strong>（0-100）= 学习曲线×30% + 注意力×30% + 情绪×20% + (100-疲劳度)×20%<br>
                     · <strong>注意力</strong>（0-100%）、<strong>情绪</strong>（0-100%）、<strong>疲劳度</strong>（0-100%）<br>
                     · <strong>综合评分结论</strong>：按整场培训综合得分输出 S/A/B/C/D 等级及文字结论，展示在综合脑机数据下方，用于快速判断本场培训效果。<br>
-                    · <strong>个人评分结论</strong>：按单个学员注意力、情绪、精力状态分输出学习状态标签和文字结论，展示在学员列表、学员详情右侧和学员脑机详情弹窗中。<br>
+                    · <strong>个人评分结论</strong>：仅已结束培训展示；进行中培训不展示。按单个学员注意力、情绪、精力状态分输出学习状态标签和文字结论，展示在学员列表、学员详情右侧和学员脑机详情弹窗中。<br>
                     · 学员脑机数据折线图（30秒滚动窗口）<br>
-                    · 事件流（设备连接/断开、异常提醒），进行中培训每 5 秒注入一条实时事件</div>
+                    · 事件流（设备连接/断开、异常提醒、超时自动结束），进行中培训每 5 秒注入一条实时事件；启用超时自动结束时展示规则说明，到达上限后记录「超过最长培训时长，系统自动结束」</div>
                   </div>
                   <div>
                     <h4 style="margin:0 0 10px;font-size:14px;">考试 Tab — 组卷规则</h4>
@@ -2351,7 +2394,7 @@
                       <tr><td>① 学员登录</td><td>用户名 + 密码，或 OA 统一认证</td><td>失败 3 次锁定 10 分钟</td></tr>
                       <tr><td>② 培训编号</td><td>输入 4 位数字编号加入培训</td><td>校验编号有效并返回培训状态；待开始可先完成设备连接，已结束则关闭考试入口</td></tr>
                       <tr><td>③ 设备连接</td><td>点击"搜索附近设备" → 授权附近设备权限 → 扫描列表 → 选择设备配对</td><td>连接成功后记录设备名称、信号强度和电量，并解锁培训大厅</td></tr>
-                      <tr><td>④ 培训大厅</td><td>展示培训视频/课件；脑机数据实时采集</td><td>每 5 秒上报一次脑电指标（WebSocket）</td></tr>
+                      <tr><td>④ 培训大厅</td><td>展示培训视频/课件；脑机数据实时采集；展示最长培训时长</td><td>每 5 秒上报一次脑电指标（WebSocket）；超过最长培训时长后大厅锁定，提示培训已自动结束</td></tr>
                       <tr><td>⑤ 考试答题</td><td>逐题作答，支持单选/多选/判断；展示题目分值、进度条和剩余答题次数</td><td>试卷满分默认 100 分；共 2 次答题机会，重新测试会消耗 1 次机会</td></tr>
                       <tr><td>⑥ 查看成绩</td><td>展示当前得分、评级、提交成绩/重新测试说明；提交后展示答题详情和答案解析</td><td>提交成绩需二次确认；提交后成绩锁定，考试入口仅可查看答题结果</td></tr>
                     </tbody>
@@ -2374,6 +2417,8 @@ type: enum(&#39;脑机培训&#39;,&#39;视频培训&#39;,&#39;线上培训&#39;,
 status: enum(&#39;pending&#39;,&#39;running&#39;,&#39;done&#39;) DEFAULT &#39;pending&#39;<br>
 start_time: datetime NOT NULL<br>
 end_time: datetime NOT NULL<br>
+max_hours: smallint DEFAULT 4  <span style="color:#86909c;">-- 最长培训时长，超时自动结束</span><br>
+auto_ended: boolean DEFAULT false<br>
 count: integer DEFAULT 50<br>
 manager_id: uuid FK users<br>
 description: text<br>
@@ -2838,7 +2883,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
 
       <!-- ===== 培训大厅 ===== -->
       <section class="pad-task" id="padLobby">
-        <div style="max-width:720px;margin:0 auto;width:100%;"><div class="req-panel" id="req-pad-lobby"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训大厅需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：头部展示 培训名称 / 编号 / 时间段 / 已连接设备名；脑机状态条展示 注意力（0-100）/ 情绪状态 / 疲劳程度 / 设备电量。</p><table><tr><th>功能入口</th><th>可用条件</th><th>无内容时</th></tr><tr><td>参加考试 / 查看答题结果</td><td>管理员已配置满分 100 分考卷且培训进行中；成绩提交后入口切换为查看答题结果</td><td>置灰 + toast 说明</td></tr><tr><td>培训资料</td><td>管理员已上传附件</td><td>显示"暂无资料"空态</td></tr><tr><td>培训视频</td><td>管理员已上传视频</td><td>显示"暂无视频"空态</td></tr><tr><td>系统公告</td><td>始终可用</td><td>显示"暂无公告"</td></tr></table><p><strong>交互</strong>：脑机状态条每 5 秒自动刷新；考试卡片展示题目数、考试时长、满分 100 分和剩余答题次数；提交成绩后卡片显示已提交得分并仅允许查看答题结果。退出培训弹窗二次确认后清除会话并返回首页，步骤全部重置。</p><p><strong>异常处理</strong>：大厅内设备断开时脑机状态条显示"设备已断开"并停止刷新，提供"重新连接"按钮；网络中断时功能入口均置灰并 toast"网络连接异常"。</p></div></div></div>
+        <div style="max-width:720px;margin:0 auto;width:100%;"><div class="req-panel" id="req-pad-lobby"><div class="req-panel-head" onclick="this.closest('.req-panel').classList.toggle('collapsed')"><span class="req-label">📋 培训大厅需求说明</span><span class="req-toggle">点击展开/收起</span></div><div class="req-panel-body"><p><strong>字段说明</strong>：头部展示 培训名称 / 编号 / 时间段 / 已连接设备名 / 最长培训时长（默认 4 小时，超时自动结束）；脑机状态条展示 注意力（0-100）/ 情绪状态 / 疲劳程度 / 设备电量。</p><table><tr><th>功能入口</th><th>可用条件</th><th>无内容时</th></tr><tr><td>参加考试 / 查看答题结果</td><td>管理员已配置满分 100 分考卷且培训进行中；成绩提交后入口切换为查看答题结果</td><td>置灰 + toast 说明</td></tr><tr><td>培训资料</td><td>管理员已上传附件</td><td>显示"暂无资料"空态</td></tr><tr><td>培训视频</td><td>管理员已上传视频</td><td>显示"暂无视频"空态</td></tr><tr><td>系统公告</td><td>始终可用</td><td>显示"暂无公告"</td></tr></table><p><strong>交互</strong>：脑机状态条每 5 秒自动刷新；考试卡片展示题目数、考试时长、满分 100 分和剩余答题次数；提交成绩后卡片显示已提交得分并仅允许查看答题结果。退出培训弹窗二次确认后清除会话并返回首页，步骤全部重置。</p><p><strong>异常处理</strong>：大厅内设备断开时脑机状态条显示"设备已断开"并停止刷新，提供"重新连接"按钮；网络中断时功能入口均置灰并 toast"网络连接异常"。培训因超过最长培训时长被系统自动结束后，大厅锁定、考试入口关闭，提示"本场培训已结束（超时自动结束）"，脑机数据停止上报。</p></div></div></div>
         <div style="max-width:720px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:16px;">
 
           <!-- 培训信息头部 -->
@@ -2856,6 +2901,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
                 <div style="margin-top:8px;display:flex;gap:18px;font-size:12px;opacity:.9;flex-wrap:wrap;">
                   <span><span style="opacity:.7;">培训开始时间：</span><span style="font-weight:700;">2025-12-10 09:00</span></span>
                   <span><span style="opacity:.7;">培训进行时长：</span><span style="font-weight:700;">1 小时 24 分</span></span>
+                  <span><span style="opacity:.7;">最长培训时长：</span><span style="font-weight:700;">4 小时，超时自动结束</span></span>
                 </div>
                 <div style="margin-top:6px;font-size:12px;opacity:.85;">
                   <span style="margin-right:4px;opacity:.7;">📁</span><span style="opacity:.75;">所属项目：</span><span style="font-weight:600;">2025年度化工安全培训项目</span>
@@ -3049,23 +3095,23 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
   <script>
     const trainings = [
       { id:1, number:'1001', name:'机械操作安全规程', type:'脑机培训', status:'running', statusText:'进行中',
-        date:'2025-12-10', startTime:'2025-12-10 09:00', endTime:'2025-12-10 11:00', duration:'2小时',
+        date:'2025-12-10', startTime:'2025-12-10 09:00', endTime:'2025-12-10 11:00', duration:'2小时', maxHours:4,
         count:96, creator:'管理员', manager:'王五', project:'机械设备操作规范培训项目', examScore:'—', attachCount:3,
         description:'本培训涵盖机械设备使用规范和安全操作流程，通过脑机接口实时监测学员专注度。' },
       { id:2, number:'1002', name:'化学品安全管理', type:'脑机培训', status:'pending', statusText:'待开始',
-        date:'2025-12-08', startTime:'2025-12-20 14:00', endTime:'2025-12-20 16:00', duration:'2小时',
+        date:'2025-12-08', startTime:'2025-12-20 14:00', endTime:'2025-12-20 16:00', duration:'2小时', maxHours:4,
         count:124, creator:'管理员', manager:'李四', project:'2025年度化工安全培训项目', examScore:'—', attachCount:5,
         description:'危险化学品安全管理规范培训，包括储存、使用和泄漏应急处理。' },
       { id:3, number:'1003', name:'安全生产法规培训', type:'视频培训', status:'done', statusText:'已结束',
-        date:'2025-11-15', startTime:'2025-11-15 09:00', endTime:'2025-11-15 11:30', duration:'2.5小时',
+        date:'2025-11-15', startTime:'2025-11-15 09:00', endTime:'2025-11-15 11:30', duration:'2.5小时', maxHours:4,
         count:95, creator:'管理员', manager:'赵六', project:'新员工入职安全培训项目', examScore:88, attachCount:4,
         description:'国家安全生产法规解读和企业安全生产规章制度培训。' },
       { id:4, number:'1004', name:'电气安全知识培训', type:'脑机培训', status:'done', statusText:'已结束',
-        date:'2025-12-05', startTime:'2025-12-05 10:00', endTime:'2025-12-05 12:00', duration:'2小时',
+        date:'2025-12-05', startTime:'2025-12-05 10:00', endTime:'2025-12-05 12:00', duration:'2小时', maxHours:4,
         count:152, creator:'管理员', manager:'周九', project:'电气安全知识普及项目', examScore:91, attachCount:2,
         description:'电气设备安全操作规程和触电急救知识培训。' },
       { id:5, number:'1005', name:'个人防护装备使用培训', type:'脑机培训', status:'done', statusText:'已结束',
-        date:'2025-11-20', startTime:'2025-11-20 14:00', endTime:'2025-11-20 16:00', duration:'2小时',
+        date:'2025-11-20', startTime:'2025-11-20 14:00', endTime:'2025-11-20 16:00', duration:'2小时', maxHours:4,
         count:130, creator:'管理员', manager:'王五', project:'新员工入职安全培训项目', examScore:85, attachCount:6,
         description:'各类个人防护装备（PPE）的正确使用方法和维护保养知识。' },
     ];
@@ -3100,6 +3146,13 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           <div class="field"><label>培训负责人</label><select id="tf-mgr"><option>王五</option><option>李四</option><option>赵六</option><option>周九</option></select></div>
           <div class="field"><label>培训类型</label><select id="tf-type"><option>脑机培训</option><option>视频培训</option><option>线上培训</option><option>线下培训</option><option>实践培训</option></select></div>
           <div class="field"><label>培训编号</label><input id="tf-num" value="${num}" readonly style="background:#f7f8fa;color:var(--primary);cursor:not-allowed;font-family:monospace;font-weight:700;" title="系统自动生成，不可修改"></div>
+          <div class="field"><label>最长培训时长 <span style="color:var(--danger)">*</span></label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="number" id="tf-maxHours" value="4" min="1" max="12" step="1">
+              <span style="font-size:13px;color:var(--muted);white-space:nowrap;">小时</span>
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;">从实际开始时刻起算，超时后系统自动结束本场培训。</div>
+          </div>
           <div class="field wide"><label>培训描述</label><textarea id="tf-desc" placeholder="请输入培训内容描述…"></textarea></div>
         </div>
         <div class="actions" style="margin-top:16px;">
@@ -3114,7 +3167,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       questionDetail: ['试题详情', '<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap;"><span class="tag blue">单选题</span><span class="tag orange">消防安全</span><span class="tag">电气安全</span><span style="margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;">题号 Q-001</span></div><div style="font-size:15px;font-weight:700;line-height:1.7;color:var(--text);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line-soft);">以下哪种灭火器适用于电气火灾？</div><div style="display:grid;gap:9px;margin-bottom:18px;"><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">A</span><span style="font-size:14px;color:var(--text-2);">泡沫灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #00B42A;border-radius:6px;background:#E8FFEA;"><span style="width:28px;height:28px;border-radius:50%;background:#00B42A;color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;">B</span><span style="font-size:14px;font-weight:600;color:#00B42A;flex:1;">二氧化碳灭火器</span><span style="font-size:12px;color:#fff;font-weight:700;background:#00B42A;border-radius:4px;padding:2px 8px;white-space:nowrap;">✓ 正确答案</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">C</span><span style="font-size:14px;color:var(--text-2);">水基型灭火器</span></div><div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);"><span style="width:28px;height:28px;border-radius:50%;background:var(--line-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;color:var(--text-2);">D</span><span style="font-size:14px;color:var(--text-2);">清水灭火器</span></div></div><div style="background:var(--line-soft);border-radius:6px;padding:13px 15px;margin-bottom:18px;"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:6px;letter-spacing:.3px;">答案解析</div><div style="font-size:13px;line-height:1.8;color:var(--text-2);">电气火灾应优先使用 <strong>二氧化碳灭火器</strong> 或干粉灭火器。泡沫、水基型及清水灭火器均含水，导电会造成触电危险，不适用于带电设备火灾。</div></div><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;"><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">历史正确率</div><div style="font-size:24px;font-weight:800;color:#00B42A;">92%</div><div class="progress green" style="margin-top:8px;"><span style="width:92%"></span></div></div><div style="border:1px solid var(--line-soft);border-radius:6px;padding:13px;text-align:center;background:var(--card);"><div style="color:var(--muted);font-size:12px;margin-bottom:6px;">使用次数</div><div style="font-size:24px;font-weight:800;color:var(--primary);">125</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">关联 8 场培训</div></div></div></div>'],
       uploadAttach: ['上传附件', '<div class="upload-zone">拖拽或选择附件上传</div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>上传</button></div>'],
       uploadVideo: ['上传培训视频', '<div class="upload-zone">上传培训视频<br><button class="btn primary" data-close style="margin-top:10px;">选择文件</button></div>'],
-      reportExport: ['报告导出', '<p>导出当前培训的综合得分、综合评分结论、学员个人评分结论、学习曲线、注意力、情绪、疲劳度、考试结果与事件记录。</p><div class="actions"><button class="btn">预览报告</button><button class="btn primary" data-close>导出 PDF</button></div>'],
+      reportExport: ['报告导出', '<p style="margin:0 0 10px;font-size:13px;line-height:1.7;color:var(--text);">为当前已结束培训导出一份 PDF 报告。与首页「导出报表」不同，这里只导出本场培训，不生成 HTML 文件。</p><ul class="report-scope"><li>包含：基本信息、综合脑机与结论、学员脑机汇总、考试概况、考题统计、考试分数排名</li><li>不含：附件、培训视频、事件流、每人逐题全文</li><li>权限：公司管理员、项目管理员；学员不可导出</li></ul><div class="actions"><button class="btn" data-close>取消</button><button class="btn primary" data-report-action="pdf">导出 PDF</button></div>'],
       scoreConfig: ['综合得分配置', '<p style="margin:0 0 16px;font-size:13px;color:var(--muted);line-height:1.6;">设置各脑机指标在综合得分中的占比权重。学习曲线作为辅助参考指标，不纳入权重计算。</p><div class="form-grid"><div class="field"><label>注意力权重</label><input id="sc-attention" type="number" min="0" max="100" value="30" oninput="calcScoreTotal()"></div><div class="field"><label>情绪权重</label><input id="sc-emotion" type="number" min="0" max="100" value="20" oninput="calcScoreTotal()"></div><div class="field"><label>疲劳度权重</label><input id="sc-fatigue" type="number" min="0" max="100" value="20" oninput="calcScoreTotal()"></div><div class="field"><label>已分配合计</label><input id="sc-total" value="70%" readonly style="background:#f2f7ff;color:var(--primary);font-weight:700;cursor:not-allowed;"></div></div><div id="sc-error" style="color:var(--danger);font-size:12px;margin-top:10px;display:none;">⚠ 权重合计必须等于 100%，当前合计不足或超出。</div><div style="display:flex;justify-content:flex-end;margin-top:24px;"><button class="btn primary" onclick="saveScoreConfig()">保存配置</button></div>'],
       noticeForm: ['系统公告', '<div class="form-grid"><div class="field wide"><label>公告内容</label><input id="noticeTitle" placeholder="请输入公告内容"></div><div class="field wide"><label>公告类型</label><select id="noticeType"><option value="">普通（蓝色）</option><option value="green">正常（绿色）</option><option value="red">紧急（红色）</option></select></div></div><div class="actions" style="margin-top:16px;"><button class="btn" data-close>取消</button><button class="btn primary" onclick="saveNotice()">保存发布</button></div></div>'],
       shareAttach: ['分享附件', '<p>生成附件分享链接，可发送给本培训学员或项目管理员。</p><div class="field"><label>分享范围</label><select><option>本培训学员</option><option>本项目管理员</option></select></div><div class="actions" style="margin-top:16px;"><button class="btn primary" data-close>生成分享链接</button></div>'],
@@ -3640,16 +3693,21 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const t = activeTraining;
       document.getElementById('trainingTitle').textContent = t.name;
       const st = document.getElementById('trainingState');
-      st.textContent = t.statusText;
+      st.textContent = t.autoEnded ? '已结束 · 超时自动结束' : t.statusText;
       st.className = 'tag ' + (t.status==='running'?'blue':t.status==='done'?'green':'orange');
       const hb = document.getElementById('trainingHeaderBtns');
       if (t.status === 'pending') {
         hb.innerHTML = '<button class="btn primary" id="startTrBtn">开始培训</button>';
         document.getElementById('startTrBtn').onclick = () => confirmStartTraining(t.id);
       } else if (t.status === 'running') {
-        hb.innerHTML = '<button class="btn" style="background:var(--danger);color:#fff;border-color:var(--danger);" id="endTrBtn">结束培训</button>';
+        hb.innerHTML = '<button class="btn" style="background:var(--danger);color:#fff;border-color:var(--danger);" id="endTrBtn">结束培训</button>'
+          + '<div class="tr-end-hint" id="trElapsedLimit">最长 ' + getTrainingMaxHours(t) + ' 小时 · 剩余 <span id="trElapsedRemain">—</span></div>';
         document.getElementById('endTrBtn').onclick = () => confirmEndTraining(t.id);
-      } else { hb.innerHTML = ''; }
+        startElapsedTimer();
+      } else {
+        hb.innerHTML = '<button class="btn primary" id="exportReportBtn">报告导出</button>';
+        document.getElementById('exportReportBtn').onclick = function() { exportTrainingReport(); };
+      }
       // 事件提示：待开始显示空态，进行中/已结束显示事件列表
       const el = document.getElementById('eventList');
       if (el) {
@@ -3671,14 +3729,17 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           ).join('');
         } else {
           const cnt = t.count || 0;
-          el.innerHTML = [
+          const limitEvents = t.autoEnded
+            ? [['ev-warn', 'ic-warn', '⏱', '超过最长培训时长，系统自动结束', t.endTime ? t.endTime.split(' ')[1] : '13:00:00', '本场最长培训时长 ' + getTrainingMaxHours(t) + ' 小时已到，系统已停止脑机采集并自动提交进行中答卷，培训时长按上限封顶。']]
+            : [['ev-blue', 'ic-blue', '⏱', '超时自动结束已启用', t.startTime ? t.startTime.split(' ')[1] : '09:00:00', '本场最长培训时长 ' + getTrainingMaxHours(t) + ' 小时，从实际开始时刻起算。管理员未手动结束时，超时后系统将自动结束本场培训。']];
+          el.innerHTML = limitEvents.concat([
             ['ev-warn',  'ic-warn',  '⚠️','群体状态提醒 · 注意力不集中','10:45:00','当前 18% 的学员注意力不集中已持续超过 1 分钟（共 17 名），建议调整培训节奏或互动提问。'],
             ['ev-green', 'ic-green', '📊','群体状态提醒 · 综合状态优秀','10:30:00','综合得分已连续 10 分钟保持在 85 分以上，学员整体专注度良好，请知悉。'],
             ['ev-green', 'ic-green', '😊','群体状态提醒 · 情绪积极','10:15:00','当前 72% 的学员情绪积极已持续超过 1 分钟（共 68 名），培训效果良好。'],
             ['ev-green', 'ic-green', '🧢','学员4设备连接成功','10:38:52','学员4的脑机头环已稳定配对，数据采集中'],
             ['ev-green', 'ic-green', '🧢','学员1设备连接成功','09:05:30','学员1的脑机头环已稳定配对，数据采集中'],
             ['ev-blue',  'ic-blue',  '🚀','培训已开始',t.startTime ? t.startTime.split(' ')[1] : '09:00:00','培训正式开始，学员可通过编号加入并连接设备'],
-          ].map(([cls,ico,icon,title,time,desc]) =>
+          ]).map(([cls,ico,icon,title,time,desc]) =>
             '<div class="ev-card ' + cls + '"><div class="ev-icon ' + ico + '">' + icon + '</div>'
             + '<div class="ev-body"><div class="ev-row1"><span class="ev-title">' + title + '</span>'
             + '<span class="ev-time">' + time + '</span></div>'
@@ -3699,17 +3760,59 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     }
     // ── 培训进行时长计时器 ───────────────────────────────────────────
     var trElapsedInterval = null;
-    var trElapsedSeconds = 0;
+    var trElapsedSeconds = 5025; // 默认进行中培训的演示进度：1h 23m 45s
+    var trAutoEnding = false;
+    function getTrainingMaxHours(t) {
+      var n = Number(t && t.maxHours);
+      return n >= 1 ? n : 4;
+    }
+    function formatElapsedClock(seconds) {
+      seconds = Math.max(0, Number(seconds) || 0);
+      var h = Math.floor(seconds / 3600);
+      var m = Math.floor((seconds % 3600) / 60);
+      var s = Math.floor(seconds % 60);
+      return (h > 0 ? h + 'h ' : '') + (m < 10 && h > 0 ? '0' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+    }
+    function formatElapsedShort(seconds) {
+      seconds = Math.max(0, Number(seconds) || 0);
+      var h = Math.floor(seconds / 3600);
+      var m = Math.floor((seconds % 3600) / 60);
+      if (h > 0) return h + 'h ' + m + 'm';
+      if (m > 0) return m + ' 分钟';
+      return '不足 1 分钟';
+    }
+    function formatDurationHours(seconds) {
+      seconds = Math.max(0, Number(seconds) || 0);
+      var h = seconds / 3600;
+      if (h >= 1) {
+        var rounded = Math.round(h * 10) / 10;
+        return (rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1)) + '小时';
+      }
+      return Math.max(1, Math.round(seconds / 60)) + '分钟';
+    }
     function startElapsedTimer() {
       if (trElapsedInterval) clearInterval(trElapsedInterval);
-      trElapsedSeconds = 5025; // 模拟：已进行 1h 23m 45s
       function tick() {
+        var t = activeTraining;
+        if (!t || t.status !== 'running') { clearInterval(trElapsedInterval); return; }
+        var maxHours = getTrainingMaxHours(t);
+        var maxSeconds = maxHours * 3600;
+        var remain = Math.max(0, maxSeconds - trElapsedSeconds);
         var el = document.getElementById('trElapsedVal');
-        if (!el) { clearInterval(trElapsedInterval); return; }
-        var h = Math.floor(trElapsedSeconds / 3600);
-        var m = Math.floor((trElapsedSeconds % 3600) / 60);
-        var s = trElapsedSeconds % 60;
-        el.textContent = (h > 0 ? h + 'h ' : '') + (m < 10 && h > 0 ? '0' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+        if (el) el.textContent = formatElapsedClock(trElapsedSeconds);
+        var remainEl = document.getElementById('trElapsedRemain');
+        var limitEl = document.getElementById('trElapsedLimit');
+        if (remainEl) remainEl.textContent = formatElapsedShort(remain);
+        if (limitEl) {
+          limitEl.classList.toggle('warn', remain <= 900);
+        }
+        if (trElapsedSeconds >= maxSeconds) {
+          if (!trAutoEnding && t && t.status === 'running') {
+            trAutoEnding = true;
+            endTraining(t.id, true);
+          }
+          return;
+        }
         trElapsedSeconds++;
       }
       tick();
@@ -3728,7 +3831,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<div style="background:#e8f3ff;border-radius:6px;padding:10px 14px;font-size:12px;color:var(--primary);line-height:1.8;margin-bottom:16px;">'
         + '• 培训开始后所有基本信息字段变为只读<br>'
         + '• 考卷将锁定，不可再修改题目<br>'
-        + '• 如有考题，学员可以进行答题'
+        + '• 如有考题，学员可以进行答题<br>'
+        + '• 从实际开始时刻起算，超过最长培训时长（' + getTrainingMaxHours(t) + ' 小时）后系统将自动结束本场培训'
         + '</div>'
         + '<div class="actions"><button class="btn" data-close>取消</button><button class="btn primary" onclick="startTraining(' + id + ');hideModal();">确认开始</button></div>'
         + '</div>';
@@ -3764,16 +3868,27 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         return;
       }
       t.status = 'running'; t.statusText = '进行中';
+      t.autoEnded = false;
       trElapsedSeconds = 0;
+      trAutoEnding = false;
       renderTrainings(document.getElementById('trainingStatusFilter').value);
-      renderTrainingDetail(); showToast('培训已开始，脑电数据采集中…');
+      renderTrainingDetail(); showToast('培训已开始，脑电数据采集中。超过 ' + getTrainingMaxHours(t) + ' 小时将自动结束。');
     }
-    function endTraining(id) {
+    function endTraining(id, autoEnded) {
       const t = trainings.find(x => x.id === id); if (!t) return;
       t.status = 'done'; t.statusText = '已结束';
+      t._roster = null;
+      if (autoEnded) t.autoEnded = true;
+      var maxSeconds = getTrainingMaxHours(t) * 3600;
+      var used = autoEnded ? maxSeconds : trElapsedSeconds;
+      if (used > 0) t.duration = formatDurationHours(Math.min(used, maxSeconds));
       stopElapsedTimer();
+      trAutoEnding = false;
       renderTrainings(document.getElementById('trainingStatusFilter').value);
-      renderTrainingDetail(); showToast('培训已结束');
+      renderTrainingDetail();
+      showToast(autoEnded
+        ? ('已超过最长培训时长（' + getTrainingMaxHours(t) + '小时），系统已自动结束培训')
+        : '培训已结束');
     }
     function metricStatus(type, val) {
       if (type === 'attention') return val < 60 ? '不集中' : val < 75 ? '一般' : '集中';
@@ -3829,6 +3944,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     function studentEnergyScore(s) {
       return Math.max(0, Math.min(100, Math.round(100 - (Number(s.fatigue) || 0))));
     }
+    function showPersonalConclusion(t) {
+      t = t || activeTraining;
+      return !!(t && t.status === 'done');
+    }
     function getPersonalConclusion(s) {
       if (!s || !s.wearing) return personalScoreConclusions.insufficient;
       const attention = Number(s.attention) || 0;
@@ -3844,6 +3963,1054 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       score = Number(score) || 0;
       return compositeScoreConclusions.find(function(item) { return score >= item.min; }) || compositeScoreConclusions[compositeScoreConclusions.length - 1];
     }
+    function escHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+    function seededRandom(seed) {
+      var s = Math.abs(Number(seed) || 1) % 233280;
+      return function() {
+        s = (s * 9301 + 49297) % 233280;
+        return s / 233280;
+      };
+    }
+    var ROSTER_SURNAMES = ['张','王','李','赵','陈','周','吴','刘','孙','郑','黄','林','马','杨','徐','朱','胡','郭','何','高'];
+    var ROSTER_GIVENS = ['伟','芳','娜','强','军','洋','勇','杰','涛','超','明','丽','敏','静','鹏','华','亮','霞','燕','波','浩','宇','婷','雪','凯'];
+    var KNOWN_EXAM = {
+      '张三': { status:'submitted', score:88, time:'09:52:11' },
+      '李四': { status:'submitted', score:79, time:'10:01:47' },
+      '王五': { status:'notStart', score:null, time:'' },
+      '赵六': { status:'submitted', score:94, time:'09:48:22' },
+      '陈七': { status:'inExam', score:null, time:'' },
+      '周八': { status:'submitted', score:85, time:'09:55:03' }
+    };
+    function makeRosterName(i) {
+      var base = ['张三','李四','王五','赵六','陈七','周八'];
+      if (i < base.length) return base[i];
+      return ROSTER_SURNAMES[i % ROSTER_SURNAMES.length] + ROSTER_GIVENS[(i * 7) % ROSTER_GIVENS.length] + (i >= 26 ? String(i) : '');
+    }
+    function hasBrainExport(t) {
+      return !!(t && t.type === '脑机培训' && t.status !== 'pending');
+    }
+    function pad2(n) { return (n < 10 ? '0' : '') + n; }
+    function maskMobile(phone) {
+      var s = String(phone || '').replace(/\D/g, '');
+      if (s.length !== 11) return phone || '—';
+      return s.slice(0, 3) + '****' + s.slice(7);
+    }
+    function makeRosterMobile(i, tId) {
+      var known = typeof students !== 'undefined' && students[i] && students[i].phone;
+      if (known) return String(known);
+      var prefixes = ['138','139','136','137','150','151','158','188','186','135','187','159'];
+      var p = prefixes[i % prefixes.length];
+      var n = (i * 7919 + (tId || 1) * 104729) % 100000000;
+      return p + ('00000000' + n).slice(-8);
+    }
+    function getTrainingRoster(t) {
+      if (!t) return [];
+      if (t._roster && t._roster.length) return t._roster;
+      var rand = seededRandom((t.id || 1) * 9173 + (t.count || 0));
+      var count = Math.max(1, Number(t.count) || studentBrainData.length);
+      var pending = t.status === 'pending';
+      var done = t.status === 'done';
+      var submittedTarget = pending ? 0 : (done ? Math.round(count * 0.93) : Math.round(count * 0.68));
+      var inExamTarget = pending || done ? 0 : Math.round(count * 0.19);
+      var list = [];
+      for (var i = 0; i < count; i++) {
+        var name = makeRosterName(i);
+        var wearing, attention, emotion, fatigue, energy, brainScore;
+        if (i < studentBrainData.length) {
+          wearing = !!studentBrainData[i].wearing;
+          attention = studentBrainData[i].attention;
+          emotion = studentBrainData[i].emotion;
+          fatigue = studentBrainData[i].fatigue;
+          brainScore = studentBrainData[i].score;
+        } else {
+          wearing = rand() > 0.08;
+          attention = wearing ? Math.round(55 + rand() * 42) : 0;
+          emotion = wearing ? Math.round(58 + rand() * 38) : 0;
+          fatigue = wearing ? Math.round(8 + rand() * 45) : 0;
+          brainScore = 0;
+        }
+        energy = Math.max(0, Math.min(100, 100 - (Number(fatigue) || 0)));
+        if (!hasBrainExport(t)) {
+          wearing = false;
+          attention = 0; emotion = 0; fatigue = 0; energy = 0; brainScore = 0;
+        } else if (wearing && i >= studentBrainData.length) {
+          brainScore = Math.round(attention * 0.4 + emotion * 0.3 + energy * 0.3);
+        } else if (!wearing) {
+          brainScore = 0;
+        }
+        var examStatus, examScore, submitTime, durationMin, durationSec;
+        var known = KNOWN_EXAM[name];
+        if (pending) {
+          examStatus = 'notStart'; examScore = null; submitTime = ''; durationMin = 0; durationSec = 0;
+        } else if (known) {
+          examStatus = (done && known.status === 'inExam') ? 'notStart' : known.status;
+          examScore = examStatus === 'submitted' ? known.score : null;
+          submitTime = examStatus === 'submitted' ? known.time : '';
+          durationMin = examStatus === 'submitted' ? (12 + (i % 7)) : 0;
+          durationSec = examStatus === 'submitted' ? ((i * 11) % 60) : 0;
+        } else if (i < submittedTarget) {
+          examStatus = 'submitted';
+          examScore = Math.max(42, Math.min(100, Math.round(68 + (rand() - 0.35) * 40)));
+          submitTime = pad2(9 + Math.floor(rand() * 2)) + ':' + pad2(Math.floor(rand() * 60)) + ':' + pad2(Math.floor(rand() * 60));
+          durationMin = 8 + Math.floor(rand() * 18);
+          durationSec = Math.floor(rand() * 60);
+        } else if (i < submittedTarget + inExamTarget) {
+          examStatus = 'inExam'; examScore = null; submitTime = ''; durationMin = 0; durationSec = 0;
+        } else {
+          examStatus = 'notStart'; examScore = null; submitTime = ''; durationMin = 0; durationSec = 0;
+        }
+        var personal = getPersonalConclusion({
+          wearing: wearing && hasBrainExport(t),
+          attention: attention,
+          emotion: emotion,
+          fatigue: fatigue
+        });
+        list.push({
+          id: 'r' + (t.id || 0) + '-' + i,
+          name: name,
+          empId: 'E2026' + String(10000 + i + (t.id || 1) * 17).slice(-5),
+          mobile: maskMobile(makeRosterMobile(i, t.id)),
+          device: i < studentBrainData.length ? studentBrainData[i].device : ('BrainLink-' + String(i + 1).padStart(3, '0')),
+          wearing: wearing && hasBrainExport(t),
+          attention: attention,
+          emotion: emotion,
+          fatigue: fatigue,
+          energy: energy,
+          brainScore: brainScore,
+          personalName: personal.name,
+          personalClass: personal.className,
+          personalText: personal.text,
+          examStatus: examStatus,
+          examScore: examScore,
+          submitTime: submitTime,
+          durationText: examStatus === 'submitted' ? (durationMin + '分' + pad2(durationSec) + '秒') : '—'
+        });
+      }
+      t._roster = list;
+      return list;
+    }
+    function getExamStats(t) {
+      var roster = getTrainingRoster(t);
+      var submitted = roster.filter(function(s) { return s.examStatus === 'submitted'; });
+      var inExam = roster.filter(function(s) { return s.examStatus === 'inExam'; });
+      var buckets = [
+        { label:'0-59', color:'#f53f3f', count:0 },
+        { label:'60-69', color:'#FF7D00', count:0 },
+        { label:'70-79', color:'#FFD166', count:0 },
+        { label:'80-89', color:'#2f6bff', count:0 },
+        { label:'90-100', color:'#00B42A', count:0 }
+      ];
+      submitted.forEach(function(s) {
+        var v = Number(s.examScore) || 0;
+        if (v < 60) buckets[0].count++;
+        else if (v < 70) buckets[1].count++;
+        else if (v < 80) buckets[2].count++;
+        else if (v < 90) buckets[3].count++;
+        else buckets[4].count++;
+      });
+      var maxBucket = 1;
+      buckets.forEach(function(b) { if (b.count > maxBucket) maxBucket = b.count; });
+      var scores = submitted.map(function(s) { return Number(s.examScore) || 0; });
+      return {
+        total: roster.length,
+        submitted: submitted.length,
+        inExam: inExam.length,
+        notStart: roster.length - submitted.length - inExam.length,
+        subRate: roster.length ? Math.round(submitted.length / roster.length * 100) : 0,
+        inRate: roster.length ? Math.round(inExam.length / roster.length * 100) : 0,
+        avg: scores.length ? Math.round(scores.reduce(function(a, v) { return a + v; }, 0) / scores.length) : null,
+        minScore: scores.length ? Math.min.apply(null, scores) : null,
+        maxScore: scores.length ? Math.max.apply(null, scores) : null,
+        buckets: buckets,
+        maxBucket: maxBucket
+      };
+    }
+    function getExamRanking(t) {
+      var roster = getTrainingRoster(t).slice();
+      var submitted = roster.filter(function(s) { return s.examStatus === 'submitted'; });
+      var others = roster.filter(function(s) { return s.examStatus !== 'submitted'; });
+      submitted.sort(function(a, b) {
+        if (b.examScore !== a.examScore) return b.examScore - a.examScore;
+        return String(a.submitTime).localeCompare(String(b.submitTime));
+      });
+      var statusOrder = { inExam: 0, notStart: 1 };
+      others.sort(function(a, b) { return (statusOrder[a.examStatus] || 9) - (statusOrder[b.examStatus] || 9); });
+      return submitted.map(function(s, i) {
+        return Object.assign({}, s, { rank: i + 1 });
+      }).concat(others.map(function(s) {
+        return Object.assign({}, s, { rank: null });
+      }));
+    }
+    function getBrainOverview(t) {
+      if (!hasBrainExport(t)) return null;
+      var roster = getTrainingRoster(t);
+      var valid = roster.filter(function(s) { return s.wearing; });
+      if (!valid.length) return null;
+      var avg = function(key) {
+        return Math.round(valid.reduce(function(sum, s) { return sum + (Number(s[key]) || 0); }, 0) / valid.length);
+      };
+      var attention = avg('attention');
+      var emotion = avg('emotion');
+      var energy = avg('energy');
+      var score = Math.round(attention * 0.4 + emotion * 0.3 + energy * 0.3);
+      return {
+        score: score,
+        attention: attention,
+        emotion: emotion,
+        energy: energy,
+        conclusion: getCompositeConclusion(score),
+        validCount: valid.length,
+        total: roster.length
+      };
+    }
+    function examStatusLabel(status) {
+      return status === 'submitted' ? '已交卷' : status === 'inExam' ? '考试中' : '未交卷';
+    }
+    function examStatusColor(status) {
+      return status === 'submitted' ? 'var(--success)' : status === 'inExam' ? 'var(--warning)' : 'var(--muted)';
+    }
+    function rankClass(rank) {
+      if (rank === 1) return ' top1';
+      if (rank === 2) return ' top2';
+      if (rank === 3) return ' top3';
+      return '';
+    }
+    function filterRankTable(q, tbodyId) {
+      q = String(q || '').trim().toLowerCase();
+      var body = document.getElementById(tbodyId || 'examRankTbody');
+      if (!body) return;
+      Array.prototype.forEach.call(body.querySelectorAll('tr[data-rank-row]'), function(tr) {
+        tr.style.display = !q || tr.getAttribute('data-rank-text').indexOf(q) >= 0 ? '' : 'none';
+      });
+    }
+    function renderExamRankTable(t, tbodyId) {
+      var rows = getExamRanking(t);
+      return rows.map(function(s) {
+        var rankTxt = s.rank ? ('<span class="rank-no' + rankClass(s.rank) + '">' + s.rank + '</span>') : '<span style="color:var(--muted);">—</span>';
+        var scoreTxt = s.examScore != null ? ('<strong style="color:var(--primary);">' + s.examScore + '</strong>') : '<span style="color:var(--muted);">—</span>';
+        var timeTxt = s.submitTime || '<span style="color:var(--muted);">—</span>';
+        var text = (s.rank || '') + ' ' + s.name + ' ' + (s.mobile || s.empId) + ' ' + examStatusLabel(s.examStatus);
+        var action = s.examStatus === 'submitted'
+          ? '<button class="btn" style="font-size:12px;padding:2px 10px;" onclick="openStudentAnswerDetail(\'' + s.name.replace(/'/g, '\\\'') + '\',' + s.examScore + ')">查看答题</button>'
+          : '<button class="btn" style="font-size:12px;padding:2px 10px;opacity:.4;cursor:not-allowed;pointer-events:none;">查看答题</button>';
+        return '<tr data-rank-row data-rank-text="' + escHtml(text.toLowerCase()) + '">'
+          + '<td>' + rankTxt + '</td>'
+          + '<td style="font-weight:600;">' + escHtml(s.name) + '</td>'
+          + '<td style="font-family:monospace;font-size:12px;color:var(--muted);">' + escHtml(s.mobile || s.empId) + '</td>'
+          + '<td>' + scoreTxt + '</td>'
+          + '<td style="font-size:12px;color:var(--muted);">' + timeTxt + '</td>'
+          + '<td style="font-size:12px;">' + escHtml(s.durationText) + '</td>'
+          + '<td><span style="font-size:12px;font-weight:700;color:' + examStatusColor(s.examStatus) + ';">' + examStatusLabel(s.examStatus) + '</span></td>'
+          + '<td>' + action + '</td>'
+          + '</tr>';
+      }).join('');
+    }
+    function reportFileName(t) {
+      var date = String(t.endTime || t.startTime || t.date || '').slice(0, 10).replace(/-/g, '');
+      var name = String(t.name || '培训').replace(/[\\/:*?"<>|]/g, '');
+      return '培训报告_' + name + '_' + t.number + '_' + (date || '日期未填');
+    }
+    function getStudentQuestionReview(name) {
+      var qs = (typeof examQuestionsMock !== 'undefined' && examQuestionsMock.length) ? examQuestionsMock : DEFAULT_EXAM_QUESTIONS;
+      return qs.map(function(q, i) {
+        var preset = q.answers && q.answers[name];
+        var ok;
+        if (preset != null) ok = preset === q.correct;
+        else {
+          var rate = parseInt(q.correct, 10);
+          if (isNaN(rate)) rate = 80;
+          ok = (hashStr(name + '#' + i) % 100) < rate;
+        }
+        return { index: i + 1, type: q.type, text: q.q || q.text || '', ok: ok };
+      });
+    }
+    function hashStr(str) {
+      var h = 0, i, t = String(str || '');
+      for (i = 0; i < t.length; i++) h = ((h << 5) - h) + t.charCodeAt(i) | 0;
+      return Math.abs(h);
+    }
+    function reportSvgEsc(s) {
+      return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function reportNiceMax(v) {
+      v = Math.max(1, Number(v) || 1);
+      if (v <= 5) return 5;
+      if (v <= 10) return 10;
+      if (v <= 20) return 20;
+      if (v <= 40) return 40;
+      if (v <= 50) return 50;
+      return Math.ceil(v / 10) * 10;
+    }
+    function reportDurationMinutes(t) {
+      var d = String((t && t.duration) || '');
+      var m = d.match(/([\d.]+)\s*小时/);
+      if (m) return Math.max(30, Math.round(parseFloat(m[1]) * 60));
+      m = d.match(/(\d+)\s*分/);
+      if (m) return Math.max(30, parseInt(m[1], 10));
+      return 120;
+    }
+    function reportTimeLabels(t, n) {
+      var minutes = reportDurationMinutes(t);
+      var labels = [];
+      var i;
+      for (i = 0; i < n; i++) labels.push(Math.round(minutes * i / Math.max(1, n - 1)) + '分');
+      return labels;
+    }
+    function reportLearningValues(t, brain, n) {
+      n = n || 13;
+      var end = brain ? Number(brain.score) || 82 : 82;
+      var start = Math.max(36, end - 32);
+      var seed = hashStr((t && t.number) || (t && t.name) || 'curve');
+      var vals = [];
+      var i;
+      for (i = 0; i < n; i++) {
+        var p = i / Math.max(1, n - 1);
+        var ease = 1 - Math.pow(1 - p, 1.35);
+        var wobble = ((seed + i * 17) % 7) - 3;
+        vals.push(Math.round(Math.min(99, Math.max(18, start + (end - start) * ease + wobble))));
+      }
+      vals[n - 1] = end;
+      return vals;
+    }
+    function reportBrainSeries(t, brain) {
+      var n = 13;
+      var baseA = brain ? Number(brain.attention) || 82 : 82;
+      var baseE = brain ? Number(brain.emotion) || 85 : 85;
+      var baseF = brain ? Math.max(18, 100 - (Number(brain.energy) || 78)) : 35;
+      var seed = hashStr(((t && t.number) || '') + 'brain');
+      function wave(base, amp, i, phase) {
+        var v = base + Math.round(Math.sin((i + phase) * 0.72) * amp) + ((seed + i * 3) % 5) - 2;
+        return Math.max(8, Math.min(99, v));
+      }
+      var att = [], fat = [], emo = [], i;
+      for (i = 0; i < n; i++) {
+        att.push(wave(baseA, 8, i, 0.2));
+        fat.push(wave(baseF, 9, i, 1.4));
+        emo.push(wave(baseE, 6, i, 2.2));
+      }
+      return [
+        { name: '注意力', color: '#00B42A', values: att },
+        { name: '疲劳度', color: '#FF7D00', values: fat },
+        { name: '情绪', color: '#722ed1', values: emo }
+      ];
+    }
+    function seriesMinMax(values) {
+      var minI = 0, maxI = 0, i;
+      for (i = 1; i < values.length; i++) {
+        if (values[i] < values[minI]) minI = i;
+        if (values[i] > values[maxI]) maxI = i;
+      }
+      return { minI: minI, maxI: maxI, min: values[minI], max: values[maxI] };
+    }
+    function buildAxisLineChart(opts) {
+      var w = opts.w || 720;
+      var h = opts.h || 268;
+      var pad = { l: 56, r: 58, t: 38, b: 46 };
+      var iw = w - pad.l - pad.r;
+      var ih = h - pad.t - pad.b;
+      var yMin = opts.yMin != null ? opts.yMin : 0;
+      var yMax = opts.yMax != null ? opts.yMax : 100;
+      var labels = opts.labels || [];
+      var series = opts.series || [];
+      var yTitle = opts.yTitle || '';
+      var xTitle = opts.xTitle || '';
+      var n = labels.length || (series[0] && series[0].values.length) || 1;
+      function xAt(i) { return pad.l + (n <= 1 ? iw / 2 : i / (n - 1) * iw); }
+      function yAt(v) { return pad.t + (1 - (v - yMin) / (yMax - yMin || 1)) * ih; }
+      var svg = [];
+      svg.push('<svg class="chart" viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">');
+      svg.push('<rect x="0" y="0" width="' + w + '" height="' + h + '" fill="#fff"/>');
+      var yTicks = opts.yTicks || [0, 25, 50, 75, 100];
+      yTicks.forEach(function(tick) {
+        var y = yAt(tick);
+        svg.push('<line x1="' + pad.l + '" y1="' + y + '" x2="' + (pad.l + iw) + '" y2="' + y + '" stroke="#f2f3f5" stroke-width="1"/>');
+        svg.push('<text x="' + (pad.l - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#86909c">' + tick + '</text>');
+      });
+      labels.forEach(function(lab, i) {
+        var step = n > 8 ? 2 : 1;
+        if (i % step !== 0 && i !== n - 1) return;
+        var x = xAt(i);
+        svg.push('<line x1="' + x + '" y1="' + (pad.t + ih) + '" x2="' + x + '" y2="' + (pad.t + ih + 4) + '" stroke="#c9cdd4"/>');
+        svg.push('<text x="' + x + '" y="' + (pad.t + ih + 18) + '" text-anchor="middle" font-size="11" fill="#86909c">' + reportSvgEsc(lab) + '</text>');
+      });
+      svg.push('<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + pad.l + '" y2="' + (pad.t + ih) + '" stroke="#4e5969" stroke-width="1.2"/>');
+      svg.push('<line x1="' + pad.l + '" y1="' + (pad.t + ih) + '" x2="' + (pad.l + iw) + '" y2="' + (pad.t + ih) + '" stroke="#4e5969" stroke-width="1.2"/>');
+      if (yTitle) {
+        svg.push('<text x="14" y="' + (pad.t + ih / 2) + '" text-anchor="middle" font-size="11" fill="#4e5969" transform="rotate(-90 14 ' + (pad.t + ih / 2) + ')">' + reportSvgEsc(yTitle) + '</text>');
+      }
+      if (xTitle) {
+        svg.push('<text x="' + (pad.l + iw / 2) + '" y="' + (h - 6) + '" text-anchor="middle" font-size="11" fill="#4e5969">' + reportSvgEsc(xTitle) + '</text>');
+      }
+      series.forEach(function(s) {
+        var pts = s.values.map(function(v, i) { return xAt(i).toFixed(1) + ',' + yAt(v).toFixed(1); }).join(' ');
+        if (opts.fill && series.length === 1) {
+          svg.push('<polygon points="' + pad.l + ',' + (pad.t + ih) + ' ' + pts + ' ' + xAt(s.values.length - 1) + ',' + (pad.t + ih) + '" fill="rgba(47,107,255,.10)" stroke="none"/>');
+        }
+        svg.push('<polyline points="' + pts + '" fill="none" stroke="' + s.color + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>');
+        var mm = seriesMinMax(s.values);
+        function mark(idx, tag, preferAbove) {
+          var v = s.values[idx];
+          var x = xAt(idx);
+          var y = yAt(v);
+          var above = preferAbove !== false && y > pad.t + 16;
+          var ty = above ? (y - 10) : (y + 16);
+          var tx = x;
+          var anchor = 'middle';
+          if (x > pad.l + iw - 46) { anchor = 'end'; tx = x - 5; }
+          else if (x < pad.l + 46) { anchor = 'start'; tx = x + 5; }
+          svg.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="3.6" fill="#fff" stroke="' + s.color + '" stroke-width="2"/>');
+          svg.push('<text x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="' + anchor + '" font-size="10" font-weight="700" fill="' + s.color + '">' + tag + v + '</text>');
+        }
+        mark(mm.maxI, '最大 ', true);
+        if (mm.minI !== mm.maxI) mark(mm.minI, '最小 ', false);
+      });
+      svg.push('</svg>');
+      return svg.join('');
+    }
+    function buildScoreDistChart(stats) {
+      var buckets = stats.buckets || [];
+      var w = 720, h = 280;
+      var pad = { l: 56, r: 24, t: 36, b: 50 };
+      var iw = w - pad.l - pad.r;
+      var ih = h - pad.t - pad.b;
+      var yMax = reportNiceMax(stats.maxBucket);
+      var n = buckets.length || 1;
+      var gap = 28;
+      var barW = (iw - gap * (n + 1)) / n;
+      function yAt(v) { return pad.t + (1 - v / yMax) * ih; }
+      var svg = [];
+      svg.push('<svg class="chart" viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">');
+      svg.push('<rect width="' + w + '" height="' + h + '" fill="#fff"/>');
+      var step = yMax <= 10 ? 2 : (yMax <= 20 ? 5 : 10);
+      var tick;
+      for (tick = 0; tick <= yMax; tick += step) {
+        var y = yAt(tick);
+        svg.push('<line x1="' + pad.l + '" y1="' + y + '" x2="' + (pad.l + iw) + '" y2="' + y + '" stroke="#f2f3f5"/>');
+        svg.push('<text x="' + (pad.l - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#86909c">' + tick + '</text>');
+      }
+      svg.push('<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + pad.l + '" y2="' + (pad.t + ih) + '" stroke="#4e5969" stroke-width="1.2"/>');
+      svg.push('<line x1="' + pad.l + '" y1="' + (pad.t + ih) + '" x2="' + (pad.l + iw) + '" y2="' + (pad.t + ih) + '" stroke="#4e5969" stroke-width="1.2"/>');
+      svg.push('<text x="14" y="' + (pad.t + ih / 2) + '" text-anchor="middle" font-size="11" fill="#4e5969" transform="rotate(-90 14 ' + (pad.t + ih / 2) + ')">人数</text>');
+      svg.push('<text x="' + (pad.l + iw / 2) + '" y="' + (h - 8) + '" text-anchor="middle" font-size="11" fill="#4e5969">分数区间（分）</text>');
+      var minB = buckets[0], maxB = buckets[0];
+      buckets.forEach(function(b) {
+        if (!minB || b.count < minB.count) minB = b;
+        if (!maxB || b.count > maxB.count) maxB = b;
+      });
+      buckets.forEach(function(b, i) {
+        var x = pad.l + gap + i * (barW + gap);
+        var bh = Math.max(2, (b.count / yMax) * ih);
+        var y = pad.t + ih - bh;
+        svg.push('<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + barW.toFixed(1) + '" height="' + bh.toFixed(1) + '" rx="4" fill="' + b.color + '"/>');
+        svg.push('<text x="' + (x + barW / 2).toFixed(1) + '" y="' + (y - 8).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#1d2129">' + b.count + '人</text>');
+        svg.push('<text x="' + (x + barW / 2).toFixed(1) + '" y="' + (pad.t + ih + 18) + '" text-anchor="middle" font-size="11" fill="#4e5969">' + reportSvgEsc(b.label) + '</text>');
+      });
+      svg.push('</svg>');
+      var cap = minB && maxB
+        ? '<div class="chart-cap">已交卷 ' + stats.submitted + ' 人　平均分 ' + (stats.avg != null ? stats.avg : '—')
+          + '　最高分 ' + (stats.maxScore != null ? stats.maxScore : '—')
+          + '　最低分 ' + (stats.minScore != null ? stats.minScore : '—')
+          + '　人数最多 ' + reportSvgEsc(maxB.label) + '（' + maxB.count + '人）　人数最少 ' + reportSvgEsc(minB.label) + '（' + minB.count + '人）</div>'
+        : '';
+      return svg.join('') + cap;
+    }
+    function reportLineCaption(series) {
+      return '<div class="chart-cap">' + series.map(function(s) {
+        var mm = seriesMinMax(s.values);
+        return '<span style="color:' + s.color + ';font-weight:700;">' + reportSvgEsc(s.name) + '</span> 最小 ' + mm.min + ' / 最大 ' + mm.max;
+      }).join('　　') + '</div>';
+    }
+    function pdfStrBytes(s) {
+      var out = new Uint8Array(s.length);
+      var i;
+      for (i = 0; i < s.length; i++) out[i] = s.charCodeAt(i) & 0xff;
+      return out;
+    }
+    function pdfConcat(parts) {
+      var len = 0, i, o = 0, out;
+      for (i = 0; i < parts.length; i++) len += parts[i].length;
+      out = new Uint8Array(len);
+      for (i = 0; i < parts.length; i++) { out.set(parts[i], o); o += parts[i].length; }
+      return out;
+    }
+    function dataURLToUint8(url) {
+      var b64 = String(url || '').split(',')[1] || '';
+      var bin = atob(b64);
+      var out = new Uint8Array(bin.length);
+      var i;
+      for (i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+    function buildJpegPdf(pages, pageW, pageH) {
+      var n = pages.length;
+      var parts = [];
+      var bufLen = 0;
+      var objOffsets = [0];
+      function emit(item) {
+        var bytes = typeof item === 'string' ? pdfStrBytes(item) : item;
+        parts.push(bytes);
+        bufLen += bytes.length;
+      }
+      function addObj(chunks) {
+        objOffsets.push(bufLen);
+        chunks.forEach(emit);
+      }
+      var pageStart = 3;
+      var contentStart = 3 + n;
+      var imageStart = 3 + 2 * n;
+      emit('%PDF-1.3\n');
+      addObj(['1 0 obj<< /Type /Catalog /Pages 2 0 R >>endobj\n']);
+      var kids = [];
+      var i;
+      for (i = 0; i < n; i++) kids.push((pageStart + i) + ' 0 R');
+      addObj(['2 0 obj<< /Type /Pages /Count ' + n + ' /Kids [' + kids.join(' ') + '] >>endobj\n']);
+      for (i = 0; i < n; i++) {
+        addObj([(pageStart + i) + ' 0 obj<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + pageW + ' ' + pageH + '] /Resources << /XObject << /Im0 ' + (imageStart + i) + ' 0 R >> >> /Contents ' + (contentStart + i) + ' 0 R >>endobj\n']);
+      }
+      for (i = 0; i < n; i++) {
+        var imgHpt = pageW * pages[i].h / pages[i].w;
+        var content = 'q ' + pageW + ' 0 0 ' + imgHpt.toFixed(2) + ' 0 ' + (pageH - imgHpt).toFixed(2) + ' cm /Im0 Do Q';
+        addObj([(contentStart + i) + ' 0 obj<< /Length ' + content.length + ' >>stream\n' + content + '\nendstream\nendobj\n']);
+      }
+      for (i = 0; i < n; i++) {
+        addObj([
+          (imageStart + i) + ' 0 obj<< /Type /XObject /Subtype /Image /Width ' + pages[i].w + ' /Height ' + pages[i].h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + pages[i].jpeg.length + ' >>stream\n',
+          pages[i].jpeg,
+          '\nendstream\nendobj\n'
+        ]);
+      }
+      var xrefStart = bufLen;
+      emit('xref\n0 ' + objOffsets.length + '\n0000000000 65535 f \n');
+      for (i = 1; i < objOffsets.length; i++) {
+        emit(('0000000000' + objOffsets[i]).slice(-10) + ' 00000 n \n');
+      }
+      emit('trailer<< /Size ' + objOffsets.length + ' /Root 1 0 R >>\nstartxref\n' + xrefStart + '\n%%EOF');
+      return new Blob([pdfConcat(parts)], { type: 'application/pdf' });
+    }
+    function canvasToJpegPage(canvas) {
+      return dataURLToUint8(canvas.toDataURL('image/jpeg', 0.96));
+    }
+    function reportPageCssHeight(wrap) {
+      return (wrap && wrap.offsetWidth ? wrap.offsetWidth : 794) * 841.89 / 595.28;
+    }
+    function isReportLeadUnit(el) {
+      var tag = el.tagName;
+      if (tag === 'H1' || tag === 'H2' || tag === 'H3' || tag === 'THEAD') return true;
+      return !!(el.classList && (el.classList.contains('chart-title') || el.classList.contains('sub')));
+    }
+    function collectReportUnits(wrap) {
+      return Array.prototype.filter.call(
+        wrap.querySelectorAll('h1,h2,h3,p,.info,.grid4,.conclusion,.chart-title,.chart-cap,.legend,.score-kpis,.q,.empty,svg.chart,table thead,table tbody tr'),
+        function(el) { return !el.closest('.pdf-page-pad') && !el.classList.contains('pdf-page-pad'); }
+      );
+    }
+    function spacerAnchor(el) {
+      if (el.tagName === 'THEAD') return el.closest('.table-box') || el.closest('table') || el;
+      return el;
+    }
+    function insertPageSpacer(el, height) {
+      height = Math.max(2, Math.ceil(height + 2));
+      var anchor = spacerAnchor(el);
+      if (!anchor || !anchor.parentNode) return 0;
+      if (anchor.tagName === 'TR') {
+        var tr = document.createElement('tr');
+        tr.className = 'pdf-page-pad';
+        tr.setAttribute('aria-hidden', 'true');
+        var td = document.createElement('td');
+        var cols = 1;
+        var row = anchor.parentNode.querySelector('tr');
+        var table = anchor.closest('table');
+        if (table) {
+          var headRow = table.querySelector('tr');
+          if (headRow) cols = headRow.children.length;
+        } else if (row) cols = row.children.length;
+        td.colSpan = Math.max(1, cols);
+        td.style.cssText = 'height:' + height + 'px;padding:0;margin:0;border:0;background:#fff;line-height:0;font-size:0;';
+        var inner = document.createElement('div');
+        inner.className = 'pdf-page-pad';
+        inner.style.cssText = 'height:' + height + 'px;width:1px;';
+        td.appendChild(inner);
+        tr.appendChild(td);
+        anchor.parentNode.insertBefore(tr, anchor);
+        return height;
+      }
+      var d = document.createElement('div');
+      d.className = 'pdf-page-pad';
+      d.setAttribute('aria-hidden', 'true');
+      d.style.cssText = 'height:' + height + 'px;margin:0;padding:0;border:0;background:#fff;';
+      anchor.parentNode.insertBefore(d, anchor);
+      return height;
+    }
+    function groupBottomCss(units, start, wrapTop) {
+      var end = start;
+      if (isReportLeadUnit(units[start])) {
+        while (end + 1 < units.length && isReportLeadUnit(units[end + 1])) end++;
+        if (end + 1 < units.length) end++;
+      }
+      var bottom = 0;
+      var i;
+      for (i = start; i <= end; i++) {
+        bottom = Math.max(bottom, units[i].getBoundingClientRect().bottom - wrapTop);
+      }
+      return bottom;
+    }
+    function padReportToPages(wrap) {
+      if (!wrap) return;
+      var pageH = reportPageCssHeight(wrap);
+      var units = collectReportUnits(wrap);
+      var pageTop = 0;
+      var i, wrapTop, top, bottom, fill;
+      for (i = 0; i < units.length; i++) {
+        wrapTop = wrap.getBoundingClientRect().top;
+        top = units[i].getBoundingClientRect().top - wrapTop;
+        bottom = groupBottomCss(units, i, wrapTop);
+        if (bottom - top > pageH - 8) bottom = units[i].getBoundingClientRect().bottom - wrapTop;
+        if (bottom <= pageTop + pageH + 0.5) continue;
+        if (top <= pageTop + 8) {
+          while (pageTop + pageH < bottom - 0.5) pageTop += pageH;
+          continue;
+        }
+        fill = Math.max(28, pageTop + pageH - top);
+        if (fill < 2) {
+          pageTop += pageH;
+          continue;
+        }
+        insertPageSpacer(units[i], fill);
+        pageTop += pageH;
+      }
+    }
+    function findQuietCanvasRow(canvas, fromY, toY, minY) {
+      var start = Math.max(minY, fromY);
+      var end = Math.max(start + 1, toY);
+      var h = end - start;
+      if (h < 3) return end;
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width;
+      var data = ctx.getImageData(0, start, w, h).data;
+      var best = end;
+      var i, row, x, off, dark, samples, ratio;
+      for (row = h - 1; row >= 0; row--) {
+        dark = 0;
+        samples = 0;
+        off = row * w * 4;
+        for (x = 0; x < w; x += 3) {
+          i = off + x * 4;
+          if (data[i] < 248 || data[i + 1] < 248 || data[i + 2] < 248) dark++;
+          samples++;
+        }
+        ratio = dark / samples;
+        if (ratio < 0.025) return start + row + 1;
+        if (ratio < 0.08) best = start + row + 1;
+      }
+      return best;
+    }
+    function sliceCanvasToA4Pages(canvas, pageCss, wrapH) {
+      if (!pageCss || !wrapH) {
+        var wrap = document.querySelector('#reportPdfHost .wrap');
+        if (wrap) {
+          pageCss = reportPageCssHeight(wrap);
+          wrapH = wrap.scrollHeight;
+        }
+      }
+      var destH = Math.max(1, Math.round(canvas.width * 841.89 / 595.28));
+      var step = (pageCss && wrapH)
+        ? Math.max(1, Math.round(pageCss * canvas.height / wrapH))
+        : destH;
+      var pages = [];
+      var y = 0;
+      while (y < canvas.height - 1) {
+        var maxEnd = Math.min(canvas.height, y + step);
+        var end = maxEnd;
+        if (end < canvas.height - 1) {
+          end = findQuietCanvasRow(canvas, Math.max(y + 8, maxEnd - 12), maxEnd, y + 8);
+        }
+        var sliceH = Math.max(2, end - y);
+        if (sliceH < 2) break;
+        var c = document.createElement('canvas');
+        c.width = canvas.width;
+        c.height = destH;
+        var ctx = c.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, Math.min(sliceH, destH));
+        pages.push({ jpeg: canvasToJpegPage(c), w: c.width, h: c.height });
+        y = end;
+        if (y >= canvas.height - 1) break;
+      }
+      return pages;
+    }
+    function canvasToPdfBlob(canvas) {
+      var pages = sliceCanvasToA4Pages(canvas);
+      if (!pages.length) throw new Error('empty pdf');
+      return buildJpegPdf(pages, 595.28, 841.89);
+    }
+    function packCanvasesToA4(canvases, scale) {
+      var pw = Math.round(794 * scale);
+      var ph = Math.round(1123 * scale);
+      var pad = Math.round(8 * scale);
+      var pages = [];
+      var page = null;
+      var ctx = null;
+      var y = 0;
+      function newPage() {
+        page = document.createElement('canvas');
+        page.width = pw;
+        page.height = ph;
+        ctx = page.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, pw, ph);
+        y = pad;
+      }
+      function flush() {
+        if (!page) return;
+        pages.push({ jpeg: canvasToJpegPage(page), w: pw, h: ph });
+        page = null;
+        ctx = null;
+        y = 0;
+      }
+      newPage();
+      canvases.forEach(function(c) {
+        if (!c || !c.width || !c.height) return;
+        var destW = pw;
+        var srcY = 0;
+        while (srcY < c.height - 0.5) {
+          var room = ph - pad - y;
+          if (room < Math.round(36 * scale) && y > pad + 10) {
+            flush();
+            newPage();
+            room = ph - pad - y;
+          }
+          var takeH = Math.min(c.height - srcY, room * (c.width / destW));
+          if (takeH < 1) break;
+          var drawH = takeH * (destW / c.width);
+          ctx.drawImage(c, 0, srcY, c.width, takeH, 0, y, destW, drawH);
+          y += drawH;
+          srcY += takeH;
+        }
+        y += Math.round(6 * scale);
+      });
+      if (page && y > pad + 8) flush();
+      return pages;
+    }
+    function scopeReportCss(css) {
+      return String(css).replace(/(^|})\s*([^{}@]+)\s*\{/g, function(_, prev, selectors) {
+        var scoped = selectors.split(',').map(function(sel) {
+          sel = sel.trim();
+          if (!sel) return '';
+          sel = sel.replace(/^html\s*,\s*body\b/, '#reportPdfHost');
+          sel = sel.replace(/^html\b/, '#reportPdfHost');
+          sel = sel.replace(/^body\b/, '#reportPdfHost');
+          if (sel.indexOf('#reportPdfHost') === 0) return sel;
+          return '#reportPdfHost ' + sel;
+        }).filter(Boolean).join(',');
+        return prev + scoped + '{';
+      });
+    }
+    function mountReportHost(html) {
+      var old = document.getElementById('reportPdfHost');
+      if (old) old.remove();
+      var host = document.createElement('div');
+      host.id = 'reportPdfHost';
+      host.setAttribute('aria-hidden', 'true');
+      host.style.cssText = 'position:fixed;left:-12000px;top:0;width:794px;background:#fff;color:#1d2129;z-index:0;pointer-events:none;';
+      var style = '';
+      var sm = String(html).match(/<style>([\s\S]*?)<\/style>/);
+      if (sm) style = scopeReportCss(sm[1]);
+      var body = String(html).replace(/^[\s\S]*?<body[^>]*>/i, '').replace(/<\/body>[\s\S]*$/i, '');
+      host.innerHTML = '<style>' + style + '</style>' + body;
+      document.body.appendChild(host);
+      return host;
+    }
+    function captureReportPages(h2c, host) {
+      var wrap = host.querySelector('.wrap') || host;
+      padReportToPages(wrap);
+      var fullW = wrap.offsetWidth || 794;
+      var fullH = Math.max(wrap.scrollHeight, host.scrollHeight, 400);
+      var pageCss = reportPageCssHeight(wrap);
+      var scale = Math.min(2, 18000 / fullH);
+      if (scale < 1.2) scale = 1.2;
+      return h2c(wrap, {
+        scale: scale,
+        width: fullW,
+        height: fullH,
+        windowWidth: fullW,
+        windowHeight: fullH,
+        scrollX: 0,
+        scrollY: 0,
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        logging: false
+      }).then(function(canvas) {
+        if (!canvas.width || canvas.height < 20) throw new Error('empty canvas');
+        return sliceCanvasToA4Pages(canvas, pageCss, fullH);
+      });
+    }
+    function triggerBlobDownload(blob, fileName) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function() { URL.revokeObjectURL(url); }, 4000);
+    }
+    function loadScriptOnce(src) {
+      return new Promise(function(resolve, reject) {
+        if (document.querySelector('script[data-pdf-lib="' + src + '"]')) {
+          resolve();
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.setAttribute('data-pdf-lib', src);
+        s.onload = function() { resolve(); };
+        s.onerror = function() { reject(new Error('script ' + src)); };
+        document.head.appendChild(s);
+      });
+    }
+    function ensureHtml2Canvas() {
+      if (typeof html2canvas === 'function') return Promise.resolve(html2canvas);
+      var urls = [
+        'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+        'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js'
+      ];
+      return loadScriptOnce(urls[0]).catch(function() { return loadScriptOnce(urls[1]); }).then(function() {
+        if (typeof html2canvas !== 'function') throw new Error('html2canvas missing');
+        return html2canvas;
+      });
+    }
+    function captureNodeFallback(doc, width) {
+      var el = doc.body;
+      var height = Math.max(el.scrollHeight, doc.documentElement.scrollHeight, 400);
+      var styles = '';
+      Array.prototype.forEach.call(doc.querySelectorAll('style'), function(st) { styles += st.textContent || ''; });
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '">'
+        + '<foreignObject width="100%" height="100%">'
+        + '<div xmlns="http://www.w3.org/1999/xhtml" style="width:' + width + 'px;background:#fff;">'
+        + '<style>' + styles + '</style>'
+        + el.innerHTML
+        + '</div></foreignObject></svg>';
+      return new Promise(function(resolve, reject) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var scale = 1.4;
+          canvas.width = Math.round(width * scale);
+          canvas.height = Math.round(height * scale);
+          var ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.scale(scale, scale);
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas);
+        };
+        img.onerror = reject;
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+      });
+    }
+    function buildTrainingReport(t) {
+      var brain = getBrainOverview(t);
+      var stats = getExamStats(t);
+      var rank = getExamRanking(t);
+      var qs = getTrainingExamQuestions(t);
+      var paperTotal = examScoreTotal(qs);
+      var fileName = reportFileName(t);
+      var vc = function(v) { return v >= 80 ? '#00b42a' : v >= 60 ? '#ff7d00' : '#f53f3f'; };
+      var brainCards = brain
+        ? '<div class="grid4">'
+          + '<div class="kpi main"><div class="num">' + brain.score + '</div><div class="lab">综合得分</div></div>'
+          + '<div class="kpi"><div class="num" style="color:' + vc(brain.attention) + '">' + brain.attention + '</div><div class="lab">注意力 · ' + metricStatus('attention', brain.attention) + '</div></div>'
+          + '<div class="kpi"><div class="num" style="color:' + vc(brain.emotion) + '">' + brain.emotion + '</div><div class="lab">情绪 · ' + metricStatus('emotion', brain.emotion) + '</div></div>'
+          + '<div class="kpi"><div class="num" style="color:' + vc(brain.energy) + '">' + brain.energy + '</div><div class="lab">抗疲劳 · ' + metricStatus('fatigue', brain.energy) + '</div></div>'
+          + '</div>'
+          + '<div class="conclusion"><b>' + escHtml(brain.conclusion.level) + '</b><p>' + escHtml(brain.conclusion.text) + '</p><div class="meta">判定依据：综合得分 ' + brain.score + ' 分；有效脑机样本 ' + brain.validCount + '/' + brain.total + ' 人。</div></div>'
+          + '<div class="chart-title">学习曲线（综合得分）</div>'
+          + (function() {
+              var labels = reportTimeLabels(t, 13);
+              var values = reportLearningValues(t, brain, 13);
+              var series = [{ name: '综合得分', color: '#2f6bff', values: values }];
+              return buildAxisLineChart({
+                labels: labels,
+                series: series,
+                yTitle: '综合得分（分）',
+                xTitle: '培训时长',
+                yMin: 0,
+                yMax: 100,
+                fill: true
+              }) + reportLineCaption(series);
+            })()
+          + '<div class="chart-title">脑机指标监测</div>'
+          + (function() {
+              var labels = reportTimeLabels(t, 13);
+              var series = reportBrainSeries(t, brain);
+              return buildAxisLineChart({
+                labels: labels,
+                series: series,
+                yTitle: '指标值（分）',
+                xTitle: '培训时长',
+                yMin: 0,
+                yMax: 100
+              }) + '<div class="legend"><span style="color:#00B42A">注意力</span><span style="color:#FF7D00">疲劳度</span><span style="color:#722ed1">情绪</span></div>'
+                + reportLineCaption(series);
+            })()
+        : '<div class="empty">本场为' + escHtml(t.type || '非脑机培训') + '，或有效脑机样本不足，综合脑机数据暂缺。</div>';
+      var studentRows = hasBrainExport(t)
+        ? getTrainingRoster(t).map(function(s) {
+            if (!s.wearing) {
+              return '<tr><td>' + escHtml(s.name) + '</td><td>' + escHtml(s.mobile || s.empId) + '</td><td colspan="4" style="color:#86909c">数据不足</td><td><span class="pill gray">数据不足</span></td></tr>';
+            }
+            return '<tr><td>' + escHtml(s.name) + '</td><td>' + escHtml(s.mobile || s.empId) + '</td><td>' + s.attention + '</td><td>' + s.emotion + '</td><td>' + s.energy + '</td><td><b>' + s.brainScore + '</b></td><td><span class="pill ' + s.personalClass + '">' + escHtml(s.personalName) + '</span></td></tr>';
+          }).join('')
+        : '';
+      var dist = stats.submitted
+        ? '<div class="score-kpis">'
+          + '<div><div class="k">平均分</div><div class="v">' + (stats.avg != null ? stats.avg : '—') + '</div></div>'
+          + '<div><div class="k">最高分</div><div class="v" style="color:#00b42a">' + (stats.maxScore != null ? stats.maxScore : '—') + '</div></div>'
+          + '<div><div class="k">最低分</div><div class="v" style="color:#f53f3f">' + (stats.minScore != null ? stats.minScore : '—') + '</div></div>'
+          + '<div><div class="k">已交卷</div><div class="v">' + stats.submitted + ' 人</div></div>'
+          + '</div>'
+          + buildScoreDistChart(stats)
+        : '<div class="empty">暂无交卷数据，分数分布为空。</div>';
+      var qCards = qs.length
+        ? qs.map(function(item, i) {
+            return '<div class="q"><div class="qt"><span class="tag">' + escHtml(item.type) + '</span> Q' + (i + 1) + '　' + escHtml(item.text || item.q || '') + '</div><div class="qr">分值 ' + (Number(item.score) || 0) + ' 分　正确率 ' + escHtml(item.correct || '—') + '　错误率 ' + escHtml(item.wrong || '—') + '</div></div>';
+          }).join('')
+        : '<div class="empty">本场未配置考卷。</div>';
+      var rankRows = rank.map(function(s) {
+        return '<tr>'
+          + '<td>' + (s.rank || '—') + '</td><td>' + escHtml(s.name) + '</td><td>' + escHtml(s.mobile || s.empId) + '</td>'
+          + '<td>' + (s.examScore != null ? s.examScore : '—') + '</td><td>' + escHtml(s.submitTime || '—') + '</td>'
+          + '<td>' + escHtml(s.durationText) + '</td><td>' + examStatusLabel(s.examStatus) + '</td></tr>';
+      }).join('');
+      var html = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">'
+        + '<title>' + escHtml(fileName) + '</title>'
+        + '<style>'
+        + '#reportPdfHost{margin:0;padding:0;width:794px;box-sizing:border-box;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:#1d2129;background:#fff;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision;}'
+        + '.wrap{padding:28px 32px 40px;}'
+        + 'h1{margin:0 0 6px;font-size:26px;} h2{margin:28px 0 12px;font-size:18px;border-left:4px solid #2f6bff;padding-left:10px;}'
+        + '.sub{color:#86909c;font-size:13px;line-height:1.7;margin:0 0 16px;}'
+        + '.info{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;}'
+        + '.info div{background:#fff;border:1px solid #f2f3f5;border-radius:8px;padding:10px 12px;} .info .k{font-size:11px;color:#86909c;} .info .v{font-weight:700;margin-top:3px;}'
+        + '.grid4{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:10px;margin:12px 0;}'
+        + '.kpi{background:#fff;border:1px solid #f2f3f5;border-radius:10px;padding:14px;text-align:center;} .kpi .num{font-size:28px;font-weight:900;} .kpi .lab{font-size:12px;color:#86909c;margin-top:4px;}'
+        + '.kpi.main{background:linear-gradient(135deg,#165DFF,#4080FF);color:#fff;} .kpi.main .lab{color:rgba(255,255,255,.85);}'
+        + '.conclusion{background:#fff;border:1px solid #f2f3f5;border-radius:10px;padding:14px;margin:12px 0;} .conclusion p{margin:8px 0;line-height:1.7;font-size:13px;} .meta{font-size:12px;color:#86909c;}'
+        + '.chart{width:100%;height:auto;background:#fff;border:1px solid #f2f3f5;border-radius:8px;display:block;}'
+        + '.chart-title{font-size:13px;font-weight:700;margin:16px 0 8px;} .legend{display:flex;gap:14px;font-size:12px;color:#86909c;margin:6px 0 0;}'
+        + '.chart-cap{font-size:12px;color:#86909c;margin:6px 0 0;line-height:1.7;}'
+        + '.score-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 10px;}'
+        + '.score-kpis>div{background:#f7f8fa;border:1px solid #f2f3f5;border-radius:8px;padding:10px 12px;} .score-kpis .k{font-size:11px;color:#86909c;} .score-kpis .v{font-weight:800;font-size:22px;margin-top:4px;}'
+        + 'table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;} th,td{padding:9px 10px;border-bottom:1px solid #f2f3f5;text-align:left;}'
+        + 'tr,h2,.q,svg.chart,.conclusion,.grid4{break-inside:avoid;page-break-inside:avoid;}'
+        + '.pdf-page-pad{display:block;margin:0;padding:0;border:0;background:#fff;}'
+        + 'tr.pdf-page-pad,tr.pdf-page-pad td{height:auto;padding:0;margin:0;border:0!important;background:#fff!important;line-height:0;font-size:0;}'
+        + 'th{background:#fbfcff;color:#4e5969;} .table-box{border:1px solid #f2f3f5;border-radius:8px;overflow:visible;}'
+        + '.empty{background:#fff;border:1px dashed #e5e6eb;border-radius:8px;padding:28px;text-align:center;color:#86909c;}'
+        + '.q{background:#fff;border:1px solid #f2f3f5;border-radius:8px;padding:10px 12px;margin-bottom:8px;} .qt{font-weight:600;} .qr{font-size:12px;color:#86909c;margin-top:6px;}'
+        + '.tag{display:inline-block;background:#e8f3ff;color:#2f6bff;border-radius:999px;padding:1px 8px;font-size:12px;margin-right:6px;}'
+        + '.pill{display:inline-block;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700;} .pill.excellent{background:#e8fff0;color:#00b42a;} .pill.stable{background:#e8f3ff;color:#2f6bff;} .pill.wave{background:#f5efff;color:#722ed1;} .pill.warning{background:#fff7e8;color:#ff7d00;} .pill.detached{background:#ffece8;color:#f53f3f;} .pill.gray,.pill.insufficient{background:#f2f3f5;color:#86909c;}'
+        + '.foot{margin-top:28px;font-size:12px;color:#86909c;}'
+        + '</style></head><body>'
+        + '<div class="wrap">'
+        + '<h1>' + escHtml(t.name) + '</h1>'
+        + '<h2 id="sec-base">1. 培训基本信息</h2>'
+        + '<div class="info">'
+        + '<div><div class="k">培训编号</div><div class="v">' + escHtml(t.number) + '</div></div>'
+        + '<div><div class="k">培训状态</div><div class="v">' + escHtml(t.statusText) + '</div></div>'
+        + '<div><div class="k">所属项目</div><div class="v">' + escHtml(t.project) + '</div></div>'
+        + '<div><div class="k">培训类型</div><div class="v">' + escHtml(t.type) + '</div></div>'
+        + '<div><div class="k">培训开始时间</div><div class="v">' + escHtml(t.startTime || '—') + '</div></div>'
+        + '<div><div class="k">参与人数</div><div class="v">' + (t.count || 0) + ' 人</div></div>'
+        + '<div><div class="k">创建人</div><div class="v">' + escHtml(t.creator || '—') + '</div></div>'
+        + '<div><div class="k">培训负责人</div><div class="v">' + escHtml(t.manager || '—') + '</div></div>'
+        + '<div><div class="k">培训时长</div><div class="v">' + escHtml(t.duration || '—') + '</div></div>'
+        + '</div>'
+        + '<p class="sub">' + escHtml(t.description || '当前培训暂无描述。') + '</p>'
+        + '<h2 id="sec-brain">2. 综合脑机数据</h2>' + brainCards
+        + '<h2 id="sec-students">3. 学员脑机汇总</h2>'
+        + (hasBrainExport(t)
+          ? '<div class="table-box"><table><thead><tr><th>姓名</th><th>手机号</th><th>注意力</th><th>情绪</th><th>抗疲劳</th><th>综合得分</th><th>学习状态</th></tr></thead><tbody id="stuBody">' + studentRows + '</tbody></table></div>'
+          : '<div class="empty">无脑机汇总数据。</div>')
+        + '<h2 id="sec-exam">4. 考试概况</h2>'
+        + '<div class="info">'
+        + '<div><div class="k">考试总题数</div><div class="v">' + qs.length + '</div></div>'
+        + '<div><div class="k">试卷总分</div><div class="v">' + paperTotal + ' 分</div></div>'
+        + '<div><div class="k">参与人数</div><div class="v">' + stats.total + '</div></div>'
+        + '<div><div class="k">平均分</div><div class="v">' + (stats.avg != null ? stats.avg : '—') + '</div></div>'
+        + '<div><div class="k">最高分</div><div class="v">' + (stats.maxScore != null ? stats.maxScore : '—') + '</div></div>'
+        + '<div><div class="k">最低分</div><div class="v">' + (stats.minScore != null ? stats.minScore : '—') + '</div></div>'
+        + '<div><div class="k">已交卷</div><div class="v">' + stats.submitted + '</div></div>'
+        + '<div><div class="k">考试中</div><div class="v">' + stats.inExam + '</div></div>'
+        + '<div><div class="k">未交卷</div><div class="v">' + stats.notStart + '</div></div>'
+        + '<div><div class="k">交卷率</div><div class="v">' + stats.subRate + '%</div></div>'
+        + '</div>'
+        + '<div class="chart-title">分数分布</div>' + dist
+        + '<h2 id="sec-q">5. 考题统计</h2>' + qCards
+        + '<h2 id="sec-rank">6. 考试分数排名</h2>'
+        + '<p class="sub">按考试得分降序；得分相同按交卷时间升序。</p>'
+        + (rank.length
+          ? '<div class="table-box"><table><thead><tr><th>名次</th><th>姓名</th><th>手机号</th><th>考试得分</th><th>交卷时间</th><th>用时</th><th>交卷状态</th></tr></thead><tbody>' + rankRows + '</tbody></table></div>'
+          : '<div class="empty">暂无排名数据。</div>')
+        + '</div></body></html>';
+      return { fileName: fileName, html: html };
+    }
+    function exportTrainingReport() {
+      var t = activeTraining;
+      if (!t) { showToast('请先选择培训'); return; }
+      if (t.status !== 'done') { showToast('仅已结束的培训可导出报告'); return; }
+      if (window._reportExporting) return;
+      window._reportExporting = true;
+      var btn = document.getElementById('exportReportBtn');
+      if (btn) { btn.disabled = true; btn.textContent = '正在生成…'; }
+      hideModal();
+      showToast('正在生成 PDF…');
+      var pack = buildTrainingReport(t);
+      var host = mountReportHost(pack.html);
+      var cleaned = false;
+      function restoreBtn() {
+        if (btn) { btn.disabled = false; btn.textContent = '报告导出'; }
+      }
+      function cleanup() {
+        if (cleaned) return;
+        cleaned = true;
+        window._reportExporting = false;
+        restoreBtn();
+        if (host && host.parentNode) host.parentNode.removeChild(host);
+      }
+      function fail(msg) {
+        cleanup();
+        showToast(msg || 'PDF 生成失败，请重试');
+      }
+      setTimeout(function() {
+        ensureHtml2Canvas().then(function(h2c) {
+          return captureReportPages(h2c, host);
+        }).catch(function() {
+          return captureNodeFallback({
+            body: host,
+            documentElement: host,
+            querySelectorAll: function(sel) { return host.querySelectorAll(sel); }
+          }, 794).then(function(canvas) {
+            return canvasToPdfBlob(canvas);
+          });
+        }).then(function(result) {
+          var blob = result instanceof Blob ? result : buildJpegPdf(result, 595.28, 841.89);
+          triggerBlobDownload(blob, pack.fileName + '.pdf');
+          cleanup();
+          showToast('报告已下载');
+        }).catch(function() { fail('PDF 生成失败，请检查网络后重试'); });
+      }, 120);
+    }
     function renderBrainTab(t) {
       const vc = v => v>=80?'var(--success)':v>=60?'var(--warning)':'var(--danger)';
       const pendingConnCount = t.status === 'pending' ? studentBrainData.filter(s => s.wearing && s.id !== 's3').length : null;
@@ -3857,7 +5024,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<div class="td-num-block"><div class="td-num-label">培训编号</div><div class="td-num-value">' + t.number + '</div></div>'
         + '</div></div>'
         + '<div class="td-info-grid">'
-        + '<div class="td-info-cell"><div class="k">培训状态</div><div class="v"><span class="tag ' + (t.status==='running'?'blue':t.status==='done'?'green':'orange') + '">' + t.statusText + '</span></div></div>'
+        + '<div class="td-info-cell"><div class="k">培训状态</div><div class="v"><span class="tag ' + (t.status==='running'?'blue':t.status==='done'?'green':'orange') + '">' + (t.autoEnded ? '已结束 · 超时自动结束' : t.statusText) + '</span></div></div>'
         + '<div class="td-info-cell"><div class="k">所属项目</div><div class="v">' + t.project + '</div></div>'
         + '<div class="td-info-cell"><div class="k">培训类型</div><div class="v">' + t.type + '</div></div>'
         + '<div class="td-info-cell"><div class="k">培训开始时间</div><div class="v" style="font-size:12px;">' + t.startTime + '</div></div>'
@@ -3873,10 +5040,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           ? '<div class="td-info-cell" style="border:1px solid rgba(134,144,156,.2);background:rgba(134,144,156,.05);">'
             + '<div class="k">进行时长</div>'
             + '<div class="v" style="font-size:15px;font-weight:800;">' + (t.duration || '—') + '</div>'
+            + '<div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">最长培训时长 ' + getTrainingMaxHours(t) + ' 小时' + (t.autoEnded ? ' · 已按上限自动结束' : '') + '</div>'
             + '</div>'
           : '<div class="td-info-cell" style="border:1px solid rgba(134,144,156,.15);background:rgba(134,144,156,.04);">'
             + '<div class="k" style="color:var(--muted);">进行时长</div>'
             + '<div class="v" style="color:var(--muted);font-weight:600;">尚未开始</div>'
+            + '<div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">最长 ' + getTrainingMaxHours(t) + ' 小时，超时将自动结束</div>'
             + '</div>'
           )
         + '</div>';
@@ -4047,20 +5216,28 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     }
 
     function renderExamTab(t) {
-      const bars = [['0-59','#f53f3f',3,20],['60-69','#FF7D00',8,53],['70-79','#FFD166',14,93],['80-89','#2f6bff',22,100],['90-100','#00B42A',18,82]];
       const qs = getTrainingExamQuestions(t);
       const paperTotal = examScoreTotal(qs);
       const paperOk = paperTotal === 100;
       const pending = t.status === 'pending';
-      const done    = t.status === 'done';
+      const stats = getExamStats(t);
+      const total   = stats.total;
+      const submitted = stats.submitted;
+      const inExam    = stats.inExam;
+      const notStart  = stats.notStart;
+      const subRate   = stats.subRate;
+      const inRate    = stats.inRate;
       const dash = '<strong style="color:var(--muted);">--</strong>';
-      // 交卷 mock 数据
-      const total   = t.count || 96;
-      const submitted = done ? Math.round(total * 0.93) : (pending ? 0 : Math.round(total * 0.68));
-      const inExam    = done ? 0 : (pending ? 0 : Math.round(total * 0.19));
-      const notStart  = total - submitted - inExam;
-      const subRate   = total > 0 ? Math.round(submitted / total * 100) : 0;
-      const inRate    = total > 0 ? Math.round(inExam   / total * 100) : 0;
+      const rankBlock = pending
+        ? '<div class="rank-panel"><div class="rank-panel-head"><div style="font-weight:700;font-size:13px;">考试分数排名</div></div><div style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0;">培训开始后显示排名</div></div>'
+        : '<div class="rank-panel">'
+          + '<div class="rank-panel-head">'
+          + '<div style="font-weight:700;font-size:13px;">考试分数排名 <span style="font-size:11px;font-weight:400;color:var(--muted);">按考试得分降序，得分相同按交卷时间升序</span></div>'
+          + '<input class="rank-search" placeholder="搜索姓名 / 手机号" oninput="filterRankTable(this.value)">'
+          + '</div>'
+          + '<div class="table-scroll rank-table-scroll"><table><thead><tr>'
+          + '<th style="width:64px;">名次</th><th>姓名</th><th>手机号</th><th>考试得分</th><th>交卷时间</th><th>用时</th><th>交卷状态</th><th>操作</th>'
+          + '</tr></thead><tbody id="examRankTbody">' + renderExamRankTable(t) + '</tbody></table></div></div>';
       // 交卷情况 HTML
       const submitBlock = pending
         ? '<div style="border:1px solid var(--line-soft);border-radius:10px;padding:12px 14px;background:var(--bg);margin-bottom:14px;color:var(--muted);font-size:13px;text-align:center;">培训开始后显示交卷情况</div>'
@@ -4096,8 +5273,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<div class="metric-mini" style="margin-bottom:14px;">'
         + '<div class="box"><span>考试总题数</span><strong>' + qs.length + '</strong></div>'
         + '<div class="box"><span>试卷总分</span><strong id="examPaperTotalBox" style="color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + paperTotal + ' 分</strong></div>'
-        + '<div class="box"><span>参与人数</span>' + (pending ? dash : '<strong>' + t.count + '</strong>') + '</div>'
-        + '<div class="box"><span>平均分</span>' + (pending ? dash : '<strong style="color:var(--primary);">87</strong>') + '</div>'
+        + '<div class="box"><span>参与人数</span>' + (pending ? dash : '<strong>' + total + '</strong>') + '</div>'
+        + '<div class="box"><span>平均分</span>' + (pending || stats.avg == null ? dash : '<strong style="color:var(--primary);">' + stats.avg + '</strong>') + '</div>'
         + '</div>'
         + '<div style="display:flex;gap:8px;margin-bottom:16px;">'
         + '<button class="btn primary" data-modal="autoExam"' + (pending ? '' : ' disabled style="opacity:.45;cursor:not-allowed;pointer-events:none;"') + '>自动组卷配置</button>'
@@ -4108,8 +5285,12 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + (pending
           ? '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0;background:var(--bg);border-radius:8px;margin-bottom:8px;">培训结束后显示分数分布</div>'
           : '<div class="score-dist-wrap">'
-            + bars.map(([range,color,n,h]) => '<div class="score-dist-col"><div class="score-dist-count">' + n + '人</div><div class="score-dist-bar-area"><div class="score-dist-bar" style="height:' + h + '%;background:' + color + ';opacity:.85;"></div></div><div class="score-dist-label">' + range + '</div></div>').join('')
+            + stats.buckets.map(function(b) {
+                var h = Math.max(6, Math.round(b.count / stats.maxBucket * 100));
+                return '<div class="score-dist-col"><div class="score-dist-count">' + b.count + '人</div><div class="score-dist-bar-area"><div class="score-dist-bar" style="height:' + h + '%;background:' + b.color + ';opacity:.85;"></div></div><div class="score-dist-label">' + b.label + '</div></div>';
+              }).join('')
             + '</div>')
+        + rankBlock
         + '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 8px;flex-wrap:wrap;">'
           + '<div style="font-weight:700;font-size:13px;">考题统计</div>'
           + '<div style="font-size:12px;color:var(--muted);">总分：<strong id="examTotalScore" style="font-size:16px;color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + paperTotal + ' 分</strong><span id="examScoreHint" style="margin-left:8px;color:' + (paperOk ? 'var(--success)' : 'var(--danger)') + ';">' + (paperOk ? '总分已满足 100 分，可开始培训。' : '总分需等于 100 分，当前不可开始培训。') + '</span></div>'
@@ -4200,9 +5381,10 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         list.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--muted);">无匹配学员</div>';
         return;
       }
+      var showPersonal = showPersonalConclusion(activeTraining);
       list.innerHTML = filtered.map(function(s){
         var isActive = sbdActiveId === s.id;
-        var personalConclusion = getPersonalConclusion(s);
+        var personalConclusion = showPersonal ? getPersonalConclusion(s) : null;
         return '<div class="sbd-student-item' + (isActive?' active':'') + '" onclick="sbdSelect(\'' + s.id + '\')">'
           + '<div class="si-name">'
           + '<span style="width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block;flex-shrink:0;"></span>'
@@ -4216,7 +5398,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '<span>疲 <strong style="color:' + vc(100-s.fatigue) + ';">' + s.fatigue + '</strong></span>'
           + '<span>分 <strong style="color:var(--primary);">' + s.score + '</strong></span>'
           + '</div>'
-          + '<span class="state-pill ' + personalConclusion.className + '">' + personalConclusion.name + '</span>'
+          + (personalConclusion ? '<span class="state-pill ' + personalConclusion.className + '">' + personalConclusion.name + '</span>' : '')
           + '</div>';
       }).join('');
     }
@@ -4234,7 +5416,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       var at = s.attention;
       var em = s.emotion;
       var ft = s.fatigue;
-      var personalConclusion = getPersonalConclusion(s);
+      var showPersonal = showPersonalConclusion(activeTraining);
+      var personalConclusion = showPersonal ? getPersonalConclusion(s) : null;
       // Learning curve SVG path (smooth upward)
       var p1y = 100 - cv*0.45;
       var p2y = 100 - cv*0.55;
@@ -4262,11 +5445,13 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<span style="font-size:11px;color:var(--muted);margin-left:2px;">' + s.device + '</span>'
         + '<span style="margin-left:auto;font-size:12px;color:var(--muted);">得分 <strong style="color:var(--primary);font-size:16px;">' + s.score + '</strong></span>'
         + '</div>'
-        + '<div class="brain-conclusion-card personal ' + personalConclusion.className + '">'
-        + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
-        + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
-        + '</div>'
-        + '</div>'
+        + (personalConclusion
+          ? '<div class="brain-conclusion-card personal ' + personalConclusion.className + '">'
+            + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
+            + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
+            + '</div>'
+            + '</div>'
+          : '')
         + '<div class="sbd-chart-label">学习曲线分析'
         + '<div class="sbd-legend"><span><span style="width:10px;height:2px;background:#2f6bff;display:inline-block;"></span>综合得分</span></div>'
         + '</div>'
@@ -4379,7 +5564,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       const s = studentBrainData.find(x => x.id === sid); if (!s) return;
       const vc = v => v>=80?'var(--success)':v>=60?'var(--warning)':'var(--danger)';
       const energyScore = studentEnergyScore(s);
-      const personalConclusion = getPersonalConclusion(s);
+      const showPersonal = showPersonalConclusion(activeTraining);
+      const personalConclusion = showPersonal ? getPersonalConclusion(s) : null;
       document.getElementById('modalTitle').textContent = s.name + ' - 脑机数据详情';
       document.getElementById('modalBody').innerHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">'
         + '<div class="td-info-cell"><div class="k">综合得分</div><div class="v" style="font-size:22px;color:var(--primary);">' + s.score + '</div></div>'
@@ -4395,11 +5581,13 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         + '<path d="M0 90 C60 70 100 55 160 50 C220 45 280 38 340 32 C400 26 450 24 500 20" stroke="var(--primary)" stroke-width="2" fill="none"/>'
         + '<path d="M0 100 C60 115 100 80 160 95 C220 110 280 70 340 85 C400 100 450 70 500 75" stroke="var(--success)" stroke-width="2" fill="none"/>'
         + '</svg></div>'
-        + '<div class="brain-conclusion-card personal ' + personalConclusion.className + '" style="margin-bottom:0;">'
-        + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
-        + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
-        + '</div>'
-        + '</div>'
+        + (personalConclusion
+          ? '<div class="brain-conclusion-card personal ' + personalConclusion.className + '" style="margin-bottom:0;">'
+            + '<div style="min-width:0;flex:1;"><div class="brain-conclusion-title">个人评分结论 · <span style="color:' + personalConclusion.color + ';">' + personalConclusion.name + '</span></div>'
+            + '<div class="brain-conclusion-text">' + personalConclusion.text + '</div>'
+            + '</div>'
+            + '</div>'
+          : '')
         + '<div class="actions"><button class="btn" data-close="modal">关闭</button></div>';
       const body2 = document.getElementById('modalBody');
       const foot2 = document.getElementById('modalFoot');
@@ -4427,18 +5615,17 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       { type:'单选题', q:'动火作业前需要办理什么手续？',           correct:'A', answers:{'赵六':'A','张三':'A','周八':'A','李四':'B'} },
     ];
     function openSubmitDetail() {
-      var statusLabel = { submitted:'已交卷', inExam:'考试中', notStart:'未开始' };
-      var statusColor = { submitted:'var(--success)', inExam:'var(--warning)', notStart:'var(--muted)' };
-      var rows = submitMockData.map(function(s) {
-        var scoreTxt = s.score !== null ? '<strong style="color:var(--primary);">' + s.score + ' 分</strong>' : '<span style="color:var(--muted);">—</span>';
+      var roster = getExamRanking(activeTraining);
+      var rows = roster.map(function(s) {
+        var scoreTxt = s.examScore != null ? '<strong style="color:var(--primary);">' + s.examScore + ' 分</strong>' : '<span style="color:var(--muted);">—</span>';
         var timeTxt  = s.submitTime || '<span style="color:var(--muted);">—</span>';
-        var actionBtn = s.status === 'submitted'
-          ? '<button class="btn" style="font-size:12px;padding:2px 10px;" onclick="openStudentAnswerDetail(\'' + s.name + '\',' + s.score + ')">查看答题</button>'
+        var actionBtn = s.examStatus === 'submitted'
+          ? '<button class="btn" style="font-size:12px;padding:2px 10px;" onclick="openStudentAnswerDetail(\'' + s.name.replace(/'/g, '\\\'') + '\',' + s.examScore + ')">查看答题</button>'
           : '<button class="btn" style="font-size:12px;padding:2px 10px;opacity:.4;cursor:not-allowed;pointer-events:none;">查看答题</button>';
         return '<tr>'
-          + '<td style="font-weight:600;">' + s.name + '</td>'
-          + '<td style="font-size:12px;color:var(--muted);">' + s.device + '</td>'
-          + '<td><span style="font-size:12px;font-weight:700;color:' + statusColor[s.status] + ';">' + statusLabel[s.status] + '</span></td>'
+          + '<td style="font-weight:600;">' + escHtml(s.name) + '</td>'
+          + '<td style="font-size:12px;color:var(--muted);">' + escHtml(s.device) + '</td>'
+          + '<td><span style="font-size:12px;font-weight:700;color:' + examStatusColor(s.examStatus) + ';">' + examStatusLabel(s.examStatus) + '</span></td>'
           + '<td>' + scoreTxt + '</td>'
           + '<td style="font-size:12px;color:var(--muted);">' + timeTxt + '</td>'
           + '<td>' + actionBtn + '</td>'
@@ -4455,9 +5642,11 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
       liftModalActions();
     }
     function openStudentAnswerDetail(name, score) {
+      var review = getStudentQuestionReview(name);
       var qRows = examQuestionsMock.map(function(q, i) {
-        var studentAns = q.answers[name] || '—';
-        var isCorrect  = studentAns === q.correct;
+        var preset = q.answers && q.answers[name];
+        var isCorrect = preset != null ? preset === q.correct : !!(review[i] && review[i].ok);
+        var studentAns = preset != null ? preset : (isCorrect ? q.correct : '错选');
         var typeColor  = q.type === '多选题' ? 'purple' : q.type === '判断题' ? 'orange' : 'blue';
         return '<div style="border:1px solid var(--line-soft);border-radius:8px;padding:10px 14px;margin-bottom:8px;">'
           + '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">'
@@ -4472,7 +5661,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
           + '<span style="color:var(--muted);">正确答案：<strong style="color:var(--success);">' + q.correct + '</strong></span>'
           + '</div></div>';
       }).join('');
-      var correctCount = examQuestionsMock.filter(function(q){ return q.answers[name] === q.correct; }).length;
+      var correctCount = review.filter(function(q){ return q.ok; }).length;
       document.getElementById('modalTitle').textContent = name + ' — 答题详情';
       document.getElementById('modalBody').innerHTML =
         '<div style="display:flex;align-items:center;gap:16px;padding:10px 14px;background:var(--bg);border-radius:8px;margin-bottom:14px;">'
@@ -4508,6 +5697,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
     function createTraining() {
       const name = (document.getElementById('tf-name')||{}).value && document.getElementById('tf-name').value.trim();
       if (!name) { showToast('请填写培训名称'); return; }
+      const maxHours = Number((document.getElementById('tf-maxHours')||{}).value);
+      if (!(maxHours >= 1 && maxHours <= 12)) { showToast('最长培训时长请填写 1～12 小时'); return; }
       const num  = (document.getElementById('tf-num')||{}).value || String(1000+Math.floor(Math.random()*9000));
       const newT = {
         id: Date.now(), number: num, name,
@@ -4516,6 +5707,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         date: new Date().toISOString().slice(0,10),
         startTime: ((document.getElementById('tf-start')||{}).value||'').replace('T',' '),
         endTime:   ((document.getElementById('tf-end')||{}).value||'').replace('T',' '),
+        maxHours: maxHours,
         duration:'—', examScore:'—', attachCount:0, count: Number((document.getElementById('tf-count')||{}).value)||0,
         creator:'管理员',
         manager: (document.getElementById('tf-mgr')||{}).value || '王五',
@@ -5504,6 +6696,7 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         '<div class="field"><label>培训编号</label><input value="' + t.number + '" readonly style="background:#f7f8fa;color:var(--primary);cursor:not-allowed;font-family:monospace;font-weight:700;"></div>' +
         '<div class="field"><label>开始时间</label><input type="datetime-local" id="ef-start" value="' + startVal + '"' + ro + '></div>' +
         '<div class="field"><label>结束时间</label><input type="datetime-local" id="ef-end" value="' + endVal + '"' + ro + '></div>' +
+        '<div class="field"><label>最长培训时长 <span style="color:var(--danger)">*</span></label><div style="display:flex;align-items:center;gap:8px;"><input type="number" id="ef-maxHours" min="1" max="12" step="1" value="' + getTrainingMaxHours(t) + '"' + ro + '><span style="font-size:13px;color:var(--muted);white-space:nowrap;">小时</span></div><div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;">从实际开始时刻起算，超时后系统自动结束本场培训。</div></div>' +
         '<div class="field wide"><label>培训描述</label><textarea id="ef-desc"' + (canEdit?'':' readonly style="background:#f7f8fa;color:var(--muted);cursor:not-allowed;"') + '>' + (t.description||'') + '</textarea></div>' +
         '</div>' +
         '<div class="actions" style="margin-top:16px;"><button class="btn" data-close="modal">取消</button>' +
@@ -5515,12 +6708,15 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         document.getElementById('saveEditBtn').addEventListener('click', () => {
           const nm = (document.getElementById('ef-name').value||'').trim();
           if (!nm) { showToast('请输入培训名称'); return; }
+          const mh = Number(document.getElementById('ef-maxHours').value);
+          if (!(mh >= 1 && mh <= 12)) { showToast('最长培训时长请填写 1～12 小时'); return; }
           t.name        = nm;
           t.project     = document.getElementById('ef-proj').value;
           t.count       = Number(document.getElementById('ef-count').value) || t.count;
           t.manager     = document.getElementById('ef-mgr').value;
           t.type        = document.getElementById('ef-type').value;
           t.description = document.getElementById('ef-desc').value;
+          t.maxHours    = mh;
           const sv = document.getElementById('ef-start').value;
           const ev = document.getElementById('ef-end').value;
           if (sv) t.startTime = sv.replace('T',' ');
@@ -5543,7 +6739,9 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
         status: 'pending',
         statusText: '待开始',
         date: new Date().toISOString().slice(0, 10),
-        examScore: '—'
+        examScore: '—',
+        maxHours: getTrainingMaxHours(t),
+        autoEnded: false
       });
       trainings.push(copy);
       setTrainView('card');
@@ -5554,6 +6752,8 @@ raw_eeg: jsonb       <span style="color:#86909c;">-- 原始脑电波包（可选
 
     // ── 全局 click 委托 ──────────────────────────────────────────────────────
     document.addEventListener('click', e => {
+      const reportAct = e.target.closest('[data-report-action]');
+      if (reportAct) { exportTrainingReport(); return; }
       // 打开弹窗
       const modal = e.target.closest('[data-modal]');
       if (modal) { openModal(modal.dataset.modal); return; }
