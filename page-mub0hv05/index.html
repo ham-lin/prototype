@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>银联黄山_自定义上架推荐规则</title>
+  <style>
+    :root {
+      --primary: #1890ff;
+      --primary-hover: #40a9ff;
+      --primary-deep: #096dd9;
+      --primary-soft: #e6f7ff;
+      --bg: #f0f2f5;
+      --surface: #fff;
+      --text: rgba(0, 0, 0, 0.85);
+      --text-secondary: rgba(0, 0, 0, 0.45);
+      --border: #e8e8e8;
+      --line: #f0f0f0;
+      --danger: #ff4d4f;
+      --topbar-h: 48px;
+      --sidebar-w: 200px;
+      --radius: 2px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      overflow: hidden;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; border: 0; background: none; color: inherit; }
+    input, select {
+      height: 32px;
+      border: 1px solid #d9d9d9;
+      border-radius: var(--radius);
+      padding: 0 11px;
+      background: #fff;
+      color: var(--text);
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+    input[readonly] { background: #fafafa; color: rgba(0, 0, 0, 0.65); }
+    input[type="checkbox"], input[type="radio"] {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+      flex-shrink: 0;
+      accent-color: var(--primary);
+    }
+    input[type="checkbox"]:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+    .hidden { display: none !important; }
+
+    .app { display: flex; flex-direction: column; height: 100vh; }
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 12px;
+      flex-shrink: 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: 148px;
+    }
+    .brand-mark {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #fff;
+      border-radius: 3px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+    }
+    .brand-mark i { background: #fff; }
+    .apps { width: 36px; font-size: 18px; letter-spacing: -2px; opacity: 0.92; }
+    .topnav { display: flex; align-self: stretch; margin-left: 8px; }
+    .topnav button {
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      color: #fff;
+      opacity: 0.88;
+    }
+    .topnav button.active {
+      background: rgba(255, 255, 255, 0.18);
+      opacity: 1;
+      font-weight: 600;
+    }
+    .user {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+    }
+    .bell { position: relative; }
+    .bell i {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 8px;
+      background: #f5222d;
+      border: 1px solid #fff;
+      font-size: 11px;
+      font-style: normal;
+      text-align: center;
+      line-height: 14px;
+    }
+
+    .body { flex: 1; display: flex; min-height: 0; }
+    .sidebar {
+      width: var(--sidebar-w);
+      flex: 0 0 var(--sidebar-w);
+      background: #fff;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 8px 0 12px;
+    }
+    .side-title { padding: 10px 20px 12px; font-weight: 600; }
+    .side-item, .side-child {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 40px;
+      padding: 0 20px;
+      color: rgba(0, 0, 0, 0.65);
+    }
+    .side-item .ico { width: 14px; color: #8c8c8c; }
+    .side-item.active, .side-child.active {
+      color: var(--primary);
+      background: #e6f7ff;
+    }
+    .side-child { padding-left: 44px; height: 36px; }
+    .side-child.active { cursor: pointer; }
+    .chev { margin-left: auto; font-size: 10px; color: #8c8c8c; }
+    .collapse {
+      margin-top: auto;
+      padding: 8px 20px;
+      color: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      overflow: auto;
+      padding: 12px 16px 24px;
+    }
+    .page {
+      background: #fff;
+      min-height: calc(100% - 8px);
+      padding: 12px 16px 20px;
+    }
+    .page-title { font-size: 16px; font-weight: 500; margin: 0 0 8px; }
+    .page-desc { color: var(--text-secondary); margin: 0 0 16px; font-size: 13px; }
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .page-head .page-title { margin: 0 0 8px; }
+    .page-head .page-desc { margin: 0; }
+    .detail-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .detail-top .page-title { margin: 0; }
+    .detail-top .modal-x { width: 28px; font-size: 20px; color: rgba(0, 0, 0, 0.45); }
+    .detail-tabs {
+      display: flex;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+    .dtab {
+      height: 40px;
+      padding: 0;
+      color: rgba(0, 0, 0, 0.65);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .dtab.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-bottom-color: var(--primary);
+    }
+    .kv-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    .kv-table th, .kv-table td {
+      border: 1px solid #f0f0f0;
+      padding: 12px 16px;
+      font-size: 13px;
+      line-height: 1.6;
+      vertical-align: top;
+    }
+    .kv-table th {
+      width: 16%;
+      background: #fafafa;
+      color: rgba(0, 0, 0, 0.65);
+      font-weight: 400;
+      text-align: right;
+    }
+    .kv-table td {
+      width: 34%;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .toolbar .spacer { flex: 1; }
+    .search-box { width: 220px; }
+
+    .btn {
+      height: 32px;
+      padding: 0 15px;
+      border: 1px solid #d9d9d9;
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--text);
+    }
+    .btn:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: #fff; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; color: rgba(0, 0, 0, 0.25); border-color: #d9d9d9; }
+    .link { color: var(--primary); background: none; border: 0; padding: 0 4px; }
+    .link:hover { color: var(--primary-hover); }
+
+    .table-wrap { overflow: auto; }
+    table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.data th, table.data td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    table.data th { background: #fafafa; font-weight: 500; }
+    table.data tbody tr:hover { background: #fafafa; }
+    table.data td.wrap { white-space: normal; min-width: 220px; line-height: 1.6; }
+    .empty { text-align: center !important; color: var(--text-secondary); padding: 28px 8px !important; }
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .status {
+      display: inline-block;
+      padding: 0 8px;
+      height: 22px;
+      line-height: 20px;
+      border-radius: 2px;
+      font-size: 12px;
+      border: 1px solid transparent;
+    }
+    .st-new { color: #1677ff; background: #e6f4ff; border-color: #91caff; }
+    .st-wait { color: #d48806; background: #fffbe6; border-color: #ffe58f; }
+    .st-pass { color: #389e0d; background: #f6ffed; border-color: #b7eb8f; }
+    .st-fail { color: #cf1322; background: #fff1f0; border-color: #ffa39e; }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px 0 22px;
+    }
+    .step { display: flex; align-items: center; color: rgba(0, 0, 0, 0.45); }
+    .step-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #d9d9d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      margin-right: 8px;
+    }
+    .step-line { width: 88px; height: 1px; background: #e8e8e8; margin: 0 12px; }
+    .step.done .step-dot, .step.current .step-dot {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .step.done, .step.current { color: var(--text); }
+    .step.current { font-weight: 600; }
+
+    .form-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+    .req { color: var(--danger); margin-right: 2px; }
+    .scope-input { width: min(520px, 46vw); }
+    .section-title { font-weight: 600; margin: 8px 0 10px; }
+    .section-title.row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .cond-bar, .reason-box {
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      margin-bottom: 14px;
+      color: rgba(0, 0, 0, 0.65);
+      background: #fafafa;
+    }
+    .reason-box p { margin: 4px 0; }
+    .table-actions, .foot-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .table-actions { margin-bottom: 8px; }
+    .foot-actions { margin-top: 20px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; padding: 8px 8px 18px; }
+    .field { display: flex; align-items: center; min-height: 48px; gap: 8px; }
+    .field label { width: 130px; text-align: right; flex-shrink: 0; }
+    .field .ctrl { flex: 1; display: flex; align-items: center; gap: 8px; }
+    .field .ctrl input, .field .ctrl select { width: 100%; }
+
+    .cfg-block {
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .cfg-block h2 { margin: 0 0 12px; font-size: 14px; font-weight: 600; }
+    .cfg-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .cfg-hd h2 { margin: 0; }
+    .cfg-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 36px;
+    }
+    .cfg-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 22px;
+      cursor: pointer;
+    }
+    .cfg-row label.locked { cursor: default; color: rgba(0, 0, 0, 0.65); }
+    .map-grid {
+      display: grid;
+      grid-template-columns: 180px 220px;
+      gap: 10px 12px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .prio-list { display: flex; flex-direction: column; gap: 8px; }
+    .prio-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .prio-no {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      text-align: center;
+      line-height: 22px;
+      font-size: 12px;
+    }
+    .prio-item .grow { flex: 1; }
+    .prio-item label.grow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      line-height: 22px;
+      cursor: pointer;
+    }
+    .note {
+      margin: 0 0 12px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .cfg-block .note:last-child { margin-bottom: 0; }
+    .help-sec { margin: 0 0 16px; }
+    .help-sec:last-child { margin-bottom: 0; }
+    .help-sec h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; }
+    .help-sec p, .help-sec li { margin: 0 0 6px; color: rgba(0, 0, 0, 0.65); line-height: 1.7; }
+    .help-sec ul { margin: 0 0 8px; padding-left: 20px; }
+    .help-eg {
+      margin: 0;
+      padding: 8px 10px;
+      background: #fafafa;
+      border: 1px solid var(--line);
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 1.7;
+    }
+
+    .mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 24px;
+    }
+    .modal {
+      background: #fff;
+      width: min(720px, calc(100vw - 48px));
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    }
+    .modal.wide { width: min(980px, calc(100vw - 48px)); }
+    .modal.rack-dialog { width: min(860px, calc(100vw - 48px)); }
+    .modal-hd {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+    .modal-x { margin-left: auto; font-size: 20px; color: rgba(0, 0, 0, 0.45); width: 28px; }
+    .modal-bd { padding: 16px 20px; overflow: auto; }
+    .modal-ft { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 16px 14px; }
+    .tree { min-height: 220px; }
+    .tree-row { display: flex; align-items: center; gap: 6px; height: 28px; white-space: nowrap; }
+    .tree-row input { width: 14px; height: 14px; }
+    .tree-search { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
+    .tree-search input { flex: 1; }
+
+    .rack-box { display: grid; grid-template-columns: 240px 1fr; gap: 16px; min-height: 420px; }
+    .rack-tree { border-right: 1px solid var(--line); padding-right: 10px; overflow: auto; max-height: 460px; }
+    .rack-view { display: flex; gap: 18px; justify-content: center; align-items: flex-start; }
+    .legend { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; color: rgba(0, 0, 0, 0.65); font-size: 13px; }
+    .legend span { display: flex; align-items: center; gap: 8px; }
+    .dot { width: 12px; height: 12px; border: 1px solid #bfbfbf; border-radius: 50%; }
+    .dot.free { background: #f5f5f5; }
+    .dot.used { background: #1f1f1f; }
+    .dot.pre { background: #434343; }
+    .dot.hold { background: #d9d9d9; }
+    .dot.pick { background: #1890ff; border-color: #1890ff; }
+    .rack-face {
+      width: 168px;
+      background: #111;
+      border: 10px solid #1a1a1a;
+      border-radius: 2px 2px 8px 8px;
+      padding: 6px 8px;
+      max-height: 430px;
+      overflow: auto;
+    }
+    .u-row { display: grid; grid-template-columns: 1fr 28px; height: 16px; margin-bottom: 1px; }
+    .u-slot { border: 0; height: 16px; background: #ececec; }
+    .u-slot.used { background: #111; }
+    .u-slot.pre { background: #434343; }
+    .u-slot.hold { background: #cfcfcf; }
+    .u-slot.pick { background: #1890ff; }
+    .u-slot:hover { outline: 1px solid #40a9ff; }
+    .u-no { color: #fff; font-size: 11px; text-align: right; line-height: 16px; }
+
+    .create-grid {
+      display: grid;
+      grid-template-columns: 100px 1fr 100px 1fr;
+      gap: 12px 10px;
+      align-items: center;
+    }
+    .create-grid label { text-align: right; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 70px);
+      background: rgba(0, 0, 0, 0.78);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: 0.2s;
+      z-index: 2000;
+    }
+    .toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+    .demand-anchor { position: relative; }
+    .demand-anchor-inline { display: inline-flex; align-items: center; }
+    .table-wrap.demand-anchor,
+    .modal.demand-anchor {
+      overflow: visible;
+    }
+    .demand-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      z-index: 20;
+      display: none;
+    }
+    body.demand-mode-on .demand-badge { display: inline-flex; }
+    .demand-badge-trigger {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #1677ff;
+      color: #fff;
+      font-size: 12px;
+      line-height: 18px;
+      cursor: pointer;
+    }
+    .demand-popover {
+      position: fixed;
+      z-index: 3000;
+      max-width: 320px;
+      padding: 10px 12px;
+      border: 1px solid #d6e4ff;
+      border-radius: 8px;
+      background: #fff;
+      color: #1f2937;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+      display: none;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .demand-popover strong { display: block; margin-bottom: 6px; color: #0958d9; }
+    .demand-popover p { margin: 4px 0; }
+    .demand-dock {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 2800;
+    }
+    body.demand-mode-on .demand-dock .btn {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .grid-2, .rack-box, .create-grid, .map-grid { grid-template-columns: 1fr; }
+      .field label { width: 96px; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i><i></i></span>XBROTHER</div>
+      <div class="apps">⠿</div>
+      <nav class="topnav">
+        <button type="button">监控告警</button>
+        <button type="button">工单中心</button>
+        <button type="button" id="navSystem">系统管理</button>
+        <button type="button" class="active" id="navAsset">资产管理</button>
+        <button type="button">视频分析</button>
+      </nav>
+      <div class="user">
+        <span class="bell">🔔<i>1</i></span>
+        <span>系统管理员 ⌄</span>
+      </div>
+    </header>
+    <div class="body">
+      <aside class="sidebar" id="sideAsset">
+        <div class="side-title">资产管理</div>
+        <div class="side-item"><span class="ico">▣</span>概览</div>
+        <div class="side-item"><span class="ico">▤</span>容量管理<span class="chev">⌃</span></div>
+        <div class="side-child">机房</div>
+        <div class="side-child">机列</div>
+        <div class="side-child">机柜</div>
+        <div class="side-item"><span class="ico">▦</span>容量预占<span class="chev">⌃</span></div>
+        <div class="side-child active" id="sideReserve">预占单管理</div>
+        <div class="collapse">‹ 收起导航</div>
+      </aside>
+
+      <main class="main">
+        <section class="page hidden" id="strategyPage">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">上架推荐策略</h1>
+              <p class="page-desc">全场通用一套。预占搜索时自动按此策略寻址，建单人不可改选。</p>
+            </div>
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="返回建单" data-demand-text="交互目的：从策略二级页回到刚才的预占单。||点击后行为：关闭策略页，已填范围和资产保留。||状态限制：不自动保存未点保存的修改。">
+              <button class="btn" id="btnBackStrategy" type="button">返回</button>
+            </span>
+          </div>
+
+          <div class="cfg-block" data-demand-title="硬约束" data-demand-text="交互目的：决定搜索时用哪些条件淘汰机柜。||点击后行为：关闭某项后，该项不再挡住候选；连续 U 不可关闭。||状态限制：全场通用，建单人不可改选。类型匹配关闭后，下方映射变淡但仍可查看。">
+            <h2>硬约束</h2>
+            <p class="note">连续 U 是上架必要条件，不可关闭。其余项关闭后，搜索时不再用该项淘汰候选。</p>
+            <div class="cfg-row"><label class="locked"><input type="checkbox" id="chkU" checked disabled /> 校验总连续 U 位是否足够</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkPower" /> 过滤功率不足的机柜</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkWeight" /> 过滤承重不足的机柜</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkPdu" /> 过滤 PDU 不足的机柜</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkOptic" /> 过滤光口不足的机柜</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkNet" /> 过滤网口不足的机柜</label></div>
+            <div class="cfg-row"><label><input type="checkbox" id="chkType" /> 按资产类型匹配机柜类型</label></div>
+            <div class="map-grid" id="typeMapBox">
+              <span>服务器</span><select id="mapServer"><option>服务器机柜</option><option>网络机柜</option><option>不限制</option></select>
+              <span>网络设备</span><select id="mapNetwork"><option>网络机柜</option><option>服务器机柜</option><option>不限制</option></select>
+              <span>存储、刀箱及其他</span><select id="mapOther"><option>服务器机柜</option><option>网络机柜</option><option>不限制</option></select>
+            </div>
+          </div>
+
+          <div class="cfg-block" data-demand-title="多方案优化" data-demand-text="交互目的：多个合法位置时，按勾选项和顺序选更合适的柜和 U。||点击后行为：勾选参与排序，取消则不参与；上移的项先比较。||状态限制：硬约束未通过时不生效。候选少的资产管的是谁先占位，不是选哪个 U。">
+            <div class="cfg-hd">
+              <h2>多方案优化</h2>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="规则说明" data-demand-text="交互目的：用示例讲清五项优化怎么比。||点击后行为：打开说明弹窗，点知道了或遮罩关闭。||状态限制：只解释规则，不改当前配置。">
+                <button class="btn" id="btnSoftHelp" type="button">规则说明</button>
+              </span>
+            </div>
+            <p class="note">仅在硬约束通过后、存在多个候选时生效。关闭某项即不参与排序。</p>
+            <div class="prio-list" id="softList"></div>
+          </div>
+
+          <div class="cfg-block" data-demand-title="无解时" data-demand-text="交互目的：约定搜不到位置时怎么处理。||点击后行为：系统不自动放宽硬约束，方案页标未匹配和卡点。||状态限制：要更多候选，须回本页关闭对应硬约束后再搜索；或在方案页人工改位。">
+            <h2>无解时</h2>
+            <p class="note">不自动放宽硬约束。预占方案页标出卡点，由用户人工改位。若需更多候选，请回到本页关闭对应硬约束后再搜索。</p>
+          </div>
+
+          <div class="foot-actions">
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="恢复默认" data-demand-text="交互目的：把策略打回现状算法。||点击后行为：连续 U、功率等硬约束重新全开，多方案优化恢复默认顺序并全选。||状态限制：须再点保存后，后续搜索才按恢复后的策略执行。">
+              <button class="btn" id="btnResetStrategy" type="button">恢复默认</button>
+            </span>
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="保存策略" data-demand-text="交互目的：保存全场通用上架推荐策略。||点击后行为：后续预占搜索按本页配置寻址。||状态限制：一套全场通用，建单过程中不可改选。">
+              <button class="btn btn-primary" id="btnSaveStrategy" type="button">保存</button>
+            </span>
+          </div>
+        </section>
+
+        <section class="page" id="listPage">
+          <h1 class="page-title">预占单管理</h1>
+          <div class="toolbar">
+            <input class="search-box" id="listKeyword" placeholder="预占单编号 / 名称" />
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="查询预占单" data-demand-text="交互目的：按编号或名称筛选列表。||点击后行为：只显示匹配的预占单。||状态限制：无匹配时表格提示没有找到记录。">
+              <button class="btn btn-primary" id="btnListQuery" type="button">查询</button>
+            </span>
+            <button class="link" id="btnAdvQuery" type="button">高级查询</button>
+            <div class="spacer"></div>
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="新增预占单" data-demand-text="交互目的：新建一张待上架预占单。||点击后行为：进入三步向导，先选范围再加资产。||状态限制：未选范围、未加资产时不能搜索。">
+              <button class="btn btn-primary" id="btnAdd" type="button">新增</button>
+            </span>
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="刷新列表" data-demand-text="交互目的：重新载入当前预占单列表。||点击后行为：按当前查询条件刷新。||状态限制：不改变已保存单据。">
+              <button class="btn btn-primary" id="btnRefresh" type="button">刷新</button>
+            </span>
+          </div>
+          <div class="table-wrap" data-demand-title="预占单列表" data-demand-text="交互目的：查看已建预占单及状态。||点击后行为：行内查看仅作演示提示。本页重点走新增预占与策略配置。||状态限制：状态含新建、待审核、待上架。">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>预占单编号</th>
+                  <th>预占单名称</th>
+                  <th>创建人</th>
+                  <th>审核人</th>
+                  <th>计划上架时间</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="listBody"></tbody>
+            </table>
+          </div>
+          <div class="pager"><span id="listPager"></span></div>
+        </section>
+
+        <section class="page hidden" id="wizardPage">
+          <h1 class="page-title">预占单管理</h1>
+          <div class="steps" id="steps"></div>
+
+          <div id="step1">
+            <div class="form-bar">
+              <label><span class="req">*</span>搜索空间范围</label>
+              <input class="scope-input" id="scopeInput" readonly />
+              <button class="link" id="btnPickScope" type="button">选择</button>
+            </div>
+            <div class="cond-bar">
+              推荐策略：全场通用（管理员配置，本单不可改选）
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="去配置" data-demand-text="交互目的：打开全场通用上架推荐策略。||点击后行为：进入二级页，侧栏仍停在预占单管理。||状态限制：点返回回到本步，已填内容保留。">
+                <button class="link" id="btnGoStrategy" type="button">去配置</button>
+              </span>
+            </div>
+            <div class="table-actions">
+              <button class="btn btn-primary" id="btnManualCreate" type="button">手动创建资产</button>
+              <button class="btn btn-primary" id="btnAddAsset" type="button">添加资产</button>
+              <button class="btn btn-primary" id="btnRemoveAsset" type="button">删除</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="checkAllDraft" /></th>
+                    <th>序号</th>
+                    <th>资产编号</th>
+                    <th>资产名称</th>
+                    <th>资产分类</th>
+                    <th>U高</th>
+                    <th>重量(kg)</th>
+                    <th>额定功率(w)</th>
+                    <th>光口(个)</th>
+                    <th>网口(个)</th>
+                    <th>PDU(个)</th>
+                    <th>添加方式</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="draftBody"></tbody>
+              </table>
+            </div>
+            <div class="foot-actions">
+              <button class="btn btn-primary" id="btnSearch" type="button">搜索</button>
+              <button class="btn btn-primary" id="btnBackList" type="button">返回</button>
+            </div>
+          </div>
+
+          <div id="step2" class="hidden">
+            <div class="section-title">本次搜索条件</div>
+            <div class="cond-bar">搜索空间范围：<span id="scopeText"></span></div>
+            <div class="section-title">推荐说明</div>
+            <div class="reason-box" data-demand-title="推荐说明" data-demand-text="交互目的：说明本次用了哪些硬约束和多方案优化。||点击后行为：随当前策略刷新，供对照推荐理由。||状态限制：不展示策略名称和资产处理序。">
+              <div id="strategySummary"></div>
+            </div>
+            <div class="section-title row">
+              <span>预占资产匹配方案</span>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="模拟无解方案" data-demand-text="交互目的：演示搜不到位置时的表格样子。||点击后行为：追加一条未匹配行，位置为无可用位置，并写出卡点。||状态限制：同一条只加一次。有未匹配行时不能点下一步。">
+                <button class="btn" id="btnMockFail" type="button">模拟无解方案</button>
+              </span>
+            </div>
+            <div class="table-wrap" data-demand-title="预占资产匹配方案" data-demand-text="交互目的：核对每台设备的位置、推荐结果和理由。||点击后行为：查看进资产详情；修改位置可人工指定 U 位。||状态限制：推荐结果为已推荐、未匹配或人工指定。添加方式只有库房导入、手动添加。未匹配不能进入下一步。">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>资产编号</th>
+                    <th>资产名称</th>
+                    <th>资产分类</th>
+                    <th>匹配位置</th>
+                    <th>推荐结果</th>
+                    <th>推荐理由</th>
+                    <th>添加方式</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="planBody"></tbody>
+              </table>
+            </div>
+            <div class="pager"><span id="planPager"></span></div>
+            <div class="foot-actions">
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="上一步" data-demand-text="交互目的：回到添加搜索，改范围或资产。||点击后行为：返回第一步，清单仍在。||状态限制：再搜索会按当前策略重算位置。">
+                <button class="btn btn-primary" id="btnPrev2" type="button">上一步</button>
+              </span>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="重新搜索" data-demand-text="交互目的：改完策略后按新规则再寻址。||点击后行为：不放宽硬约束，刷新位置和理由。||状态限制：人工改过的位置会被本次搜索覆盖。">
+                <button class="btn" id="btnResearch" type="button">重新搜索</button>
+              </span>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="下一步" data-demand-text="交互目的：进入生成预占单。||点击后行为：全部有位置后进入第三步。||状态限制：仍有未匹配时拦住，并提示先人工改位。">
+                <button class="btn btn-primary" id="btnNext2" type="button">下一步</button>
+              </span>
+            </div>
+          </div>
+
+          <div id="step3" class="hidden">
+            <div class="section-title">生成预占单</div>
+            <div class="grid-2" data-demand-title="生成预占单" data-demand-text="交互目的：补齐审核人和单据名称后落单。||点击后行为：保存进列表为新建，提交为待审核。||状态限制：预占单名称、审核人必填。仍有资产未匹配位置时不能保存或提交。">
+              <div class="field">
+                <label>安装位置：</label>
+                <div class="ctrl"><span id="installLocation"></span></div>
+              </div>
+              <div class="field">
+                <label><span class="req">*</span>审核人：</label>
+                <div class="ctrl">
+                  <select id="approver">
+                    <option value="">请选择</option>
+                    <option>张伟</option>
+                    <option>李明</option>
+                    <option>王磊</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label>预占单编号：</label>
+                <div class="ctrl"><span id="orderNo">RSV2025091400001</span></div>
+              </div>
+              <div class="field">
+                <label><span class="req">*</span>预占单名称：</label>
+                <div class="ctrl"><input id="orderName" /></div>
+              </div>
+              <div class="field">
+                <label>计划上架开始时间：</label>
+                <div class="ctrl"><input id="startTime" type="datetime-local" /></div>
+              </div>
+              <div class="field">
+                <label>计划上架结束时间：</label>
+                <div class="ctrl"><input id="endTime" type="datetime-local" /></div>
+              </div>
+            </div>
+            <div class="section-title">预占资产匹配方案</div>
+            <div class="table-wrap" data-demand-title="落单前核对方案" data-demand-text="交互目的：提交前再核对匹配位置和添加方式。||点击后行为：行内查看进入资产详情。||状态限制：本步不再改位。未匹配资产不能保存或提交。">
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>资产编号</th>
+                    <th>资产名称</th>
+                    <th>资产分类</th>
+                    <th>匹配位置</th>
+                    <th>添加方式</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="finalBody"></tbody>
+              </table>
+            </div>
+            <div class="pager"><span id="finalPager"></span></div>
+            <div class="foot-actions">
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="返回方案页" data-demand-text="交互目的：回到预占方案再改位置或重搜。||点击后行为：返回第二步，表单已填内容保留。||状态限制：不自动保存预占单。">
+                <button class="btn btn-primary" id="btnPrev3" type="button">上一步</button>
+              </span>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="保存预占单" data-demand-text="交互目的：先落单不送审。||点击后行为：写入列表，状态为新建。||状态限制：名称、审核人必填，且全部资产已有位置。">
+                <button class="btn btn-primary" id="btnSave" type="button">保存</button>
+              </span>
+              <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="提交预占单" data-demand-text="交互目的：提交审核。||点击后行为：写入列表，状态为待审核。||状态限制：名称、审核人必填，且全部资产已有位置。">
+                <button class="btn btn-primary" id="btnSubmit" type="button">提交</button>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="page hidden" id="detailPage">
+          <div class="detail-top">
+            <h1 class="page-title">详情</h1>
+            <span class="demand-anchor-inline" data-demand-position="inline" data-demand-title="关闭详情" data-demand-text="交互目的：关掉资产详情。||点击后行为：回到刚才的预占方案或建单页。||状态限制：不修改匹配位置。">
+              <button class="modal-x" id="btnCloseDetail" type="button">×</button>
+            </span>
+          </div>
+          <div class="detail-tabs" data-demand-title="资产详情页签" data-demand-text="交互目的：查看资产基本信息、历史履历和关联工单。||点击后行为：切换页签。||状态限制：本页只读。履历和工单无数据时显示暂无。">
+            <button class="dtab active" type="button" data-dtab="base">基本信息</button>
+            <button class="dtab" type="button" data-dtab="hist">历史履历</button>
+            <button class="dtab" type="button" data-dtab="wo">关联工单</button>
+          </div>
+          <div id="detailBase" data-demand-title="基本信息" data-demand-text="交互目的：对照编号、分类、功率、U 高等台账。||点击后行为：只读展示。||状态限制：已有匹配位置时状态为待上架，否则为在库。">
+            <div id="detailBaseInner"></div>
+          </div>
+          <div id="detailHist" class="hidden">
+            <table class="data">
+              <thead><tr><th>时间</th><th>操作</th><th>操作人</th><th>说明</th></tr></thead>
+              <tbody><tr><td class="empty" colspan="4">暂无历史履历</td></tr></tbody>
+            </table>
+          </div>
+          <div id="detailWo" class="hidden">
+            <table class="data">
+              <thead><tr><th>工单编号</th><th>工单类型</th><th>状态</th><th>创建时间</th></tr></thead>
+              <tbody><tr><td class="empty" colspan="4">暂无关联工单</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="mask hidden" id="scopeModal">
+    <div class="modal" data-demand-title="选择搜索范围" data-demand-text="交互目的：指定本次寻址的空间范围。||点击后行为：点选树节点后确定，回填到搜索空间范围。||状态限制：必须选一个节点才能继续搜索。">
+      <div class="modal-hd">选择位置<button class="modal-x" data-close="scopeModal" type="button">×</button></div>
+      <div class="modal-bd"><div class="tree" id="scopeTree"></div></div>
+      <div class="modal-ft">
+        <button class="btn btn-primary" id="scopeOk" type="button">确定</button>
+        <button class="btn" data-close="scopeModal" type="button">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask hidden" id="assetModal">
+    <div class="modal wide" data-demand-title="从库房添加资产" data-demand-text="交互目的：勾选库房资产加入本单。||点击后行为：可按编号名称查询，确定后加入清单。||状态限制：至少勾选一台。添加方式为库房导入。行内查看进入资产详情。">
+      <div class="modal-hd">添加资产<button class="modal-x" data-close="assetModal" type="button">×</button></div>
+      <div class="modal-bd">
+        <div class="tree-search">
+          <input id="assetKeyword" placeholder="资产编号 / 资产名称" />
+          <button class="btn btn-primary" id="btnAssetQuery" type="button">查询</button>
+          <button class="link" id="btnAssetAdv" type="button">高级查询</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="checkAllPool" /></th>
+                <th>序号</th>
+                <th>资产编号</th>
+                <th>资产名称</th>
+                <th>资产分类</th>
+                <th>资产位置</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="poolBody"></tbody>
+          </table>
+        </div>
+        <div class="pager"><span id="poolPager"></span></div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-primary" id="assetOk" type="button">确定</button>
+        <button class="btn" data-close="assetModal" type="button">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask hidden" id="createModal">
+    <div class="modal" data-demand-title="手动创建资产" data-demand-text="交互目的：补录库房没有的待上架设备。||点击后行为：填写编号名称后确定，加入清单。||状态限制：编号、名称必填。添加方式为手动添加。">
+      <div class="modal-bd">
+        <div class="create-grid">
+          <label><span class="req">*</span>资产编号</label><input id="cCode" />
+          <label><span class="req">*</span>资产名称</label><input id="cName" />
+          <label>资产分类</label>
+          <select id="cCat">
+            <option>IT设备-服务器-机架式服务器</option>
+            <option>IT设备-网络-交换机</option>
+            <option>IT设备-存储-磁盘阵列</option>
+          </select>
+          <label>U高</label><input id="cU" value="5" />
+          <label>重量(kg)</label><input id="cWeight" value="28" />
+          <label>额定功率(w)</label><input id="cPower" value="550" />
+          <label>光口(个)</label><input id="cOptic" value="2" />
+          <label>网口(个)</label><input id="cNet" value="4" />
+          <label>PDU(个)</label><input id="cPdu" value="2" />
+        </div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-primary" id="createOk" type="button">确定</button>
+        <button class="btn" data-close="createModal" type="button">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask hidden" id="rackModal">
+    <div class="modal rack-dialog" data-demand-title="修改位置" data-demand-text="交互目的：人工指定上架机柜和起始 U。||点击后行为：选机柜后点空闲 U，确定写入匹配位置，推荐结果变为人工指定。||状态限制：所选连续 U 不能超出机柜，也不能落在占用、预占、预留上。添加方式不变。">
+      <div class="modal-hd">选择位置<button class="modal-x" data-close="rackModal" type="button">×</button></div>
+      <div class="modal-bd">
+        <div class="rack-box">
+          <div class="rack-tree" id="rackTree"></div>
+          <div class="rack-view">
+            <div class="legend">
+              <span><i class="dot free"></i>空闲</span>
+              <span><i class="dot used"></i>占用</span>
+              <span><i class="dot pre"></i>预占</span>
+              <span><i class="dot hold"></i>预留</span>
+              <span><i class="dot pick"></i>本次选择</span>
+            </div>
+            <div class="rack-face" id="rackFace"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-primary" id="rackOk" type="button">确定</button>
+        <button class="btn" data-close="rackModal" type="button">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask hidden" id="softHelpModal">
+    <div class="modal wide" data-demand-title="规则说明弹窗" data-demand-text="交互目的：用示例讲清五项优化何时生效、怎么配。||点击后行为：阅读后点知道了或遮罩关闭。||状态限制：只解释规则，不改当前配置。">
+      <div class="modal-bd">
+        <div class="help-sec">
+          <h3>何时生效</h3>
+          <p>资产先过硬约束（连续 U、功率、承重等）。只有剩下多个合法位置时，才按本页已勾选的项、从上到下依次比较。前一项能分出高低，就不看后面的。</p>
+          <p>全部关闭时，系统仍会给出一个位置，但不按这些偏好排序。</p>
+        </div>
+        <div class="help-sec">
+          <h3>怎么配置</h3>
+          <ul>
+            <li>勾选：该项参与比较。</li>
+            <li>取消勾选：该项不参与，硬约束不受影响。</li>
+            <li>上移 / 下移：改比较先后。排在第 1 的最先比。</li>
+          </ul>
+        </div>
+        <div class="help-sec">
+          <h3>1. 优先低 U 位</h3>
+          <p>同一台设备有多段连续空位时，优先选起始 U 更靠下的，方便继续往上堆。</p>
+          <p class="help-eg">示例：5U 服务器在机柜000 可放 U7–U11 或 U14–U18。开启本项后，推荐 U7–U11。</p>
+        </div>
+        <div class="help-sec">
+          <h3>2. 优先未被预占的机柜</h3>
+          <p>柜内已有预占 U 位的机柜排在后面，减少和新预占单抢位。</p>
+          <p class="help-eg">示例：A1 已有 U21 预占，机柜000 没有预占。两柜都能放这台服务器时，优先机柜000。</p>
+        </div>
+        <div class="help-sec">
+          <h3>3. 优先候选位置较少的资产</h3>
+          <p>多台设备一起搜索时，先给「能放的柜子更少」的设备占位，避免难放的被挤到最后无解。这项管的是谁先处理，不管同一台设备选哪个 U。</p>
+          <p class="help-eg">示例：交换机只能进网络柜（候选少），两台服务器能进 3 个服务器柜。会先给交换机占位，再给服务器。</p>
+        </div>
+        <div class="help-sec">
+          <h3>4. 尽量集中到同一机柜</h3>
+          <p>同一预占单里，后面的设备优先跟已推荐设备进同一柜（仍要满足硬约束和连续 U）。</p>
+          <p class="help-eg">示例：BL_06 已推荐到机柜000。BL_05 若该柜还剩 5 个连续空 U，优先继续放机柜000，而不是换到 A1。</p>
+        </div>
+        <div class="help-sec">
+          <h3>5. 尽量选择相邻机柜</h3>
+          <p>不能进同一柜时，优先选与已放设备同列或相邻列的机柜，便于布线和巡检。</p>
+          <p class="help-eg">示例：第一台已在 A 列 A1。第二台在 A 列机柜000、B 列机柜003 都能放时，优先机柜000。</p>
+        </div>
+        <div class="help-sec">
+          <h3>综合示例</h3>
+          <p class="help-eg">默认五项全开，顺序为低 U → 未预占柜 → 候选少的资产先处理 → 同柜 → 相邻柜。一台 5U 服务器同时满足：机柜000 的 U7（无预占）、A1 的 U12（有预占）。先比低 U，U7 更靠下，推荐机柜000 U7–U11，不会先看 A1 是否已预占。</p>
+        </div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn btn-primary" data-close="softHelpModal" type="button">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="demand-dock">
+    <button type="button" class="btn" id="demandToggle">
+      <span id="demandToggleLabel">需求说明：关</span>
+    </button>
+  </div>
+
+  <script>
+    const STATUS = {
+      new: { text: "新建", cls: "st-new" },
+      wait: { text: "待审核", cls: "st-wait" },
+      pass: { text: "待上架", cls: "st-pass" }
+    };
+    const SOFT_LABEL = {
+      lowU: "优先低U位",
+      noPre: "优先未被预占的机柜",
+      fewCand: "优先候选位置较少的资产",
+      sameRack: "尽量集中到同一机柜",
+      adjacent: "尽量选择相邻机柜"
+    };
+    const DEFAULT_STRATEGY = {
+      hard: { u: true, power: true, weight: true, pdu: true, optic: true, net: true, typeMap: true },
+      typeMap: { server: "服务器机柜", network: "网络机柜", other: "服务器机柜" },
+      assetOrder: ["u", "power", "weight", "port"],
+      soft: [
+        { id: "lowU", on: true },
+        { id: "noPre", on: true },
+        { id: "fewCand", on: true },
+        { id: "sameRack", on: true },
+        { id: "adjacent", on: true }
+      ]
+    };
+    const poolAssets = [
+      { code: "BL_06", name: "BL_06", cat: "IT设备-服务器-机架式服务器", loc: "区域>机房", model: "5", weight: 32, power: 650, optic: 2, net: 4, pdu: 2, u: 5 },
+      { code: "BL_05", name: "BL_05", cat: "IT设备-服务器-机架式服务器", loc: "区域>机房", model: "5", weight: 30, power: 600, optic: 2, net: 4, pdu: 2, u: 5 },
+      { code: "SW_01", name: "SW_01", cat: "IT设备-网络-交换机", loc: "区域>机房", model: "S6720", weight: 18, power: 2800, optic: 4, net: 16, pdu: 2, u: 2 }
+    ];
+    const racks = [
+      { id: "a1", name: "A1机柜", type: "服务器机柜", path: "区域>A区>Bluespace>1F-U15>A1机柜", used: [1, 2, 3, 8, 9, 10, 11, 18, 19, 20], pre: [21], hold: [7, 42], power: 2200, weight: 480, pdu: 10, optic: 12, net: 24, row: 1 },
+      { id: "r000", name: "机柜000", type: "服务器机柜", path: "区域>A区>Bluespace>1F-U15>机柜000", used: [4, 5, 6, 12, 13], pre: [], hold: [1], power: 1800, weight: 420, pdu: 8, optic: 8, net: 16, row: 1 },
+      { id: "r003", name: "机柜003", type: "网络机柜", path: "区域>A区>Bluespace>1F-U15>机柜003", used: [2, 3, 15, 16], pre: [30], hold: [], power: 900, weight: 300, pdu: 6, optic: 4, net: 20, row: 2 },
+      { id: "r004", name: "机柜004", type: "服务器机柜", path: "区域>A区>Bluespace>1F-U15>机柜004", used: [10, 11, 12], pre: [], hold: [22], power: 400, weight: 260, pdu: 4, optic: 4, net: 8, row: 2 }
+    ];
+    const state = {
+      module: "asset",
+      wizardOpen: false,
+      strategyOpen: false,
+      detailOpen: false,
+      detailTab: "base",
+      step: 1,
+      scope: "",
+      scopePick: "区域>机房",
+      draft: [],
+      poolFilter: "",
+      selectedRack: "a1",
+      editingCode: "",
+      pickStart: 24,
+      strategy: clone(DEFAULT_STRATEGY),
+      list: [
+        { no: "RSV2025082100003", name: "黄山一期服务器上架", creator: "系统管理员", approver: "张伟", time: "2025-08-25 ~ 2025-08-31", status: "pass" },
+        { no: "RSV2025081800002", name: "核心交换机预占", creator: "系统管理员", approver: "李明", time: "2025-08-20 ~ 2025-08-28", status: "wait" }
+      ]
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const show = (id, on) => $(id).classList.toggle("hidden", !on);
+    function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+    function toast(msg) {
+      const el = $("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(el._t);
+      el._t = setTimeout(() => el.classList.remove("show"), 1800);
+    }
+    function escapeHtml(text) {
+      return String(text == null ? "" : text)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function pagerText(n) {
+      if (!n) return "显示第 0 到第 0 条记录，总共 0 条记录";
+      return "显示第 1 到第 " + n + " 条记录，总共 " + n + " 条记录";
+    }
+    function assetKind(cat) {
+      if (String(cat).indexOf("网络") >= 0) return "network";
+      if (String(cat).indexOf("存储") >= 0 || String(cat).indexOf("刀") >= 0) return "other";
+      return "server";
+    }
+    function targetRackType(asset) {
+      return state.strategy.typeMap[assetKind(asset.cat)];
+    }
+    function typeRestricted(asset) {
+      const target = targetRackType(asset);
+      return Boolean(state.strategy.hard.typeMap && target && target !== "不限制");
+    }
+    function portNeed(asset) {
+      return Number(asset.pdu || 0) + Number(asset.optic || 0) + Number(asset.net || 0);
+    }
+    function currentRack() {
+      return racks.find((r) => r.id === state.selectedRack) || racks[0];
+    }
+    function slotState(rack, u, extraBusy) {
+      if (rack.used.includes(u) || (extraBusy && extraBusy.indexOf(u) >= 0)) return "used";
+      if (rack.pre.includes(u)) return "pre";
+      if (rack.hold.includes(u)) return "hold";
+      return "free";
+    }
+    function isPlaced(asset) {
+      return Boolean(asset.match) && asset.match !== "无可用位置";
+    }
+    function addTypeText(asset) {
+      return asset.addType === "手动添加" || asset.addType === "手动创建" ? "手动添加" : "库房导入";
+    }
+    function enabledSoft() {
+      return state.strategy.soft.filter((s) => s.on).map((s) => s.id);
+    }
+    function hardLabels() {
+      const h = state.strategy.hard;
+      const items = [];
+      if (h.u) items.push("连续U");
+      if (h.power) items.push("功率");
+      if (h.weight) items.push("承重");
+      if (h.pdu) items.push("PDU");
+      if (h.optic) items.push("光口");
+      if (h.net) items.push("网口");
+      if (h.typeMap) items.push("机柜类型");
+      return items.length ? items.join("、") : "未启用硬约束";
+    }
+
+    function findContiguous(rack, need, extraBusy) {
+      const ranges = [];
+      let start = null;
+      for (let u = 1; u <= 42; u++) {
+        const free = slotState(rack, u, extraBusy) === "free";
+        if (free && start == null) start = u;
+        if ((!free || u === 42) && start != null) {
+          const end = free && u === 42 ? 42 : u - 1;
+          if (end - start + 1 >= need) {
+            for (let s = start; s <= end - need + 1; s++) ranges.push({ start: s, end: s + need - 1 });
+          }
+          start = null;
+        }
+      }
+      return ranges;
+    }
+    function rackFailReason(rack, asset, extraBusy) {
+      const h = state.strategy.hard;
+      if (typeRestricted(asset) && rack.type !== targetRackType(asset)) return "机柜类型不匹配（目标" + targetRackType(asset) + "）";
+      if (h.power && rack.power < Number(asset.power)) return "功率不足";
+      if (h.weight && rack.weight < Number(asset.weight)) return "承重不足";
+      if (h.pdu && rack.pdu < Number(asset.pdu)) return "PDU不足";
+      if (h.optic && rack.optic < Number(asset.optic)) return "光口不足";
+      if (h.net && rack.net < Number(asset.net)) return "网口不足";
+      const need = Number(asset.u) || 1;
+      if (h.u && !findContiguous(rack, need, extraBusy).length) return "连续U位不足";
+      return "";
+    }
+    function mainFailText(fails) {
+      const typed = fails.filter((f) => f.typeOk);
+      const item = (typed[0] || fails[0]);
+      return item ? item.name + "：" + item.reason : "";
+    }
+    function collectCandidates(asset, occ) {
+      const need = Number(asset.u) || 1;
+      const list = [];
+      const fails = [];
+      racks.forEach((rack) => {
+        const extra = occ && occ[rack.id] ? occ[rack.id] : [];
+        const fail = rackFailReason(rack, asset, extra);
+        const typeOk = !typeRestricted(asset) || rack.type === targetRackType(asset);
+        if (fail) {
+          fails.push({ name: rack.name, reason: fail, typeOk: typeOk });
+          return;
+        }
+        const ranges = state.strategy.hard.u ? findContiguous(rack, need, extra) : [{ start: 1, end: need }];
+        ranges.forEach((rg) => list.push({ rack: rack, start: rg.start, end: rg.end }));
+      });
+      return { list: list, fails: fails };
+    }
+    function sortCandidates(list, placed) {
+      const soft = enabledSoft();
+      const usedIds = placed.map((a) => a.rackId).filter(Boolean);
+      return list.slice().sort((a, b) => {
+        for (let i = 0; i < soft.length; i++) {
+          const key = soft[i];
+          let d = 0;
+          if (key === "lowU") d = a.start - b.start;
+          if (key === "noPre") d = a.rack.pre.length - b.rack.pre.length;
+          if (key === "sameRack") {
+            const as = usedIds.indexOf(a.rack.id) >= 0 ? 0 : 1;
+            const bs = usedIds.indexOf(b.rack.id) >= 0 ? 0 : 1;
+            d = as - bs;
+          }
+          if (key === "adjacent") {
+            const aAdj = usedIds.some((id) => {
+              const r = racks.find((x) => x.id === id);
+              return r && Math.abs(r.row - a.rack.row) <= 1;
+            }) ? 0 : 1;
+            const bAdj = usedIds.some((id) => {
+              const r = racks.find((x) => x.id === id);
+              return r && Math.abs(r.row - b.rack.row) <= 1;
+            }) ? 0 : 1;
+            d = aAdj - bAdj;
+          }
+          if (d) return d;
+        }
+        return a.rack.name.localeCompare(b.rack.name, "zh-CN");
+      });
+    }
+    function sortAssets(list) {
+      const order = state.strategy.assetOrder;
+      const val = (asset, key) => {
+        if (key === "u") return Number(asset.u) || 0;
+        if (key === "power") return Number(asset.power) || 0;
+        if (key === "weight") return Number(asset.weight) || 0;
+        return portNeed(asset);
+      };
+      return list.slice().sort((a, b) => {
+        for (let i = 0; i < order.length; i++) {
+          const d = val(b, order[i]) - val(a, order[i]);
+          if (d) return d;
+        }
+        return 0;
+      });
+    }
+    function runRecommend() {
+      const placed = [];
+      const occ = {};
+      racks.forEach((r) => { occ[r.id] = []; });
+      let queue = sortAssets(state.draft);
+      if (enabledSoft().indexOf("fewCand") >= 0) {
+        queue = queue.slice().sort((a, b) => collectCandidates(a, occ).list.length - collectCandidates(b, occ).list.length);
+      }
+      const result = {};
+      queue.forEach((asset) => {
+        const found = collectCandidates(asset, occ);
+        if (!found.list.length) {
+          const tip = mainFailText(found.fails);
+          result[asset.code] = {
+            match: "无可用位置",
+            ok: false,
+            start: 0,
+            end: 0,
+            rackId: "",
+            reason: "硬约束未放宽。范围内没有可上架机柜。" + (tip ? " 主要卡点：" + tip + "。" : "") + "请人工改位，或请管理员关闭对应硬约束后重新搜索。",
+            fails: found.fails
+          };
+          return;
+        }
+        const picked = sortCandidates(found.list, placed)[0];
+        const softText = enabledSoft().map((id) => SOFT_LABEL[id]).join(" → ");
+        result[asset.code] = {
+          match: picked.rack.path + ">U位" + picked.start + "-U位" + picked.end + "(" + (picked.end - picked.start + 1) + "U)",
+          ok: true,
+          start: picked.start,
+          end: picked.end,
+          rackId: picked.rack.id,
+          reason: "通过硬约束（" + hardLabels() + "），匹配" + picked.rack.type + "「" + picked.rack.name + "」。" +
+            (softText ? " 多方案时按：" + softText + "。" : "") +
+            (found.list.length > 1 ? " 共 " + found.list.length + " 个候选，取当前优先级最高的位置。" : " 仅此一个候选。"),
+          fails: found.fails
+        };
+        placed.push({ code: asset.code, rackId: picked.rack.id });
+        for (let u = picked.start; u <= picked.end; u++) occ[picked.rack.id].push(u);
+      });
+      state.draft.forEach((asset) => {
+        const rec = result[asset.code];
+        asset.match = rec.match;
+        asset.ok = rec.ok;
+        asset.start = rec.start;
+        asset.end = rec.end;
+        asset.rackId = rec.rackId;
+        asset.reason = rec.reason;
+        asset.fails = rec.fails;
+        asset.manual = false;
+      });
+    }
+
+    function hideWorkspacePages() {
+      show("listPage", false);
+      show("wizardPage", false);
+      show("strategyPage", false);
+      show("detailPage", false);
+    }
+    function showAssetWorkspace() {
+      $("navAsset").classList.add("active");
+      $("navSystem").classList.remove("active");
+      show("sideAsset", true);
+      hideWorkspacePages();
+      if (state.detailOpen) {
+        show("detailPage", true);
+        return;
+      }
+      if (state.strategyOpen) {
+        show("strategyPage", true);
+        fillStrategyForm();
+        return;
+      }
+      if (state.wizardOpen) show("wizardPage", true);
+      else show("listPage", true);
+    }
+    function openStrategy() {
+      state.strategyOpen = true;
+      state.detailOpen = false;
+      hideWorkspacePages();
+      show("strategyPage", true);
+      fillStrategyForm();
+    }
+    function backFromStrategy() {
+      state.strategyOpen = false;
+      hideWorkspacePages();
+      if (state.wizardOpen) show("wizardPage", true);
+      else show("listPage", true);
+    }
+    function fillStrategyForm() {
+      const s = state.strategy;
+      $("chkU").checked = true;
+      $("chkPower").checked = s.hard.power;
+      $("chkWeight").checked = s.hard.weight;
+      $("chkPdu").checked = s.hard.pdu;
+      $("chkOptic").checked = s.hard.optic;
+      $("chkNet").checked = s.hard.net;
+      $("chkType").checked = s.hard.typeMap;
+      $("mapServer").value = s.typeMap.server;
+      $("mapNetwork").value = s.typeMap.network;
+      $("mapOther").value = s.typeMap.other;
+      $("typeMapBox").style.opacity = s.hard.typeMap ? "1" : "0.45";
+      renderSoftList();
+    }
+    function readStrategyForm() {
+      state.strategy.hard = {
+        u: true,
+        power: $("chkPower").checked,
+        weight: $("chkWeight").checked,
+        pdu: $("chkPdu").checked,
+        optic: $("chkOptic").checked,
+        net: $("chkNet").checked,
+        typeMap: $("chkType").checked
+      };
+      state.strategy.typeMap = {
+        server: $("mapServer").value,
+        network: $("mapNetwork").value,
+        other: $("mapOther").value
+      };
+    }
+    function renderSoftList() {
+      $("softList").innerHTML = state.strategy.soft.map((item, i) =>
+        '<div class="prio-item"><span class="prio-no">' + (i + 1) + '</span><label class="grow"><input type="checkbox" data-soft="' +
+        i + '"' + (item.on ? " checked" : "") + " /> " + SOFT_LABEL[item.id] +
+        '</label><button class="btn" data-s-up="' + i + '" type="button">上移</button>' +
+        '<button class="btn" data-s-down="' + i + '" type="button">下移</button></div>'
+      ).join("");
+    }
+    function moveItem(arr, i, delta) {
+      const j = i + delta;
+      if (j < 0 || j >= arr.length) return arr;
+      const next = arr.slice();
+      const tmp = next[i];
+      next[i] = next[j];
+      next[j] = tmp;
+      return next;
+    }
+
+    function renderSteps() {
+      const names = ["添加搜索", "预占方案", "生成预占单"];
+      $("steps").innerHTML = names.map((name, i) => {
+        const n = i + 1;
+        const cls = n < state.step ? "done" : n === state.step ? "current" : "";
+        return '<div class="step ' + cls + '"><span class="step-dot">' + (n < state.step ? "✓" : n) + "</span>" + name + "</div>" +
+          (n < 3 ? '<div class="step-line"></div>' : "");
+      }).join("");
+    }
+    function showStep(n) {
+      state.step = n;
+      renderSteps();
+      show("step1", n === 1);
+      show("step2", n === 2);
+      show("step3", n === 3);
+    }
+    function openWizard() {
+      state.step = 1;
+      state.scope = "";
+      state.draft = [];
+      $("scopeInput").value = "";
+      $("approver").value = "";
+      $("orderName").value = "";
+      $("startTime").value = "";
+      $("endTime").value = "";
+      $("orderNo").textContent = "RSV2025091400001";
+      state.wizardOpen = true;
+      state.strategyOpen = false;
+      state.detailOpen = false;
+      hideWorkspacePages();
+      show("wizardPage", true);
+      showStep(1);
+      renderDraft();
+    }
+    function backToList() {
+      state.wizardOpen = false;
+      state.strategyOpen = false;
+      state.detailOpen = false;
+      hideWorkspacePages();
+      show("listPage", true);
+      renderList();
+    }
+
+    function renderList() {
+      const q = $("listKeyword").value.trim();
+      const rows = state.list.filter((r) => !q || r.no.includes(q) || r.name.includes(q));
+      $("listBody").innerHTML = rows.length
+        ? rows.map((r, i) => {
+            const st = STATUS[r.status];
+            return "<tr><td>" + (i + 1) + "</td><td>" + escapeHtml(r.no) + "</td><td>" + escapeHtml(r.name) +
+              "</td><td>" + escapeHtml(r.creator) + "</td><td>" + escapeHtml(r.approver) + "</td><td>" +
+              escapeHtml(r.time) + '</td><td><span class="status ' + st.cls + '">' + st.text +
+              '</span></td><td><button class="link" data-view-order="' + escapeHtml(r.no) + '" type="button">查看</button></td></tr>';
+          }).join("")
+        : '<tr><td class="empty" colspan="8">没有找到匹配的记录</td></tr>';
+      $("listPager").textContent = pagerText(rows.length);
+    }
+    function renderDraft() {
+      if (!state.draft.length) {
+        $("draftBody").innerHTML = '<tr><td class="empty" colspan="13">没有找到匹配的记录</td></tr>';
+        return;
+      }
+      $("draftBody").innerHTML = state.draft.map((a, i) =>
+        "<tr><td><input type='checkbox' data-draft='" + escapeHtml(a.code) + "' /></td><td>" + (i + 1) +
+        "</td><td>" + escapeHtml(a.code) + "</td><td>" + escapeHtml(a.name) + "</td><td>" + escapeHtml(a.cat) +
+        "</td><td>" + escapeHtml(a.u) + "</td><td>" + escapeHtml(a.weight) + "</td><td>" + escapeHtml(a.power) +
+        "</td><td>" + escapeHtml(a.optic) + "</td><td>" + escapeHtml(a.net) + "</td><td>" + escapeHtml(a.pdu) +
+        "</td><td>" + escapeHtml(addTypeText(a)) +
+        '</td><td><button class="link" data-del="' + escapeHtml(a.code) + '" type="button">删除</button></td></tr>'
+      ).join("");
+    }
+    function renderStrategySummary() {
+      const soft = enabledSoft().map((id) => SOFT_LABEL[id]).join(" → ") || "未启用";
+      $("strategySummary").innerHTML =
+        "<p>硬约束：" + escapeHtml(hardLabels()) + "</p>" +
+        "<p>多方案优化：" + escapeHtml(soft) + "</p>" +
+        "<p>无解时：不放宽硬约束，未匹配资产请人工改位。</p>";
+    }
+    function renderPlanTables() {
+      renderStrategySummary();
+      $("planBody").innerHTML = state.draft.map((a, i) =>
+        "<tr><td>" + (i + 1) + "</td><td>" + escapeHtml(a.code) + "</td><td>" + escapeHtml(a.name) +
+        "</td><td>" + escapeHtml(a.cat) + "</td><td>" + escapeHtml(a.match) +
+        '</td><td><span class="status ' + (a.ok ? "st-pass" : "st-fail") + '">' + (a.ok ? (a.manual ? "人工指定" : "已推荐") : "未匹配") +
+        "</span></td><td class='wrap'>" + escapeHtml(a.reason) +
+        '</td><td>' + escapeHtml(addTypeText(a)) +
+        '</td><td><button class="link" data-view="' + escapeHtml(a.code) + '" type="button">查看</button>' +
+        '<button class="link" data-move="' + escapeHtml(a.code) + '" type="button">修改位置</button></td></tr>'
+      ).join("");
+      $("finalBody").innerHTML = state.draft.map((a, i) =>
+        "<tr><td>" + (i + 1) + "</td><td>" + escapeHtml(a.code) + "</td><td>" + escapeHtml(a.name) +
+        "</td><td>" + escapeHtml(a.cat) + "</td><td>" + escapeHtml(a.match) +
+        "</td><td>" + escapeHtml(addTypeText(a)) +
+        '</td><td><button class="link" data-view="' + escapeHtml(a.code) + '" type="button">查看</button></td></tr>'
+      ).join("");
+      $("planPager").textContent = pagerText(state.draft.length);
+      $("finalPager").textContent = pagerText(state.draft.length);
+      $("scopeText").textContent = state.scope;
+      $("installLocation").textContent = state.scope;
+    }
+    function renderPool() {
+      const q = state.poolFilter.toLowerCase();
+      const rows = poolAssets.filter((a) => !q || a.code.toLowerCase().includes(q) || a.name.toLowerCase().includes(q));
+      $("poolBody").innerHTML = rows.map((a, i) =>
+        "<tr><td><input type='checkbox' data-pool='" + escapeHtml(a.code) + "' /></td><td>" + (i + 1) +
+        "</td><td>" + escapeHtml(a.code) + "</td><td>" + escapeHtml(a.name) + "</td><td>" + escapeHtml(a.cat) +
+        "</td><td>" + escapeHtml(a.loc) + '</td><td><button class="link" data-view="' + escapeHtml(a.code) +
+        '" type="button">查看</button></td></tr>'
+      ).join("") || '<tr><td class="empty" colspan="7">没有找到匹配的记录</td></tr>';
+      $("poolPager").textContent = pagerText(rows.length);
+    }
+    function renderScopeTree() {
+      const nodes = [
+        { id: "区域", pad: 0 },
+        { id: "区域>黄山中心", pad: 18 },
+        { id: "区域>机房", pad: 18 },
+        { id: "楼1>1F>机房", pad: 18 },
+        { id: "A机柜", pad: 36 }
+      ];
+      $("scopeTree").innerHTML = nodes.map((n) =>
+        '<label class="tree-row" style="padding-left:' + n.pad + 'px"><input type="radio" name="scopeNode" value="' +
+        escapeHtml(n.id) + '"' + (state.scopePick === n.id ? " checked" : "") + " />" + escapeHtml(n.id) + "</label>"
+      ).join("");
+    }
+    function renderRackTree() {
+      $("rackTree").innerHTML =
+        '<div class="tree-row">区域</div><div class="tree-row" style="padding-left:16px">A区</div>' +
+        '<div class="tree-row" style="padding-left:32px">Bluespace</div>' +
+        '<div class="tree-row" style="padding-left:48px">1F-U15</div>' +
+        racks.map((r) =>
+          '<label class="tree-row" style="padding-left:64px"><input type="radio" name="rackNode" value="' +
+          r.id + '"' + (state.selectedRack === r.id ? " checked" : "") + " />" + r.name + "（" + r.type + "）</label>"
+        ).join("");
+    }
+    function pickRange(asset) {
+      if (asset && asset.start && asset.end && !state.picking) {
+        const from = Math.min(asset.start, asset.end);
+        const to = Math.max(asset.start, asset.end);
+        return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+      }
+      const need = Number(asset && asset.u) || 5;
+      return Array.from({ length: need }, (_, i) => state.pickStart + i);
+    }
+    function renderRackFace() {
+      const rack = currentRack();
+      const asset = state.draft.find((a) => a.code === state.editingCode);
+      const picked = asset ? pickRange(asset) : [];
+      let html = "";
+      for (let u = 42; u >= 1; u--) {
+        const st = picked.includes(u) ? "pick" : slotState(rack, u);
+        html += '<div class="u-row"><button class="u-slot ' + st + '" data-u="' + u + '" type="button"></button><span class="u-no">' +
+          String(u).padStart(2, "0") + "</span></div>";
+      }
+      $("rackFace").innerHTML = html;
+    }
+    function openModal(id) { show(id, true); }
+    function closeModal(id) { show(id, false); }
+    function blank(v) {
+      return v == null || v === "" ? "" : escapeHtml(v);
+    }
+    function kvPair(label, value) {
+      return "<th>" + escapeHtml(label) + "</th><td>" + blank(value) + "</td>";
+    }
+    function showDetailTab(name) {
+      state.detailTab = name;
+      document.querySelectorAll(".dtab").forEach((el) => el.classList.toggle("active", el.dataset.dtab === name));
+      show("detailBase", name === "base");
+      show("detailHist", name === "hist");
+      show("detailWo", name === "wo");
+    }
+    function closeDetail() {
+      state.detailOpen = false;
+      hideWorkspacePages();
+      if (state.wizardOpen) show("wizardPage", true);
+      else show("listPage", true);
+    }
+    function viewAsset(code) {
+      const a = state.draft.find((x) => x.code === code) || poolAssets.find((x) => x.code === code);
+      if (!a) return;
+      closeModal("assetModal");
+      const status = a.match ? "待上架" : "在库";
+      $("detailBaseInner").innerHTML =
+        '<table class="kv-table"><tbody>' +
+        "<tr>" + kvPair("资产编号：", a.code) + kvPair("资产名称：", a.name) + "</tr>" +
+        "<tr>" + kvPair("资产分类：", a.cat) + kvPair("资产状态：", status) + "</tr>" +
+        "<tr>" + kvPair("厂商分类：", a.vendor || "通用设备-通用设备") + kvPair("序列号：", a.sn) + "</tr>" +
+        "<tr>" + kvPair("资产位置：", a.loc || "区域>机房") + kvPair("资产描述：", a.desc) + "</tr>" +
+        "<tr>" + kvPair("重量(kg)：", a.weight) + kvPair("额定功率(w)：", a.power) + "</tr>" +
+        "<tr>" + kvPair("PDU插座个数：", a.pdu) + kvPair("光口(个)：", a.optic) + "</tr>" +
+        "<tr>" + kvPair("网口(个)：", a.net) + kvPair("U位高度：", a.u) + "</tr>" +
+        "<tr>" + kvPair("所属部门：", a.dept) + kvPair("使用者：", a.user) + "</tr>" +
+        "<tr>" + kvPair("所有者电话：", a.ownerPhone) + kvPair("所有者编号：", a.ownerNo) + "</tr>" +
+        "<tr>" + kvPair("当前位置：", a.match) + kvPair("当前资产：", "") + "</tr>" +
+        "</tbody></table>";
+      state.detailOpen = true;
+      hideWorkspacePages();
+      show("detailPage", true);
+      showDetailTab("base");
+    }
+    function addToDraft(asset, addType) {
+      if (state.draft.some((a) => a.code === asset.code)) return;
+      state.draft.push(Object.assign({}, asset, { addType: addType, match: "", reason: "" }));
+    }
+    function finishOrder(status) {
+      if (state.draft.some((a) => !isPlaced(a))) { toast("仍有资产未匹配位置"); return; }
+      const name = $("orderName").value.trim();
+      const approver = $("approver").value;
+      if (!name) { toast("请填写预占单名称"); return; }
+      if (!approver) { toast("请选择审核人"); return; }
+      const start = $("startTime").value.replace("T", " ");
+      const end = $("endTime").value.replace("T", " ");
+      state.list.unshift({
+        no: $("orderNo").textContent,
+        name: name,
+        creator: "系统管理员",
+        approver: approver,
+        time: start && end ? start + " ~ " + end : "—",
+        status: status
+      });
+      toast(status === "wait" ? "预占单已提交" : "预占单已保存");
+      backToList();
+    }
+
+    document.addEventListener("click", (e) => {
+      const t = e.target;
+      if (t.dataset.close) closeModal(t.dataset.close);
+      if (t.dataset.del) {
+        state.draft = state.draft.filter((a) => a.code !== t.dataset.del);
+        renderDraft();
+      }
+      if (t.dataset.view) viewAsset(t.dataset.view);
+      if (t.dataset.dtab) showDetailTab(t.dataset.dtab);
+      if (t.dataset.move) {
+        const asset = state.draft.find((a) => a.code === t.dataset.move);
+        state.editingCode = t.dataset.move;
+        state.picking = false;
+        state.selectedRack = asset && asset.rackId ? asset.rackId : "a1";
+        state.pickStart = asset && asset.start ? asset.start : 24;
+        renderRackTree();
+        renderRackFace();
+        openModal("rackModal");
+      }
+      if (t.dataset.viewOrder) toast("演示页仅覆盖新增预占与策略配置");
+      if (t.dataset.u) {
+        state.picking = true;
+        state.pickStart = Number(t.dataset.u);
+        renderRackFace();
+      }
+      if (t.dataset.sUp != null || t.dataset.sDown != null) {
+        const i = Number(t.dataset.sUp != null ? t.dataset.sUp : t.dataset.sDown);
+        state.strategy.soft = moveItem(state.strategy.soft, i, t.dataset.sUp != null ? -1 : 1);
+        renderSoftList();
+      }
+    });
+    document.addEventListener("change", (e) => {
+      if (e.target.id === "chkType") $("typeMapBox").style.opacity = e.target.checked ? "1" : "0.45";
+      if (["chkPower", "chkWeight", "chkPdu", "chkOptic", "chkNet", "chkType", "mapServer", "mapNetwork", "mapOther"].indexOf(e.target.id) >= 0) {
+        readStrategyForm();
+      }
+      if (e.target.dataset.soft != null) {
+        state.strategy.soft[Number(e.target.dataset.soft)].on = e.target.checked;
+      }
+    });
+    document.querySelectorAll(".mask").forEach((el) => {
+      el.addEventListener("click", (e) => { if (e.target === el) el.classList.add("hidden"); });
+    });
+
+    $("navAsset").onclick = () => {
+      if (state.detailOpen) closeDetail();
+      else if (state.strategyOpen) backFromStrategy();
+      else showAssetWorkspace();
+    };
+    $("sideReserve").onclick = () => {
+      if (state.detailOpen) closeDetail();
+      else if (state.strategyOpen) backFromStrategy();
+    };
+    $("btnCloseDetail").onclick = closeDetail;
+    $("btnGoStrategy").onclick = openStrategy;
+    $("btnBackStrategy").onclick = backFromStrategy;
+    $("btnSoftHelp").onclick = () => openModal("softHelpModal");
+    $("btnSaveStrategy").onclick = () => { readStrategyForm(); toast("全场通用策略已保存，后续搜索按此执行"); };
+    $("btnResetStrategy").onclick = () => {
+      state.strategy = clone(DEFAULT_STRATEGY);
+      fillStrategyForm();
+      toast("已恢复为现状默认算法");
+    };
+    $("btnAdd").onclick = openWizard;
+    $("btnRefresh").onclick = () => { renderList(); toast("列表已刷新"); };
+    $("btnListQuery").onclick = renderList;
+    $("btnAdvQuery").onclick = () => toast("可按创建人、审核人、状态继续筛选");
+    $("btnBackList").onclick = backToList;
+    $("btnPickScope").onclick = () => { renderScopeTree(); openModal("scopeModal"); };
+    $("scopeOk").onclick = () => {
+      const picked = document.querySelector('input[name="scopeNode"]:checked');
+      state.scope = picked ? picked.value : "";
+      state.scopePick = state.scope;
+      $("scopeInput").value = state.scope;
+      closeModal("scopeModal");
+    };
+    $("btnAddAsset").onclick = () => { state.poolFilter = ""; $("assetKeyword").value = ""; renderPool(); openModal("assetModal"); };
+    $("btnAssetQuery").onclick = () => { state.poolFilter = $("assetKeyword").value.trim(); renderPool(); };
+    $("btnAssetAdv").onclick = () => toast("可按资产分类、资产位置继续筛选");
+    $("checkAllPool").onchange = (e) => {
+      document.querySelectorAll("[data-pool]").forEach((c) => { c.checked = e.target.checked; });
+    };
+    $("assetOk").onclick = () => {
+      const codes = [...document.querySelectorAll("[data-pool]:checked")].map((c) => c.dataset.pool);
+      if (!codes.length) { toast("请选择资产"); return; }
+      codes.forEach((code) => {
+        const asset = poolAssets.find((a) => a.code === code);
+        if (asset) addToDraft(asset, "库房导入");
+      });
+      renderDraft();
+      closeModal("assetModal");
+    };
+    $("btnManualCreate").onclick = () => {
+      $("cCode").value = "HS-" + String(100 + state.draft.length);
+      $("cName").value = "黄山待上架服务器";
+      openModal("createModal");
+    };
+    $("createOk").onclick = () => {
+      const code = $("cCode").value.trim();
+      const name = $("cName").value.trim();
+      if (!code || !name) { toast("请填写资产编号和名称"); return; }
+      addToDraft({
+        code: code, name: name, cat: $("cCat").value, loc: "—", model: $("cU").value,
+        weight: $("cWeight").value, power: $("cPower").value, optic: $("cOptic").value,
+        net: $("cNet").value, pdu: $("cPdu").value, u: Number($("cU").value) || 5
+      }, "手动添加");
+      renderDraft();
+      closeModal("createModal");
+    };
+    $("btnRemoveAsset").onclick = () => {
+      const codes = [...document.querySelectorAll("[data-draft]:checked")].map((c) => c.dataset.draft);
+      if (!codes.length) { toast("请勾选要删除的资产"); return; }
+      state.draft = state.draft.filter((a) => !codes.includes(a.code));
+      renderDraft();
+    };
+    $("checkAllDraft").onchange = (e) => {
+      document.querySelectorAll("[data-draft]").forEach((c) => { c.checked = e.target.checked; });
+    };
+    $("btnSearch").onclick = () => {
+      if (!state.scope) { toast("请选择搜索空间范围"); return; }
+      if (!state.draft.length) { toast("请先添加待上架资产"); return; }
+      if ($("chkU")) readStrategyForm();
+      runRecommend();
+      renderPlanTables();
+      showStep(2);
+    };
+    $("btnPrev2").onclick = () => showStep(1);
+    $("btnMockFail").onclick = () => {
+      if (state.draft.some((a) => a.code === "SW_UNSOLVED")) {
+        toast("已存在无解演示数据");
+        return;
+      }
+      addToDraft({
+        code: "SW_UNSOLVED",
+        name: "SW_UNSOLVED",
+        cat: "IT设备-网络-交换机",
+        loc: "区域>机房",
+        model: "S6720",
+        weight: 18,
+        power: 2800,
+        optic: 4,
+        net: 16,
+        pdu: 2,
+        u: 2
+      }, "库房导入");
+      const asset = state.draft.find((a) => a.code === "SW_UNSOLVED");
+      asset.match = "无可用位置";
+      asset.ok = false;
+      asset.reason = "硬约束未放宽。范围内没有可上架机柜。 主要卡点：机柜003：功率不足。请人工改位，或请管理员关闭对应硬约束后重新搜索。";
+      renderPlanTables();
+      toast("已加入一条无解方案演示数据");
+    };
+    $("btnResearch").onclick = () => {
+      if ($("chkU")) readStrategyForm();
+      runRecommend();
+      renderPlanTables();
+      toast("已按当前全场策略重新搜索");
+    };
+    $("btnNext2").onclick = () => {
+      if (state.draft.some((a) => !isPlaced(a))) {
+        toast("仍有资产未匹配，请人工改位后再进入下一步");
+        return;
+      }
+      showStep(3);
+    };
+    $("btnPrev3").onclick = () => showStep(2);
+    $("btnSave").onclick = () => finishOrder("new");
+    $("btnSubmit").onclick = () => finishOrder("wait");
+    $("rackTree").addEventListener("change", (e) => {
+      if (e.target.name === "rackNode") {
+        state.selectedRack = e.target.value;
+        renderRackFace();
+      }
+    });
+    $("rackOk").onclick = () => {
+      const asset = state.draft.find((a) => a.code === state.editingCode);
+      const rack = currentRack();
+      if (!asset) return;
+      const need = Number(asset.u) || 5;
+      const end = state.pickStart + need - 1;
+      if (end > 42) { toast("所选U位超出机柜范围"); return; }
+      for (let u = state.pickStart; u <= end; u++) {
+        if (slotState(rack, u) !== "free") { toast("所选U位包含占用、预占或预留空间"); return; }
+      }
+      asset.rackId = rack.id;
+      asset.start = state.pickStart;
+      asset.end = end;
+      asset.match = rack.path + ">U位" + state.pickStart + "-U位" + end + "(" + need + "U)";
+      asset.ok = true;
+      asset.manual = true;
+      asset.reason = "系统未自动匹配或用户改位。当前位置由人工指定为「" + rack.name + "」U" + state.pickStart + "-U" + end + "。";
+      renderPlanTables();
+      closeModal("rackModal");
+    };
+
+    class DemandExplainController {
+      constructor(options = {}) {
+        this.storageKey = options.storageKey || "prototype-demand-mode";
+        this.toggleId = options.toggleId || "demandToggle";
+        this.labelId = options.labelId || "demandToggleLabel";
+        this.popover = null;
+        this.activeTrigger = null;
+      }
+
+      init() {
+        this.mountBadges();
+        this.mountPopover();
+        this.bindToggle();
+        document.addEventListener("mousedown", (event) => {
+          if (!event.target.closest(".demand-badge-trigger") && !event.target.closest(".demand-popover")) {
+            this.hide();
+          }
+        });
+        this.applyMode(this.readMode());
+      }
+
+      mountBadges() {
+        document.querySelectorAll("[data-demand-text]").forEach((scope) => {
+          if (scope.classList.contains("demand-badge-trigger")) return;
+          if (scope.dataset.demandMounted === "1") return;
+          scope.dataset.demandMounted = "1";
+          scope.classList.add("demand-anchor");
+          if (scope.dataset.demandPosition === "inline") {
+            scope.classList.add("demand-anchor-inline");
+          }
+
+          const badge = document.createElement("span");
+          badge.className = "demand-badge";
+
+          const trigger = document.createElement("button");
+          trigger.type = "button";
+          trigger.className = "demand-badge-trigger";
+          trigger.textContent = "需";
+          trigger.setAttribute("aria-label", "查看需求说明");
+          trigger.dataset.demandTitle = scope.dataset.demandTitle || "需求说明";
+          trigger.dataset.demandText = scope.dataset.demandText || "";
+
+          trigger.addEventListener("mouseenter", () => this.show(trigger));
+          trigger.addEventListener("mouseleave", () => this.hide());
+          trigger.addEventListener("focus", () => this.show(trigger));
+          trigger.addEventListener("blur", () => this.hide());
+          trigger.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+          });
+
+          badge.appendChild(trigger);
+          scope.appendChild(badge);
+        });
+      }
+
+      mountPopover() {
+        this.popover = document.createElement("div");
+        this.popover.className = "demand-popover";
+        document.body.appendChild(this.popover);
+      }
+
+      bindToggle() {
+        const toggle = document.getElementById(this.toggleId);
+        if (!toggle) return;
+        toggle.addEventListener("click", () => {
+          this.applyMode(!document.body.classList.contains("demand-mode-on"), true);
+        });
+      }
+
+      readMode() {
+        return localStorage.getItem(this.storageKey) === "on";
+      }
+
+      applyMode(enabled, persist = false) {
+        document.body.classList.toggle("demand-mode-on", enabled);
+        const label = document.getElementById(this.labelId);
+        if (label) label.textContent = enabled ? "需求说明：开" : "需求说明：关";
+        if (persist) localStorage.setItem(this.storageKey, enabled ? "on" : "off");
+        if (!enabled) this.hide();
+      }
+
+      show(trigger) {
+        this.activeTrigger = trigger;
+        const title = trigger.dataset.demandTitle || "需求说明";
+        const parts = String(trigger.dataset.demandText || "")
+          .split("||")
+          .map((item) => item.trim())
+          .filter(Boolean);
+        this.popover.innerHTML = `<strong>${this.escape(title)}</strong>${parts.map((p) => `<p>${this.escape(p)}</p>`).join("")}`;
+        this.positionPopover(trigger);
+        this.popover.style.display = "block";
+      }
+
+      hide() {
+        if (this.popover) this.popover.style.display = "none";
+        this.activeTrigger = null;
+      }
+
+      positionPopover(trigger) {
+        const rect = trigger.getBoundingClientRect();
+        const gap = 8;
+        const width = 320;
+        const left = Math.min(window.innerWidth - width - gap, Math.max(gap, rect.right + gap));
+        const top = Math.min(window.innerHeight - 120, Math.max(gap, rect.top));
+        this.popover.style.left = `${left}px`;
+        this.popover.style.top = `${top}px`;
+      }
+
+      escape(text) {
+        const div = document.createElement("div");
+        div.textContent = String(text);
+        return div.innerHTML;
+      }
+    }
+
+    renderSteps();
+    renderList();
+    fillStrategyForm();
+    new DemandExplainController().init();
+  </script>
+</body>
+</html>
