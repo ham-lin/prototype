@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>考勤统计分析</title>
+<style>
+:root {
+  --sidebar: #324156;
+  --primary: #4169e1;
+  --primary-soft: #eef3ff;
+  --text: #303133;
+  --text-2: #606266;
+  --text-3: #909399;
+  --line: #ebeef5;
+  --border: #dcdfe6;
+  --bg: #f5f6f8;
+  --green: #67c23a;
+  --green-bg: #f0f9eb;
+  --orange: #e6a23c;
+  --purple: #7c35d0;
+  --red: #ee6666;
+  --rank1: #f02332;
+  --rank2: #f18a16;
+  --rank3: #f5d22a;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font: 14px/1.5 "Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.app { display: flex; height: 100vh; min-width: 1180px; }
+.sidebar {
+  width: 64px;
+  background: var(--sidebar);
+  color: #c5d0dc;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  transition: width .2s ease;
+  overflow: hidden;
+}
+.sidebar.open { width: 210px; }
+.logo {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sidebar.open .logo { justify-content: flex-start; padding-left: 18px; gap: 10px; }
+.logo svg { width: 26px; height: 26px; flex-shrink: 0; }
+.logo span { display: none; color: #fff; font-size: 15px; white-space: nowrap; }
+.sidebar.open .logo span { display: block; }
+.menu { flex: 1; padding-top: 6px; }
+.menu-item {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #b7c3d3;
+  position: relative;
+}
+.sidebar.open .menu-item { justify-content: flex-start; padding-left: 22px; }
+.menu-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.menu-item span { display: none; white-space: nowrap; font-size: 14px; }
+.sidebar.open .menu-item span { display: block; }
+.menu-item.active { color: #7eb6ff; }
+.menu-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 10px; bottom: 10px;
+  width: 3px;
+  background: #7eb6ff;
+  border-radius: 0 2px 2px 0;
+}
+.main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.header {
+  height: 50px;
+  background: #fff;
+  border-bottom: 1px solid #e6e8eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 8px;
+  flex-shrink: 0;
+}
+.crumb { display: flex; align-items: center; gap: 8px; color: #97a0ad; font-size: 14px; }
+.crumb .current { color: var(--text); }
+.icon-btn {
+  width: 32px; height: 32px;
+  border: 0; background: transparent; color: #606266;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+}
+.icon-btn:hover { background: #f2f3f5; }
+.header-tools { display: flex; align-items: center; gap: 6px; color: #606266; }
+.font-btn { width: auto; padding: 0 6px; gap: 2px; font-weight: 600; }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; margin-left: 6px;
+}
+.user-name { color: var(--text-2); margin-right: 4px; }
+.tags {
+  height: 40px;
+  background: #fff;
+  border-bottom: 1px solid #e6e8eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+.tag {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid #d8dce5;
+  background: #fff;
+  color: #495060;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  border-radius: 2px;
+}
+.tag.on { background: #e8f3ff; color: #3a8ee6; border-color: #d4e8ff; }
+.tag .x { font-style: normal; font-size: 14px; line-height: 1; opacity: .7; }
+.content { flex: 1; overflow: auto; padding: 12px; background: var(--bg); }
+.panel { background: #fff; min-height: 100%; padding: 0 20px 18px; border-radius: 2px; }
+.level-row { display: flex; align-items: flex-end; border-bottom: 1px solid var(--line); height: 48px; }
+.level-tab {
+  border: 0; background: transparent;
+  height: 48px; margin-right: 36px; padding: 0;
+  color: var(--text); font-size: 15px; position: relative;
+}
+.level-tab.on { color: var(--primary); }
+.level-tab.on::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px;
+  height: 2px; background: var(--primary);
+}
+.sub-row { display: flex; align-items: center; gap: 8px; padding: 14px 0 4px; }
+.sub-tab {
+  border: 0; background: transparent;
+  height: 32px; padding: 0 16px; border-radius: 4px; color: var(--text-2);
+}
+.sub-tab.on { background: var(--primary); color: #fff; }
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 0 16px; flex-wrap: wrap;
+}
+.filters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.filters label { color: var(--text-2); }
+.ctl {
+  height: 32px; border: 1px solid var(--border); border-radius: 4px;
+  background: #fff; padding: 0 10px; outline: none; color: var(--text-2);
+}
+.ctl:focus { border-color: var(--primary); }
+select.ctl {
+  width: 168px; padding-right: 26px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%23c0c4cc' stroke-width='1.4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+input.ctl { width: 280px; }
+input.ctl::placeholder { color: #c0c4cc; }
+.btn-export {
+  height: 32px; padding: 0 12px;
+  border: 1px solid #c6d4f8; background: #fff; color: var(--primary);
+  border-radius: 4px; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-export:hover { background: var(--primary-soft); }
+.period-wrap { display: flex; align-items: center; gap: 12px; }
+.seg { display: inline-flex; border: 1px solid #d7deea; border-radius: 4px; overflow: hidden; }
+.seg button {
+  height: 32px; padding: 0 14px; border: 0; background: #fff; color: var(--text-2);
+  border-right: 1px solid #d7deea;
+}
+.seg button:last-child { border-right: 0; }
+.seg button.on { background: var(--primary); color: #fff; }
+.daterange { display: inline-flex; align-items: center; color: var(--text-2); gap: 4px; }
+.daterange button {
+  width: 24px; height: 24px; border: 0; background: transparent; color: #909399; font-size: 16px;
+}
+.daterange button:hover { color: var(--primary); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat {
+  border: 1px solid #e6ebf2;
+  border-radius: 4px;
+  padding: 16px 18px 18px;
+  min-height: 104px;
+  background: #fff;
+  text-align: left;
+  width: 100%;
+  display: block;
+  position: relative;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+}
+.stat:hover, .stat:focus-visible {
+  border-color: #b9ccf8;
+  box-shadow: 0 4px 12px rgba(65, 105, 225, .12);
+  outline: none;
+}
+.stat .more {
+  position: absolute; right: 14px; top: 16px;
+  font-size: 12px; color: var(--primary); opacity: 0;
+}
+.stat:hover .more, .stat:focus-visible .more { opacity: 1; }
+.stat-label { display: flex; align-items: center; gap: 6px; color: #8d97a6; font-size: 14px; }
+.stat-label svg { width: 16px; height: 16px; }
+.stat-value { margin-top: 18px; font-size: 28px; font-weight: 600; color: #303133; letter-spacing: .2px; }
+.stat-value small { margin-left: 4px; font-size: 13px; font-weight: 400; color: #909399; }
+.mask {
+  position: fixed; inset: 0; z-index: 30;
+  background: rgba(20, 30, 48, .35);
+  display: flex; justify-content: flex-end;
+}
+.mask[hidden] { display: none; }
+.drawer {
+  width: min(960px, 94vw); height: 100%; background: #fff;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, .08);
+  display: flex; flex-direction: column;
+}
+.drawer-head {
+  height: 56px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; border-bottom: 1px solid var(--line);
+}
+.drawer-head h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.drawer-body { flex: 1; overflow: auto; padding: 16px 20px 28px; }
+.drawer-summary {
+  background: #f7f9fc; border-radius: 4px; padding: 14px 16px; margin-bottom: 14px; color: var(--text-2);
+}
+.drawer-summary b { color: var(--text); font-size: 22px; margin-right: 6px; }
+.drawer-summary p { margin: 6px 0 0; }
+.drawer table { min-width: 0; }
+.drawer th, .drawer td { text-align: left; white-space: nowrap; }
+.drawer td.wrap { white-space: normal; min-width: 240px; line-height: 1.6; }
+.drawer .empty { text-align: center; }
+.drawer-tools { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+.drawer-tools input { width: 240px; }
+.drawer-pager { padding-top: 14px; }
+.num-link {
+  border: 0; background: transparent; color: var(--primary);
+  font: inherit; cursor: pointer; min-width: 28px; padding: 0 2px;
+}
+.num-link:hover { text-decoration: underline; }
+.num-link.is-zero { color: #c0c4cc; }
+.chart-head { margin: 22px 0 4px; font-size: 16px; font-weight: 600; color: #303133; }
+.chart-box { position: relative; }
+#trend { width: 100%; height: 300px; display: block; }
+.legend { display: flex; justify-content: center; gap: 22px; padding: 4px 0 8px; color: var(--text-2); font-size: 13px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.tip {
+  position: absolute; z-index: 2; pointer-events: none;
+  background: rgba(50, 50, 50, .86); color: #fff;
+  border-radius: 4px; padding: 8px 10px; font-size: 12px; line-height: 1.7;
+  white-space: nowrap;
+}
+.table-tabs { display: flex; gap: 28px; border-top: 1px solid #f0f2f5; margin-top: 8px; }
+.table-tab {
+  border: 0; background: transparent; height: 44px; padding: 0; color: var(--text); position: relative; font-size: 14px;
+}
+.table-tab.on { color: var(--primary); }
+.table-tab.on::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--primary);
+}
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 860px; }
+th, td { padding: 14px 12px; text-align: center; border-bottom: 1px solid #f0f2f5; font-weight: 400; }
+th { color: #909399; font-size: 14px; }
+td { color: #606266; }
+th.name, td.name { text-align: left; padding-left: 8px; }
+tbody tr:hover td { background: #fafbfc; }
+.pill {
+  display: inline-block; min-width: 78px;
+  background: var(--green-bg); color: var(--green);
+  border-radius: 3px; padding: 2px 8px; line-height: 20px;
+}
+.badge {
+  display: inline-flex; width: 22px; height: 22px; border-radius: 50%;
+  align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600;
+}
+.b1 { background: var(--rank1); }
+.b2 { background: var(--rank2); }
+.b3 { background: var(--rank3); color: #fff; }
+.rank-plain { color: #606266; }
+.empty { text-align: center !important; color: #c0c4cc !important; padding: 36px !important; }
+.pager {
+  display: flex; justify-content: flex-end; align-items: center; gap: 8px;
+  padding-top: 14px; color: var(--text-2); font-size: 13px;
+}
+.pager select, .jump {
+  height: 28px; border: 1px solid var(--border); border-radius: 2px; background: #fff; color: var(--text-2);
+}
+.pager select { padding: 0 8px; }
+.jump { width: 46px; text-align: center; }
+.page-btn, .page-num {
+  min-width: 28px; height: 28px; padding: 0 6px;
+  border: 1px solid var(--border); background: #fff; border-radius: 2px; color: var(--text-2);
+}
+.page-num.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.page-btn:disabled { color: #c0c4cc; cursor: not-allowed; }
+.placeholder { min-height: 420px; display: flex; align-items: center; justify-content: center; color: var(--text-3); }
+.toast {
+  position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+  background: #fff; border: 1px solid #ebeef5; box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  padding: 10px 16px; border-radius: 4px; z-index: 20; color: var(--text);
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo" title="业务管理">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 27c0-6 2-9 7-12-1 7-4 11-7 12z" fill="#3ecf9a"/>
+        <path d="M15.5 27c.2-7-2.2-11-8-14 2.2 6 5 10 8 14z" fill="#2bb583"/>
+        <path d="M16 27V14" stroke="#1f9a70" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span>业务管理</span>
+    </div>
+    <nav class="menu" id="menu"></nav>
+  </aside>
+  <section class="main">
+    <header class="header">
+      <div class="crumb">
+        <button class="icon-btn" id="hamburger" aria-label="展开菜单">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4.5h12M3 9h12M3 13.5h12"/></svg>
+        </button>
+        <span>首页</span><span>/</span><span>考勤管理</span><span>/</span><span class="current">考勤统计</span>
+      </div>
+      <div class="header-tools">
+        <button class="icon-btn" id="focusSearch" aria-label="搜索">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.2"/><path d="M10.4 10.4L13.5 13.5"/></svg>
+        </button>
+        <button class="icon-btn" id="fullBtn" aria-label="全屏">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 6V3h3M10 3h3v3M13 10v3h-3M6 13H3v-3"/></svg>
+        </button>
+        <button class="icon-btn font-btn" id="fontBtn" aria-label="字号">T <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        <span class="avatar">超</span>
+        <span class="user-name">超级管理员</span>
+      </div>
+    </header>
+    <div class="tags">
+      <span class="tag">首页</span>
+      <span class="tag on">考勤统计 <i class="x">×</i></span>
+    </div>
+    <div class="content">
+      <div class="panel">
+        <div class="level-row" id="levelRow"></div>
+        <div class="sub-row" id="subRow"></div>
+        <div id="analysis">
+          <div class="toolbar">
+            <div class="filters">
+              <label for="deptSelect">部门筛选</label>
+              <select class="ctl" id="deptSelect"><option value="">请选择部门</option></select>
+              <label for="keyword">人员搜索</label>
+              <input class="ctl" id="keyword" placeholder="搜索员工姓名或工号...">
+              <button class="btn-export" id="exportBtn" type="button">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 2v7M4.5 6.5L7 9l2.5-2.5"/><path d="M2.5 11.5h9"/></svg>
+                导出考勤统计
+              </button>
+            </div>
+            <div class="period-wrap">
+              <div class="seg" id="seg"></div>
+              <div class="daterange">
+                <button type="button" id="prevRange" aria-label="上一周期">‹</button>
+                <span id="rangeLabel">2026-09-01 ~ 2026-09-30</span>
+                <button type="button" id="nextRange" aria-label="下一周期">›</button>
+              </div>
+            </div>
+          </div>
+          <div class="stats" id="stats"></div>
+          <div class="chart-head" id="chartTitle">月考勤趋势</div>
+          <div class="chart-box">
+            <svg id="trend"></svg>
+            <div class="legend" id="legend"></div>
+            <div class="tip" id="tip" hidden></div>
+          </div>
+          <div class="table-tabs" id="tableTabs"></div>
+          <div class="table-wrap">
+            <table>
+              <thead id="thead"></thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+          <div class="pager" id="pager"></div>
+        </div>
+        <div class="placeholder" id="placeholder" hidden></div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="mask" id="mask" hidden>
+  <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="drawer-head">
+      <h3 id="detailTitle">详情</h3>
+      <button class="icon-btn" id="detailClose" type="button" aria-label="关闭">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="detailBody"></div>
+  </aside>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script>
+const KPI = [
+  { id: "total", label: "总人数", value: "89", icon: "user", color: "#7c35d0" },
+  { id: "days", label: "应出勤天数", value: "22", icon: "cal", color: "#7c35d0" },
+  { id: "leaveDays", label: "请假总人天", value: "6", icon: "leave", color: "#e6a23c" },
+  { id: "field", label: "外勤总人天", value: "0", icon: "field", color: "#7c35d0" },
+  { id: "should", label: "应出勤总人天", value: "1958", icon: "users", color: "#7c35d0" },
+  { id: "absent", label: "缺勤总人天", value: "953", icon: "miss", color: "#7c35d0" },
+  { id: "late", label: "迟到总次数", value: "203", icon: "clock", color: "#7c35d0" },
+  { id: "early", label: "早退总次数", value: "10", icon: "early", color: "#7c35d0" },
+  { id: "attendRate", label: "出勤率", value: "51.33%", icon: "chart", color: "#67c23a" },
+  { id: "lateRate", label: "迟到率", value: "10.37%", icon: "chart", color: "#e6a23c" },
+  { id: "leaveRate", label: "请假率", value: "0.31%", icon: "chart", color: "#7c35d0" },
+  { id: "absentRate", label: "缺勤率", value: "48.67%", icon: "chart", color: "#9b6bdb" },
+  { id: "trip", label: "出差", value: "8", unit: "人天", icon: "trip", color: "#4169e1" },
+  { id: "leave", label: "请假", value: "6", unit: "人天", icon: "leave", color: "#e6a23c" },
+  { id: "out", label: "外出办事", value: "5", unit: "人天", icon: "out", color: "#13a8a8" },
+  { id: "ot", label: "加班", value: "11", unit: "小时", icon: "ot", color: "#7c35d0" }
+];
+
+const DEPTS = [
+  { name: "运营管理部（算量中心）", total: 6, attend: 85.6061, late: 0, leave: 0, absent: 14.3939 },
+  { name: "党委干部部（人力资源部）", total: 5, attend: 73.6364, late: 0.9091, leave: 0, absent: 26.3636 },
+  { name: "经济管理部（算价中心）", total: 7, attend: 73.3766, late: 12.3377, leave: 0, absent: 26.6234 },
+  { name: "法律合规部", total: 4, attend: 65.9091, late: 30.6818, leave: 0, absent: 34.0909 },
+  { name: "科技创新与数字化部", total: 3, attend: 65.1515, late: 1.5152, leave: 0, absent: 34.8485 },
+  { name: "创产资源保障部", total: 4, attend: 64.7727, late: 4.5455, leave: 0, absent: 35.2273 },
+  { name: "党委工作部（团委、保密办公室）", total: 7, attend: 64.2857, late: 26.6234, leave: 0, absent: 35.7143 },
+  { name: "工会工作部（退休人员管理部）", total: 3, attend: 62.1212, late: 13.6364, leave: 0, absent: 37.8788 },
+  { name: "战略规划部（海外部、执行董事办公室）", total: 5, attend: 58.1818, late: 8.1818, leave: 0, absent: 41.8182 },
+  { name: "财务管理部", total: 6, attend: 56.0606, late: 9.0909, leave: 0, absent: 43.9394 },
+  { name: "安全生产监督管理部", total: 8, attend: 54.5455, late: 11.3636, leave: 0.5682, absent: 44.8864 },
+  { name: "工程管理部", total: 9, attend: 52.0202, late: 15.1515, leave: 0, absent: 47.9798 },
+  { name: "市场开发部", total: 4, attend: 50.0000, late: 6.8182, leave: 0, absent: 50.0000 },
+  { name: "审计部", total: 3, attend: 48.4848, late: 4.5455, leave: 0, absent: 51.5152 },
+  { name: "纪委办公室", total: 3, attend: 46.9697, late: 3.0303, leave: 0, absent: 53.0303 },
+  { name: "办公室（董事会办公室）", total: 5, attend: 45.4545, late: 7.2727, leave: 1.8182, absent: 52.7273 },
+  { name: "信息化管理部", total: 4, attend: 43.1818, late: 5.6818, leave: 0, absent: 56.8182 },
+  { name: "采购管理部", total: 3, attend: 40.9091, late: 9.0909, leave: 0, absent: 59.0909 }
+];
+
+const PEOPLE = [
+  { name: "王磊", no: "E10021", dept: "运营管理部（算量中心）", attend: 95.4545, late: 0, leave: 0, absent: 4.5455 },
+  { name: "李娜", no: "E10036", dept: "运营管理部（算量中心）", attend: 90.9091, late: 0, leave: 0, absent: 9.0909 },
+  { name: "张伟", no: "E10058", dept: "党委干部部（人力资源部）", attend: 86.3636, late: 4.5455, leave: 0, absent: 9.0909 },
+  { name: "刘洋", no: "E10072", dept: "经济管理部（算价中心）", attend: 81.8182, late: 13.6364, leave: 0, absent: 18.1818 },
+  { name: "陈静", no: "E10088", dept: "法律合规部", attend: 72.7273, late: 27.2727, leave: 0, absent: 27.2727 },
+  { name: "赵敏", no: "E10102", dept: "科技创新与数字化部", attend: 77.2727, late: 0, leave: 0, absent: 22.7273 },
+  { name: "孙浩", no: "E10115", dept: "创产资源保障部", attend: 68.1818, late: 9.0909, leave: 0, absent: 31.8182 },
+  { name: "周婷", no: "E10128", dept: "党委工作部（团委、保密办公室）", attend: 63.6364, late: 22.7273, leave: 0, absent: 36.3636 },
+  { name: "吴强", no: "E10140", dept: "工会工作部（退休人员管理部）", attend: 59.0909, late: 13.6364, leave: 0, absent: 40.9091 },
+  { name: "郑丽", no: "E10153", dept: "战略规划部（海外部、执行董事办公室）", attend: 54.5455, late: 9.0909, leave: 0, absent: 45.4545 },
+  { name: "冯杰", no: "E10167", dept: "财务管理部", attend: 50.0000, late: 13.6364, leave: 0, absent: 50.0000 },
+  { name: "韩雪", no: "E10179", dept: "工程管理部", attend: 45.4545, late: 18.1818, leave: 0, absent: 54.5455 }
+];
+
+const SEP = {
+  attend: [48,44,22,100,100,100,48,46,52,47,100,100,100,46,48,50,47,49,100,100,100,52,48,16,100,6,0,0,0,0],
+  late:   [12,11,8,0,0,0,10,12,13,11,2,8,18,16,10,7,6,5,0,0,0,12,10,8,4,0,0,0,0,0],
+  leave:  [0.4,0.4,0.3,0.2,0.2,0.2,0.4,0.4,0.5,0.4,0.2,0.2,0.3,0.4,0.4,0.5,0.4,0.4,0.2,0.2,0.2,0.4,0.4,0.3,0.2,0,0,0,0,0],
+  absent: [54,58,82,0,0,0,52,56,58,54,0,0,0,55,56,50,48,48,0,0,0,48,50,55,86,0,0,0,0,0]
+};
+
+const SERIES = [
+  { key: "attend", name: "出勤率(%)", color: "#5470c6" },
+  { key: "late", name: "迟到率(%)", color: "#e6a23c" },
+  { key: "leave", name: "请假率(%)", color: "#7b4cb5" },
+  { key: "absent", name: "缺勤率(%)", color: "#ee6666" }
+];
+
+const MENUS = [
+  { id: "home", label: "首页", icon: "home" },
+  { id: "org", label: "组织架构", icon: "org" },
+  { id: "att", label: "考勤管理", icon: "star", active: true },
+  { id: "grade", label: "定级管理", icon: "doc" },
+  { id: "score", label: "季度评分", icon: "grid" },
+  { id: "bid", label: "投标管理", icon: "list" },
+  { id: "meet", label: "工前会智能体", icon: "chat" },
+  { id: "sys", label: "系统管理", icon: "gear" }
+];
+
+const state = {
+  org: "总公司",
+  view: "analysis",
+  period: "month",
+  anchor: new Date(2026, 8, 1),
+  table: "dept",
+  page: 1,
+  pageSize: 10,
+  dept: "",
+  keyword: ""
+};
+
+const ICONS = {
+  home: '<path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+  org: '<circle cx="9" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="9" r="1.7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.5 18c.6-2.4 2.4-3.6 4.5-3.6S13 15.6 13.6 18M14 14.6c1.4-.2 2.6.4 3.4 1.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
+  star: '<path d="M12 3.5l2.1 4.4 4.8.7-3.5 3.4.8 4.8L12 14.6 7.8 16.8l.8-4.8L5.1 8.6l4.8-.7L12 3.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>',
+  doc: '<path d="M7 3.5h7l4 4V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M14 3.8V8h4.2M8.5 12h7M8.5 15.5h7" stroke="currentColor" stroke-width="1.4"/>',
+  grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  list: '<path d="M8 6h11M8 12h11M8 18h11M5 6h.01M5 12h.01M5 18h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  chat: '<path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v6A2.5 2.5 0 0 1 16.5 15H10l-3.5 3v-3H7.5A2.5 2.5 0 0 1 5 12.5v-6z" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  gear: '<circle cx="12" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 4.2v1.6M12 18.2v1.6M4.2 12h1.6M18.2 12h1.6M6.4 6.4l1.1 1.1M16.5 16.5l1.1 1.1M17.6 6.4l-1.1 1.1M7.5 16.5l-1.1 1.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
+  user: '<circle cx="8" cy="6" r="2.2"/><path d="M3.2 13.2c.7-2 2.4-3 4.8-3s4.1 1 4.8 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
+  cal: '<rect x="2.2" y="3.2" width="11.6" height="10.2" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2.2 6.4h11.6M5.2 2.2v2.2M10.8 2.2v2.2" stroke="currentColor" stroke-width="1.3"/>',
+  leave: '<circle cx="8" cy="8" r="5.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 5.2V8l2 1.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
+  field: '<circle cx="8" cy="5.2" r="2"/><path d="M3.4 13c.6-2.2 2.2-3.2 4.6-3.2s4 1 4.6 3.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
+  users: '<circle cx="6" cy="6" r="2"/><circle cx="11" cy="6.6" r="1.6"/><path d="M1.8 13c.5-2 2-3 4.2-3s3.6 1 4.2 3M11 10.2c1.2 0 2.2.5 2.8 1.8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
+  miss: '<circle cx="8" cy="6" r="2.1"/><path d="M3.2 13.4c.6-2.1 2.3-3.2 4.8-3.2 1.2 0 2.2.3 3 .8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11 9.2l3 3M14 9.2l-3 3" stroke="currentColor" stroke-width="1.3"/>',
+  clock: '<circle cx="8" cy="8" r="5.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.2L10 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
+  early: '<path d="M3 8h7M7.5 5.2L10.5 8 7.5 10.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
+  chart: '<path d="M2.5 12.5l3.2-3.6 2.4 2.2 4.6-5.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  trip: '<rect x="2.2" y="5" width="11.6" height="8" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6 5V3.6h4V5M6.2 8.2h3.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
+  out: '<path d="M8 1.8a3.3 3.3 0 0 1 3.3 3.3c0 2.5-3.3 6.6-3.3 6.6S4.7 7.6 4.7 5.1A3.3 3.3 0 0 1 8 1.8z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="5.1" r="1.1"/>',
+  ot: '<circle cx="8" cy="8" r="5.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.8V8h2.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>'
+};
+
+function svgIcon(name, size) {
+  const s = size || 16;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s === 18 ? 24 : 16} ${s === 18 ? 24 : 16}" aria-hidden="true">${ICONS[name] || ""}</svg>`;
+}
+function menuIcon(name) {
+  return `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
+}
+function pad(n) { return String(n).padStart(2, "0"); }
+function fmtDate(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+function fmtRate(n) {
+  const v = Number(n);
+  if (Math.abs(v) < 0.00005) return "0%";
+  return v.toFixed(4) + "%";
+}
+function startOfWeek(d) {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const day = x.getDay() || 7;
+  x.setDate(x.getDate() - day + 1);
+  return x;
+}
+function rangeOf() {
+  const a = state.anchor;
+  if (state.period === "year") {
+    return { start: new Date(a.getFullYear(), 0, 1), end: new Date(a.getFullYear(), 11, 31) };
+  }
+  if (state.period === "week") {
+    const start = startOfWeek(a);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    return { start, end };
+  }
+  const start = new Date(a.getFullYear(), a.getMonth(), 1);
+  const end = new Date(a.getFullYear(), a.getMonth() + 1, 0);
+  return { start, end };
+}
+function shiftRange(step) {
+  const a = new Date(state.anchor);
+  if (state.period === "year") a.setFullYear(a.getFullYear() + step);
+  else if (state.period === "week") a.setDate(a.getDate() + step * 7);
+  else a.setMonth(a.getMonth() + step);
+  state.anchor = a;
+}
+function isSep2026(d) { return d.getFullYear() === 2026 && d.getMonth() === 8; }
+function synth(date) {
+  const dow = date.getDay();
+  if (dow === 0 || dow === 6) return { attend: 100, late: 0, leave: 0.2, absent: 0 };
+  const attend = 42 + (date.getDate() % 6) * 2;
+  const late = 8 + (date.getDate() % 5);
+  return { attend, late, leave: 0.3, absent: Math.max(0, Math.round((100 - attend - 6) * 10) / 10) };
+}
+function dayPoint(date) {
+  if (isSep2026(date)) {
+    const i = date.getDate() - 1;
+    return { attend: SEP.attend[i], late: SEP.late[i], leave: SEP.leave[i], absent: SEP.absent[i] };
+  }
+  return synth(date);
+}
+function seriesData() {
+  const { start, end } = rangeOf();
+  const labels = [];
+  const rows = { attend: [], late: [], leave: [], absent: [] };
+  if (state.period === "year") {
+    for (let m = 0; m < 12; m++) {
+      labels.push(start.getFullYear() + "-" + pad(m + 1));
+      const days = new Date(start.getFullYear(), m + 1, 0).getDate();
+      const acc = { attend: 0, late: 0, leave: 0, absent: 0 };
+      for (let d = 1; d <= days; d++) {
+        const p = dayPoint(new Date(start.getFullYear(), m, d));
+        acc.attend += p.attend; acc.late += p.late; acc.leave += p.leave; acc.absent += p.absent;
+      }
+      rows.attend.push(Math.round(acc.attend / days));
+      rows.late.push(Math.round(acc.late / days));
+      rows.leave.push(Math.round(acc.leave / days * 10) / 10);
+      rows.absent.push(Math.round(acc.absent / days));
+    }
+    return { labels, rows };
+  }
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    labels.push(fmtDate(d));
+    const p = dayPoint(d);
+    rows.attend.push(p.attend);
+    rows.late.push(p.late);
+    rows.leave.push(p.leave);
+    rows.absent.push(p.absent);
+  }
+  return { labels, rows };
+}
+
+function filteredDepts() {
+  return DEPTS.map((d, i) => ({ ...d, rank: i + 1 })).filter(d => {
+    if (state.dept && d.name !== state.dept) return false;
+    if (state.keyword && !d.name.includes(state.keyword.trim())) return false;
+    return true;
+  });
+}
+function sumByNo(rows, no, idx) {
+  return (rows || []).filter(r => r[1] === no).reduce((s, r) => s + Number(r[idx] || 0), 0);
+}
+function personMetrics(no) {
+  ensureAttendDetails();
+  return {
+    attend: ATTEND_ROWS.filter(r => r[1] === no).length,
+    absent: sumByNo(ABSENT_ROWS, no, 3),
+    late: LATE_ROWS.filter(r => r[1] === no).length,
+    early: EARLY_ROWS.filter(r => r[1] === no).length,
+    leave: sumByNo(LEAVE_ROWS, no, 5),
+    trip: sumByNo(TRIP_ROWS, no, 5),
+    out: sumByNo(OUT_ROWS, no, 5),
+    ot: sumByNo(OT_ROWS, no, 5)
+  };
+}
+function filteredPeople() {
+  const q = state.keyword.trim();
+  return buildStaff().map(p => ({ ...p, metrics: personMetrics(p.no) })).filter(p => {
+    if (state.dept && p.dept !== state.dept) return false;
+    if (q && !(p.name.includes(q) || p.no.toLowerCase().includes(q.toLowerCase()))) return false;
+    return true;
+  }).sort((a, b) => b.metrics.attend - a.metrics.attend || a.name.localeCompare(b.name, "zh"));
+}
+
+function renderMenu() {
+  document.getElementById("menu").innerHTML = MENUS.map(m =>
+    `<div class="menu-item${m.active ? " active" : ""}" title="${m.label}">${menuIcon(m.icon)}<span>${m.label}</span></div>`
+  ).join("");
+}
+function renderLevels() {
+  document.getElementById("levelRow").innerHTML = ["总公司", "分公司", "项目部"].map(name =>
+    `<button type="button" class="level-tab${state.org === name ? " on" : ""}" data-org="${name}">${name}</button>`
+  ).join("");
+}
+function renderSubs() {
+  const items = [["query", "实时考勤查询"], ["analysis", "考勤统计分析"], ["rank", "考勤排名公示"]];
+  document.getElementById("subRow").innerHTML = items.map(([id, name]) =>
+    `<button type="button" class="sub-tab${state.view === id ? " on" : ""}" data-view="${id}">${name}</button>`
+  ).join("");
+}
+function renderSeg() {
+  const items = [["week", "周统计"], ["month", "月统计"], ["year", "年统计"]];
+  document.getElementById("seg").innerHTML = items.map(([id, name]) =>
+    `<button type="button" data-period="${id}" class="${state.period === id ? "on" : ""}">${name}</button>`
+  ).join("");
+}
+function renderStats() {
+  ensureAttendDetails();
+  document.getElementById("stats").innerHTML = KPI.map(k =>
+    `<button type="button" class="stat" data-kpi="${k.id}">
+      <span class="more">查看详情</span>
+      <div class="stat-label" style="color:${k.color}">${svgIcon(k.icon)}<span style="color:#8d97a6">${k.label}</span></div>
+      <div class="stat-value">${k.value}${k.unit ? `<small>${k.unit}</small>` : ""}</div>
+    </button>`
+  ).join("");
+}
+function renderLegend() {
+  document.getElementById("legend").innerHTML = SERIES.map(s =>
+    `<span><i style="background:${s.color}"></i>${s.name}</span>`
+  ).join("");
+}
+function fillDeptOptions() {
+  const sel = document.getElementById("deptSelect");
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">请选择部门</option>` + DEPTS.map(d => `<option value="${d.name}">${d.name}</option>`).join("");
+  sel.value = cur;
+}
+
+function monotonePath(pts) {
+  const n = pts.length;
+  if (!n) return "";
+  if (n === 1) return `M ${pts[0].x} ${pts[0].y}`;
+  const dx = [], dy = [], m = [], t = new Array(n);
+  for (let i = 0; i < n - 1; i++) {
+    dx[i] = pts[i + 1].x - pts[i].x;
+    dy[i] = pts[i + 1].y - pts[i].y;
+    m[i] = dx[i] === 0 ? 0 : dy[i] / dx[i];
+  }
+  t[0] = m[0];
+  t[n - 1] = m[n - 2];
+  for (let i = 1; i < n - 1; i++) t[i] = (m[i - 1] * m[i] <= 0) ? 0 : (m[i - 1] + m[i]) / 2;
+  for (let i = 0; i < n - 1; i++) {
+    if (Math.abs(m[i]) < 1e-6) { t[i] = 0; t[i + 1] = 0; continue; }
+    const a = t[i] / m[i], b = t[i + 1] / m[i], h = Math.hypot(a, b);
+    if (h > 3) { const tau = 3 / h; t[i] = tau * a * m[i]; t[i + 1] = tau * b * m[i]; }
+  }
+  let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const c1x = pts[i].x + dx[i] / 3, c1y = pts[i].y + t[i] * dx[i] / 3;
+    const c2x = pts[i + 1].x - dx[i] / 3, c2y = pts[i + 1].y - t[i + 1] * dx[i] / 3;
+    d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${pts[i + 1].x.toFixed(1)} ${pts[i + 1].y.toFixed(1)}`;
+  }
+  return d;
+}
+
+let chartCache = null;
+function renderChart() {
+  const svg = document.getElementById("trend");
+  const width = svg.clientWidth || svg.parentElement.clientWidth || 900;
+  const height = 300;
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  const padL = 52, padR = 16, padT = 16, padB = 36;
+  const iw = width - padL - padR, ih = height - padT - padB;
+  const { labels, rows } = seriesData();
+  chartCache = { labels, rows, padL, padT, iw, ih, width, height };
+  const n = labels.length;
+  const xAt = i => padL + (n === 1 ? iw / 2 : (iw * i) / (n - 1));
+  const yAt = v => padT + ih - (Math.max(0, Math.min(100, v)) / 100) * ih;
+  let grid = "";
+  for (let p = 0; p <= 5; p++) {
+    const y = padT + (ih * p) / 5;
+    const label = (100 - p * 20) + "%";
+    grid += `<line x1="${padL}" y1="${y}" x2="${width - padR}" y2="${y}" stroke="#eef0f4"/>`;
+    grid += `<text x="${padL - 8}" y="${y + 4}" text-anchor="end" fill="#909399" font-size="12">${label}</text>`;
+  }
+  const step = n > 16 ? 3 : 1;
+  let xlab = "";
+  for (let i = 0; i < n; i += step) {
+    xlab += `<text x="${xAt(i)}" y="${height - 10}" text-anchor="middle" fill="#909399" font-size="12">${labels[i]}</text>`;
+  }
+  const paths = SERIES.map(s => {
+    const pts = rows[s.key].map((v, i) => ({ x: xAt(i), y: yAt(v) }));
+    return `<path d="${monotonePath(pts)}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }).join("");
+  svg.innerHTML = grid + xlab + paths + `<rect id="plotHit" x="${padL}" y="${padT}" width="${iw}" height="${ih}" fill="transparent"/>`;
+}
+function moveTip(evt) {
+  if (!chartCache) return;
+  const svg = document.getElementById("trend");
+  const rect = svg.getBoundingClientRect();
+  const x = (evt.clientX - rect.left) * (chartCache.width / rect.width);
+  const { labels, rows, padL, iw } = chartCache;
+  const n = labels.length;
+  if (x < padL || x > padL + iw || !n) { document.getElementById("tip").hidden = true; return; }
+  const i = Math.max(0, Math.min(n - 1, Math.round(((x - padL) / iw) * (n - 1))));
+  const tip = document.getElementById("tip");
+  tip.hidden = false;
+  tip.innerHTML = `<b>${labels[i]}</b><br>` + SERIES.map(s =>
+    `<span style="color:${s.color}">●</span> ${s.name.replace("(%)", "")} ${Number(rows[s.key][i]).toFixed(2)}%`
+  ).join("<br>");
+  const left = evt.clientX - svg.parentElement.getBoundingClientRect().left + 12;
+  const top = evt.clientY - svg.parentElement.getBoundingClientRect().top + 12;
+  tip.style.left = Math.min(left, svg.clientWidth - 160) + "px";
+  tip.style.top = top + "px";
+}
+
+function rankHtml(rank) {
+  if (rank <= 3) return `<span class="badge b${rank}">${rank}</span>`;
+  return `<span class="rank-plain">${rank}</span>`;
+}
+function renderTable() {
+  const deptMode = state.table === "dept";
+  const rows = deptMode ? filteredDepts() : filteredPeople();
+  const pages = Math.max(1, Math.ceil(rows.length / state.pageSize));
+  if (state.page > pages) state.page = pages;
+  const start = (state.page - 1) * state.pageSize;
+  const pageRows = rows.slice(start, start + state.pageSize);
+  document.getElementById("tableTabs").innerHTML = [
+    ["dept", "部门统计"],
+    ["person", "人员统计"]
+  ].map(([id, name]) => `<button type="button" class="table-tab${state.table === id ? " on" : ""}" data-table="${id}">${name}</button>`).join("");
+  document.querySelector(".table-wrap table").style.minWidth = deptMode ? "860px" : "1280px";
+  document.getElementById("thead").innerHTML = deptMode
+    ? `<tr><th class="name">部门</th><th>总人数</th><th>出勤率</th><th>迟到率</th><th>请假率</th><th>缺勤率</th><th>排名</th></tr>`
+    : `<tr><th class="name">姓名</th><th>工号</th><th class="name">部门</th>${PERSON_METRICS.map(m => `<th>${m.label}</th>`).join("")}</tr>`;
+  const body = document.getElementById("tbody");
+  if (!pageRows.length) {
+    body.innerHTML = `<tr><td class="empty" colspan="${deptMode ? 7 : 11}">暂无数据</td></tr>`;
+  } else if (deptMode) {
+    body.innerHTML = pageRows.map((d, i) => `<tr>
+      <td class="name">${d.name}</td><td>${d.total}</td>
+      <td><span class="pill">${fmtRate(d.attend)}</span></td>
+      <td>${fmtRate(d.late)}</td><td>${fmtRate(d.leave)}</td><td>${fmtRate(d.absent)}</td>
+      <td>${rankHtml(d.rank)}</td></tr>`).join("");
+  } else {
+    body.innerHTML = pageRows.map(p => `<tr>
+      <td class="name">${p.name}</td><td>${p.no}</td><td class="name">${p.dept}</td>
+      ${PERSON_METRICS.map(m => {
+        const n = p.metrics[m.key];
+        return `<td><button type="button" class="num-link${n ? "" : " is-zero"}" data-no="${p.no}" data-metric="${m.detail}">${n}</button></td>`;
+      }).join("")}
+    </tr>`).join("");
+  }
+  const nums = [];
+  for (let i = 1; i <= pages; i++) nums.push(`<button type="button" class="page-num${i === state.page ? " on" : ""}" data-page="${i}">${i}</button>`);
+  document.getElementById("pager").innerHTML = `
+    <span>共 ${rows.length} 条</span>
+    <select id="pageSize">
+      ${[10, 20, 50].map(n => `<option value="${n}"${n === state.pageSize ? " selected" : ""}>${n}条/页</option>`).join("")}
+    </select>
+    <button type="button" class="page-btn" id="prevPage" ${state.page === 1 ? "disabled" : ""}>‹</button>
+    ${nums.join("")}
+    <button type="button" class="page-btn" id="nextPage" ${state.page === pages ? "disabled" : ""}>›</button>
+    <span>前往</span><input class="jump" id="jump" value="${state.page}"><span>页</span>`;
+  document.getElementById("pageSize").onchange = e => { state.pageSize = Number(e.target.value); state.page = 1; renderTable(); };
+  document.getElementById("prevPage").onclick = () => { if (state.page > 1) { state.page--; renderTable(); } };
+  document.getElementById("nextPage").onclick = () => { if (state.page < pages) { state.page++; renderTable(); } };
+  document.querySelectorAll(".page-num").forEach(btn => btn.onclick = () => { state.page = Number(btn.dataset.page); renderTable(); });
+  document.getElementById("jump").onchange = e => {
+    const n = Number(e.target.value);
+    if (n >= 1 && n <= pages) { state.page = n; renderTable(); }
+  };
+}
+
+function render() {
+  renderLevels();
+  renderSubs();
+  const analysis = state.view === "analysis";
+  document.getElementById("analysis").hidden = !analysis;
+  const ph = document.getElementById("placeholder");
+  ph.hidden = analysis;
+  if (!analysis) {
+    ph.textContent = state.view === "query" ? "实时考勤查询" : "考勤排名公示";
+  }
+  const { start, end } = rangeOf();
+  document.getElementById("rangeLabel").textContent = fmtDate(start) + " ~ " + fmtDate(end);
+  document.getElementById("chartTitle").textContent = state.period === "week" ? "周考勤趋势" : state.period === "year" ? "年考勤趋势" : "月考勤趋势";
+  renderSeg();
+  if (analysis) {
+    renderChart();
+    renderTable();
+  }
+}
+
+const WEEKDAY = ["日", "一", "二", "三", "四", "五", "六"];
+const LEAVE_ROWS = [
+  ["陈静", "E10088", "法律合规部", "年假", "2026-09-02 ~ 2026-09-03", "2", "已通过"],
+  ["周婷", "E10128", "党委工作部（团委、保密办公室）", "事假", "2026-09-09", "1", "已通过"],
+  ["韩雪", "E10179", "工程管理部", "病假", "2026-09-16 ~ 2026-09-18", "3", "已通过"]
+];
+const TRIP_ROWS = [
+  ["王磊", "E10021", "运营管理部（算量中心）", "北京项目对接", "2026-09-08 ~ 2026-09-10", "3", "已通过"],
+  ["刘洋", "E10072", "经济管理部（算价中心）", "算价复核", "2026-09-15 ~ 2026-09-17", "3", "已通过"],
+  ["郑丽", "E10153", "战略规划部（海外部、执行董事办公室）", "海外项目协调", "2026-09-22 ~ 2026-09-23", "2", "已通过"]
+];
+const OUT_ROWS = [
+  ["李娜", "E10036", "运营管理部（算量中心）", "市政务中心办事", "2026-09-04", "1"],
+  ["张伟", "E10058", "党委干部部（人力资源部）", "银行对公业务", "2026-09-11", "1"],
+  ["赵敏", "E10102", "科技创新与数字化部", "档案查阅", "2026-09-18", "1"],
+  ["孙浩", "E10115", "创产资源保障部", "供应商对接", "2026-09-21", "1"],
+  ["冯杰", "E10167", "财务管理部", "税务大厅办理", "2026-09-25", "1"]
+];
+const OT_ROWS = [
+  ["王磊", "E10021", "运营管理部（算量中心）", "2026-09-04", "19:00-21:00", "2", "月结核算"],
+  ["李娜", "E10036", "运营管理部（算量中心）", "2026-09-11", "18:30-21:30", "3", "报表汇总"],
+  ["吴强", "E10140", "工会工作部（退休人员管理部）", "2026-09-18", "18:00-22:00", "4", "活动保障"],
+  ["郑丽", "E10153", "战略规划部（海外部、执行董事办公室）", "2026-09-25", "19:00-21:00", "2", "材料整理"]
+];
+const EARLY_ROWS = [
+  ["王磊", "E10021", "运营管理部（算量中心）", "2026-09-03", "17:30", "16:42"],
+  ["张伟", "E10058", "党委干部部（人力资源部）", "2026-09-04", "17:30", "16:35"],
+  ["刘洋", "E10072", "经济管理部（算价中心）", "2026-09-08", "17:30", "16:20"],
+  ["陈静", "E10088", "法律合规部", "2026-09-10", "17:30", "16:48"],
+  ["孙浩", "E10115", "创产资源保障部", "2026-09-11", "17:30", "16:15"],
+  ["周婷", "E10128", "党委工作部（团委、保密办公室）", "2026-09-15", "17:30", "16:28"],
+  ["吴强", "E10140", "工会工作部（退休人员管理部）", "2026-09-17", "17:30", "16:40"],
+  ["郑丽", "E10153", "战略规划部（海外部、执行董事办公室）", "2026-09-18", "17:30", "16:33"],
+  ["冯杰", "E10167", "财务管理部", "2026-09-22", "17:30", "16:25"],
+  ["韩雪", "E10179", "工程管理部", "2026-09-24", "17:30", "16:10"]
+];
+const FAMILY = ["陈","林","黄","吴","刘","杨","张","王","李","赵","周","徐","孙","马","朱","胡","郭","何","高","罗","郑","梁","谢","宋","唐","许","邓","冯","韩","曹","彭","曾","肖","田","董","潘","袁","蔡","蒋","余","杜","叶","程","魏","苏","吕","丁","任","沈","姚","卢","姜","崔","钟","谭","陆","汪","范","金","石","廖","贾","夏","韦","付","方","白","邹","孟","熊","秦","邱","江","尹","薛","闫","段","雷","侯"];
+const GIVEN1 = ["子","雨","浩","欣","俊","思","嘉","梓","宇","梦","博","可","语","一","诗","佳","文","晓","志","建"];
+const GIVEN2 = ["涵","轩","然","怡","杰","远","琪","桐","豪","泽","诺","墨","妍","熙","琳","峰","燕","敏","强","磊"];
+let STAFF = null;
+let ABSENT_ROWS = null;
+let LATE_ROWS = null;
+let ATTEND_ROWS = null;
+const PERSON_METRICS = [
+  { key: "attend", label: "出勤(天)", detail: "attend" },
+  { key: "absent", label: "缺勤(天)", detail: "absent" },
+  { key: "late", label: "迟到(次)", detail: "late" },
+  { key: "early", label: "早退(次)", detail: "early" },
+  { key: "leave", label: "请假(天)", detail: "leave" },
+  { key: "trip", label: "出差(天)", detail: "trip" },
+  { key: "out", label: "外出办事(天)", detail: "out" },
+  { key: "ot", label: "加班(小时)", detail: "ot" }
+];
+function buildStaff() {
+  if (STAFF) return STAFF;
+  const knownNames = new Set(PEOPLE.map(p => p.name));
+  const extras = [];
+  let n = 0;
+  while (extras.length < 77) {
+    const name = FAMILY[n % FAMILY.length] + GIVEN1[n % GIVEN1.length] + GIVEN2[(n * 3) % GIVEN2.length];
+    n++;
+    if (knownNames.has(name) || extras.includes(name)) continue;
+    extras.push(name);
+  }
+  const staff = [];
+  let extraIdx = 0;
+  DEPTS.forEach(d => {
+    PEOPLE.filter(p => p.dept === d.name).forEach(p => staff.push({ name: p.name, no: p.no, dept: d.name }));
+    const need = d.total - PEOPLE.filter(p => p.dept === d.name).length;
+    for (let i = 0; i < need; i++) {
+      extraIdx++;
+      staff.push({ name: extras[extraIdx - 1], no: "E" + String(10300 + extraIdx), dept: d.name });
+    }
+  });
+  STAFF = staff;
+  return staff;
+}
+function ensureAttendDetails() {
+  if (ABSENT_ROWS) return;
+  const staff = buildStaff();
+  const dayMeta = workdayRows();
+  const days = dayMeta.map(r => r[0]);
+  const weekOf = Object.fromEntries(dayMeta.map(r => [r[0], r[1]]));
+  const base = Math.floor(953 / staff.length);
+  let rem = 953 - base * staff.length;
+  const counts = staff.map((_, i) => base + (i < rem ? 1 : 0));
+  ATTEND_ROWS = [];
+  staff.forEach((p, i) => {
+    const count = counts[i];
+    const start = i % (days.length - count + 1);
+    const absent = new Set(days.slice(start, start + count));
+    days.forEach(day => {
+      if (!absent.has(day)) ATTEND_ROWS.push([p.name, p.no, p.dept, day, weekOf[day], "正常出勤"]);
+    });
+  });
+  ABSENT_ROWS = staff.map((p, i) => {
+    const count = counts[i];
+    const start = i % (days.length - count + 1);
+    const picked = days.slice(start, start + count);
+    return [p.name, p.no, p.dept, String(count), picked.map(d => d.slice(5)).join("、")];
+  }).sort((a, b) => Number(b[3]) - Number(a[3]) || a[0].localeCompare(b[0], "zh"));
+  const slots = [];
+  staff.forEach((p, i) => {
+    const count = counts[i];
+    const start = i % (days.length - count + 1);
+    const absent = new Set(days.slice(start, start + count));
+    days.forEach(day => { if (!absent.has(day)) slots.push({ p, day }); });
+  });
+  LATE_ROWS = [];
+  for (let i = 0; i < 203; i++) {
+    const slot = slots[Math.floor(i * slots.length / 203)];
+    const minute = 8 * 60 + 30 + 1 + (i % 55);
+    const hh = String(Math.floor(minute / 60)).padStart(2, "0");
+    const mm = String(minute % 60).padStart(2, "0");
+    LATE_ROWS.push([slot.p.name, slot.p.no, slot.p.dept, slot.day, hh + ":" + mm, String(1 + (i % 55))]);
+  }
+  LATE_ROWS.sort((a, b) => a[3].localeCompare(b[3]) || a[0].localeCompare(b[0], "zh"));
+  fillActivityMocks(staff, days, counts);
+}
+function fillActivityMocks(staff, days, counts) {
+  const presentOf = i => {
+    const count = counts[i];
+    const start = i % (days.length - count + 1);
+    const absent = new Set(days.slice(start, start + count));
+    return days.filter(d => !absent.has(d));
+  };
+  const taken = (rows, no, idx, day) => rows.some(r => r[1] === no && String(r[idx]).includes(day));
+  const takeSpan = (present, n, seed) => {
+    if (!present.length) return [];
+    for (let k = 0; k < present.length; k++) {
+      const start = (seed + k) % present.length;
+      const span = [];
+      for (let j = 0; j < n && start + j < present.length; j++) {
+        if (j > 0 && days.indexOf(present[start + j]) !== days.indexOf(present[start + j - 1]) + 1) break;
+        span.push(present[start + j]);
+      }
+      if (span.length === n) return span;
+    }
+    return [present[seed % present.length]];
+  };
+  const spanText = span => span.length <= 1 ? span[0] : span[0] + " ~ " + span[span.length - 1];
+  const leaveTypes = ["事假", "年假", "病假", "调休"];
+  const tripReasons = ["项目对接", "客户拜访", "现场勘查", "算价复核", "合同洽谈"];
+  const outReasons = ["政务中心办事", "银行对公业务", "档案查阅", "供应商对接", "税务大厅办理"];
+  const otReasons = ["月结核算", "报表汇总", "材料整理", "项目赶工", "值班保障"];
+  staff.forEach((p, i) => {
+    const present = presentOf(i);
+    if (!present.length) return;
+    if (i % 3 === 0) {
+      const day = present[i % present.length];
+      if (!taken(EARLY_ROWS, p.no, 3, day)) {
+        const mm = String(10 + (i % 40)).padStart(2, "0");
+        EARLY_ROWS.push([p.name, p.no, p.dept, day, "17:30", "16:" + mm]);
+      }
+    }
+    if (i % 4 === 1) {
+      const span = takeSpan(present, 1 + (i % 2), i);
+      if (span.length && !span.some(d => taken(LEAVE_ROWS, p.no, 4, d))) {
+        LEAVE_ROWS.push([p.name, p.no, p.dept, leaveTypes[i % leaveTypes.length], spanText(span), String(span.length), "已通过"]);
+      }
+    }
+    if (i % 5 === 2) {
+      const span = takeSpan(present, 2, i + 2);
+      if (span.length && !span.some(d => taken(TRIP_ROWS, p.no, 4, d))) {
+        TRIP_ROWS.push([p.name, p.no, p.dept, tripReasons[i % tripReasons.length], spanText(span), String(span.length), "已通过"]);
+      }
+    }
+    if (i % 4 === 2) {
+      const day = present[(i + 3) % present.length];
+      if (!taken(OUT_ROWS, p.no, 4, day)) {
+        OUT_ROWS.push([p.name, p.no, p.dept, outReasons[i % outReasons.length], day, "1"]);
+      }
+    }
+    if (i % 3 === 1) {
+      const day = present[(i + 1) % present.length];
+      if (!taken(OT_ROWS, p.no, 3, day)) {
+        const hours = 2 + (i % 3);
+        OT_ROWS.push([p.name, p.no, p.dept, day, "18:00-" + (18 + hours) + ":00", String(hours), otReasons[i % otReasons.length]]);
+      }
+    }
+  });
+  EARLY_ROWS.sort((a, b) => a[3].localeCompare(b[3]) || a[0].localeCompare(b[0], "zh"));
+  const sum = (rows, idx) => rows.reduce((s, r) => s + Number(r[idx] || 0), 0);
+  const leaveDays = sum(LEAVE_ROWS, 5);
+  const setKpi = (id, value) => { const item = KPI.find(k => k.id === id); if (item) item.value = String(value); };
+  setKpi("leaveDays", leaveDays);
+  setKpi("leave", leaveDays);
+  setKpi("early", EARLY_ROWS.length);
+  setKpi("trip", sum(TRIP_ROWS, 5));
+  setKpi("out", sum(OUT_ROWS, 5));
+  setKpi("ot", sum(OT_ROWS, 5));
+  setKpi("leaveRate", (leaveDays / 1958 * 100).toFixed(2) + "%");
+}
+
+function periodText() {
+  const { start, end } = rangeOf();
+  return fmtDate(start) + " ~ " + fmtDate(end);
+}
+function detailTable(columns, rows, emptyText) {
+  if (!rows.length) return `<div class="empty">${emptyText || "本周期暂无记录"}</div>`;
+  const cell = c => `<td${String(c).includes("、") ? ' class="wrap"' : ""}>${c}</td>`;
+  return `<div class="table-wrap"><table><thead><tr>${columns.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${
+    rows.map(r => `<tr>${r.map(cell).join("")}</tr>`).join("")
+  }</tbody></table></div>`;
+}
+function detailPager(total, page, pages) {
+  if (total <= 10) return `<div class="pager drawer-pager"><span>共 ${total} 条</span></div>`;
+  const from = Math.max(1, Math.min(page - 2, pages - 4));
+  const to = Math.min(pages, from + 4);
+  let nums = "";
+  for (let i = from; i <= to; i++) nums += `<button type="button" class="page-num${i === page ? " on" : ""}" data-dpage="${i}">${i}</button>`;
+  return `<div class="pager drawer-pager"><span>共 ${total} 条</span>
+    <button type="button" class="page-btn" data-dpage="${page - 1}" ${page === 1 ? "disabled" : ""}>‹</button>
+    ${nums}
+    <button type="button" class="page-btn" data-dpage="${page + 1}" ${page === pages ? "disabled" : ""}>›</button></div>`;
+}
+function workdayRows() {
+  const rows = [];
+  for (let day = 1; day <= 30; day++) {
+    const date = new Date(2026, 8, day);
+    if (date.getDay() === 0 || date.getDay() === 6) continue;
+    rows.push([fmtDate(date), "周" + WEEKDAY[date.getDay()], "应出勤"]);
+  }
+  return rows;
+}
+function detailOf(id) {
+  const period = "统计周期 " + periodText();
+  ensureAttendDetails();
+  const sumCol = (rows, idx) => rows.reduce((s, r) => s + Number(r[idx] || 0), 0);
+  const leaveDays = sumCol(LEAVE_ROWS, 5);
+  const tripDays = sumCol(TRIP_ROWS, 5);
+  const outDays = sumCol(OUT_ROWS, 5);
+  const otHours = sumCol(OT_ROWS, 5);
+  const leaveRateText = (leaveDays / 1958 * 100).toFixed(2) + "%";
+  const deptPeople = DEPTS.map(d => [d.name, String(d.total)]);
+  const deptShould = DEPTS.map(d => [d.name, String(d.total), "22", String(d.total * 22)]);
+  const deptRate = (key) => DEPTS.map(d => [d.name, String(d.total), fmtRate(d[key])]);
+  const map = {
+    total: {
+      title: "总人数详情",
+      summary: `<b>89</b>人<p>${period}。按部门汇总，人数合计 89。</p>`,
+      columns: ["部门", "人数"],
+      rows: deptPeople
+    },
+    days: {
+      title: "应出勤天数详情",
+      summary: `<b>22</b>天<p>${period}。2026 年 9 月共 22 个工作日，周末不计入应出勤。</p>`,
+      columns: ["日期", "星期", "出勤要求"],
+      rows: workdayRows()
+    },
+    attend: {
+      title: "出勤明细",
+      summary: `<b>${ATTEND_ROWS.length}</b>天<p>${period}。按人员列出正常出勤日期。</p>`,
+      columns: ["姓名", "工号", "部门", "日期", "星期", "状态"],
+      rows: ATTEND_ROWS,
+      person: true
+    },
+    leaveDays: {
+      title: "请假总人天详情",
+      summary: `<b>${leaveDays}</b>人天<p>${period}。${LEAVE_ROWS.length} 条已通过请假，人天合计 ${leaveDays}。</p>`,
+      columns: ["姓名", "工号", "部门", "请假类型", "时间", "人天", "状态"],
+      rows: LEAVE_ROWS
+    },
+    leave: {
+      title: "请假详情",
+      summary: `<b>${leaveDays}</b>人天<p>${period}。${LEAVE_ROWS.length} 条已通过请假，人天合计 ${leaveDays}。</p>`,
+      columns: ["姓名", "工号", "部门", "请假类型", "时间", "人天", "状态"],
+      rows: LEAVE_ROWS
+    },
+    field: {
+      title: "外勤总人天详情",
+      summary: `<b>0</b>人天<p>${period}。本周期没有外勤记录。</p>`,
+      columns: ["姓名", "工号", "部门", "外勤事由", "时间", "人天"],
+      rows: []
+    },
+    should: {
+      title: "应出勤总人天详情",
+      summary: `<b>1958</b>人天<p>${period}。应出勤总人天 = 总人数 89 × 应出勤天数 22。</p>`,
+      columns: ["部门", "人数", "应出勤天数", "应出勤人天"],
+      rows: deptShould
+    },
+    absent: {
+      title: "缺勤总人天详情",
+      summary: `<b>953</b>人天<p>${period}。以下为缺勤人员明细，缺勤天数合计 953。</p>`,
+      columns: ["姓名", "工号", "部门", "缺勤天数", "缺勤日期"],
+      rows: ABSENT_ROWS,
+      person: true
+    },
+    late: {
+      title: "迟到总次数详情",
+      summary: `<b>203</b>次<p>${period}。以下为迟到人员打卡明细，共 203 次。</p>`,
+      columns: ["姓名", "工号", "部门", "日期", "上班打卡", "迟到分钟"],
+      rows: LATE_ROWS,
+      person: true
+    },
+    early: {
+      title: "早退总次数详情",
+      summary: `<b>${EARLY_ROWS.length}</b>次<p>${period}。以下为早退人员打卡明细，共 ${EARLY_ROWS.length} 次。</p>`,
+      columns: ["姓名", "工号", "部门", "日期", "应下班", "实际打卡"],
+      rows: EARLY_ROWS,
+      person: true
+    },
+    attendRate: {
+      title: "出勤率详情",
+      summary: `<b>51.33%</b><p>${period}。出勤率 = 1005 / 1958。下表为各部门出勤率。</p>`,
+      columns: ["部门", "人数", "出勤率"],
+      rows: deptRate("attend")
+    },
+    lateRate: {
+      title: "迟到率详情",
+      summary: `<b>10.37%</b><p>${period}。迟到率 = 203 / 1958。以下为迟到人员打卡明细。</p>`,
+      columns: ["姓名", "工号", "部门", "日期", "上班打卡", "迟到分钟"],
+      rows: LATE_ROWS,
+      person: true
+    },
+    leaveRate: {
+      title: "请假率详情",
+      summary: `<b>${leaveRateText}</b><p>${period}。请假率 = 请假总人天 ${leaveDays} / 应出勤总人天 1958。</p>`,
+      columns: ["姓名", "工号", "部门", "请假类型", "时间", "人天", "状态"],
+      rows: LEAVE_ROWS
+    },
+    absentRate: {
+      title: "缺勤率详情",
+      summary: `<b>48.67%</b><p>${period}。缺勤率 = 953 / 1958。以下为缺勤人员明细。</p>`,
+      columns: ["姓名", "工号", "部门", "缺勤天数", "缺勤日期"],
+      rows: ABSENT_ROWS,
+      person: true
+    },
+    trip: {
+      title: "出差详情",
+      summary: `<b>${tripDays}</b>人天<p>${period}。${TRIP_ROWS.length} 条已通过出差，人天合计 ${tripDays}。</p>`,
+      columns: ["姓名", "工号", "部门", "事由", "时间", "人天", "状态"],
+      rows: TRIP_ROWS
+    },
+    out: {
+      title: "外出办事详情",
+      summary: `<b>${outDays}</b>人天<p>${period}。${OUT_ROWS.length} 条外出办事，人天合计 ${outDays}。</p>`,
+      columns: ["姓名", "工号", "部门", "事由", "日期", "人天"],
+      rows: OUT_ROWS
+    },
+    ot: {
+      title: "加班详情",
+      summary: `<b>${otHours}</b>小时<p>${period}。${OT_ROWS.length} 条加班记录，时长合计 ${otHours} 小时。</p>`,
+      columns: ["姓名", "工号", "部门", "日期", "时段", "小时", "事由"],
+      rows: OT_ROWS
+    }
+  };
+  return map[id];
+}
+let detailTrigger = null;
+const detailState = { id: "", page: 1, keyword: "", personNo: "", personLabel: "", personDept: "" };
+const METRIC_UNIT = { attend: "天", absent: "天", late: "次", early: "次", leave: "天", leaveDays: "人天", trip: "天", out: "天", ot: "小时" };
+const METRIC_SHORT = { attend: "出勤", absent: "缺勤", late: "迟到", early: "早退", leave: "请假", leaveDays: "请假", trip: "出差", out: "外出办事", ot: "加班" };
+function metricValue(id, rows) {
+  if (id === "absent") return rows.reduce((s, r) => s + Number(r[3] || 0), 0);
+  if (["leave", "leaveDays", "trip", "out", "ot"].includes(id)) return rows.reduce((s, r) => s + Number(r[5] || 0), 0);
+  return rows.length;
+}
+function filteredDetailRows(rows) {
+  let list = rows || [];
+  if (detailState.personNo) list = list.filter(r => r[1] === detailState.personNo);
+  if (!detailState.keyword) return list;
+  return list.filter(r => r.join(" ").includes(detailState.keyword));
+}
+function paintDetailTable() {
+  const data = detailOf(detailState.id);
+  const rows = filteredDetailRows(data.rows);
+  const pages = Math.max(1, Math.ceil(rows.length / 10));
+  if (detailState.page > pages) detailState.page = pages;
+  const start = (detailState.page - 1) * 10;
+  const emptyText = detailState.keyword ? "未找到相关人员" : "本周期暂无记录";
+  document.getElementById("detailTable").innerHTML = detailTable(data.columns, rows.slice(start, start + 10), emptyText) + (rows.length ? detailPager(rows.length, detailState.page, pages) : "");
+}
+function openDetail(id, person) {
+  const data = detailOf(id);
+  if (!data) return;
+  detailState.id = id;
+  detailState.page = 1;
+  detailState.keyword = "";
+  detailState.personNo = person ? person.no : "";
+  detailState.personLabel = person ? `${person.name}（${person.no}）` : "";
+  detailState.personDept = person ? person.dept : "";
+  detailTrigger = person
+    ? document.querySelector(`[data-no="${person.no}"][data-metric="${id}"]`)
+    : document.querySelector(`[data-kpi="${id}"]`);
+  let title = data.title;
+  let summary = data.summary;
+  if (person) {
+    const rows = (data.rows || []).filter(r => r[1] === person.no);
+    title = `${person.name}的${METRIC_SHORT[id] || ""}明细`;
+    summary = `<b>${metricValue(id, rows)}</b>${METRIC_UNIT[id] || ""}<p>${detailState.personLabel} · ${person.dept}<br>统计周期 ${periodText()}。</p>`;
+  }
+  document.getElementById("detailTitle").textContent = title;
+  document.getElementById("detailBody").innerHTML = `<div class="drawer-summary">${summary}</div>`
+    + (data.person ? `<div class="drawer-tools"><input class="ctl" id="detailKeyword" placeholder="搜索姓名、工号或部门"></div>` : "")
+    + `<div id="detailTable"></div>`;
+  paintDetailTable();
+  const input = document.getElementById("detailKeyword");
+  if (input) input.oninput = e => { detailState.keyword = e.target.value.trim(); detailState.page = 1; paintDetailTable(); };
+  document.getElementById("mask").hidden = false;
+}
+function closeDetail() {
+  document.getElementById("mask").hidden = true;
+  if (detailTrigger) detailTrigger.focus();
+}
+function toast(text) {
+  const el = document.getElementById("toast");
+  el.textContent = text;
+  el.hidden = false;
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.hidden = true; }, 1600);
+}
+function exportCsv() {
+  const deptMode = state.table === "dept";
+  const rows = deptMode ? filteredDepts() : filteredPeople();
+  const head = deptMode
+    ? ["部门", "总人数", "出勤率", "迟到率", "请假率", "缺勤率", "排名"]
+    : ["姓名", "工号", "部门", ...PERSON_METRICS.map(m => m.label)];
+  const body = deptMode
+    ? rows.map(d => [d.name, d.total, fmtRate(d.attend), fmtRate(d.late), fmtRate(d.leave), fmtRate(d.absent), d.rank])
+    : rows.map(p => [p.name, p.no, p.dept, ...PERSON_METRICS.map(m => p.metrics[m.key])]);
+  const csv = [head, ...body].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+  a.download = "考勤统计.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("已导出当前统计");
+}
+
+document.getElementById("hamburger").onclick = () => document.getElementById("sidebar").classList.toggle("open");
+document.getElementById("focusSearch").onclick = () => document.getElementById("keyword").focus();
+document.getElementById("fullBtn").onclick = () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+};
+document.getElementById("fontBtn").onclick = () => {
+  document.body.style.fontSize = document.body.style.fontSize === "15px" ? "14px" : "15px";
+};
+document.getElementById("levelRow").onclick = e => {
+  const btn = e.target.closest("[data-org]");
+  if (!btn) return;
+  state.org = btn.dataset.org;
+  renderLevels();
+};
+document.getElementById("subRow").onclick = e => {
+  const btn = e.target.closest("[data-view]");
+  if (!btn) return;
+  state.view = btn.dataset.view;
+  render();
+};
+document.getElementById("seg").onclick = e => {
+  const btn = e.target.closest("[data-period]");
+  if (!btn) return;
+  state.period = btn.dataset.period;
+  render();
+};
+document.getElementById("prevRange").onclick = () => { shiftRange(-1); render(); };
+document.getElementById("nextRange").onclick = () => { shiftRange(1); render(); };
+document.getElementById("deptSelect").onchange = e => { state.dept = e.target.value; state.page = 1; renderTable(); };
+document.getElementById("keyword").oninput = e => { state.keyword = e.target.value; state.page = 1; renderTable(); };
+document.getElementById("exportBtn").onclick = exportCsv;
+document.getElementById("stats").onclick = e => {
+  const btn = e.target.closest("[data-kpi]");
+  if (!btn) return;
+  openDetail(btn.dataset.kpi);
+};
+document.getElementById("tbody").onclick = e => {
+  const btn = e.target.closest("[data-metric]");
+  if (!btn) return;
+  const person = buildStaff().find(p => p.no === btn.dataset.no);
+  if (person) openDetail(btn.dataset.metric, person);
+};
+document.getElementById("detailClose").onclick = closeDetail;
+document.getElementById("detailBody").onclick = e => {
+  const btn = e.target.closest("[data-dpage]");
+  if (!btn || btn.disabled) return;
+  const page = Number(btn.dataset.dpage);
+  if (page < 1) return;
+  detailState.page = page;
+  paintDetailTable();
+};
+document.getElementById("mask").onclick = e => { if (e.target.id === "mask") closeDetail(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDetail(); });
+document.getElementById("tableTabs").onclick = e => {
+  const btn = e.target.closest("[data-table]");
+  if (!btn) return;
+  state.table = btn.dataset.table;
+  state.page = 1;
+  renderTable();
+};
+document.getElementById("trend").addEventListener("mousemove", moveTip);
+document.getElementById("trend").addEventListener("mouseleave", () => { document.getElementById("tip").hidden = true; });
+window.addEventListener("resize", () => { if (state.view === "analysis") renderChart(); });
+
+renderMenu();
+renderStats();
+renderLegend();
+fillDeptOptions();
+render();
+</script>
+</body>
+</html>
