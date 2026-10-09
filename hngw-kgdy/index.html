@@ -30,6 +30,7 @@
       width: 100%;
       height: 100%;
       margin: 0;
+      overflow-x: hidden;
     }
 
     body {
@@ -385,6 +386,7 @@
     .frame {
       height: 100%;
       overflow-y: auto;
+      overflow-x: hidden;
       border: 1px solid #b9cbdc;
       background: #fff;
     }
@@ -522,6 +524,7 @@
     }
 
     .help {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -533,6 +536,130 @@
       font-size: 12px;
       font-weight: 700;
       line-height: 16px;
+      cursor: help;
+      outline: none;
+    }
+
+    .metric-heading {
+      position: relative;
+      z-index: 6;
+    }
+
+    .metric-popover {
+      position: absolute;
+      top: calc(100% + 13px);
+      left: 50%;
+      z-index: 30;
+      width: min(760px, calc(100vw - 48px));
+      overflow: hidden;
+      color: #163a59;
+      background: #fff;
+      border: 1px solid #cbddea;
+      border-radius: 8px;
+      box-shadow: 0 12px 28px rgba(7, 57, 93, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -4px);
+      transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+      visibility: hidden;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .metric-popover::before {
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      width: 12px;
+      height: 12px;
+      content: "";
+      background: #fff;
+      border-top: 1px solid #cbddea;
+      border-left: 1px solid #cbddea;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .metric-help:hover .metric-popover,
+    .metric-help:focus-within .metric-popover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+      visibility: visible;
+    }
+
+    .metric-popover-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      padding: 0 14px;
+      color: #0b355a;
+      background: linear-gradient(90deg, #f3f9ff 0%, #fff 100%);
+      border-bottom: 1px solid #d8e4ef;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .metric-popover-tag {
+      color: #0a66a3;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .metric-popover-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .metric-popover-table th,
+    .metric-popover-table td {
+      padding: 8px 10px;
+      border-right: 1px solid #d8e4ef;
+      border-bottom: 1px solid #d8e4ef;
+      vertical-align: top;
+      white-space: normal;
+    }
+
+    .metric-popover-table th {
+      color: #163a59;
+      background: #edf5fb;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    .metric-popover-table th:first-child,
+    .metric-popover-table td:first-child {
+      width: 14%;
+    }
+
+    .metric-popover-table th:nth-child(2),
+    .metric-popover-table td:nth-child(2) {
+      width: 42%;
+    }
+
+    .metric-popover-table th:nth-child(3),
+    .metric-popover-table td:nth-child(3) {
+      width: 18%;
+    }
+
+    .metric-popover-table th:last-child,
+    .metric-popover-table td:last-child {
+      width: 26%;
+      border-right: 0;
+    }
+
+    .metric-popover-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .metric-popover-table .popover-source {
+      color: #0b355a;
+      background: #f8fbff;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .metric-row {
@@ -1291,7 +1418,44 @@
         <div class="content">
           <div class="cards">
             <article class="result-card backup-card">
-              <h2>后备时间校核<span class="help">?</span></h2>
+              <h2 class="metric-heading">后备时间校核<span class="help metric-help" tabindex="0" aria-label="查看后备时间校核指标说明">?
+                <span class="metric-popover" role="tooltip">
+                  <span class="metric-popover-head">
+                    <span>数据来源及取值逻辑</span>
+                    <span class="metric-popover-tag">后备时间校核</span>
+                  </span>
+                  <table class="metric-popover-table" aria-label="后备时间校核数据来源及取值逻辑">
+                    <thead>
+                      <tr>
+                        <th>校核项</th>
+                        <th>后备时长取值</th>
+                        <th>安全时长取值</th>
+                        <th>校验结果判定</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="popover-source">核容装置</td>
+                        <td>取核容装置上传的测点值</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                      <tr>
+                        <td class="popover-source">蓄电池</td>
+                        <td>后备时间 = 组内蓄电池额定容量之和 / 组内开关电源实时负载之和</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                      <tr>
+                        <td class="popover-source">人工测算</td>
+                        <td>下方蓄电池列表“实际容量”之和，计算公式：实际容量/组内开关电源实时负载之和</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </span>
+              </span></h2>
               <div class="check-overview">
                 <table class="check-table" aria-label="后备时间校核结果">
                   <thead>
@@ -1327,7 +1491,44 @@
             </article>
 
             <article class="result-card">
-              <h2>4小时安全校核<span class="help">?</span></h2>
+              <h2 class="metric-heading">4小时安全校核<span class="help metric-help" tabindex="0" aria-label="查看4小时安全校核指标说明">?
+                <span class="metric-popover" role="tooltip">
+                  <span class="metric-popover-head">
+                    <span>数据来源及取值逻辑</span>
+                    <span class="metric-popover-tag">4小时安全校核</span>
+                  </span>
+                  <table class="metric-popover-table" aria-label="4小时安全校核数据来源及取值逻辑">
+                    <thead>
+                      <tr>
+                        <th>校核项</th>
+                        <th>后备时长取值</th>
+                        <th>安全时长取值</th>
+                        <th>校验结果判定</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="popover-source">核容装置</td>
+                        <td>取核容装置上传的测点值</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                      <tr>
+                        <td class="popover-source">蓄电池</td>
+                        <td>后备时间 = 组内蓄电池额定容量之和 / 组内开关电源实时负载之和</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                      <tr>
+                        <td class="popover-source">人工测算</td>
+                        <td>下方蓄电池列表“实际容量”之和，计算公式：实际容量/组内开关电源实时负载之和</td>
+                        <td>固定值（4 小时）</td>
+                        <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </span>
+              </span></h2>
               <div class="metric-row">
                 <span class="metric">
                   <svg class="clock" viewBox="0 0 24 24" aria-hidden="true">
@@ -1377,20 +1578,20 @@
               <tbody>
                 <tr>
                   <td class="logic-source">核容装置</td>
-                  <td>取核容装置上传的测点值。</td>
-                  <td>固定值（4 小时）。</td>
+                  <td>取核容装置上传的测点值</td>
+                  <td>固定值（4 小时）</td>
                   <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
                 </tr>
                 <tr>
                   <td class="logic-source">蓄电池</td>
-                  <td>后备时间 = 组内蓄电池容量之和 / 组内开关电源实时负载之和。<span class="logic-muted">按当前系统实现逻辑，这块逻辑无需变更。</span></td>
-                  <td>固定值（4 小时）。</td>
+                  <td>后备时间 = 组内蓄电池额定容量之和 / 组内开关电源实时负载之和<span class="logic-muted">按当前系统实现逻辑，这块逻辑无需变更</span></td>
+                  <td>固定值（4 小时）</td>
                   <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
                 </tr>
                 <tr>
                   <td class="logic-source">人工测算</td>
                   <td>下方蓄电池列表“实际容量”之和，计算公式：实际容量/组内开关电源实时负载之和</td>
-                  <td>固定值（4 小时）。</td>
+                  <td>固定值（4 小时）</td>
                   <td><span class="logic-rule">≥4 满足；&lt;4 不满足</span></td>
                 </tr>
               </tbody>
@@ -1455,7 +1656,7 @@
                   <path d="M2.5 11.5v2h11v-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"></path>
                 </svg>
                 <span>导出全量调整记录</span>
-                <span class="demand-badge" title="需求说明：导出全部蓄电池实际容量调整记录，包含资产名称、实际容量旧值、实际容量新值、调整时间。">需</span>
+                <span class="demand-badge" title="需求说明：导出全部蓄电池实际容量调整记录，包含资产名称、实际容量旧值、实际容量新值、调整时间">需</span>
               </button>
             </div>
           </div>
@@ -1479,14 +1680,14 @@
                 <th>
                   <span class="demand-anchor-inline">
                     <span>实际容量</span>
-                    <span class="demand-badge shift-up" title="需求说明：展示并支持调整蓄电池实际容量，调整后同步影响后备时间校核。">需</span>
+                    <span class="demand-badge shift-up" title="需求说明：展示并支持调整蓄电池实际容量，调整后同步影响后备时间校核">需</span>
                   </span>
                 </th>
                 <th>所属开关电源</th>
                 <th>
                   <span class="demand-anchor-inline">
                     <span>操作</span>
-                    <span class="demand-badge shift-up" title="需求说明：提供查看蓄电池详情与实际容量调整记录入口。">需</span>
+                    <span class="demand-badge shift-up" title="需求说明：提供查看蓄电池详情与实际容量调整记录入口">需</span>
                   </span>
                 </th>
               </tr>
@@ -1561,7 +1762,7 @@
           <div>
             <input class="modal-input" id="capacityNewValue" type="number" step="1" min="0" />
           </div>
-          <div class="modal-note">修改后会同步写入“实际容量调整记录”，并可通过右侧记录入口查看。</div>
+          <div class="modal-note">修改后会同步写入“实际容量调整记录”，并可通过右侧记录入口查看</div>
         </div>
       </div>
       <div class="modal-foot">
@@ -1762,6 +1963,38 @@
         if (event.target === modal) closeModal(modal);
       });
     });
+  </script>
+  <script>
+    (() => {
+      const bindMetricTips = () => {
+        const tips = [
+          {
+            heading: '后备时间校核',
+            text: '指标说明：后备时长为当前校核项计算得到的后备时间；安全时长为系统要求的最低保障时长，本页面固定为 4 小时；当后备时长大于或等于安全时长时，校核结果为满足，否则为不满足'
+          },
+          {
+            heading: '4小时安全校核',
+            text: '指标说明：实际负载为当前组内开关电源实时负载之和；安全负载为满足 4 小时后备要求时允许的最大负载；当实际负载小于或等于安全负载时，校核结果为满足，否则为不满足'
+          }
+        ];
+
+        document.querySelectorAll('h1, h2, h3, h4').forEach((heading) => {
+          const tip = tips.find((item) => heading.textContent.includes(item.heading));
+          if (!tip) return;
+
+          const icon = heading.querySelector('.metric-help');
+          const target = icon || heading;
+          target.setAttribute('aria-label', tip.text);
+          target.removeAttribute('title');
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bindMetricTips);
+      } else {
+        bindMetricTips();
+      }
+    })();
   </script>
 </body>
 </html>
