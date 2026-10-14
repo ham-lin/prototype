@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>林龙涵 &times; 罗映紫 · 一部拍了十二年的电影</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #F5F0E6;
+  --paper-dark: #E8E0D0;
+  --sepia: #C9A87C;
+  --sepia-dark: #8B6B4A;
+  --brown: #5C4033;
+  --brown-light: #8B7355;
+  --cream: #FAF6ED;
+  --black-film: #1A1510;
+  --text: #3D2E22;
+  --text-light: #7A6655;
+  --accent: #B87333;
+  --font-serif: "Noto Serif SC", "Songti SC", serif;
+  --font-en: "Cormorant Garamond", "Times New Roman", serif;
+  --font-type: "Special Elite", "Courier New", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-serif);
+  color: var(--text);
+  background: var(--paper);
+  overflow-x: hidden;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Film grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.12'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.6;
+}
+
+/* Vignette */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(60,40,20,0.25) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+img { display: block; max-width: 100%; }
+
+/* Reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-scale.active { opacity: 1; transform: scale(1); }
+
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.reveal-fade.active { opacity: 1; }
+
+section { position: relative; width: 100%; }
+
+/* ===== HERO / TITLE CARD ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  background: linear-gradient(180deg, #F5F0E6 0%, #EDE5D4 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Film perforations */
+.hero::before, .hero::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 28px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--black-film) 0px,
+    var(--black-film) 14px,
+    transparent 14px,
+    transparent 28px
+  );
+  opacity: 0.18;
+}
+.hero::before { left: 12px; }
+.hero::after { right: 12px; }
+
+.projector-light {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200%;
+  height: 90%;
+  background: radial-gradient(ellipse at center, rgba(255,248,230,0.5) 0%, transparent 60%);
+  pointer-events: none;
+  animation: flicker 4s infinite ease-in-out;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0.65; }
+}
+
+.hero-label {
+  font-family: var(--font-type);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--text-light);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.hero-frame {
+  width: 220px;
+  height: 280px;
+  border: 8px solid var(--cream);
+  box-shadow: 0 8px 30px rgba(60,40,20,0.2), inset 0 0 40px rgba(60,40,20,0.12);
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  transform: rotate(-1.5deg);
+}
+
+.hero-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.2) contrast(1.05);
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--brown);
+  margin-bottom: 12px;
+}
+
+.hero-names {
+  font-family: var(--font-en);
+  font-size: 22px;
+  font-style: italic;
+  color: var(--sepia-dark);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: var(--text-light);
+  letter-spacing: 3px;
+  margin-bottom: 36px;
+}
+
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 12px;
+  letter-spacing: 2px;
+  animation: bounce 2s infinite;
+}
+
+.scroll-hint span {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--text-light), transparent);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ===== INTRO ===== */
+.intro {
+  padding: 80px 28px;
+  background: var(--paper);
+  text-align: center;
+}
+
+.film-strip-divider {
+  width: 100%;
+  height: 40px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--black-film) 0px,
+    var(--black-film) 14px,
+    transparent 14px,
+    transparent 28px
+  );
+  opacity: 0.12;
+  margin: 20px 0;
+}
+
+/* ===== PHOTO GALLERY ===== */
+.gallery {
+  padding: 60px 0 80px;
+  background: linear-gradient(180deg, var(--paper) 0%, #EDE5D4 100%);
+  overflow: hidden;
+}
+.gallery .section-title { padding: 0 20px; margin-bottom: 36px; }
+
+.gallery-subtitle {
+  font-family: var(--font-en);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-light);
+  letter-spacing: 3px;
+  margin-top: 8px;
+}
+
+/* --- Parallax dual-track (B) --- */
+.parallax-gallery {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 0 30px;
+}
+.parallax-track {
+  display: flex;
+  gap: 12px;
+  will-change: transform;
+  padding: 0 20px;
+  margin-bottom: 14px;
+}
+.parallax-photo {
+  flex: 0 0 auto;
+  width: 150px;
+  background: var(--cream);
+  padding: 5px 5px 10px;
+  box-shadow: 0 4px 14px rgba(60,40,20,0.15);
+}
+.parallax-photo:nth-child(odd) { transform: rotate(-1deg); }
+.parallax-photo:nth-child(even) { transform: rotate(0.8deg); }
+.parallax-photo img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.12) contrast(1.05);
+}
+.parallax-photo .pcaption {
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 9px;
+  color: var(--sepia-dark);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+.parallax-hint {
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 10px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  opacity: 0.5;
+}
+
+/* --- Film strip (A) --- */
+
+.intro-text {
+  font-size: 16px;
+  line-height: 2.2;
+  color: var(--text);
+  max-width: 360px;
+  margin: 0 auto 32px;
+}
+
+.intro-text em {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.date-stamp {
+  display: inline-block;
+  border: 2px solid var(--sepia);
+  padding: 8px 20px;
+  font-family: var(--font-type);
+  font-size: 13px;
+  color: var(--sepia-dark);
+  letter-spacing: 2px;
+  transform: rotate(-1deg);
+  margin-top: 8px;
+}
+
+/* ===== TIMELINE ===== */
+.timeline {
+  padding: 60px 20px 80px;
+  background: linear-gradient(180deg, var(--paper) 0%, #EDE5D4 100%);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-title h2 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+
+.section-title .en {
+  font-family: var(--font-en);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-light);
+  letter-spacing: 3px;
+}
+
+/* Film reel center line */
+.timeline-track {
+  position: relative;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--sepia) 0px,
+    var(--sepia) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  opacity: 0.5;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+
+.timeline-dot {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  z-index: 2;
+  box-shadow: 0 0 0 2px var(--sepia);
+}
+
+.timeline-content {
+  width: 44%;
+  padding: 0 8px;
+}
+
+.timeline-item:nth-child(odd) .timeline-content { text-align: right; }
+.timeline-item:nth-child(even) .timeline-content { text-align: left; }
+
+.timeline-photo {
+  background: var(--cream);
+  padding: 8px 8px 28px 8px;
+  box-shadow: 0 6px 20px rgba(60,40,20,0.15);
+  transform: rotate(var(--rotate, -1deg));
+  transition: transform 0.4s ease;
+}
+
+.timeline-item:nth-child(odd) .timeline-photo { --rotate: 1.5deg; }
+.timeline-item:nth-child(even) .timeline-photo { --rotate: -1.5deg; }
+
+.timeline-photo img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  filter: sepia(0.15);
+}
+
+.timeline-caption {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 11px;
+  color: var(--sepia-dark);
+  letter-spacing: 1px;
+}
+
+.timeline-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.timeline-text .year {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.timeline-text .event {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 6px;
+}
+
+.timeline-text .desc {
+  font-size: 12px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ===== DETAILS ===== */
+.details {
+  padding: 80px 24px;
+  background: var(--paper);
+  text-align: center;
+}
+
+.ticket-card {
+  background: var(--cream);
+  border: 1px solid var(--sepia);
+  padding: 28px 22px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 6px 24px rgba(60,40,20,0.1);
+}
+
+.ticket-card::before, .ticket-card::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--paper);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-card::before { left: -12px; }
+.ticket-card::after { right: -12px; }
+
+.ticket-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brown);
+  margin-bottom: 16px;
+  letter-spacing: 3px;
+}
+
+.ticket-card p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.ticket-card .label {
+  font-family: var(--font-type);
+  font-size: 11px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.dashed-line {
+  border-top: 1px dashed var(--sepia);
+  margin: 16px 0;
+  opacity: 0.6;
+}
+
+/* ===== WELCOME FOOTER ===== */
+.welcome {
+  padding: 30px 24px 90px;
+  background: linear-gradient(180deg, #EDE5D4 0%, var(--paper) 100%);
+  text-align: center;
+}
+.welcome-title {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  color: var(--brown);
+  margin: 36px 0 18px;
+}
+.welcome-sub {
+  font-size: 14px;
+  line-height: 2.1;
+  color: var(--text-light);
+  letter-spacing: 2px;
+}
+.welcome-en {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-type);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--sepia-dark);
+}
+
+/* ===== DECORATIVE FILM ELEMENTS ===== */
+.film-corner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--sepia);
+  opacity: 0.25;
+}
+
+.film-corner.tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+.film-corner.tr { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+.film-corner.bl { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+.film-corner.br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+
+/* ===== MUSIC BUTTON ===== */
+.music-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid var(--sepia);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  color: var(--brown);
+  font-size: 18px;
+  box-shadow: 0 2px 10px rgba(60,40,20,0.15);
+}
+
+.music-btn.playing { animation: spin 4s linear infinite; }
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- Music Button -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">♪</button>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="film-corner tl"></div>
+  <div class="film-corner tr"></div>
+  <div class="film-corner bl"></div>
+  <div class="film-corner br"></div>
+  <div class="projector-light"></div>
+
+  <div class="hero-label reveal">feature presentation</div>
+
+  <div class="hero-frame reveal-scale">
+    <img src="assets/photos_vintage/hero-vintage.jpg" alt="林龙涵 & 罗映紫">
+  </div>
+
+  <h1 class="reveal">婚礼请柬</h1>
+  <div class="hero-names reveal">Hamlin &amp; Loyazy</div>
+  <div class="hero-sub reveal">林龙涵 &times; 罗映紫 &middot; 2026.11.14</div>
+
+  <div class="scroll-hint reveal">
+    <span></span>
+    <div>向下滚动</div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="film-strip-divider reveal"></div>
+  <p class="intro-text reveal">
+    时间是最细心的导演。<br>
+    十二年的素材，<br>
+    剪成一场两小时的放映。<br>
+    <em>2026 年 11 月 14 日</em>，邀你入场。
+  </p>
+  <div class="reveal">
+    <div class="date-stamp">PREMIERE: 2026.11.14</div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section class="gallery">
+  <div class="section-title reveal">
+    <div class="en">selected moments</div>
+    <div class="gallery-subtitle">订婚 & 婚纱</div>
+  </div>
+
+  <!-- B: Parallax dual-track — 婚纱照 (top) + 订婚宴 (bottom), same section -->
+  <div class="parallax-hint reveal">↓ scroll to unfold the film ↓</div>
+  <div class="parallax-gallery" data-parallax>
+    <div class="parallax-track" data-direction="-1">
+      <div class="parallax-photo"><img src="assets/gallery_web/07_188A7659_web.jpg" alt="婚纱 · 经典"><div class="pcaption">07</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/08_188A7739_web.jpg" alt="婚纱 · 草坪"><div class="pcaption">08</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/09_188A7755_web.jpg" alt="婚纱 · 林间"><div class="pcaption">09</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/10_188A7975_web.jpg" alt="婚纱 · 新娘"><div class="pcaption">10</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/11_188A8043_web.jpg" alt="婚纱 · 相拥"><div class="pcaption">11</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/12_188A8089_web.jpg" alt="婚纱 · 街景"><div class="pcaption">12</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/13_188A8229_web.jpg" alt="婚纱 · 白廊"><div class="pcaption">13</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/14_188A8246_web.jpg" alt="婚纱 · 拱门"><div class="pcaption">14</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/15_188A8417_web.jpg" alt="婚纱 · 红妆"><div class="pcaption">15</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/16_188A8450_web.jpg" alt="婚纱 · 囍嫁"><div class="pcaption">16</div></div>
+    </div>
+    <div class="parallax-track" data-direction="1">
+      <div class="parallax-photo"><img src="assets/gallery_web/06_7_web.jpg" alt="订婚 · 纸伞"><div class="pcaption">06</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/05_6_web.jpg" alt="订婚 · 望远"><div class="pcaption">05</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/04_4_web.jpg" alt="订婚 · 牵手"><div class="pcaption">04</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/03_3_web.jpg" alt="订婚 · 大喜"><div class="pcaption">03</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/02_2_web.jpg" alt="订婚 · 花束"><div class="pcaption">02</div></div>
+      <div class="parallax-photo"><img src="assets/gallery_web/01_1_web.jpg" alt="订婚 · 囍"><div class="pcaption">01</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="details">
+  <div class="section-title reveal">
+    <h2>放映信息</h2>
+    <div class="en">screening details</div>
+  </div>
+
+  <div class="ticket-card reveal">
+    <h3>时间</h3>
+    <p>
+      <span class="label">DATE</span>
+      2026年11月14日 星期六
+    </p>
+    <div class="dashed-line"></div>
+    <p>
+      <span class="label">SCHEDULE</span>
+      下午 &middot; 户外草坪仪式<br>
+      晚间 &middot; 室内中式晚宴
+    </p>
+  </div>
+
+  <div class="ticket-card reveal">
+    <h3>地点</h3>
+    <p>
+      <span class="label">VENUE</span>
+      清远新世界酒店
+    </p>
+    <div class="dashed-line"></div>
+    <p>
+      <span class="label">ADDRESS</span>
+      广东省清远市清新区三坑镇新丽路1号
+    </p>
+  </div>
+
+  <div class="ticket-card reveal">
+    <h3>着装</h3>
+    <p>
+      <span class="label">DRESS CODE</span>
+      最好是浅色系啦，实在没有也没关系~
+    </p>
+  </div>
+</section>
+
+<!-- WELCOME FOOTER -->
+<section class="welcome">
+  <div class="film-strip-divider reveal"></div>
+  <div class="welcome-title reveal">欢迎到来</div>
+  <div class="welcome-sub reveal">
+    我们的十二年获影，谢谢你成为观众之一<br>
+    <span class="welcome-en">WELCOME TO OUR PREMIERE &middot; 11.14 &middot; QINGYUAN</span>
+  </div>
+</section>
+
+<script>
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-scale, .reveal-fade').forEach(el => observer.observe(el));
+
+// Music button placeholder
+let playing = false;
+function toggleMusic() {
+  playing = !playing;
+  const btn = document.getElementById('musicBtn');
+  btn.classList.toggle('playing', playing);
+  btn.textContent = playing ? '❚❚' : '♪';
+}
+
+// ===== Parallax dual-track (B) =====
+(function() {
+  const parallax = document.querySelector('[data-parallax]');
+  if (!parallax) return;
+  const tracks = parallax.querySelectorAll('.parallax-track');
+  let ticking = false;
+
+  function updateParallax() {
+    const rect = parallax.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const progress = (vh - rect.top) / (vh + rect.height);
+    const clamped = Math.max(0, Math.min(1, progress));
+
+    tracks.forEach(function(track, i) {
+      const trackWidth = track.scrollWidth;
+      const containerWidth = parallax.offsetWidth;
+      const maxMove = Math.max(0, trackWidth - containerWidth + 40);
+      let move;
+      if (i === 0) {
+        // Top track (婚纱照): slides left as you scroll down
+        move = -maxMove * clamped;
+      } else {
+        // Bottom track (订婚宴): starts shifted left, slides right
+        move = -maxMove * (1 - clamped);
+      }
+      track.style.transform = 'translateX(' + move + 'px)';
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', updateParallax);
+  updateParallax();
+})();
+</script>
+
+</body>
+</html>
