@@ -67,13 +67,22 @@
       textarea {
         width: 100%;
         border: 1px solid var(--border);
-        border-radius: 3px;
+        border-radius: 6px;
         background: #fff;
         color: var(--text);
         padding: 6px 10px;
         outline: none;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
       }
+
+      /* 全局下拉：只统一圆角/边框/聚焦，不去掉原生箭头，避免自定义背景盖掉箭头 */
+      select {
+        cursor: pointer;
+        height: 30px;
+        font-size: 13px;
+      }
+
+      select:hover:not(:disabled) { border-color: var(--primary); }
 
       select:disabled,
       input:disabled,
@@ -140,7 +149,7 @@
         box-shadow: 0 1px 4px rgba(17, 71, 135, 0.14);
         flex-shrink: 0;
         position: relative;
-        z-index: 20;
+        z-index: 100;
         overflow: visible;
       }
 
@@ -197,7 +206,7 @@
       .topbar-nav-item {
         position: relative;
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         align-self: stretch;
       }
 
@@ -237,15 +246,19 @@
       .topbar-nav-menu {
         display: none;
         position: absolute;
-        top: 100%;
+        top: calc(100% + 8px);
         left: 0;
-        min-width: 128px;
+        min-width: 148px;
         padding: 4px;
-        border-radius: 0 0 8px 8px;
+        border-radius: 8px;
         border: 1px solid #dbe6f2;
         background: #fff;
         box-shadow: 0 10px 24px rgba(32, 58, 85, 0.16);
-        z-index: 30;
+        z-index: 200;
+      }
+
+      .topbar-nav-item.is-open {
+        z-index: 200;
       }
 
       .topbar-nav-item.is-open .topbar-nav-menu {
@@ -353,7 +366,7 @@
         z-index: 120;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .mobile-app-dialog {
@@ -643,13 +656,13 @@
         color: var(--primary);
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         flex-shrink: 0;
       }
 
       .sidebar-icon svg {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
         display: block;
       }
 
@@ -1012,7 +1025,7 @@
         background: #eef5ff;
         color: #2869bd;
         font-size: 12px;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .inbound-status.is-done {
@@ -1093,7 +1106,7 @@
         z-index: 2;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 32px;
         height: 32px;
         padding: 0;
@@ -1440,7 +1453,7 @@
         right: 0;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 22px;
         height: 100%;
         padding: 0;
@@ -1745,7 +1758,7 @@
       .operation-vtable-fallback {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 100%;
         min-height: 620px;
         padding: 24px;
@@ -1927,7 +1940,7 @@
         color: #677e95;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         font-size: 13px;
         line-height: 1;
       }
@@ -2947,7 +2960,7 @@
         color: var(--space-tree-muted);
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         cursor: pointer;
       }
 
@@ -3147,7 +3160,7 @@
       .cabinet-power-status-tag {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-width: 52px;
         height: 24px;
         padding: 0 10px;
@@ -3165,7 +3178,7 @@
         position: relative;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         flex: 0 0 auto;
         width: 16px;
         height: 16px;
@@ -3262,7 +3275,7 @@
         color: #1f78ff;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         font-size: 15px;
         font-weight: 700;
         box-shadow: inset 0 0 0 1px #d8e8ff;
@@ -3627,7 +3640,7 @@
       .cabinet-status-line {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         flex-wrap: wrap;
         gap: 4px 8px;
         min-height: 24px;
@@ -3843,7 +3856,7 @@
         color: #45607c;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 6px;
         transition: all 0.15s ease;
       }
@@ -3969,7 +3982,7 @@
         color: var(--primary);
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .tiny-icon-btn:hover {
@@ -4597,6 +4610,8 @@
         align-items: center;
         justify-content: center;
         gap: 28px;
+        width: 100%;
+        margin: 0 auto;
       }
 
       .overview-donut {
@@ -4796,7 +4811,7 @@
         height: 170px;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         color: #26394f;
         font-size: 52px;
         font-weight: 500;
@@ -4953,6 +4968,33 @@
         overflow: visible;
       }
 
+      .list-table th.sticky-right:last-child,
+      .list-table td.sticky-right:last-child {
+        min-width: 132px;
+        padding-right: 14px;
+      }
+
+      .list-table .action-links {
+        gap: 8px;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+      }
+
+      .list-table .action-links .demand-badge {
+        top: -9px;
+        right: -12px;
+      }
+
+      .list-table .action-links .demand-badge-trigger {
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
+      }
+
+      .table-wrap {
+        padding-right: 2px;
+      }
+
       thead .sticky-left,
       thead .sticky-right {
         z-index: 6;
@@ -5026,6 +5068,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
         min-width: 52px;
         height: 24px;
         padding: 0 10px;
@@ -5496,7 +5539,7 @@
       .system-message-filters input[type="search"] {
         flex: 0 0 auto;
         width: auto;
-        min-width: 140px;
+        min-width: 132px;
         height: 32px;
         border: 1px solid #d7e2ed;
         border-radius: 6px;
@@ -5514,7 +5557,7 @@
       .system-message-status {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 22px;
         height: 22px;
         color: #86909c;
@@ -5734,7 +5777,7 @@
         padding: 0 8px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border: 1px solid var(--border);
         border-radius: 4px;
         color: #54677f;
@@ -5756,6 +5799,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
         color: #607289;
       }
 
@@ -5782,7 +5826,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         color: #9baec4;
       }
@@ -6359,8 +6403,11 @@
       .page-surface.classify-page,
       .classify-page {
         min-height: calc(100vh - var(--topbar-h) - 32px);
-        overflow: visible;
-        padding: 20px 24px 24px;
+        height: calc(100vh - var(--topbar-h) - 20px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding: 20px 24px 16px;
       }
 
       .classify-toolbar {
@@ -6391,8 +6438,9 @@
         display: grid;
         grid-template-columns: 300px minmax(0, 1fr);
         gap: 16px;
-        min-height: 560px;
-        overflow: visible;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
       }
 
       .classify-side,
@@ -6400,7 +6448,9 @@
         background: #fff;
         border: 1px solid #e6eef6;
         border-radius: 8px;
-        min-height: 560px;
+        min-height: 0;
+        height: 100%;
+        overflow-y: auto;
       }
 
       .classify-side {
@@ -6600,12 +6650,17 @@
 
       .classify-main {
         padding: 20px 24px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
       }
 
       .classify-card-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
         gap: 16px 20px;
+        align-content: flex-start;
+        flex: 1;
       }
 
       .classify-card {
@@ -6927,7 +6982,7 @@
         height: 16px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border-radius: 50%;
         background: #edf5ff;
         color: #1677ff;
@@ -7266,7 +7321,7 @@
         color: #2f506f;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .template-tree-toggle::before {
@@ -7360,7 +7415,7 @@
       .process-config-switch:disabled { cursor: not-allowed; opacity: .55; }
       .process-config-status { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eef3f8; color: #687c90; }
       .process-config-status.is-on { background: #e9f7ef; color: #16894b; }
-      .process-config-form-link { display: inline-flex; align-items: center; justify-content: center; gap: 5px; height: 28px; padding: 0 10px; border: 1px solid #b9d3f2; border-radius: 4px; background: #f5f9ff; color: var(--primary); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+      .process-config-form-link { display: inline-flex; align-items: center; justify-content: flex-start; gap: 5px; height: 28px; padding: 0 10px; border: 1px solid #b9d3f2; border-radius: 4px; background: #f5f9ff; color: var(--primary); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; }
       .process-config-form-link:hover { border-color: var(--primary); background: #eaf3ff; box-shadow: 0 2px 6px rgba(30, 102, 210, .12); }
       .process-config-form-link:focus-visible { outline: 2px solid rgba(28, 111, 229, .25); outline-offset: 2px; }
       .process-config-form-link-icon { color: #4b83c7; font-size: 13px; line-height: 1; }
@@ -7369,7 +7424,7 @@
       .process-close-blocker span { color: #38536d; font-size: 12px; }
       .asset-activity-wrap { position: relative; flex: 0 0 auto; overflow: visible; }
       .asset-activity-wrap > .demand-badge { top: -8px; right: -8px; }
-      .asset-activity-trigger { min-width: 104px; height: 32px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 13px; border-radius: 2px; white-space: nowrap; line-height: 1; }
+      .asset-activity-trigger { min-width: 104px; height: 32px; display: inline-flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0 13px; border-radius: 2px; white-space: nowrap; line-height: 1; }
       .asset-activity-trigger svg { flex: 0 0 auto; transition: transform .16s ease; }
       .asset-activity-trigger.is-open svg { transform: rotate(180deg); }
       .asset-activity-menu { position: absolute; top: calc(100% + 5px); left: 0; right: auto; z-index: 80; width: 144px; padding: 5px; border: 1px solid #d8e3ef; border-radius: 4px; background: #fff; box-shadow: 0 10px 28px rgba(25, 52, 81, .16); }
@@ -7709,7 +7764,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-height: 420px;
         color: #7a8fa7;
       }
@@ -7935,7 +7990,7 @@
       .integration-visual-empty {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         color: #7a8fa7;
       }
 
@@ -8492,7 +8547,7 @@
       .tree-toggle {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border-radius: 4px;
         color: #9db0c5;
         transition: background 0.15s ease, color 0.15s ease;
@@ -8625,7 +8680,7 @@
       .settings-count-pill {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 24px;
         padding: 0 8px;
         border-radius: 999px;
@@ -8759,7 +8814,7 @@
         height: 22px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border: 1px solid #e3ebf5;
         border-radius: 6px;
         background: #fff;
@@ -8788,7 +8843,7 @@
       }
 
       .design-field-item .detail-setting-meta {
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .design-field-list-empty {
@@ -8805,7 +8860,7 @@
         flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 18px;
         padding: 0 6px;
         border-radius: 999px;
@@ -9409,7 +9464,7 @@
 
       .cabinet-position-stage {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
         gap: 72px;
         min-width: 560px;
@@ -9847,7 +9902,7 @@
 
       .asset-rack-stage {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: flex-start;
         padding-top: 4px;
         overflow: visible;
@@ -10159,7 +10214,7 @@
       .asset-history-empty {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-height: 360px;
       }
 
@@ -10221,7 +10276,7 @@
       .history-result-tag {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-width: 48px;
         height: 22px;
         padding: 0 8px;
@@ -10308,7 +10363,7 @@
       .asset-work-order-type {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-width: 42px;
         height: 22px;
         padding: 0 8px;
@@ -10611,7 +10666,7 @@
       .asset-topology-stage.is-empty {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         background: #f7f9fc;
       }
 
@@ -10628,7 +10683,7 @@
       .topology-mini-tool {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 16px;
         height: 16px;
         color: #4a90e2;
@@ -10767,7 +10822,7 @@
       .cabinet-contains-side {
         display: flex;
         align-items: flex-start;
-        justify-content: center;
+        justify-content: flex-start;
         height: 100%;
         min-height: 0;
         overflow: visible;
@@ -10890,7 +10945,7 @@
         line-height: 1.2;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         pointer-events: auto;
         cursor: pointer;
       }
@@ -11164,7 +11219,7 @@
         z-index: 7;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 6px;
         background: rgba(12, 16, 20, 0.68);
         opacity: 0;
@@ -11532,7 +11587,7 @@
       .cabinet-rack-step-index {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 24px;
         height: 24px;
         border: 1px solid #cbd8e6;
@@ -11760,7 +11815,7 @@
       .cabinet-occupancy-tag {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-width: 52px;
         height: 22px;
         padding: 0 8px;
@@ -12246,7 +12301,7 @@
       .detail-field-lock {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 14px;
         height: 14px;
         color: #b7c4d3;
@@ -12257,7 +12312,7 @@
         height: 24px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border: 1px solid #e2e8f0;
         border-radius: 6px;
         background: #fff;
@@ -12460,7 +12515,7 @@
         background: #f7f9fc;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 20px;
       }
 
@@ -12472,7 +12527,7 @@
         background: #f3f5f9;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 18px;
       }
 
@@ -12521,7 +12576,7 @@
         height: 28px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border: 0;
         border-radius: 4px;
         background: transparent;
@@ -12662,7 +12717,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         color: #7e95b0;
         background: #fafcff;
@@ -12714,7 +12769,7 @@
         color: #6e8197;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .close-btn:hover {
@@ -12878,7 +12933,7 @@
       .advanced-search-mode {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 8px;
         margin-bottom: 24px;
         color: #126ef5;
@@ -12936,7 +12991,7 @@
         color: #fff;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         font-size: 14px;
         line-height: 1;
         font-weight: 700;
@@ -12963,7 +13018,7 @@
         color: #fff;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         font-weight: 700;
         line-height: 1;
       }
@@ -13165,6 +13220,7 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
         width: 18px;
         height: 18px;
         padding: 0;
@@ -13555,7 +13611,7 @@
       .row-expand-toggle {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 20px;
         height: 20px;
         margin-right: 6px;
@@ -13933,7 +13989,7 @@
       .asset-board-save-tree-toggle {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         color: #7a8da3;
       }
 
@@ -13957,7 +14013,7 @@
         height: 18px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border-radius: 4px;
         color: #0f7af5;
         background: #eaf3ff;
@@ -14065,7 +14121,7 @@
       .relation-modal-step .step-dot {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 18px;
         height: 18px;
         border-radius: 50%;
@@ -14595,7 +14651,7 @@
         left: 80px;
       }
 
-      .export-progress-manager > .demand-badge { top: -8px; right: -8px; z-index: 84; }
+      .export-progress-manager > .demand-badge { top: -12px; right: -16px; z-index: 84; }
       .export-progress-task > .demand-badge { top: -6px; right: -6px; }
 
       .export-progress-head {
@@ -14713,7 +14769,7 @@
         color: var(--primary);
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .export-task-title {
@@ -15022,7 +15078,7 @@
         color: #00b42a;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .export-complete-title {
@@ -15376,7 +15432,7 @@
         height: 28px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         border: 1px solid var(--primary);
         border-radius: 2px;
         color: var(--primary);
@@ -16646,7 +16702,7 @@
         border-radius: 6px;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         background: #e8f3ff;
         color: var(--primary);
         font-size: 13px;
@@ -16654,7 +16710,7 @@
       }
 
       .app-sidebar.is-collapsed .sidebar-header {
-        justify-content: center;
+        justify-content: flex-start;
         padding: 0;
       }
 
@@ -16673,7 +16729,7 @@
         min-height: 40px;
         margin: 0 auto;
         padding: 0;
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .app-sidebar.is-collapsed .sidebar-trigger > span:not(.sidebar-icon),
@@ -16701,7 +16757,7 @@
       .app-sidebar.is-collapsed .collapse-link {
         width: 40px;
         height: 36px;
-        justify-content: center;
+        justify-content: flex-start;
         border-radius: 5px;
       }
 
@@ -16891,7 +16947,7 @@
       .maintenance-list-page .maintenance-table th:first-child .th-content {
         width: 100%;
         height: 100%;
-        justify-content: center;
+        justify-content: flex-start;
         padding-right: 0;
       }
 
@@ -16934,7 +16990,7 @@
         min-width: 42px;
         height: 24px;
         padding: 0 9px;
-        justify-content: center;
+        justify-content: flex-start;
         border-radius: 12px;
         font-size: 12px;
       }
@@ -17222,7 +17278,7 @@
         font-weight: 400;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
       }
       .app-topbar .topbar-nav > button:hover,
       .app-topbar .topbar-nav-trigger:hover { background: var(--nav-hover); color: var(--nav-primary); }
@@ -17562,7 +17618,7 @@
       .flow-search-clear, .flow-search-submit {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         flex: 0 0 16px;
         width: 16px;
         height: 24px;
@@ -17591,7 +17647,7 @@
       .flow-page-item, .flow-page-ellipsis {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         min-width: 32px;
         height: 32px;
         padding: 0 8px;
@@ -17747,7 +17803,7 @@
         transform: translate(35%, -25%);
         display: inline-flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         box-sizing: border-box;
         min-width: 16px;
         height: 16px;
@@ -17938,9 +17994,23 @@
          color: var(--nav-primary);
          background: var(--nav-hover);
        }
+       .app-topbar .topbar-nav > button.is-active,
        .app-topbar .topbar-nav-trigger.is-active {
+         align-self: center;
+         height: 44px;
+         border-radius: 8px;
          color: var(--nav-primary);
-         background: transparent;
+         background: var(--nav-hover);
+       }
+       .app-topbar .topbar-nav > button.is-active::after,
+       .app-topbar .topbar-nav-trigger.is-active::after {
+         bottom: -8px;
+       }
+       .app-topbar .topbar-nav > button:focus-visible,
+       .app-topbar .topbar-nav-trigger:focus-visible,
+       .app-topbar .topbar-nav-menu button:focus-visible {
+         outline: 2px solid var(--nav-primary);
+         outline-offset: -2px;
        }
        .app-topbar .topbar-nav-caret {
          width: 12px;
@@ -17991,7 +18061,7 @@
        :is(.list-page-surface, .inbound-list-page, .inbound-page, .integration-list-page, .operation-log-page) .page-size,
        :is(.list-page-surface, .inbound-list-page, .inbound-page, .integration-list-page, .operation-log-page) .flow-page-size {
          min-width: 96px;
-         justify-content: center;
+         justify-content: flex-start;
          padding: 0 12px;
          border-radius: 8px;
        }
@@ -18067,19 +18137,89 @@
          :is(th:first-child, th:nth-child(2)) .th-content {
          width: 100%;
          height: 100%;
-         justify-content: center;
+         justify-content: flex-start;
          padding-right: 0;
        }
        :is(.inbound-list-page, .inbound-page, .maintenance-list-page) .inbound-order-table
          :is(th:nth-child(2), td:nth-child(2)) {
-         width: 64px !important;
-         min-width: 64px;
-         max-width: 64px;
+          width: 56px !important;
+          min-width: 56px;
+          max-width: 56px;
       }
        :is(.inbound-list-page, .inbound-page, .maintenance-list-page) .inbound-order-table
          :is(th:first-child, td:first-child) input[type="checkbox"] {
          display: block;
          margin: 0 auto;
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) {
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         min-height: 48px;
+         padding: 0 16px;
+         border-bottom: 1px solid #e5e6eb;
+         background: #fff;
+         overflow-x: auto;
+         overflow-y: hidden;
+         scrollbar-width: none;
+         overscroll-behavior-x: contain;
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs)::-webkit-scrollbar { display: none; }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) > :is(button, .relation-source-tab, .asset-board-tab) {
+         position: relative;
+         display: inline-flex;
+         flex: 0 0 auto;
+         align-items: center;
+         justify-content: flex-start;
+         min-width: 0;
+         height: 48px;
+         padding: 0 12px;
+         border: 0;
+         border-bottom: 2px solid transparent;
+         border-radius: 0;
+         background: transparent;
+         color: #4e5969;
+         font-size: 14px;
+         font-weight: 400;
+         line-height: 22px;
+         white-space: nowrap;
+         transition: color .15s ease, background-color .15s ease;
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) > :is(button, .relation-source-tab, .asset-board-tab):hover {
+         color: var(--primary);
+         background: #f2f3f5;
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) > :is(button, .relation-source-tab, .asset-board-tab).is-active {
+         color: var(--primary);
+         font-weight: 500;
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) > :is(button, .relation-source-tab, .asset-board-tab).is-active::after {
+         content: "";
+         position: absolute;
+         right: 0;
+         bottom: -1px;
+         left: 0;
+         height: 2px;
+         border-radius: 4px 4px 0 0;
+         background: var(--primary);
+       }
+       :is(.inbound-tabs, .asset-overview-tabs, .tabs:not(.detail-tabs), .integration-tabs,
+           .consumable-simple-tabs, .asset-inventory-tabs, .maintenance-tabs,
+           .relation-source-tabs, .asset-board-tabs) > :is(button, .relation-source-tab, .asset-board-tab):focus-visible {
+         outline: 2px solid var(--primary);
+         outline-offset: -2px;
        }
        .overview-line-shape { display: none; }
        .overview-line-svg {
@@ -18096,7 +18236,10 @@
        .overview-drilldown:hover .overview-bar,
        .overview-rank-row.overview-drilldown:hover .overview-rank-fill { filter: brightness(.94); }
        .overview-drilldown:focus-visible { outline: var(--xbro-focus-ring-width, 2px) solid var(--primary); outline-offset: calc(var(--xbro-focus-ring-offset, 2px) * -1); }
-    </style>
+    
+      .inbound-pagination { display: none; }
+      
+      </style>
   </head>
   <body>
     <div class="app-shell">
@@ -23502,6 +23645,7 @@
 
         const DEFAULT_COLUMN_WIDTHS = {
           __select: 36,
+          __index: 56,
           name: 240,
           assetStatus: 96,
           assetLocation: 188,
@@ -23513,7 +23657,7 @@
           portCount: 72,
           startU: 82,
           serialCode: 84,
-          __actions: 96,
+          __actions: 140,
           assetSummary: 136,
           description: 136,
           dataTag: 90,
@@ -25593,14 +25737,17 @@
           }
 
           getColumnWidth(viewId, columnKey) {
-            return this.state.ui.columnWidths?.[viewId]?.[columnKey] || DEFAULT_COLUMN_WIDTHS[columnKey] || 128;
+            const minWidth = columnKey === "__select" ? 36 : columnKey === "__index" ? 56 : columnKey === "__actions" ? 132 : 72;
+            const stored = this.state.ui.columnWidths?.[viewId]?.[columnKey];
+            const fallback = DEFAULT_COLUMN_WIDTHS[columnKey] || 128;
+            return Math.max(minWidth, stored || fallback);
           }
 
           setColumnWidth(viewId, columnKey, width) {
             if (!this.state.ui.columnWidths[viewId]) {
               this.state.ui.columnWidths[viewId] = {};
             }
-            const minWidth = columnKey === "__select" ? 36 : columnKey === "__actions" ? 86 : 72;
+            const minWidth = columnKey === "__select" ? 36 : columnKey === "__index" ? 56 : columnKey === "__actions" ? 132 : 72;
             this.state.ui.columnWidths[viewId][columnKey] = Math.max(minWidth, Math.round(width));
             this.emit();
           }
@@ -36029,7 +36176,8 @@
               table.setAttribute("data-view", tableViewId);
               const colgroup = document.createElement("colgroup");
               headers.forEach((th, index) => {
-                const key = index === 0 ? "__select" : index === headers.length - 1 ? "__actions" : `column-${index}`;
+                const isIndexColumn = th.textContent.trim() === "序号";
+                const key = index === 0 ? "__select" : isIndexColumn ? "__index" : index === headers.length - 1 ? "__actions" : `column-${index}`;
                 const width = key === "__select"
                   ? Math.max(48, this.store.getColumnWidth(tableViewId, key))
                   : this.store.getColumnWidth(tableViewId, key);
@@ -36242,7 +36390,7 @@
             const icons = {
               it: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="2.2" y="3" width="11.6" height="8" rx="1.6" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="2.2" y="3" width="11.6" height="8" rx="1.6" stroke="currentColor" stroke-width="1.3"></rect>
                   <path d="M5.2 13h5.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
                 </svg>
               `,
@@ -36254,33 +36402,32 @@
               `,
               cabinet: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="4" y="2.5" width="8" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="4" y="2.5" width="8" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"></rect>
                   <path d="M6 5h4M6 8h4M6 11h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
                 </svg>
               `,
               spare: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <path d="M9.8 3.2a2.2 2.2 0 102.9 2.9l-2 2-1-1-5 5 1.3 1.3 5-5-1-1 2-2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
+                  <path d="M2.8 5.3L8 2.8l5.2 2.5v5L8 12.8l-5.2-2.5v-5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path><path d="M2.8 5.3L8 7.8l5.2-2.5M8 7.8v5" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
                 </svg>
               `,
               retired: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <path d="M6 4H3.5v8H6M7 8h5.5M10.2 5.2L13 8l-2.8 2.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M2.8 4.5h10.4v8H2.8v-8z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path><path d="M2.8 4.5l1.2-2h8L13.2 4.5M6.5 8l1.2 1.2L10.2 6.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
               `,
               assetInventory: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="2.5" y="2.5" width="4" height="4" rx="0.8" stroke="currentColor" stroke-width="1.2"></rect>
-                  <rect x="9.5" y="2.5" width="4" height="4" rx="0.8" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="2.5" y="2.5" width="4" height="4" rx="0.8" stroke="currentColor" stroke-width="1.3"></rect>
+                  <rect x="9.5" y="2.5" width="4" height="4" rx="0.8" stroke="currentColor" stroke-width="1.3"></rect>
                   <path d="M3.5 11.5l1.3 1.3 2.6-3M9.5 11.5h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
               `,
               assetConfig: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <path d="M3 4.5h10M3 8h10M3 11.5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
-                  <circle cx="6" cy="4.5" r="1.2" fill="currentColor"></circle>
-                  <circle cx="10" cy="8" r="1.2" fill="currentColor"></circle>
-                  <circle cx="7.5" cy="11.5" r="1.2" fill="currentColor"></circle>
+                  <path d="M2.5 5h11M2.5 11h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  <circle cx="6" cy="5" r="1.7" fill="#fff" stroke="currentColor" stroke-width="1.3"></circle>
+                  <circle cx="10" cy="11" r="1.7" fill="#fff" stroke="currentColor" stroke-width="1.3"></circle>
                 </svg>
               `,
               spareManage: `
@@ -36288,15 +36435,20 @@
                   <path d="M2.8 5.2L8 2.8l5.2 2.4L8 7.6 2.8 5.2zm0 2.6L8 10.2l5.2-2.4M2.8 10.4L8 12.8l5.2-2.4" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
                 </svg>
               `,
+              maintenance: `
+                <svg viewBox="0 0 16 16" fill="none">
+                  <path d="M8 2.2l4.6 1.9v3.2c0 2.8-1.8 4.9-4.6 6.3-2.8-1.4-4.6-3.5-4.6-6.3V4.1L8 2.2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
+                  <path d="M9.9 5.4a1.9 1.9 0 0 0-2.5 2.4L5.6 9.6l.8.8 1.8-1.8a1.9 1.9 0 0 0 2.4-2.5l-1.2 1.2-.8-.3-.3-.8 1.6-.8z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"></path>
+                </svg>
+              `,
               maintain: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2.4l4.5 1.9v3.1c0 2.7-1.7 4.8-4.5 6.2-2.8-1.4-4.5-3.5-4.5-6.2V4.3L8 2.4z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></path>
-                  <path d="M5.7 8.1l1.5 1.5 3.2-3.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M8 2.2l4.6 1.9v3.2c0 2.8-1.8 4.9-4.6 6.3-2.8-1.4-4.6-3.5-4.6-6.3V4.1L8 2.2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"></path>
                 </svg>
               `,
               assetDetection: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="2.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="2.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"></rect>
                   <path d="M5.2 13h5.6M5 6.2h2.2M8.8 6.2H11M5 8.5h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
                 </svg>
               `,
@@ -36313,17 +36465,17 @@
               `,
               deviceOverview: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="2.5" y="2.5" width="4.2" height="4.2" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
-                  <rect x="9.3" y="2.5" width="4.2" height="4.2" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="2.5" y="2.5" width="4.2" height="4.2" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
+                  <rect x="9.3" y="2.5" width="4.2" height="4.2" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
                   <path d="M3 12.8h3.2M8 12.8h5M3 10.2h2M7 10.2h2.5M11 10.2h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
                 </svg>
               `,
               classifyManage: `
                 <svg viewBox="0 0 16 16" fill="none">
-                  <rect x="2.5" y="3" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
-                  <rect x="9.1" y="3" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
-                  <rect x="2.5" y="8.6" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
-                  <rect x="9.1" y="8.6" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.2"></rect>
+                  <rect x="2.5" y="3" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
+                  <rect x="9.1" y="3" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
+                  <rect x="2.5" y="8.6" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
+                  <rect x="9.1" y="8.6" width="4.4" height="4.4" rx="1" stroke="currentColor" stroke-width="1.3"></rect>
                 </svg>
               `,
               consumable: `
@@ -36339,7 +36491,9 @@
               `
             };
 
-            return `<span class="sidebar-icon" aria-hidden="true">${icons[menuId] || icons.assetConfig}</span>`;
+            const alias = { maintenance: "maintenance", retired: "retired", deviceOverview: "deviceOverview" };
+            const key = alias[menuId] || menuId;
+            return `<span class="sidebar-icon" aria-hidden="true">${icons[key] || icons.assetConfig}</span>`;
           }
 
           getSidebarVersionTag(item, state) {
@@ -37383,7 +37537,7 @@
             if (consumable.ledgerMode === "detail") return this.renderConsumableLedgerDetail(consumable);
             const keyword = String(consumable.ledgerKeyword || "").trim().toLowerCase();
             const rows = keyword ? consumable.materials.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : consumable.materials;
-            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>耗材台账</h1></div><div class="consumable-simple-tabs"><button class="is-active" type="button">全部</button><button type="button">我发起的</button><button type="button">部门工单</button><button type="button">班组工单</button><button type="button">草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-ledger-search" value="${escapeHtml(consumable.ledgerKeyword || "")}" placeholder="请输入耗材名称/物料编码" /></label><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="consumable-ledger-tool" data-label="导出二维码">导出二维码</button><button class="btn" type="button" data-action="consumable-ledger-tool" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table consumable-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>物料编号</th><th>物料编码</th><th>物料名称</th><th>物料分类</th><th>品牌</th><th>规格型号</th><th>计量单位</th><th>所在仓库</th><th>预警基数</th><th>可用库存</th><th>操作</th></tr></thead><tbody>${rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.materialName)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.materialNo)}</td><td>${escapeHtml(item.materialCode)}</td><td>${escapeHtml(item.materialName)}</td><td title="${escapeHtml(item.category)}">${escapeHtml(item.category)}</td><td>${escapeHtml(item.brand)}</td><td>${escapeHtml(item.model)}</td><td>${escapeHtml(item.unit)}</td><td>${escapeHtml(item.warehouse)}</td><td>${item.warningBase}</td><td>${item.availableStock}</td><td class="consumable-actions"><button type="button" data-action="open-consumable-ledger-detail" data-id="${escapeHtml(item.id)}">查看</button><button type="button" data-action="consumable-ledger-tool" data-label="编辑">编辑</button><button type="button" data-action="consumable-ledger-tool" data-label="打印">打印</button></td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>耗材台账</h1></div><div class="consumable-simple-tabs"><button class="is-active" type="button">全部</button><button type="button">我发起的</button><button type="button">部门工单</button><button type="button">班组工单</button><button type="button">草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-ledger-search" value="${escapeHtml(consumable.ledgerKeyword || "")}" placeholder="请输入耗材名称/物料编码" /></label><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="consumable-ledger-tool" data-label="导出二维码">导出二维码</button><button class="btn" type="button" data-action="consumable-ledger-tool" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table consumable-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>物料编号</th><th>物料编码</th><th>物料名称</th><th>物料分类</th><th>品牌</th><th>规格型号</th><th>计量单位</th><th>所在仓库</th><th>预警基数</th><th>可用库存</th><th>操作</th></tr></thead><tbody>${rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.materialName)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.materialNo)}</td><td>${escapeHtml(item.materialCode)}</td><td>${escapeHtml(item.materialName)}</td><td title="${escapeHtml(item.category)}">${escapeHtml(item.category)}</td><td>${escapeHtml(item.brand)}</td><td>${escapeHtml(item.model)}</td><td>${escapeHtml(item.unit)}</td><td>${escapeHtml(item.warehouse)}</td><td>${item.warningBase}</td><td>${item.availableStock}</td><td class="consumable-actions"><button type="button" data-action="open-consumable-ledger-detail" data-id="${escapeHtml(item.id)}">查看</button><button type="button" data-action="consumable-ledger-tool" data-label="编辑">编辑</button><button type="button" data-action="consumable-ledger-tool" data-label="打印">打印</button></td></tr>`).join("")}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
 
           renderConsumableLedgerDetail(consumable) {
@@ -37407,7 +37561,7 @@
             const tabRows = workflow.tab === "pending" ? workflow.orders.filter((item) => item.status === "待审核") : workflow.tab === "processed" ? workflow.orders.filter((item) => ["已完成", "已拒绝"].includes(item.status)) : workflow.tab === "mine" ? workflow.orders.filter((item) => item.creator !== "仓库管理员") : workflow.tab === "cc" ? [] : workflow.tab === "draft" ? workflow.orders.filter((item) => item.status === "草稿") : workflow.orders;
             const rows = keyword ? tabRows.filter((item) => [item.id, item.title, item.creator, item.status].join(" ").toLowerCase().includes(keyword)) : tabRows;
             const statusClass = (status) => status === "已完成" ? "is-done" : status === "待审核" ? "is-pending" : status === "已拒绝" ? "is-rejected" : "";
-            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>${escapeHtml(config.listTitle)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-consumable-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入编号/标题" /></label><button class="inbound-text-action" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="open-consumable-workflow-form" data-view="${escapeHtml(viewId)}">新建</button><button class="btn" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>${escapeHtml(config.codeLabel)}</th><th>${escapeHtml(config.titleLabel)}</th><th>${escapeHtml(config.dateLabel)}</th><th>${escapeHtml(config.creatorLabel)}</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td>${escapeHtml(order.title)}</td><td>${escapeHtml(order.createdAt)}</td><td>${escapeHtml(order.creator)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td>${escapeHtml(order.remark)}</td><td class="consumable-actions"><button type="button" data-action="open-consumable-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" && order.status === "待审核" ? `<button type="button" data-action="open-consumable-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}<button type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="打印">打印</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无${keyword ? "匹配" : ""}${escapeHtml(config.listTitle)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>${escapeHtml(config.listTitle)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-consumable-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入编号/标题" /></label><button class="inbound-text-action" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="open-consumable-workflow-form" data-view="${escapeHtml(viewId)}">新建</button><button class="btn" type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>${escapeHtml(config.codeLabel)}</th><th>${escapeHtml(config.titleLabel)}</th><th>${escapeHtml(config.dateLabel)}</th><th>${escapeHtml(config.creatorLabel)}</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(order.id)}" /></td><td>${index + 1}</td><td>${escapeHtml(order.id)}</td><td>${escapeHtml(order.title)}</td><td>${escapeHtml(order.createdAt)}</td><td>${escapeHtml(order.creator)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td>${escapeHtml(order.remark)}</td><td class="consumable-actions"><button type="button" data-action="open-consumable-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" && order.status === "待审核" ? `<button type="button" data-action="open-consumable-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}<button type="button" data-action="consumable-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="打印">打印</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无${keyword ? "匹配" : ""}${escapeHtml(config.listTitle)}</td></tr>`}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
 
           renderConsumableFormFields(config, data, readonly = false) {
@@ -37448,7 +37602,7 @@
             const consumable = this.store.ensureConsumableState();
             const keyword = String(consumable.historyKeyword || "").trim().toLowerCase();
             const rows = keyword ? CONSUMABLE_HISTORY_ROWS.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : CONSUMABLE_HISTORY_ROWS;
-            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>耗材履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-history-search" value="${escapeHtml(consumable.historyKeyword || "")}" placeholder="请输入物料编码/操作类型" /></label><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="consumable-ledger-tool" data-label="导入">导入</button><button class="btn" type="button" data-action="consumable-ledger-tool" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>物料编码</th><th>操作类型</th><th>发生时间</th><th>数量变更</th><th>备注</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.materialCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.change)}</td><td>${escapeHtml(row.remark)}</td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page"><div class="inbound-list-head"><h1>耗材履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="consumable-history-search" value="${escapeHtml(consumable.historyKeyword || "")}" placeholder="请输入物料编码/操作类型" /></label><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="consumable-ledger-tool" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="consumable-ledger-tool" data-label="导入">导入</button><button class="btn" type="button" data-action="consumable-ledger-tool" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>物料编码</th><th>操作类型</th><th>发生时间</th><th>数量变更</th><th>备注</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.materialCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.change)}</td><td>${escapeHtml(row.remark)}</td></tr>`).join("")}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
 
           renderToolLedger() {
@@ -37457,7 +37611,7 @@
             const keyword = String(tool.ledgerKeyword || "").trim().toLowerCase();
             const rows = keyword ? tool.assets.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : tool.assets;
             const statusClass = (status) => status === "空闲" ? "is-done" : status === "维修中" ? "is-rejected" : "is-pending";
-            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表台账</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-ledger-search" value="${escapeHtml(tool.ledgerKeyword || "")}" placeholder="请输入资产编号/资产名称" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="tool-instrument-action" data-label="导出二维码">导出二维码</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导入">导入</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table consumable-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>资产名称</th><th>资产编号</th><th>资产品牌型号分类</th><th>购置金额（含税）</th><th>单位</th><th>供应商名称</th><th>资产状态</th><th>资产位置</th><th>当前领用人员</th><th>操作</th></tr></thead><tbody>${rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.name)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.category + " / " + item.brandModel)}">${escapeHtml(item.category)} / ${escapeHtml(item.brandModel)}</td><td>${escapeHtml(item.amount)}</td><td>${escapeHtml(item.unit)}</td><td>${escapeHtml(item.supplier)}</td><td><span class="inbound-status ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td><td title="${escapeHtml(item.location)}">${escapeHtml(item.location)}</td><td>${escapeHtml(item.user)}</td><td class="consumable-actions"><button type="button" data-action="open-tool-ledger-detail" data-id="${escapeHtml(item.id)}">查看</button><button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表台账</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-ledger-search" value="${escapeHtml(tool.ledgerKeyword || "")}" placeholder="请输入资产编号/资产名称" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="tool-instrument-action" data-label="导出二维码">导出二维码</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导入">导入</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table consumable-table"><thead><tr><th class="consumable-check"><input type="checkbox" aria-label="全选" /></th><th>序号</th><th>资产名称</th><th>资产编号</th><th>资产品牌型号分类</th><th>购置金额（含税）</th><th>单位</th><th>供应商名称</th><th>资产状态</th><th>资产位置</th><th>当前领用人员</th><th>操作</th></tr></thead><tbody>${rows.map((item, index) => `<tr><td><input type="checkbox" aria-label="选择${escapeHtml(item.name)}" /></td><td>${index + 1}</td><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.assetCode)}</td><td title="${escapeHtml(item.category + " / " + item.brandModel)}">${escapeHtml(item.category)} / ${escapeHtml(item.brandModel)}</td><td>${escapeHtml(item.amount)}</td><td>${escapeHtml(item.unit)}</td><td>${escapeHtml(item.supplier)}</td><td><span class="inbound-status ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td><td title="${escapeHtml(item.location)}">${escapeHtml(item.location)}</td><td>${escapeHtml(item.user)}</td><td class="consumable-actions"><button type="button" data-action="open-tool-ledger-detail" data-id="${escapeHtml(item.id)}">查看</button><button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("")}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
 
           renderToolLedgerDetail(tool) {
@@ -37486,7 +37640,7 @@
             const specialDateLabel = config.key === "retire" ? "报废时间" : config.key === "repair" ? "维修时间" : config.key === "transfer" ? "计划开始时间 / 计划结束时间" : config.key === "inventory" ? "计划开始时间 / 计划结束时间" : "创建时间";
             const specialDateValue = (order) => config.key === "retire" ? order.retireDate : config.key === "repair" ? order.repairDate : ["transfer", "inventory"].includes(config.key) ? `${order.planStartDate} / ${order.planEndDate}` : order.createdAt;
             const statusClass = (status) => status === "已完成" ? "is-done" : status === "待审核" ? "is-pending" : "";
-            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>${escapeHtml(config.listTitle)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-tool-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="open-tool-workflow-form" data-view="${escapeHtml(viewId)}"${viewId === VIEW_IDS.TOOL_INBOUND ? ASSET_CODE_INBOUND_NEW_DEMAND_ATTRS : ""}>${escapeHtml(config.actionLabel)}</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>标题</th><th>单据号</th><th>待办人</th><th>创建人</th><th>业务状态</th><th>${escapeHtml(specialDateLabel)}</th><th>操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(order.title)}</td><td>${escapeHtml(order.id)}</td><td>${escapeHtml(order.assignee)}</td><td>${escapeHtml(order.creator)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td>${escapeHtml(specialDateValue(order))}</td><td class="consumable-actions"><button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" ? `<button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}<button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无${keyword ? "匹配" : ""}${escapeHtml(config.listTitle)}</td></tr>`}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>${escapeHtml(config.listTitle)}</h1></div><div class="inbound-tabs">${tabs.map(([id, label]) => `<button type="button" class="${workflow.tab === id ? "is-active" : ""}" data-action="set-tool-workflow-tab" data-view="${escapeHtml(viewId)}" data-tab="${id}">${label}</button>`).join("")}</div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-workflow-search" data-view="${escapeHtml(viewId)}" value="${escapeHtml(workflow.keyword || "")}" placeholder="请输入单号/标题" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn btn-primary" type="button" data-action="open-tool-workflow-form" data-view="${escapeHtml(viewId)}"${viewId === VIEW_IDS.TOOL_INBOUND ? ASSET_CODE_INBOUND_NEW_DEMAND_ATTRS : ""}>${escapeHtml(config.actionLabel)}</button><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>标题</th><th>单据号</th><th>待办人</th><th>创建人</th><th>业务状态</th><th>${escapeHtml(specialDateLabel)}</th><th>操作</th></tr></thead><tbody>${rows.length ? rows.map((order, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(order.title)}</td><td>${escapeHtml(order.id)}</td><td>${escapeHtml(order.assignee)}</td><td>${escapeHtml(order.creator)}</td><td><span class="inbound-status ${statusClass(order.status)}">${escapeHtml(order.status)}</span></td><td>${escapeHtml(specialDateValue(order))}</td><td class="consumable-actions"><button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}">查看</button>${workflow.tab === "pending" ? `<button type="button" data-action="open-tool-workflow-process" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(order.id)}" data-process="true">处理</button>` : ""}<button type="button" data-action="tool-instrument-action" data-label="打印">打印</button></td></tr>`).join("") : `<tr><td colspan="9" class="consumable-empty">暂无${keyword ? "匹配" : ""}${escapeHtml(config.listTitle)}</td></tr>`}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
 
           renderToolWorkflowFields(viewId, config, data, readonly = false) {
@@ -37532,7 +37686,7 @@
             const tool = this.store.ensureToolInstrumentState();
             const keyword = String(tool.historyKeyword || "").trim().toLowerCase();
             const rows = keyword ? TOOL_HISTORY_ROWS.filter((item) => Object.values(item).join(" ").toLowerCase().includes(keyword)) : TOOL_HISTORY_ROWS;
-            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-history-search" value="${escapeHtml(tool.historyKeyword || "")}" placeholder="请输入资产编号/操作类型" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>操作单号</th><th>资产名称</th><th>操作人</th><th>操作时间</th><th>资产编号</th><th>操作类型</th><th>备注</th><th>操作</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.orderNo)}</td><td>${escapeHtml(row.assetName)}</td><td>${escapeHtml(row.operator)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.assetCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.remark)}</td><td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button></td></tr>`).join("")}</tbody></table></div><div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div></div>`;
+            return `<div class="page-surface inbound-list-page consumable-page tool-instrument-page"><div class="inbound-list-head"><h1>工具仪表履历</h1></div><div class="consumable-simple-tabs"><button class="is-active">全部</button><button>我发起的</button><button>部门工单</button><button>班组工单</button><button>草稿</button></div><div class="inbound-toolbar"><label class="inbound-search"><input type="search" data-role="tool-history-search" value="${escapeHtml(tool.historyKeyword || "")}" placeholder="请输入资产编号/操作类型" /></label><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="高级查询">高级查询</button><button class="inbound-text-action" type="button" data-action="tool-instrument-action" data-label="快捷查询">快捷查询</button><span class="consumable-toolbar-spacer"></span><button class="btn" type="button" data-action="tool-instrument-action" data-label="导出">导出</button></div><div class="inbound-order-table-wrap"><table class="inbound-order-table"><thead><tr><th class="consumable-check"><input type="checkbox" /></th><th>序号</th><th>操作单号</th><th>资产名称</th><th>操作人</th><th>操作时间</th><th>资产编号</th><th>操作类型</th><th>备注</th><th>操作</th></tr></thead><tbody>${rows.map((row, index) => `<tr><td><input type="checkbox" /></td><td>${index + 1}</td><td>${escapeHtml(row.orderNo)}</td><td>${escapeHtml(row.assetName)}</td><td>${escapeHtml(row.operator)}</td><td>${escapeHtml(row.time)}</td><td>${escapeHtml(row.assetCode)}</td><td>${escapeHtml(row.action)}</td><td>${escapeHtml(row.remark)}</td><td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button></td></tr>`).join("")}</tbody></table></div><div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div></div>`;
           }
           renderOperationPage() {
             const page = this.store.getOperationPageData();
@@ -38843,7 +38997,7 @@
                 <div class="inbound-order-table-wrap">
                   ${viewId === VIEW_IDS.MAINTENANCE_CONTRACT ? this.renderMaintenanceContractTable(rows) : viewId === VIEW_IDS.MAINTENANCE_MANAGEMENT ? this.renderMaintenanceRelationTable(rows) : this.renderMaintenanceExpiredTable(rows)}
                 </div>
-                <div class="inbound-pagination">共 ${rows.length} 条　20条/页　‹　1　›</div>
+                <div class="pagination"><div>共 ${rows.length} 条</div><div class="pager-right"><button class="page-size" type="button">20条/页</button><div class="pager-list"><button class="pager-btn is-active" type="button">1</button></div><div class="pager-jump"><span>前往</span><input value="1" /><span>页</span></div></div></div>
               </div>
             `;
           }
@@ -46554,7 +46708,7 @@
               startX,
               startWidth: th.getBoundingClientRect().width,
               currentWidth: th.getBoundingClientRect().width,
-              minWidth: key === "__select" ? 36 : key === "__actions" ? 86 : 72,
+              minWidth: key === "__select" ? 36 : key === "__index" ? 56 : key === "__actions" ? 86 : 72,
               th,
               col,
               handleNode
@@ -47339,7 +47493,7 @@
     line-height: 1.5;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 28px 16px;
   }
 
@@ -47549,7 +47703,7 @@
     color: #2d61d7;
   }
   .home-topbar-title { text-align: center; font-size: 17px; font-weight: 700; }
-  .home-topbar-action { display: inline-flex; align-items: center; justify-content: center; color: #3f6fdc; }
+  .home-topbar-action { display: inline-flex; align-items: center; justify-content: flex-start; color: #3f6fdc; }
   .home-topbar-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
   .home-scroll { flex: 1; min-height: 0; overflow: hidden; }
   .home-scroll::-webkit-scrollbar { width: 0; }
@@ -47590,7 +47744,7 @@
     height: 35px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 11px;
     background: #edf3ff;
     color: #4a78df;
@@ -47618,7 +47772,7 @@
     border-radius: 50%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: #fff;
     font-size: 11px;
     background: linear-gradient(145deg, #5c8ff0, #396dd4);
@@ -47656,7 +47810,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 2px;
     color: #9aa7b7;
     font-size: 10px;
@@ -47709,13 +47863,13 @@
     height: 36px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border: 2px solid #20aef3;
     border-radius: 50%;
     color: #11a4ed;
     background: #f8fdff;
   }
-  .app-entry-label { min-height: 32px; display: flex; align-items: flex-start; justify-content: center; }
+  .app-entry-label { min-height: 32px; display: flex; align-items: flex-start; justify-content: flex-start; }
   .app-entry.is-asset {
     color: #075fcb;
     font-weight: 700;
@@ -47762,7 +47916,7 @@
     padding: 0 4px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 9px;
     background: #e71928;
     color: #fff;
@@ -47940,7 +48094,7 @@
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -47994,7 +48148,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     z-index: 2;
   }
   .donut-center .dc-num { font-size: 18px; font-weight: 700; line-height: 1.15; }
@@ -48017,7 +48171,7 @@
     font-size: 11px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-shrink: 0;
     font-weight: 600;
   }
@@ -48025,7 +48179,7 @@
   .rank-row:nth-child(2) .rank-idx { background: #ffa940; color: #fff; }
   .rank-row:nth-child(3) .rank-idx { background: #ffc53d; color: #fff; }
   .rank-name { width: 64px; font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
-  .rank-bar-track { flex: 1 1 145px; min-width: 120px; height: 8px; background: #eef3fa; border-radius: 999px; overflow: hidden; }
+  .rank-bar-track { flex: 1 1 145px; min-width: 132px; height: 8px; background: #eef3fa; border-radius: 999px; overflow: hidden; }
   .rank-bar { display: block; height: 100%; min-width: 2px; border-radius: 999px; background: linear-gradient(90deg, #4da2ff, #1677ff); }
   .rank-val { width: 28px; text-align: right; font-size: 11px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
 
@@ -48039,7 +48193,7 @@
   .mini-bar-lbl { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; }
   .mini-bar-val { font-size: 10px; color: var(--text-secondary); font-weight: 600; }
 
-  .chart-legend-inline { display: flex; gap: 14px; font-size: 11px; color: var(--text-secondary); margin-top: 8px; justify-content: center; }
+  .chart-legend-inline { display: flex; gap: 14px; font-size: 11px; color: var(--text-secondary); margin-top: 8px; justify-content: flex-start; }
   .chart-legend-inline span { display: inline-flex; align-items: center; gap: 5px; }
   .chart-legend-inline i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 
@@ -48164,7 +48318,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 5px;
     padding: 7px 0;
     border-top: 1px dashed var(--border);
@@ -48216,7 +48370,7 @@
     width: 30px; height: 30px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border-radius: 8px;
     color: #fff;
     flex-shrink: 0;
@@ -48242,7 +48396,7 @@
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     color: #2878d0;
   }
   .sum-info { flex: 1; min-width: 0; }
@@ -48485,7 +48639,7 @@
   .mobile-work-order-type {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-width: 42px;
     height: 22px;
     padding: 0 8px;
@@ -48508,11 +48662,11 @@
     padding: 18px 0 10px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0;
     flex-direction: column;
   }
-  .topo-pair { display: flex; align-items: center; width: 100%; justify-content: center; gap: 0; }
+  .topo-pair { display: flex; align-items: center; width: 100%; justify-content: flex-start; gap: 0; }
   .topo-node {
     width: 128px;
     border-radius: 12px;
@@ -48661,7 +48815,7 @@
     color: #16202e;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-shrink: 0;
   }
   .sim-chip.invalid .qr-ico { background: #4a3535; color: #ff8f8a; }
@@ -48686,7 +48840,7 @@
     box-shadow: 0 4px 14px rgba(21, 48, 84, 0.18);
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
   .demand-fab.is-on {
     background: #ff7d00;
@@ -48762,13 +48916,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 3px;
     font-size: 11px;
     color: var(--text-tertiary);
   }
   .tab-item.is-active { color: var(--primary); font-weight: 600; }
-  .tab-scan-wrap { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
+  .tab-scan-wrap { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: flex-start; padding-bottom: 6px; }
   .tab-scan {
     position: absolute;
     top: -24px;
@@ -48778,7 +48932,7 @@
     color: #fff;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     box-shadow: 0 8px 18px rgba(13, 110, 244, .42), 0 0 0 5px #fff;
     transition: transform .12s ease;
   }
