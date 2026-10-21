@@ -18239,6 +18239,65 @@
     
       .inbound-pagination { display: none; }
       
+      
+      
+      /* 全局图标/徽标/小按钮内容居中（覆盖各处 flex-start 造成的靠左） */
+      :is(
+        /* 结构化图标 / 徽标 / 圆形小按钮：内容居中 */
+        .cabinet-space-stat-icon, .sum-asset-icon, .home-summary-circle,
+        .sidebar-icon, .sidebar-collapsed-mark, .tiny-icon-btn,
+        .app-sidebar.is-collapsed .sidebar-trigger,
+        .app-sidebar.is-collapsed .sidebar-static,
+        .app-sidebar.is-collapsed .collapse-link,
+        .config-title-tip, .close-btn, .back-btn,
+        .relation-modal-close, .classify-dialog-close, .maintenance-dialog-close,
+        .operation-print-close, .mobile-app-close, .toast-close, .demand-page-panel-close,
+        .advanced-search-remove, .row-expand-toggle, .workflow-sheet-search-toggle,
+        .is-global-flow-route [data-action="back-it-inbound-list"].inbound-form-back,
+        .export-task-icon, .export-complete-icon, .export-progress-icon-btn,
+        .export-progress-float, .export-progress-complete-notice-icon,
+        .todo-count, .rank-idx, .topbar-badge,
+        .field-count-pill, .settings-count-pill,
+        .cabinet-rack-step-index, .relation-modal-step .step-dot,
+        .detail-field-lock, .detail-field-drag, .label-binding-delete,
+        .topology-mini-tool, .sim-chip .qr-ico, .demand-fab, .tab-scan,
+        .flow-search-clear, .flow-search-submit,
+        .flow-page-item, .flow-page-ellipsis,
+        .app-entry-icon, .home-module-icon, .operation-zoom button,
+        .asset-board-save-type-icon, .field-item .drag,
+        .mobile-work-order-type, .asset-work-order-type,
+        .asset-history-source-tag, .history-result-tag,
+        .cabinet-power-status-tag, .cabinet-power-warning, .cabinet-occupancy-tag,
+        .system-message-status, .maintenance-status, .asset-status-tag, .inbound-status,
+        .demand-badge-trigger, .pager-btn, .pager-btn.is-active, .pager-ellipsis,
+        .page-size, .tree-toggle, .template-tree-toggle,
+        .ledger-space-tree-toggle, .asset-board-save-tree-toggle,
+        .asset-activity-trigger, .advanced-search-add span, .donut .donut-center
+
+      ) {
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
+
+      :is(
+        .cabinet-space-stat-icon, .sum-asset-icon, .home-summary-circle,
+        .sidebar-icon, .sidebar-collapsed-mark, .tiny-icon-btn,
+        .config-title-tip, .close-btn, .back-btn,
+        .export-task-icon, .export-complete-icon, .export-progress-icon-btn,
+        .export-progress-float, .export-progress-complete-notice-icon,
+        .todo-count, .rank-idx, .cabinet-rack-step-index,
+        .relation-modal-step .step-dot, .detail-field-lock, .detail-field-drag,
+        .label-binding-delete, .topology-mini-tool, .sim-chip .qr-ico,
+        .demand-fab, .tab-scan, .flow-search-clear, .flow-search-submit,
+        .app-entry-icon, .home-module-icon, .operation-zoom button,
+        .asset-board-save-type-icon, .field-item .drag
+      ) > svg {
+        display: block !important;
+        margin: 0 auto !important;
+        flex-shrink: 0;
+      }
+
       </style>
   </head>
   <body>
