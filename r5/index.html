@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
@@ -366,7 +366,7 @@
         z-index: 120;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
       }
 
       .mobile-app-dialog {
@@ -1413,6 +1413,12 @@
         cursor: not-allowed;
       }
 
+      .workflow-sheet-input:read-only {
+        color: #7f91a4;
+        background: #edf1f5;
+        cursor: default;
+      }
+
       .workflow-sheet-shell .operation-sheet-table td.is-disabled {
         background: #edf1f5;
         color: #7f91a4;
@@ -1726,6 +1732,66 @@
         line-height: 1.5;
       }
 
+      .sheet-code-refresh {
+        position: absolute;
+        z-index: 13;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        border: 1px solid #cddff2;
+        border-radius: 4px;
+        background: #fff;
+        color: #3d76b5;
+        cursor: pointer;
+        pointer-events: auto;
+        box-shadow: 0 1px 2px rgba(30, 55, 85, 0.1);
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+      }
+
+      .sheet-code-refresh[hidden] {
+        display: none !important;
+      }
+
+      .sheet-code-refresh:hover {
+        color: #1f6fd0;
+        border-color: #9cc4ee;
+        background: #f2f8ff;
+      }
+
+      .sheet-code-refresh.is-spinning svg {
+        animation: sheet-code-refresh-spin 0.6s linear;
+      }
+
+      @keyframes sheet-code-refresh-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .workflow-sheet-code-refresh {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        margin-left: 4px;
+        padding: 0;
+        border: 1px solid #cddff2;
+        border-radius: 4px;
+        background: #fff;
+        color: #3d76b5;
+        cursor: pointer;
+        vertical-align: middle;
+      }
+
+      .workflow-sheet-code-refresh:hover {
+        color: #1f6fd0;
+        border-color: #9cc4ee;
+        background: #f2f8ff;
+      }
+
       .workflow-sheet-field-label.is-serial-demand {
         display: inline-flex;
         align-items: center;
@@ -1741,12 +1807,6 @@
 
       body.is-demand-mode .workflow-sheet-field-label.is-serial-demand > .demand-badge {
         display: inline-flex;
-      }
-
-      .workflow-sheet-input.is-exhaust-code,
-      .workflow-sheet-input.is-exhaust-code::placeholder {
-        color: #d4380d;
-        font-style: italic;
       }
 
       .operation-vtable-container {
@@ -2808,6 +2868,68 @@
         font-weight: 700;
         color: var(--text);
         white-space: nowrap;
+      }
+
+      .page-title-with-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .page-title-hint {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #b8c7d8;
+        border-radius: 50%;
+        color: #6b8199;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1;
+        cursor: help;
+        flex: 0 0 auto;
+      }
+
+      .page-title-hint::before {
+        content: "i";
+        font-family: Georgia, "Times New Roman", serif;
+        transform: translateY(-0.5px);
+      }
+
+      .page-title-hint::after {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: -8px;
+        z-index: 40;
+        width: 460px;
+        max-width: min(460px, calc(100vw - 64px));
+        padding: 10px 12px;
+        border: 1px solid #d5e2f0;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(36, 56, 77, .16);
+        color: #445970;
+        content: attr(data-tooltip);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.7;
+        white-space: normal;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(-4px);
+        transition: opacity .15s ease, transform .15s ease, visibility .15s ease;
+      }
+
+      .page-title-hint:hover::after,
+      .page-title-hint:focus-visible::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
       }
 
       .mode-chip {
@@ -5344,6 +5466,10 @@
         width: 72px;
       }
 
+      .retire-reminder-inline .retire-weekday-select {
+        width: 88px;
+      }
+
       .retire-reminder-inline input[type="time"] {
         width: 120px;
       }
@@ -6210,6 +6336,12 @@
       }
       .code-rule-settings .code-rule-sub {
         grid-column: 1 / -1;
+      }
+      .code-rule-field-hint {
+        display: block;
+        margin-top: 4px;
+        font-size: 12px;
+        color: #8aa0b5;
       }
       .code-rule-settings .code-rule-field-title {
         display: inline-flex;
@@ -18272,7 +18404,9 @@
         .demand-badge-trigger, .pager-btn, .pager-btn.is-active, .pager-ellipsis,
         .page-size, .tree-toggle, .template-tree-toggle,
         .ledger-space-tree-toggle, .asset-board-save-tree-toggle,
-        .asset-activity-trigger, .advanced-search-add span, .donut .donut-center
+        .asset-activity-trigger, .advanced-search-add span, .donut-center,
+        .home-topbar-action, .home-tab,
+        .maintenance-list-page .maintenance-table th:first-child .th-content
 
       ) {
         align-items: center !important;
@@ -19104,6 +19238,7 @@
           { id: "sms", label: "短信" },
           { id: "email", label: "邮箱" }
         ];
+        const RETIRE_WEEKDAY_OPTIONS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
         const RETIRE_REMINDER_PEOPLE = [
           { id: "liu-ting", name: "刘婷", department: "仓储管理组" },
           { id: "zhang-wei", name: "张伟", department: "基础设施运维部" },
@@ -19305,19 +19440,13 @@
         });
 
         const SHEET_UI_FONT = '"Microsoft YaHei", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-        const ASSET_CODE_AUTO_PLACEHOLDER = "填写名称、分类或库房位置后自动预览";
-        const ASSET_CODE_SERIAL_EXHAUST_PLACEHOLDER = "流水已用尽，请改位数或手填";
-        const ASSET_CODE_SERIAL_EXHAUST_TOAST = "本组下一个号已超出当前位数，已停止自动生成。请调大流水位数或手填编号。";
-        const ASSET_CODE_SERIAL_EXHAUST_SUBMIT = "本组流水已用尽，无法继续自动生成。请调大流水位数或手填编号。";
-        const ASSET_CODE_SERIAL_EXHAUST_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="流水号用尽如何处理" data-demand-text="需求来源：V3R5-6693。||交互目的：说明当前流水位数用尽后，作业人员如何继续办理入库或初始化。||展示规则：流水位数默认 4 位，可选 4、5、6 位。4 位本组最多到 9999，5 位到 99999，6 位到 999999。系统不自动升位，也不回填空号。||处理规则：本组下一个号会超出当前位数时，停止自动生成，该行不再出预览号。请到资产基础配置把流水位数调大后再预览，或在本格手填不重复的编号。||异常判断：流水用尽时提交或生效会被拦截，并提示改位数或手填；已生效编号不因改位数而重算。" data-demand-action="simulate-asset-code-serial-exhaust" data-demand-action-label="模拟用尽" data-demand-action-label-on="退出模拟"';
-        function renderAssetCodeSerialExhaustBanner() {
-          return '<div class="sheet-code-serial-exhaust-banner">本组流水已用尽，已停止自动生成预览号。请到资产基础配置调大流水位数，或在本格手填不重复编号。</div>';
-        }
+        const ASSET_CODE_AUTO_PLACEHOLDER = "编号自动生成";
+        const ASSET_CODE_SERIAL_EXHAUST_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="流水位数与自动升位" data-demand-text="需求来源：V3R5-6693。||交互目的：说明流水位数如何设置，以及超出当前位数时系统如何处理。||展示规则：流水位数默认 4 位，可选 4、5、6 位。4 位本组最多到 9999，5 位到 99999，6 位到 999999。超出当前位数时系统自动往上新增长度（4 位满后按 5 位继续，依次类推），不回填空号。||处理规则：流水超出当前位数时，编号自动按新长度生成，无需人工调整位数，不存在流水用尽的情况。||编号回显：录入过程中编号格只显示占位"编号自动生成"，不做预览号回显；提交或生效时按规则正式生成编号。"';
         function renderAssetCodeSerialDemandAnchor() {
           return `<span class="sheet-code-serial-demand" data-role="asset-code-serial-demand"${ASSET_CODE_SERIAL_EXHAUST_DEMAND_ATTRS}></span>`;
         }
-        const ASSET_CODE_INBOUND_NEW_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="新建入库自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：新建入库单后，未手填编号时按规则预览，提交后正式占用。||点击后行为：打开入库单填写页。||异常判断：无法生成且未手填时，提交提示补全分类/库房位置或手填编号。"';
-        const ASSET_CODE_SPACE_NEW_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="空间视图新建自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：机柜图空闲U位选择新建设备并上架后，未手填编号时按规则预览，提交后正式占用。||点击后行为：进入新建设备表单。||异常判断：无法生成且未手填时，提交提示补全分类或手填编号。"';
+        const ASSET_CODE_INBOUND_NEW_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="新建入库自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：新建入库单后，资产编号由系统按规则生成，提交后正式占用。||锁定规则：已开启自动编号时，资产编号列不可编辑，录入过程中编号格只显示占位“编号自动生成”，不做预览号回显。||点击后行为：打开入库单填写页。||异常判断：无法生成时，提交提示补全分类/库房位置或调整编号规则。"';
+        const ASSET_CODE_SPACE_NEW_DEMAND_ATTRS = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="空间视图新建自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：机柜图空闲U位选择新建设备并上架后，资产编号由系统按规则生成，提交后正式占用。||锁定规则：已开启自动编号时，资产编号列不可编辑，未生成时占位显示“编号自动生成”。||点击后行为：进入新建设备表单。||异常判断：无法生成时，提交提示补全分类或调整编号规则。"';
         const ASSET_CODE_RULE_LEDGERS = Object.freeze([
           { id: "it", label: "IT设备", customText: "IT" },
           { id: "station", label: "场地设施", customText: "SF" },
@@ -19334,12 +19463,12 @@
           {
             id: "categoryCode",
             label: "分类编码",
-            tip: "<strong>使用场景：</strong>希望从编号看出资产属于哪一类。<br /><strong>取值逻辑：</strong>取当前资产所选分类在「工程配置 / 分类管理」中维护的末级分类编码，不取物模型标识。<br /><strong>异常：</strong>该分类未维护编码时不生成预览，需先补编码或改用手填。"
+            tip: "<strong>使用场景：</strong>希望从编号看出资产属于哪一类。<br /><strong>取值逻辑：</strong>取当前资产所选分类在「工程配置 / 分类管理」中维护的末级分类编码，不取物模型标识。<br /><strong>异常：</strong>该分类未维护编码时不生成编号，需先在分类管理补维护编码。"
           },
           {
             id: "locationCode",
             label: "位置编码",
-            tip: "<strong>使用场景：</strong>希望从编号看出资产所在位置。<br /><strong>取值逻辑：</strong>按资产填写的位置路径，取最末一级对应的位置编码。例如「2号楼>B1层>备件库A区」取「备件库A区」的编码。行上尚未填写库房位置时，先按默认库房「2号楼>B1层>备件库A区」生成预览，填入实际位置后立即重算。<br /><strong>异常：</strong>该级没有对应编码时，用可识别的位置缩写继续生成预览。"
+            tip: "<strong>使用场景：</strong>希望从编号看出资产所在位置。<br /><strong>取值逻辑：</strong>按资产填写的位置路径，取最末一级对应的位置编码。例如「2号楼>B1层>备件库A区」取「备件库A区」的编码。行上尚未填写库房位置时，行上尚未填写库房位置时，先按默认库房「2号楼>B1层>备件库A区」生成编号。<br /><strong>异常：</strong>该级没有对应编码时，用可识别的位置缩写继续生成编号。"
           },
           { id: "inboundDate", label: "创建日期" },
           { id: "serial", label: "流水号" }
@@ -19464,6 +19593,7 @@
             advanceUnit: ["天", "周", "月"].includes(base.advanceUnit) ? base.advanceUnit : "月",
             frequencyValue: Math.max(1, Number(base.frequencyValue) || 1),
             frequencyUnit: ["天", "周"].includes(base.frequencyUnit) ? base.frequencyUnit : "天",
+            frequencyWeekday: RETIRE_WEEKDAY_OPTIONS.includes(base.frequencyWeekday) ? base.frequencyWeekday : "周一",
             reminderTime: base.reminderTime || "09:00",
             reminderPeopleIds: normalizeRetirePeopleIds(base),
             reminderPeople: getRetireReminderPeopleText(normalizeRetirePeopleIds(base))
@@ -19475,7 +19605,8 @@
           const scopes = RETIRE_KIND_OPTIONS.filter((item) => source.scopes?.[item.id]).map((item) => item.label).join("、") || "未选适用范围";
           const channels = RETIRE_CHANNEL_OPTIONS.filter((item) => source.channels?.[item.id] || item.locked).map((item) => item.label).join("、");
           const people = String(source.reminderPeople || "").trim() || "未选接收人";
-          return `适用范围 ${scopes}；${channels}；每${source.frequencyValue || 1}${source.frequencyUnit || "天"} ${source.reminderTime || "09:00"}；接收人 ${people}`;
+          const weekday = source.frequencyUnit === "周" ? ` ${source.frequencyWeekday || "周一"}` : "";
+          return `适用范围 ${scopes}；${channels}；每${source.frequencyValue || 1}${source.frequencyUnit || "天"}${weekday} ${source.reminderTime || "09:00"}；接收人 ${people}`;
         }
 
         function assignSeedExpireDate(index) {
@@ -23088,15 +23219,15 @@
             ticketId: "V3R5-6693",
             version: "v1.4",
             type: "新增",
-            title: "【资产管理】新增 入库时能自动生成资产编号",
-            description: "新增 入库时能自动生成资产编号",
+            title: "【资产管理】新增 入库/初始化/添加新数据 时能自动生成资产编号",
+            description: "新增 入库/初始化/添加新数据 时能自动生成资产编号",
             detail: [
               "需求来源：V3R5-6693。",
               "交互目的：资产管理员入库、初始化或空间视图新建设备时，可不手填资产编号，由系统按台账规则生成唯一编号。",
               "配置规则：资产编号规则作为资产基础配置中的一项维护，不单独占菜单，全台账共用一套规则。点击“配置规则”后在弹窗中维护片段组合、自定义文本、流水位数、大小流水和连接符。分类编码在工程配置的分类管理中维护；分类编码读取分类管理中维护的编码，不把物模型标识当作分类编码。",
-              "展示规则：资产编号始终标识必填。自动开启且未手填时，编号格显示预览号并标注“预览”；预览不占号，提交或生效时才正式占用。清空预览后，行上已有名称、分类或库房位置则立即回填。空白行不生成编号；填写名称、资产分类或规则需要的库房位置后立即显示预览号。流程表与台账在线表使用同一套生成时机。创建日期只占一个片段，格式在已选区下拉选择，默认年月日时分，也可改为年月日、年月或年。流水位数默认 4 位，可选 4/5/6 位。",
-              "流水口径：大流水按台账连续计数；小流水按规则中除流水外的完整前缀分组计数。同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。",
-              "异常判断：未开自动或未配规则时仍手填；规则依赖分类或位置但行上未填且未手填时禁止提交，提示补全分类/库房位置或手填编号；手填重复或流水用尽时拦截并提示。"
+              "展示规则：资产编号始终标识必填。已开启自动编号时，资产编号列锁定为不可编辑：录入过程中编号格只显示占位“编号自动生成”，不做预览号回显；提交或生效时按规则正式生成编号。空白行不生成编号、不预占流水。流程表与台账在线表使用同一套生成时机与锁定规则。创建日期只占一个片段，格式在已选区下拉选择，默认年月日时分，也可改为年月日、年月或年。流水位数默认 4 位，可选 4/5/6 位，超出时系统自动往上新增长度。",
+              "流水口径：大流水按台账连续计数；小流水按规则中除流水外的完整前缀分组计数。同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。",
+              "异常判断：未开自动或未配规则时编号列仍可手填；已开启自动编号时编号列锁定，不接受手填。规则依赖分类或位置但行上未填时禁止提交，提示补全分类/库房位置；未开自动时手填重复会拦截。"
             ],
             scope: "资产配置",
             targetView: VIEW_IDS.TEMPLATE_CONFIG,
@@ -23114,7 +23245,7 @@
             detail: [
               "需求来源：V3R5-6692。",
               "交互目的：按资产到期时间识别待处置设备，配置系统消息提醒，并在待报废清单中批量发起迁出或报废。",
-              "配置规则：提醒配置放在资产基础配置，不单独占菜单。提前量常显，用于待报废清单识别即将到期，与提醒开关无关。仅开启后显示“配置规则”按钮和当前消息规则回显；点击后在弹窗中维护适用范围、发送方式、频次、提醒时刻和接收人，五项均为必填，确定后写回，取消不保存本次修改。发送方式默认勾选站内信且不可取消，短信和邮箱可选。适用范围只限制谁收消息，不过滤待报废清单。接收人默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。产品默认关闭；关闭后不再发新消息，待报废清单仍可按提前量筛选和处置。",
+              "配置规则：提醒配置放在资产基础配置，不单独占菜单。提前量常显，用于待报废清单识别即将到期，与提醒开关无关。仅开启后显示“配置规则”按钮和当前消息规则回显；点击后在弹窗中维护适用范围、发送方式、频次、提醒时刻和接收人（频次按周时需选择周几），五项均为必填，确定后写回，取消不保存本次修改。发送方式默认勾选站内信且不可取消，短信和邮箱可选。适用范围只限制谁收消息，不过滤待报废清单。接收人默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。产品默认关闭；关闭后不再发新消息，待报废清单仍可按提前量筛选和处置。",
               "到期口径：只认资产上的到期时间。已到期=到期时间不晚于今天；即将到期=今天之后且落入提前量；无到期时间不进清单、不提醒。提前量关闭提醒后仍生效。已迁出、已报废、已废弃只在归档台账。",
               "清单规则：迁出/报废下新增待报废，不新建库房菜单。页签按全部、IT设备、场地设施、机柜、备件拆分；全部页签不允许复选和批量，仅支持单行查看和发起，并提示如需批量处理请切换至分类页签。IT 批量迁出，场地、机柜、备件批量报废；场地/IT 按表单流程配置进入对应流程或在线电子表，机柜/备件进入在线电子表。处置中资产可看不可再发起。",
               "联动规则：批量发起复用现有迁出/报废办理和逐项校验。系统消息按周期汇总一条，点击查看详情后可进入待报废。配置页提供消息文案示例，可查看站内信、短信、邮件的提醒正文。",
@@ -23419,8 +23550,8 @@
           "V3R5-4419": { role: "机房管理员", need: "在空间范围内切换卡片或列表查看机柜及U位占用", value: "既能直观掌握机柜容量，又能沿用台账列表完成明细查询和批量处理", scenario: "规划上架位置时使用卡片查看U位容量，核对或批量处理同空间机柜时切换为列表。", rules: ["IT设备、场地设施、机柜和备件台账首次进入时默认展示空间视图。", "机柜台账的空间视图默认使用卡片模式；标准视图用于查看全局台账。", "空间视图保留空间树、机柜数、设备数和利用率统计，并支持卡片展示和列表展示。", "顶部统计卡片和展示切换固定显示，底部分页器固定显示，仅中间机柜卡片或列表结果区域随鼠标滚动。", "机柜缩略图蓝色表示已占用U位占总U位的比例示意，从底部向上填充；灰色表示空闲U位。", "缩略图按10个示意格等分显示，每格代表10%的容量区间；蓝色格数按已用U/总U换算并四舍五入，只要已用U大于0至少显示1格。", "精确占用以卡片中的已用U/总U和百分比为准，具体物理U位在机柜详情查看。", "机柜详情将“包含设备”页签置于首位并默认进入，用于继续查看设备明细、U位占用和可分配容量。", "卡片/列表切换只在空间视图中显示，并保留空间节点、查询条件、分页和已选数据。", "进入机柜详情再返回时恢复离开前的空间节点及展示方式。"], boundary: "当前空间无机柜时展示空态；U位数据缺失、重叠或超出机柜高度时应提示异常；缩略图蓝色格数不得解释为设备数量或精确U位坐标。" },
           "V3R5-4773": { role: "现场运维人员", need: "在运维宝移动端查询资产、扫码进入详情，并在离线场景导入台账数据", value: "在现场无网络或网络不稳定时仍能完成资产查询与核对", scenario: "巡检或故障处理现场网络不可用时，需要提前下载指定台账数据并导入运维宝App。", rules: ["移动端支持资产搜索、扫码和核心详情查看。", "Web端资产基础配置提供App离线数据下载，支持全量台账或部分台账范围。", "部分导出支持选择IT设施、场地设施、机柜、备件，且至少选择一个台账。", "下载文件需导入App指定目录，具体操作参考App使用手册。", "字段权限和脱敏规则与Web端保持一致。"], boundary: "未选择台账、所选范围无数据、文件生成失败、App导入失败、二维码无效、资产不存在或无权限时给出明确提示。" },
           "V3R5-838": { role: "运维人员", need: "在资产详情中切换3D场景并定位当前资产", value: "直观理解资产所处空间、机柜和U位", scenario: "远程定位设备或核对空间关系时，需要从二维信息进入三维场景。", rules: ["IT设备、机柜和场地设施详情支持2D/3D切换，默认2D。", "通过 resource_id 定位并高亮资产、机柜或所属空间。"], boundary: "资产未建模时逐级降级定位；平台不可用或空间未建模时隐藏3D入口。" },
-          "V3R5-6692": { role: "资产管理员", need: "按到期时间识别待报废资产并配置提醒，再批量发起迁出或报废", value: "到期设备能被及时发现并完成处置，不必人工翻台账", scenario: "一批设备到期需要退役时，管理员先收到系统消息，再在待报废清单按类型批量办理。", rules: ["只按到期时间判断已到期和即将到期。", "提醒配置放在资产基础配置，覆盖 IT、场地、机柜、备件；仅开启时展开配置项。", "配置规则中适用范围、发送方式、提醒频次、提醒时刻、接收人均为必填。", "发送方式默认勾选站内信且不可取消，短信和邮箱可选。", "接收人默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。", "待报废清单与已迁出/已废弃并列，不新建库房菜单。", "全部页签不允许复选和批量，仅支持单行查看和发起；如需批量处理请切换至分类页签。", "IT 到期走迁出，其余走报废；分类页签批量后进入对应流程或在线电子表，并复用现有办理和逐项校验。", "系统消息按周期汇总一条，在系统消息列表中点击查看详情，详情可进入待报废。", "配置页在发送方式的邮箱后提供文本按钮「消息文案示例」，查看站内信、短信、邮件的提醒正文，不发送真实消息。"], boundary: "无到期时间或已归档的资产不进清单、不提醒；处置中资产不可再发起；关闭提醒后不再发新消息但清单仍可用；工具仪表和库存台账不在本期。" },
-          "V3R5-6693": { role: "资产管理员", need: "入库、初始化或空间视图新建时由系统按规则自动生成资产编号", value: "批量到货时不必逐条手填编号，并保持编号唯一、可追溯", scenario: "一批设备到货入库，或从空间视图/待初始化转入正式台账时，不希望先编好编号再录入。", rules: ["全台账共用一套编号规则，支持自定义文本、分类编码、位置编码、创建日期和流水号组合。创建日期只占一个片段，格式下拉选择，默认年月日时分。", "分类编码在工程配置的分类管理中维护，编号规则读取该编码，不把物模型标识当作分类编码。", "录入时可不手填，由系统预览；提交或生效时编号必有。表头始终标必填。清空预览后，有名称/分类/库房位置则回填，否则拦截。", "同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号，提交或生效时才正式占用。", "流水位数默认 4 位，可选 4/5/6 位。", "覆盖单条/批量入库、上传本地数据、待初始化、空间视图新建和工具仪表入库。"], boundary: "未开自动则必须手填；规则依赖字段缺失且未手填、分类未维护编码、手填重复或流水用尽时阻止生效并提示原因；已生效编号不因规则变更而重算。" }
+          "V3R5-6692": { role: "资产管理员", need: "按到期时间识别待报废资产并配置提醒，再批量发起迁出或报废", value: "到期设备能被及时发现并完成处置，不必人工翻台账", scenario: "一批设备到期需要退役时，管理员先收到系统消息，再在待报废清单按类型批量办理。", rules: ["只按到期时间判断已到期和即将到期。", "提醒配置放在资产基础配置，覆盖 IT、场地、机柜、备件；仅开启时展开配置项。", "配置规则中适用范围、发送方式、提醒频次、提醒时刻、接收人均为必填；提醒频次选择按周时需指定周几。", "发送方式默认勾选站内信且不可取消，短信和邮箱可选。", "接收人默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。", "待报废清单与已迁出/已废弃并列，不新建库房菜单。", "全部页签不允许复选和批量，仅支持单行查看和发起；如需批量处理请切换至分类页签。", "IT 到期走迁出，其余走报废；分类页签批量后进入对应流程或在线电子表，并复用现有办理和逐项校验。", "系统消息按周期汇总一条，在系统消息列表中点击查看详情，详情可进入待报废。", "配置页在发送方式的邮箱后提供文本按钮「消息文案示例」，查看站内信、短信、邮件的提醒正文，不发送真实消息。"], boundary: "无到期时间或已归档的资产不进清单、不提醒；处置中资产不可再发起；关闭提醒后不再发新消息但清单仍可用；工具仪表和库存台账不在本期。" },
+          "V3R5-6693": { role: "资产管理员", need: "入库、初始化或空间视图新建时由系统按规则自动生成资产编号", value: "批量到货时不必逐条手填编号，并保持编号唯一、可追溯", scenario: "一批设备到货入库，或从空间视图/待初始化转入正式台账时，不希望先编好编号再录入。", rules: ["全台账共用一套编号规则，支持自定义文本、分类编码、位置编码、创建日期和流水号组合。创建日期只占一个片段，格式下拉选择，默认年月日时分。", "分类编码在工程配置的分类管理中维护，编号规则读取该编码，不把物模型标识当作分类编码。", "录入时编号由系统生成，编号格只显示占位“编号自动生成”，不做预览号回显；提交或生效时正式生成。表头始终标必填。", "同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。", "流水位数默认 4 位，可选 4/5/6 位，超出时系统自动往上新增长度。", "覆盖单条/批量入库、上传本地数据、待初始化、空间视图新建和工具仪表入库。"], boundary: "未开自动则必须手填；规则依赖字段缺失、分类未维护编码、手填重复时阻止生效并提示原因；已生效编号不因规则变更而重算。" }
         });
 
         function getRequirementUserStoryContent(requirement) {
@@ -24256,8 +24387,7 @@
                 retireMessageExampleDialog: false,
                 assetCodeRule: {
                   dialog: null,
-                  rule: createDefaultAssetCodeRule(),
-                  serialExhaustedDemo: false
+                  rule: createDefaultAssetCodeRule()
                 },
                 assetCategory: createDefaultAssetCategoryState(),
                 formDesign: {
@@ -26317,7 +26447,7 @@
               return;
             }
             if (action === "上架" && !selectedDevice && !this.getOfficialAssetCode(asset.assetCode)) {
-              this.pushToast("无法提交", "无法生成编号，请补全分类/库房位置，或手填编号。", "warning");
+              this.pushToast("无法提交", "无法生成编号，请补全分类/库房位置。", "warning");
               return;
             }
             if (action === "上架" && dialog?.processDriven) {
@@ -30809,7 +30939,6 @@
               ? sourceRows.map((sourceRow, index) => buildSheetValues(sourceRow, index))
               : [{ ...emptySheetValues }];
             if (shouldPreviewCode) {
-              this.seedAssetCodeSerialExhaustDemoRows(sheetRows);
               this.applyAssetCodePreviewsToRows(sheetRows, this.resolveAssetCodeLedger(operationPage.viewId, operationPage.action));
             }
             const sheetValues = sheetRows[0] || { ...emptySheetValues };
@@ -30998,7 +31127,7 @@
               autoAction,
               autoEnabled,
               summary,
-              ruleText: `当前自动编号规则：${summary}。流水位数 ${normalizeAssetCodeSerialLength(rule.serialLength)} 位，${serialMode}。预览不占号，提交或生效后正式占用；同一流水组内接已生效最大流水加 1，不回填空号。`
+              ruleText: `当前自动编号规则：${summary}。流水位数 ${normalizeAssetCodeSerialLength(rule.serialLength)} 位，${serialMode}。编号格仅显示占位不做预览回显，提交或生效后正式占用；同一流水组内接已生效最大流水加 1，不回填空号。`
             };
           }
 
@@ -31007,7 +31136,7 @@
             const formatByKey = {
               assetCode: codeMeta.autoAction
                 ? (codeMeta.autoEnabled
-                  ? "必填；表头带*表示生效时必须有编号。导入时可空，由系统按规则生成预览；手填则保留。"
+                  ? "必填；表头带*表示生效时必须有编号。已开启自动编号时导入列可空，由系统按规则生成编号。"
                   : "必填；未开启自动编号，须手填且不可与已有编号重复。")
                 : "示例：M2T-ISW-U2-01",
               name: "示例：01# 动环接入交换机",
@@ -31069,7 +31198,7 @@
               "1.所有红色带*号为必填项目，若一行内前两个必填项缺失则视作该行无记录，请注意填写。",
               codeMeta.autoAction
                 ? (codeMeta.autoEnabled
-                  ? "2.资产编号表头带*，表示提交或生效时必须有编号。已开启自动生成时，导入列可空着由系统生成预览，手填则保留。"
+                  ? "2.资产编号表头带*，表示提交或生效时必须有编号。已开启自动编号时，导入列可空着由系统生成编号。"
                   : "2.资产编号未开启自动生成，为必填项，必须手填且不可与已有编号重复。")
                 : "2.资产编号为必填项，须填写已有资产编号。",
               "3.位置类字段请填写完整路径，需精确到可上架/部署/入库的具体位置。",
@@ -32820,7 +32949,6 @@
               state.rule = createDefaultAssetCodeRule(legacy);
             }
             if (!Object.prototype.hasOwnProperty.call(state, "dialog")) state.dialog = null;
-            if (!Object.prototype.hasOwnProperty.call(state, "serialExhaustedDemo")) state.serialExhaustedDemo = false;
             const migrated = migrateAssetCodeRuleTokens(
               isLegacyDefaultAssetCodeRuleTokens(state.rule.tokens)
                 ? DEFAULT_ASSET_CODE_RULE_TOKENS.slice()
@@ -32970,7 +33098,6 @@
             if (!value) return true;
             if (value.includes("（预览）") || value.includes("(预览)")) return true;
             if (value.includes("请先选择")) return true;
-            if (value.includes("流水已用尽")) return true;
             return /^(ITINIT-|SFINIT-|PREVIEW-)/i.test(value);
           }
 
@@ -33033,48 +33160,21 @@
           }
 
           applyAssetCodePreviewsToRows(rows, ledgerId, extra = {}) {
-            const rule = this.getAssetCodeRule(ledgerId);
-            const counters = {};
             (rows || []).forEach((row) => {
-              const category = row.assetCategory || row.assetType || row.category || extra.category;
-              const location = this.resolveAssetCodeLocation(row, extra) || DEFAULT_ASSET_CODE_LOCATION;
               const hasContext = this.hasAssetCodePreviewContext(row, extra);
               const hasManualCode = Boolean(String(row.assetCode || "").trim()) && !this.isTemporaryAssetCode(row.assetCode);
-              if (this.isAssetCodeSerialExhaustedDemo() && rule.enabled !== false) {
-                if (!hasManualCode) row.assetCode = "";
-                return;
-              }
               if (!hasContext && !hasManualCode) {
                 row.assetCode = "";
                 return;
               }
-              const result = this.buildAssetCodePreview({
-                ledgerId,
-                category,
-                location,
-                existingCode: row.assetCode,
-                forcePreview: extra.forcePreview
-              });
-              if (!result.preview) {
-                row.assetCode = this.formatAssetCodeDisplay(result, { hasContext });
-                return;
+              if (this.isTemporaryAssetCode(row.assetCode)) {
+                row.assetCode = "";
               }
-              const groupKey = this.getAssetCodeSerialGroupKey(rule, result.prefix);
-              const start = counters[groupKey] || this.getExistingSerialMax(ledgerId, groupKey, rule);
-              counters[groupKey] = start + 1;
-              row.assetCode = this.composeAssetCode(result.prefix, counters[groupKey], rule, { ledgerId, category, location }) + "（预览）";
             });
             return rows;
           }
 
           finalizeAssetCodes(assets, ledgerId, extra = {}) {
-            if (this.isAssetCodeSerialExhaustedDemo() && this.getAssetCodeRule(ledgerId).enabled !== false) {
-              return (assets || []).map((asset) => ({
-                ...asset,
-                assetCode: this.getOfficialAssetCode(asset.assetCode),
-                __codePreview: false
-              }));
-            }
             const rule = this.getAssetCodeRule(ledgerId);
             const counters = {};
             return (assets || []).map((asset) => {
@@ -33117,11 +33217,6 @@
           getMissingAssetCodeMessage(rows, ledgerId, extra = {}) {
             const filled = (rows || []).filter((row) => this.isAssetCodeFilledRow(row));
             if (!filled.length) return "";
-            if (this.isAssetCodeSerialExhaustedDemo() && this.getAssetCodeRule(ledgerId).enabled !== false) {
-              return filled.some((row) => !this.getOfficialAssetCode(row.assetCode))
-                ? ASSET_CODE_SERIAL_EXHAUST_SUBMIT
-                : "";
-            }
             const autoOn = this.getAssetCodeRule(ledgerId).enabled !== false
               && this.isAssetCodeAutoAction(extra.action || "入库");
             const finalized = autoOn
@@ -33129,7 +33224,7 @@
               : filled;
             if (!finalized.some((row) => !this.getOfficialAssetCode(row.assetCode))) return "";
             return autoOn
-              ? "无法生成编号，请补全分类/库房位置，或手填编号。"
+              ? "无法生成编号，请补全分类/库房位置。"
               : "请填写资产编号。";
           }
 
@@ -33189,40 +33284,6 @@
             const rule = this.getAssetCodeRule();
             rule.enabled = !rule.enabled;
             this.emit();
-          }
-
-          isAssetCodeSerialExhaustedDemo() {
-            return Boolean(this.ensureAssetCodeRuleState().serialExhaustedDemo);
-          }
-
-          seedAssetCodeSerialExhaustDemoRows(rows) {
-            const list = Array.isArray(rows) ? rows : [];
-            if (!this.isAssetCodeSerialExhaustedDemo()) return list;
-            if (list.some((row) => String(row?.name || "").trim())) return list;
-            const samples = [
-              { name: "01# 动环接入交换机", assetCategory: "设备分类>IT设备>三层交换机", warehouseLocation: "2号楼>B1层>IT备件库A区" },
-              { name: "02# 核心交换机", assetCategory: "设备分类>IT设备>三层交换机", warehouseLocation: "2号楼>B1层>IT备件库A区" }
-            ];
-            samples.forEach((sample, index) => {
-              const current = list[index] || {};
-              const hasManual = Boolean(String(current.assetCode || "").trim()) && !this.isTemporaryAssetCode(current.assetCode);
-              list[index] = {
-                ...current,
-                ...sample,
-                assetCode: hasManual ? current.assetCode : ""
-              };
-            });
-            return list;
-          }
-
-          toggleAssetCodeSerialExhaustDemo() {
-            const state = this.ensureAssetCodeRuleState();
-            state.serialExhaustedDemo = !state.serialExhaustedDemo;
-            if (state.serialExhaustedDemo) {
-              this.pushToast("流水已用尽", ASSET_CODE_SERIAL_EXHAUST_TOAST, "warning", { durationMs: 4200 });
-              return;
-            }
-            this.pushToast("已退出模拟", "已恢复自动生成预览号。", "info");
           }
 
           addAssetCodeRuleToken(tokenId) {
@@ -35857,15 +35918,8 @@
                 const showCodeHint = field === "assetCode"
                   && adapter.isAssetCodeAutoAction(adapter.page?.action)
                   && adapter.store?.isAssetCodeRuleEnabled?.(adapter.page.viewId, adapter.page.action);
-                const record = adapter.instance?.getCellOriginRecord?.(context.col, context.row);
-                const showExhaustHint = showCodeHint
-                  && adapter.store?.isAssetCodeSerialExhaustedDemo?.()
-                  && adapter.store?.hasAssetCodePreviewContext?.(record);
-                node.placeholder = showExhaustHint
-                  ? ASSET_CODE_SERIAL_EXHAUST_PLACEHOLDER
-                  : (showCodeHint ? ASSET_CODE_AUTO_PLACEHOLDER : "");
-                node.style.color = showExhaustHint ? "#d4380d" : "";
-                node.style.fontStyle = showExhaustHint || showCodeHint ? "italic" : "";
+                node.placeholder = showCodeHint ? ASSET_CODE_AUTO_PLACEHOLDER : "";
+                node.style.fontStyle = showCodeHint ? "italic" : "";
               };
               applyEditorLook();
               window.requestAnimationFrame(applyEditorLook);
@@ -35883,10 +35937,10 @@
             const readonlyColumnKeys = new Set(page.readonlyColumnKeys || []);
             const locationSelectFields = new Set(["assetLocation", "warehouseLocation", "shelfLocation", "deployLocation", "newLocation", "returnLocation", "offShelfLocation", "transferWarehouse"]);
             const requiredColumnKeys = new Set((page.sheetColumns || []).filter((column) => column.required).map((column) => column.key));
-            const isReadonlyOperationField = (columnKey) => readonlyColumnKeys.has(columnKey);
             const editableBlankRows = Boolean(page.editableBlankRows);
             const autoCodeEnabled = this.isAssetCodeAutoAction(page?.action) && this.store?.isAssetCodeRuleEnabled?.(page.viewId, page.action);
-            const exhaustDemo = Boolean(this.store?.isAssetCodeSerialExhaustedDemo?.());
+            const autoCodeLockedKeys = new Set(autoCodeEnabled ? ["assetCode"] : []);
+            const isReadonlyOperationField = (columnKey) => readonlyColumnKeys.has(columnKey) || autoCodeLockedKeys.has(columnKey);
             const isAssetCodeHintRow = (record) => {
               const rowType = record?.__rowType;
               return rowType === "data" || rowType === "blankEditable";
@@ -35895,11 +35949,6 @@
               autoCodeEnabled
               && isAssetCodeHintRow(record)
               && !String(record?.assetCode || "").trim()
-            );
-            const shouldShowAssetCodeExhaustHint = (record) => (
-              exhaustDemo
-              && shouldShowAssetCodePlaceholder(record)
-              && Boolean(this.store?.hasAssetCodePreviewContext?.(record))
             );
             const getRowType = (args) => {
               const record = getRecordFromArgs(args);
@@ -35939,25 +35988,18 @@
                   bgColor: "#f6f8fb"
                 };
               }
-              const isExhaustHint = columnKey === "assetCode" && shouldShowAssetCodeExhaustHint(record);
               const isPreviewOrHint = columnKey === "assetCode"
                 && (String(record?.[columnKey] || "").includes("预览") || shouldShowAssetCodePlaceholder(record));
-              if (isExhaustHint) {
-                return {
-                  ...base,
-                  textAlign: "left",
-                  color: "#d4380d",
-                  fontStyle: "italic",
-                  bgColor: "#fff7f3"
-                };
-              }
               if (isPreviewOrHint) {
+                const editableRow = rowType === "blankEditable" || rowType === "data";
                 return {
                   ...base,
                   textAlign: "left",
                   color: "#8aa0b5",
                   fontStyle: "italic",
-                  bgColor: rowType === "blankEditable" || rowType === "data" ? "#fff" : "#f6f8fb"
+                  bgColor: editableRow
+                    ? (autoCodeLockedKeys.has(columnKey) ? "#f3f6fa" : "#fff")
+                    : "#f6f8fb"
                 };
               }
               if (rowType === "blankEditable") {
@@ -36035,9 +36077,7 @@
                   const raw = record && typeof record === "object" ? record[column.key] : record;
                   const value = raw == null ? "" : String(raw);
                   if (column.key === "assetCode" && !value && shouldShowAssetCodePlaceholder(record)) {
-                    return shouldShowAssetCodeExhaustHint(record)
-                      ? ASSET_CODE_SERIAL_EXHAUST_PLACEHOLDER
-                      : ASSET_CODE_AUTO_PLACEHOLDER;
+                    return ASSET_CODE_AUTO_PLACEHOLDER;
                   }
                   return value;
                 },
@@ -36359,6 +36399,14 @@
                   </svg>
                   <span>App</span>
                 </button>
+                <button class="topbar-app-btn" type="button" data-action="open-cabinet-viz" title="打开机柜可视化" data-demand-version="v1.3" data-demand-req-id="V3R5-CABINET" data-demand-title="机柜可视化" data-demand-text="需求来源：机柜管理可视化。||交互目的：在Web原型中提供机柜可视化入口，展示机房布局、机柜容量（U位、功率、上下电）并支持查看详情。||点击后行为：新标签页打开机柜可视化页面。">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="3" y="3" width="7" height="18" rx="1.5" stroke="currentColor" stroke-width="1.6"></rect>
+                    <rect x="14" y="3" width="7" height="18" rx="1.5" stroke="currentColor" stroke-width="1.6"></rect>
+                    <path d="M5 7h3M5 11h3M16 7h3M16 11h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"></path>
+                  </svg>
+                  <span>机柜可视化</span>
+                </button>
                 <div class="topbar-guide-wrap ${state.ui.guideMenuOpen ? "is-open" : ""}">
                   <button class="topbar-guide-btn ${state.ui.guideMenuOpen ? "is-open" : ""}" type="button" data-action="toggle-guide-menu" aria-haspopup="menu" aria-expanded="${state.ui.guideMenuOpen ? "true" : "false"}">
                     <span>原型说明</span>
@@ -36628,16 +36676,16 @@
               return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="待报废清单入口" data-demand-text="需求来源：V3R5-6692。||交互目的：集中查看已到期、即将到期和处置中的资产，并按类型批量发起迁出或报废。||点击后行为：进入待报废清单，不新建独立报废库房。全部页签不允许复选和批量，仅支持单行查看和发起；如需批量处理请切换至分类页签。分类页签可批量勾选，进入对应流程或在线电子表。||范围限制：仅覆盖 IT、场地、机柜、备件；已处置资产在已迁出/已废弃查看。"';
             }
             if ([VIEW_IDS.IT_FACILITY, VIEW_IDS.STATION_FACILITY, VIEW_IDS.CABINET, VIEW_IDS.SPARE_PART].includes(viewId)) {
-              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="台账入库入口" data-demand-text="需求来源：V3R5-6693。||交互目的：从台账进入入库后，未手填编号时按规则预览，提交或生效后正式占用。||点击后行为：打开当前台账，可通过批量入库办理。||范围限制：覆盖 IT设备、场地设施、机柜和备件。"';
+              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="台账入库入口" data-demand-text="需求来源：V3R5-6693。||交互目的：从台账进入入库后，由系统按规则生成编号，提交或生效后正式占用。||点击后行为：打开当前台账，可通过批量入库办理。||范围限制：覆盖 IT设备、场地设施、机柜和备件。"';
             }
             if ([VIEW_IDS.PENDING_IT_ASSET, VIEW_IDS.PENDING_ASSET].includes(viewId)) {
-              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="待初始化入口" data-demand-text="需求来源：V3R5-6693。||交互目的：待初始化转入正式台账时，未手填编号按规则预览，初始化生效后占用。||点击后行为：进入待初始化列表，可通过批量初始化或行内初始化办理。"';
+              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="待初始化入口" data-demand-text="需求来源：V3R5-6693。||交互目的：待初始化转入正式台账时，由系统按规则生成编号，初始化生效后占用。||点击后行为：进入待初始化列表，可通过批量初始化或行内初始化办理。"';
             }
             if (viewId === VIEW_IDS.IT_INBOUND || viewId === VIEW_IDS.STATION_INBOUND) {
               return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="入库流程入口" data-demand-text="需求来源：V3R5-6693。||交互目的：从入库流程新建单据时，资产编号按当前规则自动预览。||点击后行为：进入对应入库流程列表，可新建入库单。"';
             }
             if (viewId === VIEW_IDS.TOOL_INBOUND) {
-              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="工具仪表入库入口" data-demand-text="需求来源：V3R5-6693。||交互目的：工具仪表入库未手填编号时按规则预览，提交后占用。||点击后行为：进入工具仪表入库列表，可发起入库单。"';
+              return ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="工具仪表入库入口" data-demand-text="需求来源：V3R5-6693。||交互目的：工具仪表入库由系统按规则生成编号，提交后占用。||点击后行为：进入工具仪表入库列表，可发起入库单。"';
             }
             return "";
           }
@@ -37311,6 +37359,9 @@
           renderItWorkflowSheet(action, assets = [], editable = false, inputIds = {}, allowManualRows = false, lockedRows = false) {
             const columns = this.getItWorkflowSheetColumns(action);
             const readonlyColumnKeys = this.getItWorkflowReadonlyColumnKeys(action, columns, allowManualRows);
+            const autoCodeLockedColumns = new Set(
+              this.store.isAssetCodeAutoAction(action) && this.store.isAssetCodeRuleEnabled(null, action) ? ["assetCode"] : []
+            );
             const records = (assets.length ? assets : [{}]).map((asset, index) => this.mapItWorkflowSheetAsset(action, asset, index));
             if (["入库", "场地入库"].includes(action)) {
               this.store.applyAssetCodePreviewsToRows(records, this.store.resolveAssetCodeLedger(null, action));
@@ -37348,37 +37399,31 @@
             const renderCell = (column, record, rowIndex) => {
               const value = record[column.key] ?? "";
               const inputId = rowIndex === 0 ? inputIds[column.key] : "";
-              const isDisabled = editable && readonlyColumnKeys.has(column.key);
-              const isSelectField = column.key === "assetCategory" || column.key === "operationStartU" || locationSelectKeys.has(column.key);
+              const isCodeLocked = autoCodeLockedColumns.has(column.key);
+              const isDisabled = editable && (readonlyColumnKeys.has(column.key) || isCodeLocked);
               const isPreviewCode = column.key === "assetCode" && String(value).includes("预览");
-              const isExhaustCode = column.key === "assetCode"
-                && this.store.isAssetCodeSerialExhaustedDemo()
-                && !value
-                && this.store.hasAssetCodePreviewContext(record)
-                && ["入库", "场地入库", "初始化"].includes(action);
+              const isSelectField = column.key === "assetCategory" || column.key === "operationStartU" || locationSelectKeys.has(column.key);
               const codePlaceholder = column.key === "assetCode" && ["入库", "场地入库", "初始化"].includes(action)
-                ? ` placeholder="${isExhaustCode ? ASSET_CODE_SERIAL_EXHAUST_PLACEHOLDER : ASSET_CODE_AUTO_PLACEHOLDER}"`
+                ? ` placeholder="${ASSET_CODE_AUTO_PLACEHOLDER}"`
                 : "";
               const editor = column.key === "powerOnTime"
                 ? renderDateTime(value, inputId, column.key)
                 : (isSelectField
                   ? renderSelect(column, value, inputId)
-                  : `<input class="workflow-sheet-input${isExhaustCode ? " is-exhaust-code" : (isPreviewCode ? " is-preview-code" : "")}" data-field="${escapeHtml(column.key)}"${inputId ? ` id="${escapeHtml(inputId)}"` : ""}${codePlaceholder} value="${escapeHtml(value)}" />`);
+                  : `<input class="workflow-sheet-input${isPreviewCode ? " is-preview-code" : ""}" data-field="${escapeHtml(column.key)}"${inputId ? ` id="${escapeHtml(inputId)}"` : ""}${codePlaceholder} value="${escapeHtml(value)}" />`);
               return editable
-                ? `<td class="${isDisabled ? "is-disabled" : ""}${isPreviewCode ? " code-preview-cell" : ""}">${isDisabled ? `<input class="workflow-sheet-input" data-field="${escapeHtml(column.key)}"${inputId ? ` id="${escapeHtml(inputId)}"` : ""} value="${escapeHtml(value)}" disabled />` : editor}</td>`
+                ? `<td class="${isDisabled ? "is-disabled" : ""}${isPreviewCode ? " code-preview-cell" : ""}">${isDisabled ? `<input class="workflow-sheet-input" data-field="${escapeHtml(column.key)}"${inputId ? ` id="${escapeHtml(inputId)}"` : ""}${codePlaceholder} value="${escapeHtml(value)}" ${isCodeLocked ? "readonly" : "disabled"} />` : editor}</td>`
                 : `<td class="${isPreviewCode ? "code-preview-cell" : ""}" title="${escapeHtml(value)}">${escapeHtml(value || "—")}</td>`;
             };
             const isFullyReadonly = editable && columns.length > 0 && columns.every((column) => readonlyColumnKeys.has(column.key));
             const dataRows = records.map((record, rowIndex) => `<tr class="${lockedRows || isFullyReadonly ? "is-readonly-row" : ""}${lockedRows ? " is-source-locked-row" : ""}" data-role="workflow-sheet-row"><th scope="row">${rowIndex + 1}</th>${columns.map((column) => renderCell(column, record, rowIndex)).join("")}</tr>`).join("");
             const blankRows = Array.from({ length: rowCount - records.length }, (_, index) => `<tr class="${allowManualRows && editable ? "is-editable-blank-row" : "is-placeholder-row"}" data-role="workflow-sheet-row"><th scope="row">${records.length + index + 1}</th>${columns.map((column) => allowManualRows && editable ? renderCell(column, {}, records.length + index) : "<td>&nbsp;</td>").join("")}</tr>`).join("");
             const sheetClass = ` is-ledger-workflow-sheet ${allowManualRows ? "is-manual-row-sheet" : "is-fixed-row-sheet"}${lockedRows ? " is-source-locked-sheet" : ""}`;
-            const exhaustOn = this.store.isAssetCodeSerialExhaustedDemo();
             const fieldLabels = columns.map((column) => {
               const serialDemand = column.key === "assetCode" && ["入库", "场地入库", "初始化"].includes(action);
               return `<td><span class="workflow-sheet-field-label${column.required ? " is-required" : ""}${serialDemand ? " is-serial-demand" : ""}"${serialDemand ? ASSET_CODE_SERIAL_EXHAUST_DEMAND_ATTRS : ""}">${column.required ? "*" : ""}${escapeHtml(column.label)}</span></td>`;
             }).join("");
-            const exhaustBanner = exhaustOn && ["入库", "场地入库", "初始化"].includes(action) ? renderAssetCodeSerialExhaustBanner() : "";
-            return `<div class="operation-sheet-shell workflow-sheet-shell${sheetClass}" data-sheet-action="${escapeHtml(action)}">${exhaustBanner}<div class="operation-sheet-wrap"><table class="operation-sheet-table"><colgroup><col class="row-index" />${columnGroup}</colgroup><thead><tr><th class="sheet-corner"></th>${columns.map((column) => `<th>${column.letter}</th>`).join("")}</tr></thead><tbody><tr class="field-row"><th></th>${fieldLabels}</tr>${dataRows}${blankRows}</tbody></table></div><div class="operation-sheet-footer"><div class="operation-zoom"><button type="button" aria-label="缩小">−</button><div class="operation-zoom-bar" aria-hidden="true"></div><button type="button" aria-label="放大">+</button><span>100%</span></div></div></div>`;
+            return `<div class="operation-sheet-shell workflow-sheet-shell${sheetClass}" data-sheet-action="${escapeHtml(action)}"><div class="operation-sheet-wrap"><table class="operation-sheet-table"><colgroup><col class="row-index" />${columnGroup}</colgroup><thead><tr><th class="sheet-corner"></th>${columns.map((column) => `<th>${column.letter}</th>`).join("")}</tr></thead><tbody><tr class="field-row"><th></th>${fieldLabels}</tr>${dataRows}${blankRows}</tbody></table></div><div class="operation-sheet-footer"><div class="operation-zoom"><button type="button" aria-label="缩小">−</button><div class="operation-zoom-bar" aria-hidden="true"></div><button type="button" aria-label="放大">+</button><span>100%</span></div></div></div>`;
           }
           collectWorkflowSheetRows(sheetRoot = document) {
             const sheet = sheetRoot.closest?.(".is-ledger-workflow-sheet") || sheetRoot.querySelector?.(".is-ledger-workflow-sheet") || document.querySelector(".is-ledger-workflow-sheet");
@@ -37410,19 +37455,14 @@
               const restoreEmpty = Boolean(options.restoreEmpty) && input === source && !String(source?.value || "").trim();
               if (!(input instanceof HTMLInputElement) || (input === source && !restoreEmpty)) return;
               const next = rows[index].assetCode || "";
-              const isExhaust = this.store.isAssetCodeSerialExhaustedDemo()
-                && !next
-                && this.store.hasAssetCodePreviewContext(rows[index]);
-              input.placeholder = isExhaust ? ASSET_CODE_SERIAL_EXHAUST_PLACEHOLDER : ASSET_CODE_AUTO_PLACEHOLDER;
+              input.placeholder = ASSET_CODE_AUTO_PLACEHOLDER;
               if (input.value === next) {
                 input.classList.toggle("is-preview-code", next.includes("预览"));
-                input.classList.toggle("is-exhaust-code", isExhaust);
                 input.closest("td")?.classList.toggle("code-preview-cell", next.includes("预览"));
                 return;
               }
               input.value = next;
               input.classList.toggle("is-preview-code", next.includes("预览"));
-              input.classList.toggle("is-exhaust-code", isExhaust);
               input.closest("td")?.classList.toggle("code-preview-cell", next.includes("预览"));
             });
           }
@@ -37430,7 +37470,7 @@
             const assets = this.store.getItInboundDraftAssets();
             const scenario = IT_INBOUND_FORM_SCENARIO;
             const sheet = this.renderItWorkflowSheet("入库", assets, true, { name: "itInboundAssetName", assetCode: "itInboundAssetCode", assetCategory: "itInboundAssetType", uHeight: "itInboundAssetUHeight", warehouseLocation: "itInboundWarehouse" }, true);
-            const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions"><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="上传本地数据" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须手填。已开启时导入列可空，导入后显示预览号，提交或生效后正式占用；已填写编号按手填保留。示例表只放在“导入示例”页签。||异常判断：缺少分类或库房位置且未手填时，该行不生成编号；提交时提示补全分类/库房位置或手填编号。">上传本地数据</button></div></div>`;
+            const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions"><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="上传本地数据" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须填写。已开启时编号列不可编辑，导入列可空，导入后由系统按规则生成编号，提交或生效后正式占用。示例表只放在“导入示例”页签。||异常判断：缺少分类或库房位置时，该行不生成编号；提交时提示补全分类/库房位置。">上传本地数据</button></div></div>`;
             return `<div class="page-surface inbound-form-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-form-actions"><button class="btn" type="button" data-action="save-it-inbound">保存</button><button class="btn btn-primary" type="button" data-action="submit-it-inbound" data-demand-version="v1.3" data-demand-req-id="V3R5-4997" data-demand-title="台账流程提交结果" data-demand-text="需求来源：V3R5-4997。||触发条件：用户从资产台账入口被引导至入库流程单并点击提交。||提交结果：申请创建成功后关闭当前流程单页面并返回来源台账，不停留在已提交表单。||结果反馈：界面顶部居中展示“申请已提交，单号：XXXX”，提示支持手动关闭。||状态限制：仅台账来源的流程单提交后自动关闭；从流程菜单直接新建时仍停留在已提交申请详情。||异常判断：提交失败时保留当前流程单页面及已填写内容，并展示具体失败原因。">提交</button></div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(scenario.createdAt)}" readonly /></div><div class="inbound-form-label is-required">审核人</div><div class="inbound-form-value"><select id="itInboundApprover"><option>${escapeHtml(scenario.approver)}</option><option>周明</option><option>资产管理员</option></select></div><div class="inbound-form-label is-required">执行人</div><div class="inbound-form-value"><select id="itInboundExecutor"><option>${escapeHtml(scenario.executor)}</option><option>陈浩</option><option>现场运维人员</option></select></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><select><option>草稿</option><option>待审核</option></select></div><div class="inbound-form-label is-required">入库单名称</div><div class="inbound-form-value is-wide"><input id="itInboundName" value="${escapeHtml(scenario.name)}" /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea id="itInboundDescription">${escapeHtml(scenario.description)}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong><span style="color:#e14c45;margin-right:4px;">*</span>入库资产列表</strong></div>${sheetToolbar}${sheet}</section></div></div>`;
           }
           renderItInboundProcess(inbound) {
@@ -37573,7 +37613,7 @@
               "迁出": [{ label: "选择资产", tone: "primary" }]
             };
             const toolbarActions = isCabinetPrefilled ? [] : (config.toolbarActions || toolbarActionsByAction[action] || []);
-            const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions">${toolbarActions.map((item) => `<button class="btn ${item.tone === "primary" ? "btn-primary" : "btn-light"}" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(item.label)}"${item.label === "上传本地数据" && config.action === "入库" ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：场地设施入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须手填。已开启时导入列可空，导入后显示预览号，提交或生效后正式占用；已填写编号按手填保留。示例表只放在“导入示例”页签。||异常判断：缺少规则依赖字段且未手填时该行不生成编号；提交时提示补全分类/库房位置或手填编号。"' : ""}>${escapeHtml(item.label)}</button>`).join("")}</div></div>`;
+            const sheetToolbar = `<div class="workflow-operation-toolbar"><label class="workflow-operation-filter"><span>设备列表</span><select><option>全部</option></select></label><div class="operation-toolbar-actions">${toolbarActions.map((item) => `<button class="btn ${item.tone === "primary" ? "btn-primary" : "btn-light"}" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(item.label)}"${item.label === "上传本地数据" && config.action === "入库" ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：场地设施入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须填写。已开启时编号列不可编辑，导入列可空，导入后由系统按规则生成编号，提交或生效后正式占用。示例表只放在“导入示例”页签。||异常判断：缺少规则依赖字段时该行不生成编号；提交时提示补全分类/库房位置。"' : ""}>${escapeHtml(item.label)}</button>`).join("")}</div></div>`;
             const rowModeTip = isCabinetPrefilled
               ? "资产信息已从机柜详情带入，不可修改"
               : config.allowManualRows
@@ -37726,7 +37766,7 @@
             const displayItems = (items || []).map((item) => ({ ...item }));
             if (isInbound) this.store.applyAssetCodePreviewsToRows(displayItems, "tool");
             const columns = isInbound ? [["category", "资产品牌型号分类"], ["assetCode", "资产编号"], ["name", "资产名称"], ["amount", "购置金额（含税）"], ["unit", "单位"], ["purchaseDate", "购置时间"], ["location", "资产位置"], ["contact", "联系人"], ["phone", "联系人电话"], ["supplier", "供应商名称"], ["description", "描述"]] : [["assetCode", "资产编号"], ["name", "资产名称"], ["category", "资产品牌型号分类"], ["unit", "单位"], ["location", "资产位置"]];
-            const tableDemand = isInbound ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="工具仪表入库自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：工具仪表入库未手填编号时，按工具仪表台账规则预览，提交后正式占用。||展示规则：资产编号标必填。预览号带“预览”标识，可手填覆盖。清空预览后，行上已有名称或分类则回填。||流水口径：小流水按完整前缀分组。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。||异常判断：无法生成且未手填时，提交提示补全分类/库房位置或手填编号。"' : "";
+            const tableDemand = isInbound ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="工具仪表入库自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：工具仪表入库由系统按工具仪表台账规则生成编号，提交后正式占用。||展示规则：资产编号标必填。录入过程中编号格只显示占位“编号自动生成”，不做预览号回显；提交或生效时按规则正式生成。||流水口径：小流水按完整前缀分组。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。||异常判断：无法生成时，提交提示补全分类/库房位置。"' : "";
             return `<div class="consumable-item-toolbar"><label class="consumable-item-search"><input placeholder="请输入资产编号/名称搜索" /></label>${editable ? `<button class="btn" type="button" data-action="add-tool-workflow-item" data-view="${escapeHtml(viewId)}">添加</button>` : ""}</div><div class="consumable-table-scroll"${tableDemand}><table class="consumable-detail-table"><thead><tr><th>序号</th>${columns.map(([, label]) => `<th>${escapeHtml(label)}</th>`).join("")}${isInventory ? "<th>盘点状态</th>" : ""}<th>操作</th></tr></thead><tbody>${displayItems.length ? displayItems.map((item, index) => `<tr><td>${index + 1}</td>${columns.map(([key]) => `<td class="${key === "assetCode" && String(item[key] || "").includes("预览") ? "code-preview-cell" : ""}" title="${escapeHtml(item[key] ?? "-")}">${escapeHtml(item[key] ?? "-")}</td>`).join("")}${isInventory ? `<td><select data-role="tool-inventory-status" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(item.rowId)}" ${editable ? "" : "disabled"}><option ${item.inventoryStatus === "正常" ? "selected" : ""}>正常</option><option ${item.inventoryStatus === "盘亏" ? "selected" : ""}>盘亏</option><option ${item.inventoryStatus === "盘盈" ? "selected" : ""}>盘盈</option></select></td>` : ""}<td><button class="consumable-link-btn" type="button" data-action="tool-instrument-action" data-label="查看">查看</button>${editable ? `<button class="consumable-link-btn" type="button" data-action="remove-tool-workflow-item" data-view="${escapeHtml(viewId)}" data-id="${escapeHtml(item.rowId)}">删除</button>` : ""}</td></tr>`).join("") : `<tr><td colspan="${columns.length + (isInventory ? 3 : 2)}" class="consumable-empty">暂无工具仪表，请点击“添加”选择资产</td></tr>`}</tbody></table></div>`;
           }
 
@@ -37781,7 +37821,7 @@
                       ${page.toolbarActions.map((item) => {
                         const demandAttrs = item.label === "上传本地数据"
                           ? (page.action === "入库"
-                            ? ` data-demand-version="v1.2,v1.4" data-demand-req-id="V3R5-4422,V3R5-6693" data-demand-title="上传本地数据字段一致" data-demand-text="需求来源：V3R5-4422。||交互目的：上传本地数据前可导出与当前在线表格字段完全一致的 Excel 模板，降低离线填报字段错漏。||展示规则：导出的 Excel 模板字段顺序、字段名称、隐藏字段、必填标识需与当前在线表格保持一致；模板同时提供字段说明，包含是否必填、填写格式和示例说明。||状态限制：模板按当前台账类型和当前操作动作生成，如入库、上架、部署、调拨等动作字段不同，应导出对应动作下的字段范围。||异常判断：当前页面无法识别在线表字段、浏览器拒绝下载或模板生成失败时，应提示下载失败，不影响继续在线填写。" data-demand-title-v14="上传本地数据自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须手填。已开启时导入列可空，导入后显示预览号，提交或生效后正式占用；已填写编号按手填保留。示例表只放在“导入示例”页签。||异常判断：自动开启但行上缺少规则依赖字段且未手填时，该行不生成编号；提交时提示补全分类/库房位置或手填编号。"`
+                            ? ` data-demand-version="v1.2,v1.4" data-demand-req-id="V3R5-4422,V3R5-6693" data-demand-title="上传本地数据字段一致" data-demand-text="需求来源：V3R5-4422。||交互目的：上传本地数据前可导出与当前在线表格字段完全一致的 Excel 模板，降低离线填报字段错漏。||展示规则：导出的 Excel 模板字段顺序、字段名称、隐藏字段、必填标识需与当前在线表格保持一致；模板同时提供字段说明，包含是否必填、填写格式和示例说明。||状态限制：模板按当前台账类型和当前操作动作生成，如入库、上架、部署、调拨等动作字段不同，应导出对应动作下的字段范围。||异常判断：当前页面无法识别在线表字段、浏览器拒绝下载或模板生成失败时，应提示下载失败，不影响继续在线填写。" data-demand-title-v14="上传本地数据自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须填写。已开启时编号列不可编辑，导入列可空，导入后由系统按规则生成编号，提交或生效后正式占用。示例表只放在“导入示例”页签。||异常判断：自动开启但行上缺少规则依赖字段时，该行不生成编号；提交时提示补全分类/库房位置。"`
                             : ` data-demand-version="v1.2" data-demand-req-id="V3R5-4422" data-demand-title="上传本地数据字段一致" data-demand-text="需求来源：V3R5-4422。||交互目的：上传本地数据前可导出与当前在线表格字段完全一致的 Excel 模板，降低离线填报字段错漏。||展示规则：导出的 Excel 模板字段顺序、字段名称、隐藏字段、必填标识需与当前在线表格保持一致；模板同时提供字段说明，包含是否必填、填写格式和示例说明。||状态限制：模板按当前台账类型和当前操作动作生成，如入库、上架、部署、调拨等动作字段不同，应导出对应动作下的字段范围。||异常判断：当前页面无法识别在线表字段、浏览器拒绝下载或模板生成失败时，应提示下载失败，不影响继续在线填写。"`)
                           : "";
                         return `
@@ -37793,8 +37833,7 @@
                     </div>
                   </div>
                   <div class="operation-sheet-shell">
-                    ${this.store.isAssetCodeSerialExhaustedDemo() && ["入库", "初始化"].includes(page.action) ? renderAssetCodeSerialExhaustBanner() : ""}
-                    <div class="operation-sheet-wrap" data-demand-version="${["入库", "初始化"].includes(page.action) ? "v1.1,v1.1,v1.4" : "v1.1,v1.1"}" data-demand-req-id="${["入库", "初始化"].includes(page.action) ? "V3R5-4315,V3R5-4375,V3R5-6693" : "V3R5-4315,V3R5-4375"}" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。"${["入库", "初始化"].includes(page.action) ? ' data-demand-title-v14="作业表自动生成资产编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：入库和待初始化作业表中，未手填时显示预览编号，提交或初始化生效后才占号。与流程表使用同一套生成时机。||展示规则：资产编号始终标必填。预览号灰色斜体并带“预览”；空白行不生成编号、不预占流水。填写名称、资产分类或库房位置后立即显示预览号。清空预览后，行上已有这些字段则回填预览。||流水口径：小流水按除流水外的完整前缀分组。||异常判断：空行不处理；规则依赖字段缺失且未手填时该行不生成预览，提交时提示补全分类/库房位置或手填编号。"' : ""}>
+                    <div class="operation-sheet-wrap" data-demand-version="${["入库", "初始化"].includes(page.action) ? "v1.1,v1.1,v1.4" : "v1.1,v1.1"}" data-demand-req-id="${["入库", "初始化"].includes(page.action) ? "V3R5-4315,V3R5-4375,V3R5-6693" : "V3R5-4315,V3R5-4375"}" data-demand-title="电子表格性能优化" data-demand-text="需求来源：V3R5-4315。||交互目的：将作业电子表格选型从 luckysheet 切换为 VisActor VTable，提升大数据量表格渲染和交互性能。||展示规则：电子表格需承载字段列、行号、编辑态、复制和横向滚动等基础能力，并保持原作业页面视觉结构。||状态限制：组件替换不改变作业业务流程，提交、上传和选择资产仍按原页面入口触发。||异常判断：VTable 资源加载失败、初始化失败或浏览器兼容异常时，应给出明确失败提示。" data-demand-title-v112="电子表格字段与填充规则" data-demand-text-v112="需求来源：V3R5-4375。||交互目的：从台账操作入口进入电子表格时，统一控制字段禁用、隐藏、必填和可编辑字段类型，并支持类Excel的下拉填充。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；IT设备作业表展示上电时间字段，字段位于U高之后；点击上电时间单元格时打开日期时间选择器，选择后回填到当前单元格；可编辑单元格选中后显示右下角填充柄，下拉后展示复制单元格、填充序列、仅填充格式、不带格式填充菜单。||状态限制：上电时间仅在可编辑数据行或可编辑空白行中允许选择；填充柄仅作用于可编辑数据行，字段标题行、占位行和只读列不可被填充覆盖。||异常判断：未选择时间时允许保持为空；浏览器不支持原生时间选择器时应保留键盘输入能力；填充范围为空、越界或命中只读列时应忽略该次填充，不应导致电子表格无法编辑。"${["入库", "初始化"].includes(page.action) ? ' data-demand-title-v14="作业表自动生成资产编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：入库和待初始化作业表中，录入过程中编号格只显示占位“编号自动生成”，不做预览号回显；提交或初始化生效时按规则正式生成并占号。与流程表使用同一套生成时机。||展示规则：资产编号始终标必填。空白行不生成编号、不预占流水。||流水口径：小流水按除流水外的完整前缀分组。||异常判断：空行不处理；规则依赖字段缺失时该行不生成编号，提交时提示补全分类/库房位置。"' : ""}>
                       ${["入库", "初始化"].includes(page.action) ? renderAssetCodeSerialDemandAnchor() : ""}
                       <div class="operation-vtable-container" data-role="operation-vtable"></div>
                     </div>
@@ -38527,7 +38566,7 @@
                               </div>
                             `).join("")}
                           </div>
-                          <span class="cabinet-operation-demand-anchor" data-demand-version="v1.3,v1.4" data-demand-req-id="V3R5-4419,V3R5-6693" data-demand-title="机柜图设备上架、下架与迁出" data-demand-text="需求来源：V3R5-4419。||交互目的：直接在机柜U位图中定位设备或空闲位置，并完成设备上架、下架和迁出操作。||上架交互：鼠标悬停可分配的空闲U位时显示“上架设备”；点击后带入当前机柜和开始U位，再选择已有设备或创建设备。||下架与迁出交互：鼠标悬停已上架设备时展示设备信息及“下架、迁出”入口，点击后带入当前设备、机柜和U位上下文。||数据联动：操作完成后同步更新机柜U位、包含设备列表和IT设备台账；迁出设备进入“已迁出/已废弃”。||状态限制：已占用、预占、空闲和禁用U位分别展示与状态匹配的操作，不允许从不匹配状态绕过限制。||异常判断：设备状态冲突、U位并发占用、连续空间不足或存在进行中的冲突业务时，应阻止操作并提示具体原因。" data-demand-title-v14="空间视图新建自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：机柜图空闲U位选择“新建设备并上架”时，可不手填资产编号，按 IT设备规则预览并在提交时占用。||点击后行为：带入当前机柜和开始U位后进入新建表单。||展示规则：资产编号标必填。已选分类后显示预览号，可手填覆盖。||异常判断：无法生成且未手填时，阻止提交并提示补全分类或手填编号。"></span>
+                          <span class="cabinet-operation-demand-anchor" data-demand-version="v1.3,v1.4" data-demand-req-id="V3R5-4419,V3R5-6693" data-demand-title="机柜图设备上架、下架与迁出" data-demand-text="需求来源：V3R5-4419。||交互目的：直接在机柜U位图中定位设备或空闲位置，并完成设备上架、下架和迁出操作。||上架交互：鼠标悬停可分配的空闲U位时显示“上架设备”；点击后带入当前机柜和开始U位，再选择已有设备或创建设备。||下架与迁出交互：鼠标悬停已上架设备时展示设备信息及“下架、迁出”入口，点击后带入当前设备、机柜和U位上下文。||数据联动：操作完成后同步更新机柜U位、包含设备列表和IT设备台账；迁出设备进入“已迁出/已废弃”。||状态限制：已占用、预占、空闲和禁用U位分别展示与状态匹配的操作，不允许从不匹配状态绕过限制。||异常判断：设备状态冲突、U位并发占用、连续空间不足或存在进行中的冲突业务时，应阻止操作并提示具体原因。" data-demand-title-v14="空间视图新建自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：机柜图空闲U位选择“新建设备并上架”时，资产编号由系统按 IT设备规则生成并在提交时占用。||点击后行为：带入当前机柜和开始U位后进入新建表单。||展示规则：资产编号标必填。录入过程中编号格只显示占位“编号自动生成”，不做预览号回显。||异常判断：无法生成时，阻止提交并提示补全分类。"></span>
                         </div>
                       </div>
                       <div class="rack-feet" aria-hidden="true"></div>
@@ -39549,13 +39588,13 @@
             }
             const actionLabel = escapeHtml(action);
             if (action === "初始化" || action === "批量初始化") {
-              return ` data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="${actionLabel}自动生成资产编号" data-demand-text="需求来源：V3R5-6693。||交互目的：待初始化转入正式台账时，未手填编号按规则预览，初始化生效后占用。||点击后行为：进入初始化作业表。||展示规则：资产编号始终标必填。空白行不生成编号。||异常判断：无法生成且未手填时，提交提示补全分类/库房位置或手填编号。"`;
+              return ` data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="${actionLabel}自动生成资产编号" data-demand-text="需求来源：V3R5-6693。||交互目的：待初始化转入正式台账时，由系统按规则生成编号，初始化生效后占用。||点击后行为：进入初始化作业表。||展示规则：资产编号始终标必填。空白行不生成编号。||异常判断：无法生成时，提交提示补全分类/库房位置。"`;
             }
             if (action === "批量上架") {
               return ` data-demand-version="v1.1,v1.3" data-demand-req-id="V3R5-4375,V3R5-4997" data-demand-title-v11="批量上架电子表格禁用规则" data-demand-text-v11="需求来源：V3R5-4375。||交互目的：从台账批量上架入口进入电子表格时，按操作场景控制字段禁用、隐藏和必填。||展示规则：资产编号、名称、资产分类、U高、上架位置和开始U位按规则标识必填；只读字段置灰不可编辑。||异常判断：必填字段为空、位置无效或U位冲突时应提示用户处理。" data-demand-title-v13="批量上架允许后选资产" data-demand-text-v13="需求来源：V3R5-4997。||交互目的：用户无需先在台账勾选资产，也能从批量上架入口进入办理页面。||点击后行为：流程启用时直接进入上架流程发起页；未选择资产时在表单内通过选择资产补充明细，已选择资产时自动带入。||状态限制：进入页面不等于提交成功，提交前仍需至少选择一条符合上架条件的资产。"`;
             }
             if (action === "入库" || action === "批量入库") {
-              return ` data-demand-version="v1.1,v1.4" data-demand-req-id="V3R5-4375,V3R5-6693" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。" data-demand-title-v14="${actionLabel}自动生成资产编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：从台账${actionLabel}入口进入办理后，未手填编号时按规则预览，提交或生效后正式占用。||展示规则：资产编号始终标必填。空白行不生成编号。填写名称、分类或库房位置后立即显示预览号。||异常判断：无法生成且未手填时，提交提示补全分类/库房位置或手填编号。"`;
+              return ` data-demand-version="v1.1,v1.4" data-demand-req-id="V3R5-4375,V3R5-6693" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。" data-demand-title-v14="${actionLabel}自动生成资产编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：从台账${actionLabel}入口进入办理后，由系统按规则生成编号，提交或生效后正式占用。||展示规则：资产编号始终标必填。空白行不生成编号。录入过程中编号格只显示占位“编号自动生成”，不做预览号回显。||异常判断：无法生成时，提交提示补全分类/库房位置。"`;
             }
             return ` data-demand-version="v1.1" data-demand-req-id="V3R5-4375" data-demand-title="${actionLabel}电子表格禁用规则" data-demand-text="需求来源：V3R5-4375。||交互目的：从台账${actionLabel}入口进入电子表格时，按操作场景控制字段禁用、隐藏、必填和尾部新增字段。||展示规则：资产编号、名称、资产分类及台账适用字段按规则标识必填；场地设施、机柜、备件作业表不展示U高和上电时间字段；入库动作下隐藏资产状态列和资产位置列，且所有台账的入库操作表格末尾均追加库房位置列并标记必填；只读字段置灰不可编辑；新增位置或开始U位字段按场景必填并使用下拉选择；上电时间字段点击后使用日期时间选择器选择并回填；可编辑单元格支持右下角填充柄，下拉后可选择复制单元格或填充序列。||异常判断：不允许编辑的字段被点击、粘贴覆盖只读列、必填字段为空、时间格式非法、填充范围越界或下拉选项缺失时，应提示用户按规则处理。"`
           }
@@ -40043,7 +40082,7 @@
             if (!group) return "";
             const open = state.ui.assetActivityMenuOpen === viewId;
             return `
-              <div class="asset-activity-wrap" data-demand-version="v1.3,v1.4" data-demand-req-id="V3R5-4997,V3R5-6693" data-demand-title="台账统一资产活动入口" data-demand-text="需求来源：V3R5-4997。||交互目的：普通用户始终从台账统一入口选择资产活动，不需要预先判断是否启用流程。||点击后行为：选择业务活动后，系统读取最新表单流程配置；流程关闭时直接办理，流程开启时不再二次确认，直接打开全屏流程发起页并带入当前已选资产。||关闭规则：流程页右上角提供关闭按钮，关闭后返回来源台账并保留原筛选、视图和选择状态。||展示规则：下拉菜单继续使用入库、上架、变动等原业务文案，不向普通用户展示配置术语。" data-demand-title-v14="资产活动入库自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：从台账资产活动选择入库后，未手填编号时按规则预览，提交或生效后正式占用。||点击后行为：按当前表单流程配置进入入库办理。">
+              <div class="asset-activity-wrap" data-demand-version="v1.3,v1.4" data-demand-req-id="V3R5-4997,V3R5-6693" data-demand-title="台账统一资产活动入口" data-demand-text="需求来源：V3R5-4997。||交互目的：普通用户始终从台账统一入口选择资产活动，不需要预先判断是否启用流程。||点击后行为：选择业务活动后，系统读取最新表单流程配置；流程关闭时直接办理，流程开启时不再二次确认，直接打开全屏流程发起页并带入当前已选资产。||关闭规则：流程页右上角提供关闭按钮，关闭后返回来源台账并保留原筛选、视图和选择状态。||展示规则：下拉菜单继续使用入库、上架、变动等原业务文案，不向普通用户展示配置术语。" data-demand-title-v14="资产活动入库自动编号" data-demand-text-v14="需求来源：V3R5-6693。||交互目的：从台账资产活动选择入库后，由系统按规则生成编号，提交或生效后正式占用。||点击后行为：按当前表单流程配置进入入库办理。">
                 <button class="btn btn-primary asset-activity-trigger ${open ? "is-open" : ""}" type="button" data-action="toggle-asset-activity-menu" data-view="${escapeHtml(viewId)}" aria-haspopup="menu" aria-expanded="${open ? "true" : "false"}"><span>资产活动</span><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
                 ${open ? `<div class="asset-activity-menu" role="menu">${group.activities.map((activity) => `<button type="button" data-action="ledger-asset-activity" data-view="${escapeHtml(viewId)}" data-label="${escapeHtml(activity.label)}"${activity.label === "入库" ? ASSET_CODE_INBOUND_NEW_DEMAND_ATTRS : ""}>${escapeHtml(activity.label)}</button>`).join("")}</div>` : ""}
               </div>
@@ -40253,7 +40292,7 @@
               forcePreview: true
             }), { showMark: false });
             return `
-                  <div class="${this.getTemplateConfigSectionClass("codeRule", "code-rule-section")}" id="asset-code-rule-section" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="资产编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：在资产基础配置中维护全台账统一的资产编号自动生成规则，入库、初始化共用本规则。||展示规则：本项不单独占菜单，也不按台账分类分别配置；仅开启自动生成后，才显示“配置规则”按钮和当前规则回显。详细片段与流水参数通过“配置规则”弹窗维护。系统默认已选创建日期 + 流水号。创建日期只占一个片段，格式在已选区下拉选择，默认年月日时分，也可改为年月日、年月或年。流水位数默认 4 位，可选 4/5/6 位。作业表资产编号始终标必填。||分类编码来源：分类编码取自工程配置 / 分类管理中维护的编码，不把物模型标识当作分类编码。||流水口径：大流水按当前台账连续计数；小流水按除流水外的完整前缀分组。流水号为必选片段，不可删除。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。||状态限制：关闭自动后，不显示配置规则和当前规则回显，须手填编号。开启后表头仍标必填，可不手填由系统预览；清空预览后按规则回填或拦截。||异常判断：规则变更只影响之后新生效的资产，已有编号不重算；分类未维护编码时不生成预览。">
+                  <div class="${this.getTemplateConfigSectionClass("codeRule", "code-rule-section")}" id="asset-code-rule-section" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="资产编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：在资产基础配置中维护全台账统一的资产编号自动生成规则，入库、初始化共用本规则。||展示规则：本项不单独占菜单，也不按台账分类分别配置；仅开启自动生成后，才显示“配置规则”按钮和当前规则回显。详细片段与流水参数通过“配置规则”弹窗维护。系统默认已选创建日期 + 流水号。创建日期只占一个片段，格式在已选区下拉选择，默认年月日时分，也可改为年月日、年月或年。流水位数默认 4 位，可选 4/5/6 位，超出时系统自动往上新增长度。作业表资产编号始终标必填。||分类编码来源：分类编码取自工程配置 / 分类管理中维护的编码，不把物模型标识当作分类编码。||流水口径：大流水按当前台账连续计数；小流水按除流水外的完整前缀分组。流水号为必选片段，不可删除。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。||状态限制：关闭自动后，不显示配置规则和当前规则回显，须手填编号。开启后表头仍标必填，编号由系统生成，编号格只显示占位“编号自动生成”，不做预览号回显。||异常判断：规则变更只影响之后新生效的资产，已有编号不重算；分类未维护编码时不生成编号。">
                     ${this.renderConfigSectionTitle("codeRule", "资产编号规则")}
                     <div class="config-form-grid single">
                       <div class="field-block code-rule-entry">
@@ -40264,7 +40303,7 @@
                         </div>
                         <div class="code-rule-entry-actions">
                           <button class="code-rule-switch ${rule.enabled ? "is-on" : ""}" type="button" data-action="toggle-asset-code-rule-enabled" aria-label="${rule.enabled ? "关闭自动生成" : "开启自动生成"}"></button>
-                          ${rule.enabled ? `<button class="btn" type="button" data-action="open-asset-code-rule-dialog" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="配置编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：在弹窗中维护统一编号规则的片段组合、自定义文本、流水和连接符。||点击后行为：打开配置弹窗；确定后写回本页，取消不保存本次修改。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。||异常判断：流水号为必选；已选自定义文本后必须填写，未填写不能确定。">配置规则</button>` : ""}
+                          ${rule.enabled ? `<button class="btn" type="button" data-action="open-asset-code-rule-dialog" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="配置编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：在弹窗中维护统一编号规则的片段组合、自定义文本、流水和连接符。||点击后行为：打开配置弹窗；确定后写回本页，取消不保存本次修改。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。||异常判断：流水号为必选；已选自定义文本后必须填写，未填写不能确定。">配置规则</button>` : ""}
                         </div>
                       </div>
                     </div>
@@ -40292,7 +40331,7 @@
             const dateFormatSelect = `<select class="code-rule-date-format" data-config="assetCodeRule" data-field="dateFormat">${ASSET_CODE_DATE_FORMATS.map((item) => `<option value="${item.id}"${dateFormat === item.id ? " selected" : ""}>${item.label}</option>`).join("")}</select>`;
             return `
               <div class="classify-dialog-mask">
-                <section class="classify-dialog is-wide code-rule-dialog" role="dialog" aria-modal="true" aria-labelledby="assetCodeRuleDialogTitle" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="配置编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：全台账共用一套编号规则，在此维护片段顺序、自定义文本、流水位数、大小流水和连接符。||展示规则：系统默认已选创建日期 + 流水号。创建日期只占一个片段，已选后通过下拉选择格式，默认年月日时分。流水号为必选片段，带红色*，不可删除。已选自定义文本后，下方自定义文本必填并带红色*。流水位数默认 4 位，可选 4/5/6 位。||分类编码来源：分类编码取自工程配置 / 分类管理。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。||异常判断：缺少流水号，或已选自定义文本但未填写时，不允许确定。">
+                <section class="classify-dialog is-wide code-rule-dialog" role="dialog" aria-modal="true" aria-labelledby="assetCodeRuleDialogTitle" data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="配置编号规则" data-demand-text="需求来源：V3R5-6693。||交互目的：全台账共用一套编号规则，在此维护片段顺序、自定义文本、流水位数、大小流水和连接符。||展示规则：系统默认已选创建日期 + 流水号。创建日期只占一个片段，已选后通过下拉选择格式，默认年月日时分。流水号为必选片段，带红色*，不可删除。已选自定义文本后，下方自定义文本必填并带红色*。流水位数默认 4 位，可选 4/5/6 位，超出时系统自动往上新增长度。||分类编码来源：分类编码取自工程配置 / 分类管理。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。||异常判断：缺少流水号，或已选自定义文本但未填写时，不允许确定。">
                   <header class="classify-dialog-head">
                     <h3 id="assetCodeRuleDialogTitle">配置编号规则</h3>
                     <button class="classify-dialog-close" type="button" data-action="close-asset-code-rule-dialog" aria-label="关闭">×</button>
@@ -40338,15 +40377,16 @@
                     </div>
                     <div class="code-rule-settings" style="padding:0;">
                       ${selected.has("customText") ? `<label><span class="code-rule-field-title is-required">自定义文本${tokenTip(ASSET_CODE_RULE_TOKENS.find((item) => item.id === "customText"))}</span><input data-config="assetCodeRule" data-field="customText" value="${escapeHtml(rule.customText || "")}" placeholder="请填写自定义文本，如 IT、SF" required aria-required="true" /></label>` : ""}
-                      <label data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="流水号长度" data-demand-text="需求来源：V3R5-6693。||展示规则：流水位数默认 4 位，可选 4/5/6 位，不提供 2 位和 3 位。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。||异常判断：本组流水用尽时不自动扩位，阻止生效并提示改位数或手填。">流水号长度
+                      <label data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="流水号长度" data-demand-text="需求来源：V3R5-6693。||展示规则：流水位数默认 4 位，可选 4/5/6 位，超出时系统自动往上新增长度，不提供 2 位和 3 位。超出时系统会自动往上新增长度，无需人工调整。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。">流水号长度
                         <select data-config="assetCodeRule" data-field="serialLength">
                           ${[4, 5, 6].map((item) => `<option value="${item}"${Number(rule.serialLength) === item ? " selected" : ""}>${item} 位</option>`).join("")}
                         </select>
+                        <span class="code-rule-field-hint">超出时系统会自动往上新增长度</span>
                       </label>
-                      <label data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="大小流水区别" data-demand-text="需求来源：V3R5-6693。||交互目的：说明小流水与大流水的计数口径，以及同一组内后续批次如何接号。||展示规则：小流水按除流水外的完整前缀分组，前缀不同则各自从起始号起号；大流水按当前台账连续计数，不论前缀如何变化都接着往下排。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。例如本组已占用 0000～0055，下一批从 0056 起。||范围限制：只影响之后新生效的资产，已占用编号不重算。">
+                      <label data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="大小流水区别" data-demand-text="需求来源：V3R5-6693。||交互目的：说明小流水与大流水的计数口径，以及同一组内后续批次如何接号。||展示规则：小流水按除流水外的完整前缀分组，前缀不同则各自从起始号起号；大流水按当前台账连续计数，不论前缀如何变化都接着往下排。||流水接号：同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。例如本组已占用 0000～0055，下一批从 0056 起。||范围限制：只影响之后新生效的资产，已占用编号不重算。">
                         <span class="code-rule-field-title">流水号类别
                           <span class="config-title-tip code-rule-serial-tip" tabindex="0" aria-label="大小流水说明">
-                            <span class="config-title-tip-text"><strong>小流水：</strong>按“除流水号外的完整前缀”分组计数。前缀相同才共用一组流水，前缀不同则各自从起始号起号。<br />例如前缀分别为 SRV-20260914、NET-20260914 时，会生成 SRV-20260914-0001 与 NET-20260914-0001。<br /><strong>大流水：</strong>同一台账内不分前缀，流水连续递增。上例会生成 SRV-20260914-0001 与 NET-20260914-0002。<br /><strong>接号：</strong>同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；预览不占号。</span>
+                            <span class="config-title-tip-text"><strong>小流水：</strong>按“除流水号外的完整前缀”分组计数。前缀相同才共用一组流水，前缀不同则各自从起始号起号。<br />例如前缀分别为 SRV-20260914、NET-20260914 时，会生成 SRV-20260914-0001 与 NET-20260914-0001。<br /><strong>大流水：</strong>同一台账内不分前缀，流水连续递增。上例会生成 SRV-20260914-0001 与 NET-20260914-0002。<br /><strong>接号：</strong>同一流水组内，新自动编号取已生效最大流水加 1，不回填空号；编号在提交或生效时正式生成并占用。</span>
                           </span>
                         </span>
                         <select data-config="assetCodeRule" data-field="serialMode">
@@ -40430,6 +40470,9 @@
                           <select data-config="retireReminder" data-field="frequencyUnit">
                             ${["天", "周"].map((item) => `<option value="${item}"${reminder.frequencyUnit === item ? " selected" : ""}>${item}</option>`).join("")}
                           </select>
+                          ${reminder.frequencyUnit === "周" ? `<select class="retire-weekday-select" data-config="retireReminder" data-field="frequencyWeekday" aria-label="提醒星期">
+                            ${RETIRE_WEEKDAY_OPTIONS.map((item) => `<option value="${item}"${reminder.frequencyWeekday === item ? " selected" : ""}>${item}</option>`).join("")}
+                          </select>` : ""}
                         </div>
                       </div>
                       <div class="field-block">
@@ -40467,7 +40510,7 @@
           renderRetireReminderSection(state) {
             const reminder = this.store.getRetireReminder();
             return `
-                  <div class="${this.getTemplateConfigSectionClass("retireReminder")}" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="报废到期提醒配置" data-demand-text="需求来源：V3R5-6692。||交互目的：配置到期资产的识别窗口和系统消息提醒，不单独占菜单。||展示规则：提前量始终展示在提醒开关上方，用于待报废清单识别即将到期。仅开启提醒后显示“配置规则”按钮和当前消息规则回显。点击“配置规则”后，在弹窗中维护适用范围、发送方式、频次、提醒时刻和接收人，五项均为必填；确定后写回，取消不保存本次修改。发送方式中邮箱后提供文本按钮「消息文案示例」。||发送方式：默认勾选站内信且不可取消，短信和邮箱可选。||适用范围：只限制谁收消息，不过滤待报废清单。||接收人：默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。||站内信：进入系统消息列表后，报废提醒可点击查看详情，详情可进入待报废清单。||数据口径：只按资产到期时间判断已到期和即将到期；未填到期时间的资产不进待报废清单，也不提醒。||状态限制：产品默认关闭；关闭后不再发新消息，待报废清单仍按提前量筛选和处置。||范围限制：仅覆盖 IT、场地、机柜、备件。||异常判断：开启时未选适用范围或未选接收人，不允许确定或保存。">
+                  <div class="${this.getTemplateConfigSectionClass("retireReminder")}" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="报废到期提醒配置" data-demand-text="需求来源：V3R5-6692。||交互目的：配置到期资产的识别窗口和系统消息提醒，不单独占菜单。||展示规则：提前量始终展示在提醒开关上方，用于待报废清单识别即将到期。仅开启提醒后显示“配置规则”按钮和当前消息规则回显。点击“配置规则”后，在弹窗中维护适用范围、发送方式、频次（按周时需选择周几）、提醒时刻和接收人，五项均为必填；确定后写回，取消不保存本次修改。发送方式中邮箱后提供文本按钮「消息文案示例」。||发送方式：默认勾选站内信且不可取消，短信和邮箱可选。||适用范围：只限制谁收消息，不过滤待报废清单。||接收人：默认系统管理员，按人员多选，下拉展示姓名（部门），支持按姓名或部门搜索。||站内信：进入系统消息列表后，报废提醒可点击查看详情，详情可进入待报废清单。||数据口径：只按资产到期时间判断已到期和即将到期；未填到期时间的资产不进待报废清单，也不提醒。||状态限制：产品默认关闭；关闭后不再发新消息，待报废清单仍按提前量筛选和处置。||范围限制：仅覆盖 IT、场地、机柜、备件。||异常判断：开启时未选适用范围或未选接收人，不允许确定或保存。">
                     ${this.renderConfigSectionTitle("retireReminder", "报废到期提醒")}
                     <div class="retire-reminder-setup">
                       ${this.renderRetireAdvanceField(reminder)}
@@ -40480,7 +40523,7 @@
                           </div>
                           <div class="code-rule-entry-actions">
                             <button class="code-rule-switch ${reminder.enabled ? "is-on" : ""}" type="button" data-action="toggle-retire-reminder-enabled" aria-label="${reminder.enabled ? "关闭报废到期提醒" : "开启报废到期提醒"}"></button>
-                            ${reminder.enabled ? `<button class="btn" type="button" data-action="open-retire-reminder-dialog" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="配置提醒规则" data-demand-text="需求来源：V3R5-6692。||交互目的：在弹窗中维护消息提醒的适用范围、发送方式、频次、提醒时刻和接收人。||点击后行为：打开配置弹窗；确定后写回本页，取消不保存本次修改。提前量在本页常显，不在弹窗中修改。||异常判断：未选适用范围或未选接收人时不允许确定。">配置规则</button>` : ""}
+                            ${reminder.enabled ? `<button class="btn" type="button" data-action="open-retire-reminder-dialog" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="配置提醒规则" data-demand-text="需求来源：V3R5-6692。||交互目的：在弹窗中维护消息提醒的适用范围、发送方式、频次（按周时需选择周几）、提醒时刻和接收人。||点击后行为：打开配置弹窗；确定后写回本页，取消不保存本次修改。提前量在本页常显，不在弹窗中修改。||异常判断：未选适用范围或未选接收人时不允许确定。">配置规则</button>` : ""}
                           </div>
                         </div>
                       </div>
@@ -40493,7 +40536,7 @@
             const reminder = dialog || {};
             return `
               <div class="classify-dialog-mask">
-                <section class="classify-dialog is-wide retire-reminder-dialog" role="dialog" aria-modal="true" aria-labelledby="retireReminderDialogTitle" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="配置提醒规则" data-demand-text="需求来源：V3R5-6692。||交互目的：在弹窗中维护消息提醒规则。||展示规则：弹窗内维护适用范围、发送方式、频次、提醒时刻和接收人，五项均为必填并标红星；提前量在资产基础配置页常显，不在本弹窗修改。发送方式中邮箱后提供「消息文案示例」。||操作逻辑：确定后写回资产基础配置页，取消不保存本次修改。适用范围只限制谁收消息。接收人默认系统管理员。||异常判断：未选适用范围或未选接收人时不允许确定。">
+                <section class="classify-dialog is-wide retire-reminder-dialog" role="dialog" aria-modal="true" aria-labelledby="retireReminderDialogTitle" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="配置提醒规则" data-demand-text="需求来源：V3R5-6692。||交互目的：在弹窗中维护消息提醒规则。||展示规则：弹窗内维护适用范围、发送方式、频次（按周时需选择周几）、提醒时刻和接收人，五项均为必填并标红星；提前量在资产基础配置页常显，不在本弹窗修改。发送方式中邮箱后提供「消息文案示例」。||操作逻辑：确定后写回资产基础配置页，取消不保存本次修改。适用范围只限制谁收消息。接收人默认系统管理员。||异常判断：未选适用范围或未选接收人时不允许确定。">
                   <header class="classify-dialog-head">
                     <h3 id="retireReminderDialogTitle">配置提醒规则</h3>
                     <button class="classify-dialog-close" type="button" data-action="close-retire-reminder-dialog" aria-label="关闭">×</button>
@@ -40655,6 +40698,8 @@
             const pageAllSelected = selectableIds.length > 0 && selectableIds.every((id) => selected.has(id));
             const colCount = allowBatchSelect ? 11 : 10;
             const summary = this.store.getPendingRetireMessageSummary();
+            const summaryPeople = getRetireReminderPeopleLabels(reminder.reminderPeopleIds) || "未选择";
+            const summaryText = `按到期时间识别待处置资产。当前清单 ${page.total} 台；提醒范围合计 ${summary.total} 台（已到期 ${summary.expired}，即将到期 ${summary.upcoming}，处置中 ${summary.processing}）。提醒${reminder.enabled ? "已开启，接收人 " + summaryPeople : "未开启，不会发送新消息"}。`;
             const tabs = [{ id: "all", label: "全部" }, ...RETIRE_KIND_OPTIONS].map((item) => `
               <button type="button" class="${pageState.kind === item.id ? "is-active" : ""}" data-action="set-pending-retire-kind" data-kind="${item.id}">${escapeHtml(item.label)}</button>
             `).join("");
@@ -40685,14 +40730,13 @@
               <div class="page-surface list-page-surface" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="待报废清单" data-demand-text="需求来源：V3R5-6692。||交互目的：按到期时间集中查看待处置资产，并按类型批量发起迁出或报废。||展示规则：默认展示已到期、即将到期和处置中资产；无到期时间、已迁出/已报废/已废弃不进入本清单。||页签规则：全部页签不允许复选和批量，仅支持单行查看和发起；IT设备批量迁出，场地、机柜、备件批量报废。||联动规则：分类页签批量后进入对应流程或在线电子表；场地/IT 看表单流程配置，机柜/备件固定进在线电子表。完成后资产进入已迁出/已废弃。||状态限制：处置中资产可查看，不可再发起。||异常判断：未选资产或全部不通过时不进入办理页。">
                 <div class="page-toolbar">
                   <div class="page-toolbar-left">
-                    <div class="page-title">待报废</div>
+                    <div class="page-title page-title-with-hint">待报废<span class="page-title-hint" role="img" tabindex="0" aria-label="提示：${escapeHtml(summaryText)}" data-tooltip="${escapeHtml(summaryText)}"></span></div>
                     <div class="ledger-segment pending-retire-tabs" aria-label="待报废资产类型">${tabs}</div>
                   </div>
                   ${batchLabel ? `<div class="toolbar-actions">
                     <button class="btn btn-primary" type="button" data-action="pending-retire-batch" data-label="${escapeHtml(batchLabel)}" data-demand-version="v1.4" data-demand-req-id="V3R5-6692" data-demand-title="批量发起迁出或报废" data-demand-text="需求来源：V3R5-6692。||交互目的：将当前分类页签中勾选且校验通过的资产带入现有迁出或报废办理。||点击后行为：先排除处置中资产，再按现有活动规则逐项校验，进入对应流程或在线电子表。||状态限制：仅分类页签提供批量；IT走迁出，其余走报废。场地/IT 按是否走流程分流，机柜/备件进入在线电子表。||异常判断：未勾选、全部不通过或动作与页签不匹配时拦截。">${escapeHtml(batchLabel)}</button>
                   </div>` : ""}
                 </div>
-                <p class="pending-retire-summary">按到期时间识别待处置资产。当前清单 ${page.total} 台；提醒范围合计 ${summary.total} 台（已到期 ${summary.expired}，即将到期 ${summary.upcoming}，处置中 ${summary.processing}）。提醒${reminder.enabled ? "已开启，接收人 " + escapeHtml(getRetireReminderPeopleLabels(reminder.reminderPeopleIds) || "未选择") : "未开启，不会发送新消息"}。</p>
                 <div class="pending-retire-filters">
                   <input type="search" data-role="pending-retire-keyword" value="${escapeHtml(pageState.keyword)}" placeholder="请输入资产编号/资产名称" />
                   <select data-role="pending-retire-status">
@@ -42023,17 +42067,11 @@
               let previewCode = false;
               let demandAttrs = "";
               if (field.key === "assetCode") {
-                const preview = this.store.formatAssetCodeDisplay(this.store.buildAssetCodePreview({
-                  ledgerId: "it",
-                  category: dialog.assetCategory,
-                  location: dialog.shelfLocation || dialog.cabinetLocation || "当前机柜",
-                  existingCode: dialog.assetCode
-                }), { hasContext: Boolean(dialog.assetCategory) });
-                if (preview) {
-                  value = preview;
-                  previewCode = String(preview).includes("预览");
+                const manualCode = this.store.getOfficialAssetCode(dialog.assetCode);
+                if (!manualCode) {
+                  value = "";
                 }
-                demandAttrs = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="空间视图新建自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：机柜空间视图新建设备时，可不手填资产编号，按 IT设备规则预览并在提交时占用。||展示规则：资产编号标必填。已选分类后显示预览号，可手填覆盖。清空预览后，已选分类则回填。||异常判断：无法生成且未手填时，阻止提交并提示补全分类/库房位置或手填编号。"';
+                demandAttrs = ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="空间视图新建自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：机柜空间视图新建设备时，资产编号由系统按 IT设备规则生成并在提交时占用。||展示规则：资产编号标必填。录入过程中编号格只显示占位“编号自动生成”，不做预览号回显。||异常判断：无法生成时，阻止提交并提示补全分类/库房位置。"';
               }
               const hasOptions = !field.readonly && Boolean(renderSelectOptions(field.key, value));
               return `
@@ -43309,7 +43347,7 @@
             const templateTypes = ["小型机", "服务器", "网络设备", "存储设备", "机柜"];
             const page = this.store.getOperationPageData();
             const inboundDemand = (page?.action === "入库" || dialog.workflowViewId === VIEW_IDS.STATION_INBOUND)
-              ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须手填。已开启时导入列可空，导入后显示预览号，提交或生效后正式占用；已填写编号按手填保留。示例表只放在“导入示例”页签。||异常判断：缺少规则依赖字段且未手填时该行不生成编号；提交时提示补全分类/库房位置或手填编号。"'
+              ? ' data-demand-version="v1.4" data-demand-req-id="V3R5-6693" data-demand-title="上传本地数据自动编号" data-demand-text="需求来源：V3R5-6693。||交互目的：入库上传本地数据按当前编号规则处理资产编号。||展示规则：资产编号表头始终标必填。未开启自动编号时必须填写。已开启时编号列不可编辑，导入列可空，导入后由系统按规则生成编号，提交或生效后正式占用。示例表只放在“导入示例”页签。||异常判断：缺少规则依赖字段时该行不生成编号；提交时提示补全分类/库房位置。"'
               : "";
             return `
               <div class="relation-modal-backdrop" data-action="close-local-data-upload-dialog"></div>
@@ -44436,6 +44474,10 @@
                 this.store.openMobileApp();
                 return;
               }
+              if (action === "open-cabinet-viz") {
+                window.open("机柜可视化.html", "_blank");
+                return;
+              }
               if (action === "close-mobile-app") {
                 this.store.closeMobileApp();
                 return;
@@ -45382,11 +45424,6 @@
               }
               if (action === "toggle-asset-code-rule-enabled") {
                 this.store.toggleAssetCodeRuleEnabled();
-                return;
-              }
-              if (action === "simulate-asset-code-serial-exhaust") {
-                window.demandExplainController?.hide();
-                this.store.toggleAssetCodeSerialExhaustDemo();
                 return;
               }
               if (action === "add-asset-code-rule-token") {
@@ -47072,15 +47109,6 @@
               .map((id) => id.trim())
               .filter(Boolean)
               .join(",");
-            if (scope.dataset.demandAction) {
-              trigger.dataset.demandAction = scope.dataset.demandAction;
-              trigger.dataset.demandActionLabel = scope.dataset.demandActionLabel || "模拟用尽";
-              trigger.dataset.demandActionLabelOn = scope.dataset.demandActionLabelOn || "退出模拟";
-            } else {
-              delete trigger.dataset.demandAction;
-              delete trigger.dataset.demandActionLabel;
-              delete trigger.dataset.demandActionLabelOn;
-            }
           }
 
           getDemandEntries(scope) {
@@ -47181,14 +47209,6 @@
               return entryTitle + parts.map(renderPart).join("");
             };
             this.popover.innerHTML = entries.map(renderEntry).join(entries.length > 1 ? '<hr style="border:0;border-top:1px solid #edf2f8;margin:10px 0;">' : "");
-            const action = trigger.dataset.demandAction || trigger.closest("[data-demand-action]")?.getAttribute("data-demand-action") || "";
-            if (action) {
-              const isOn = Boolean(window.__r5Store?.isAssetCodeSerialExhaustedDemo?.());
-              const label = isOn
-                ? (trigger.dataset.demandActionLabelOn || "退出模拟")
-                : (trigger.dataset.demandActionLabel || "模拟用尽");
-              this.popover.innerHTML += `<div class="demand-popover-actions"><button type="button" class="sheet-code-serial-demo-btn${isOn ? " is-on" : ""}" data-action="${escape(action)}" aria-label="${escape(isOn ? "退出流水用尽模拟" : "模拟资产编号流水用尽")}">${escape(label)}</button></div>`;
-            }
             this.popover.style.display = "block";
             this.position(trigger);
             this.activatePagePanelEntryForTrigger(trigger);
@@ -47789,7 +47809,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 6px;
     border-right: 1px solid #f0f3f7;
     border-bottom: 1px solid #f0f3f7;
@@ -47869,7 +47889,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 2px;
     color: #9aa7b7;
     font-size: 10px;
@@ -47907,7 +47927,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 7px;
     border-right: 1px solid #edf1f5;
     border-bottom: 1px solid #edf1f5;
@@ -48207,7 +48227,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     z-index: 2;
   }
   .donut-center .dc-num { font-size: 18px; font-weight: 700; line-height: 1.15; }
@@ -48975,16 +48995,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 3px;
     font-size: 11px;
     color: var(--text-tertiary);
   }
   .tab-item.is-active { color: var(--primary); font-weight: 600; }
-  .tab-scan-wrap { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: flex-start; padding-bottom: 6px; }
+  .tab-scan-wrap { flex: 1; position: relative; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; }
   .tab-scan {
     position: absolute;
     top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 58px; height: 58px;
     border-radius: 50%;
     background: linear-gradient(135deg, #2b95ff 0%, #0d6ef4 100%);
@@ -48995,7 +49017,7 @@
     box-shadow: 0 8px 18px rgba(13, 110, 244, .42), 0 0 0 5px #fff;
     transition: transform .12s ease;
   }
-  .tab-scan:active { transform: scale(.93); }
+  .tab-scan:active { transform: translateX(-50%) scale(.93); }
   .tab-scan-label { font-size: 11px; color: var(--text-tertiary); }
   .tab-scan-wrap.is-active .tab-scan-label { color: var(--primary); font-weight: 600; }
 
@@ -49030,6 +49052,22 @@
     opacity: .28;
     z-index: 40;
     pointer-events: none;
+  }
+
+  /* 图标居中修正：移动端图标/徽标容器内容居中 */
+  :is(.home-module-icon, .home-summary-circle, .app-entry-icon, .todo-count,
+      .sheet-btn, .rank-idx, .back-btn, .sum-asset-icon, .mobile-work-order-type,
+      .sim-chip .qr-ico, .demand-fab, .tab-scan, .home-topbar-action) {
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  :is(.home-module-icon, .home-summary-circle, .app-entry-icon, .todo-count,
+      .sheet-btn, .rank-idx, .back-btn, .sum-asset-icon, .demand-fab, .tab-scan,
+      .sim-chip .qr-ico, .tab-item, .home-tab, .tab-scan-wrap) > svg {
+    display: block !important;
+    margin: 0 auto !important;
   }
 </style>
 </head>
@@ -50669,3 +50707,4 @@
     </script>
 </body>
 </html>
+
