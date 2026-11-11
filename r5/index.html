@@ -10776,7 +10776,7 @@
 
       .operation-log-summary {
         display: grid;
-        grid-template-columns: repeat(4, minmax(140px, 1fr));
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
         gap: 10px;
         padding: 14px 20px 0;
       }
@@ -10793,7 +10793,7 @@
 
       .operation-log-filters {
         display: grid;
-        grid-template-columns: minmax(240px, 1.8fr) repeat(3, minmax(120px, 1fr)) auto auto;
+        grid-template-columns: minmax(240px, 1.8fr) repeat(2, minmax(120px, 1fr)) auto auto;
         gap: 8px;
         padding: 14px 20px;
       }
@@ -10819,27 +10819,6 @@
         font-size: 12px;
       }
 
-      .operation-log-histogram-legend {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .operation-log-histogram-legend span {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .operation-log-histogram-legend i {
-        width: 8px;
-        height: 8px;
-        border-radius: 2px;
-        background: #5b9df5;
-      }
-
-      .operation-log-histogram-legend i.is-failed { background: #ee6b6b; }
-
       .operation-log-chart {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(34px, 1fr));
@@ -10862,18 +10841,10 @@
         cursor: pointer;
       }
 
-      .operation-log-chart-stack {
-        min-height: 4px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+      .operation-log-chart-column {
         border-radius: 3px 3px 0 0;
-        overflow: hidden;
-        background: #e8eef6;
+        background: #5b9df5;
       }
-
-      .operation-log-chart-segment { display: block; width: 100%; background: #5b9df5; }
-      .operation-log-chart-segment.is-failed { background: #ee6b6b; }
 
       .operation-log-chart-label {
         margin-top: 5px;
@@ -10883,8 +10854,8 @@
         white-space: nowrap;
       }
 
-      .operation-log-chart-bar:hover .operation-log-chart-stack,
-      .operation-log-chart-bar.is-active .operation-log-chart-stack {
+      .operation-log-chart-bar:hover .operation-log-chart-column,
+      .operation-log-chart-bar.is-active .operation-log-chart-column {
         box-shadow: 0 0 0 2px rgba(31, 120, 255, 0.24);
       }
 
@@ -10903,7 +10874,7 @@
 
       .operation-log-table {
         width: 100%;
-        min-width: 1120px;
+        min-width: 1030px;
         border-collapse: collapse;
         table-layout: fixed;
         font-size: 12px;
@@ -10940,19 +10911,6 @@
         white-space: normal;
       }
 
-      .operation-log-detail-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px 18px;
-      }
-
-      .operation-log-change-list {
-        grid-column: 1 / -1;
-        padding: 10px 12px;
-        border: 1px solid #e0e8f1;
-        background: #fff;
-      }
-
       .operation-log-pagination {
         display: flex;
         align-items: center;
@@ -10977,7 +10935,6 @@
       @media (max-width: 1500px) {
         .asset-history-search-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
         .operation-log-filters { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
-        .operation-log-summary { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
       }
 
       .asset-topology-wrap {
@@ -21641,17 +21598,37 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
         const EXPORT_TASK_RETENTION_MS = 24 * 60 * 60 * 1000;
 
         function readAssetOperationSavedViews() {
+          const defaultViews = [
+            { id: "preset-all", name: "全部操作记录", preset: true, filters: { dateRange: "近30日", source: "全部" } },
+            { id: "preset-workflow", name: "流程工单操作", preset: true, filters: { dateRange: "近30日", source: "流程工单" } }
+          ];
+          let saved = null;
           try {
-            const rows = JSON.parse(window.localStorage?.getItem(ASSET_OPERATION_SAVED_VIEWS_KEY) || "[]");
-            return Array.isArray(rows) ? rows.filter((item) => item && item.id && item.name && item.filters && !item.preset) : [];
+            saved = JSON.parse(window.localStorage?.getItem(ASSET_OPERATION_SAVED_VIEWS_KEY) || "null");
           } catch (error) {
-            return [];
+            // 存储不可用时使用初始视图。
           }
+          // 旧版本只保存自定义视图，新版本保存完整清单，包括空清单。
+          const views = Array.isArray(saved?.views) ? saved.views : [
+            ...defaultViews,
+            ...(Array.isArray(saved) ? saved : [])
+          ];
+          return views
+            .filter((view) => view?.id && view.name && view.filters && view.id !== "preset-failed")
+            .map(({ filters, ...view }) => ({
+              ...view,
+              filters: {
+                keyword: filters.keyword || "",
+                dateRange: filters.dateRange || "近30日",
+                source: filters.source === "空间视图" ? "全部" : (filters.source || "全部"),
+                selectedDay: filters.selectedDay || ""
+              }
+            }));
         }
 
         function writeAssetOperationSavedViews(rows) {
           try {
-            window.localStorage?.setItem(ASSET_OPERATION_SAVED_VIEWS_KEY, JSON.stringify((rows || []).filter((item) => !item.preset)));
+            window.localStorage?.setItem(ASSET_OPERATION_SAVED_VIEWS_KEY, JSON.stringify({ views: rows }));
           } catch (error) {
             // 原型运行环境可能禁用 localStorage，当前会话内仍可使用保存视图。
           }
@@ -24803,7 +24780,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           "V3R5-4185": { role: "系统管理员", need: "在表单设计和详情设计的资产树中搜索分类或模型", value: "快速定位配置对象，减少逐级展开成本", scenario: "资产分类层级较深、模型数量较多时，需要按名称搜索。", rules: ["搜索命中子节点时保留父级路径并自动展开。", "清空搜索后恢复原有树结构和展开状态。"], boundary: "无匹配结果时保留当前配置，不得清空已选节点或字段。" },
           "V3R5-4117": { role: "运维主管", need: "将已配置的资产概览看板应用到其他组织或空间层级", value: "复用看板配置并保持多层级展示一致", scenario: "多个机房、楼层或区域需要使用相同指标看板时，可批量复用配置。", rules: ["应用前选择目标层级并展示受影响范围。", "只复制目标层级支持的组件和指标配置。"], boundary: "未选择目标、目标无权限或字段不兼容时不得直接覆盖。" },
           "V3R5-4113": { role: "运维主管", need: "从资产概览指标逐级下钻到明细数据", value: "快速定位指标异常对应的资产和位置", scenario: "发现资产数量、状态或利用率异常时，需要查看组成数据。", rules: ["支持从汇总指标进入下一层级或资产列表。", "下钻过程保留当前筛选条件和层级路径。"], boundary: "无下级数据或用户无查看权限时，展示明确空态或权限提示。" },
-          "V3R5-4112": { role: "运维人员", need: "统一查询资产详情与全局操作记录", value: "追溯资产字段、位置、关系、流程及执行结果变化", scenario: "定位资产异常或审计变更时，需要按资产、来源单据及字段新旧值快速检索记录。", rules: ["操作记录覆盖资产台账和流程工单中的业务操作。", "原包含设备页签统一命名为柜内资产，关系变更字段使用柜内资产关系。", "成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "全局操作记录支持按资产信息、操作信息、来源单据、字段名称、旧值和新值查询，并展示成功及未生效结果。", "流程工单显示具体业务入口名称；记录详情不展示内部事件编号。"], boundary: "失败或未生效事件只进入全局操作记录，不得写入正式资产履历；缺失的新旧值使用“-”兜底。" },
+          "V3R5-4112": { role: "运维人员", need: "统一查询资产详情与全局操作记录", value: "追溯已生效的资产字段、位置、关系和流程变更", scenario: "定位资产异常或审计变更时，需要按资产、来源单据及字段新旧值快速检索记录。", rules: ["操作记录覆盖资产台账和流程工单中的业务操作。", "柜内资产页签仅在机柜台账详情展示，关系变更字段使用柜内资产关系。", "成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "全局操作记录仅展示已生效事件，列表和导出统一使用操作时间，并支持按资产、操作、来源单据和字段新旧值查询。", "全局详情与资产详情共用字段变更样式。预置和自定义视图均可重命名和删除，修改在刷新后保留。", "流程工单显示具体业务入口名称；记录详情不展示内部事件编号。"], boundary: "缺失的新旧值显示“-”。视图名称须填写且保持唯一。" },
           "V3R5-4111": { role: "资产管理员", need: "在资产台账中跨页勾选并批量处理资产", value: "无需把所有目标资产集中到同一页即可完成批量操作", scenario: "目标资产分布在多页搜索结果中时，需要持续累积选择。", rules: ["翻页后保留已选资产和累计数量。", "表头全选只影响当前页，不清空其他页选择。"], boundary: "筛选范围变化或资产失效时，应清理不再适用的选择并提示。" },
           "V3R5-4110": { role: "资产管理员", need: "在空间视图中按位置查看资产分布而不展示设备末级节点", value: "减少树节点数量并突出空间层级", scenario: "按园区、楼栋、楼层和房间浏览资产时，需要快速定位空间。", rules: ["空间树只展示空间层级及资产数量。", "设备明细继续在右侧列表或详情区域展示。"], boundary: "资产位置缺失时应归入未分配位置，不得生成异常树节点。" },
           "V3R5-4427": { role: "运维人员", need: "在场地设施及备件详情中查看符合其业务特点的位置信息", value: "避免使用不适用的机柜U位图并快速识别同空间设备", scenario: "查看精密空调、传感器或备件位置时，需要了解所属空间和附近设备。", rules: ["展示空间路径、当前设备和同空间设备。", "同空间设备支持搜索并可进入对应详情。"], boundary: "位置缺失或同空间无其他设备时展示清晰空态。" },
@@ -25041,7 +25018,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
         const DETAIL_TABS = [
           { id: "basic", label: "基本信息" },
           { id: "position", label: "位置信息" },
-          { id: "history", label: "履历信息" },
+          { id: "history", label: "操作记录" },
           { id: "workOrders", label: "关联工单" },
           { id: "relation", label: "关系拓扑" },
           { id: "contains", label: "柜内资产" }
@@ -25106,15 +25083,6 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
         const DEFAULT_DETAIL_DESIGN_ORDERS = Object.fromEntries(
           Object.entries(DETAIL_FIELDS).map(([tabId, fields]) => [tabId, fields.slice()])
         );
-
-        const ASSET_DETAIL_TABS = [
-          { id: "basic", label: "基本信息" },
-          { id: "position", label: "位置信息" },
-          { id: "history", label: "履历信息" },
-          { id: "workOrders", label: "关联工单" },
-          { id: "relation", label: "关系拓扑" },
-          { id: "contains", label: "柜内资产" }
-        ];
 
         const LABEL_TEMPLATES = [
           { id: "brandQr", name: "标准资产开孔位", variant: "wide", lines: ["资产名称: XXXXX", "资产编号: XXXXX"] },
@@ -25497,18 +25465,12 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                   keyword: "",
                   dateRange: "近30日",
                   source: "全部",
-                  result: "全部",
                   selectedDay: "",
                   page: 1,
                   pageSize: 20,
                   expandedEventId: "",
                   activeSavedViewId: "",
-                  savedViews: [
-                    { id: "preset-all", name: "全部操作记录", preset: true, filters: { keyword: "", dateRange: "近30日", source: "全部", result: "全部", selectedDay: "" } },
-                    { id: "preset-failed", name: "近7日未生效", preset: true, filters: { keyword: "", dateRange: "近7日", source: "全部", result: "未生效", selectedDay: "" } },
-                    { id: "preset-workflow", name: "流程工单操作", preset: true, filters: { keyword: "", dateRange: "近30日", source: "流程工单", result: "全部", selectedDay: "" } },
-                    ...readAssetOperationSavedViews()
-                  ]
+                  savedViews: readAssetOperationSavedViews()
                 },
                 exportProgressManager: null,
                 exportProgressPosition: null,
@@ -27116,18 +27078,17 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const maxDays = filters.dateRange === "近7日" ? 7 : filters.dateRange === "近15日" ? 15 : filters.dateRange === "全部" ? 999 : 30;
             const cutoffDay = 14 - maxDays + 1;
             const baseRows = this.getAssetHistoryEvents().filter((event) => {
+              if (event.result !== "成功") return false;
               const day = Number(String(event.time).slice(8, 10)) || 1;
               const changeValues = (event.changes || []).flatMap((change) => [change.field, change.oldValue, change.newValue]);
               const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject, event.source, event.note, ...changeValues].some((value) => String(value || "").toLowerCase().includes(keyword));
-              return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source) && (!filters.result || filters.result === "全部" || event.result === filters.result);
+              return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source);
             });
             const histogramMap = new Map();
             baseRows.forEach((event) => {
               const date = String(event.time || "").slice(0, 10) || "未知";
-              const bucket = histogramMap.get(date) || { date, success: 0, failed: 0, total: 0 };
+              const bucket = histogramMap.get(date) || { date, total: 0 };
               bucket.total += 1;
-              if (event.result === "成功") bucket.success += 1;
-              else bucket.failed += 1;
               histogramMap.set(date, bucket);
             });
             const histogram = [...histogramMap.values()].sort((first, second) => first.date.localeCompare(second.date));
@@ -27147,8 +27108,6 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               pageCount,
               summary: {
                 total: filteredRows.length,
-                success: filteredRows.filter((item) => item.result === "成功").length,
-                failed: filteredRows.filter((item) => item.result === "未生效").length,
                 workOrders: filteredRows.filter((item) => (item.sourceType || item.source) === "流程工单" && item.orderNo).length
               }
             };
@@ -28342,10 +28301,11 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           }
 
           setAssetDetailTab(tabId) {
-            if (!this.state.ui.detailPage) {
+            const detailPage = this.state.ui.detailPage;
+            if (!detailPage || (tabId === "contains" && detailPage.viewId !== VIEW_IDS.CABINET)) {
               return;
             }
-            this.state.ui.detailPage.activeTab = tabId;
+            detailPage.activeTab = tabId;
             this.emit();
           }
 
@@ -28410,7 +28370,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           }
 
           setAssetOperationLogFilter(field, value) {
-            if (!["keyword", "dateRange", "source", "result"].includes(field)) {
+            if (!["keyword", "dateRange", "source"].includes(field)) {
               return;
             }
             const filters = this.state.ui.assetOperationLog || {};
@@ -28433,18 +28393,14 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
 
           resetAssetOperationLogFilters() {
             const current = this.state.ui.assetOperationLog || {};
-            this.state.ui.assetOperationLog = { keyword: "", dateRange: "近30日", source: "全部", result: "全部", selectedDay: "", page: 1, pageSize: 20, expandedEventId: "", activeSavedViewId: "", savedViews: current.savedViews || [] };
+            this.state.ui.assetOperationLog = { keyword: "", dateRange: "近30日", source: "全部", selectedDay: "", page: 1, pageSize: 20, expandedEventId: "", activeSavedViewId: "", savedViews: current.savedViews };
             this.emit();
           }
 
           ensureAssetOperationSavedViews() {
             const filters = this.state.ui.assetOperationLog || (this.state.ui.assetOperationLog = {});
-            if (!Array.isArray(filters.savedViews) || !filters.savedViews.length) {
-              filters.savedViews = [
-                { id: "preset-all", name: "全部操作记录", preset: true, filters: { keyword: "", dateRange: "近30日", source: "全部", result: "全部", selectedDay: "" } },
-                { id: "preset-failed", name: "近7日未生效", preset: true, filters: { keyword: "", dateRange: "近7日", source: "全部", result: "未生效", selectedDay: "" } },
-                { id: "preset-workflow", name: "流程工单操作", preset: true, filters: { keyword: "", dateRange: "近30日", source: "流程工单", result: "全部", selectedDay: "" } }
-              ];
+            if (!Array.isArray(filters.savedViews)) {
+              filters.savedViews = readAssetOperationSavedViews();
             }
             return filters.savedViews;
           }
@@ -28453,8 +28409,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const filters = this.state.ui.assetOperationLog || {};
             const views = this.ensureAssetOperationSavedViews();
             const active = views.find((item) => item.id === filters.activeSavedViewId);
-            if (mode === "rename" && (!active || active.preset)) {
-              this.pushToast("无法重命名", "请先选择一个自定义视图。", "warning");
+            if (mode === "rename" && !active) {
+              this.pushToast("无法重命名", "请先选择视图。", "warning");
               return;
             }
             const customCount = views.filter((item) => !item.preset).length + 1;
@@ -28491,7 +28447,6 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 keyword: filters.keyword || "",
                 dateRange: filters.dateRange || "近30日",
                 source: filters.source || "全部",
-                result: filters.result || "全部",
                 selectedDay: filters.selectedDay || ""
               }
             };
@@ -28508,8 +28463,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const views = this.ensureAssetOperationSavedViews();
             const active = views.find((item) => item.id === viewId);
             const name = String(customName || "").trim();
-            if (!active || active.preset) {
-              this.pushToast("无法重命名", "系统预置视图不可重命名。", "warning");
+            if (!active) {
+              this.pushToast("无法重命名", "请先选择视图。", "warning");
               return;
             }
             if (!name) {
@@ -28540,8 +28495,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const filters = this.state.ui.assetOperationLog || {};
             const views = this.ensureAssetOperationSavedViews();
             const active = views.find((item) => item.id === filters.activeSavedViewId);
-            if (!active || active.preset) {
-              this.pushToast("无法删除", "系统预置视图不可删除，请先选择自定义视图。", "warning");
+            if (!active) {
+              this.pushToast("无法删除", "请先选择视图。", "warning");
               return;
             }
             filters.savedViews = views.filter((item) => item.id !== active.id);
@@ -28566,8 +28521,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               this.pushToast("无法导出", "当前筛选条件下没有可导出的操作记录。", "warning");
               return;
             }
-            const header = ["发生时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "来源", "关联单据", "结果"];
-            const workbookRows = [header, ...rows.map((event) => [event.time, event.action, event.assetCode, event.assetName, event.assetType, event.operator, event.source, event.orderNo, event.result])];
+            const header = ["操作时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "来源", "关联单据"];
+            const workbookRows = [header, ...rows.map((event) => [event.time, event.action, event.assetCode, event.assetName, event.assetType, event.operator, event.source, event.orderNo])];
             try {
               this.downloadXlsxRows(workbookRows, "资产操作记录_" + new Date().toISOString().slice(0, 10) + ".xlsx", "操作记录");
               this.pushToast("导出成功", `已按当前筛选条件导出 ${rows.length} 条操作记录。`, "success");
@@ -29532,12 +29487,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 { id: "slave", title: "从设备", subtitle: normalize(slaveRow.name || slaveRow.assetCode), left: "70%", top: "158px", primary: !!parentRow }
               ]
               : [];
+            const commonDetailTabs = DETAIL_TABS.filter((tab) => tab.id !== "contains");
             const detailTabs = detailPage.viewId === VIEW_IDS.CABINET
-              ? [
-                ASSET_DETAIL_TABS.find((tab) => tab.id === "contains"),
-                ...ASSET_DETAIL_TABS.filter((tab) => tab.id !== "contains")
-              ].filter(Boolean).map((tab) => tab.id === "history" ? { ...tab, label: "操作记录" } : tab)
-              : ASSET_DETAIL_TABS.map((tab) => tab.id === "history" ? { ...tab, label: "操作记录" } : tab);
+              ? [DETAIL_TABS.find((tab) => tab.id === "contains"), ...commonDetailTabs]
+              : commonDetailTabs;
             const position3dKind = detailPage.viewId === VIEW_IDS.CABINET
               ? "cabinet"
               : (detailPage.viewId === VIEW_IDS.STATION_FACILITY || detailPage.viewId === VIEW_IDS.SPARE_PART)
@@ -38589,15 +38542,13 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 <div class="tabs">
                   ${detail.tabs.map((tab) => {
                     const demandAttrs = tab.id === "contains"
-                      ? (detail.viewId === VIEW_IDS.CABINET
-                        ? ' data-demand-version="v1.3,v1.5" data-demand-req-id="V3R5-4419,V3R5-4112" data-demand-title="机柜详情柜内资产优先展示" data-demand-text="需求来源：V3R5-4419。||交互目的：从机柜空间视图进入详情后，优先查看机柜内设备与U位资源情况。||展示规则：机柜详情将“柜内资产”页签固定在首位，并作为进入机柜详情后的默认页签；页面展示设备明细、U位占用、预占U位及剩余可分配容量。||联动规则：设备数量、U位数据与机柜空间视图保持一致；从详情返回时恢复原空间节点、卡片或列表展示方式及查询条件。||范围限制：仅调整机柜详情页签，IT设备、场地设施和备件详情页签顺序不受影响。||异常判断：机柜内无设备时仍保留页签和容量信息，并展示设备列表空态。" data-demand-title-v15="柜内资产页签名称" data-demand-text-v15="需求来源 V3R5-4112。||页签统一显示柜内资产，操作记录中的关系变更字段同步显示柜内资产关系。"'
-                        : ' data-demand-version="v1.5" data-demand-req-id="V3R5-4112" data-demand-title="柜内资产页签名称" data-demand-text="需求来源 V3R5-4112。||页签统一显示柜内资产，操作记录中的关系变更字段同步显示柜内资产关系。"')
+                      ? ' data-demand-version="v1.3,v1.5" data-demand-req-id="V3R5-4419,V3R5-4112" data-demand-title="机柜详情柜内资产优先展示" data-demand-text="需求来源：V3R5-4419。||交互目的：从机柜空间视图进入详情后，优先查看机柜内设备与U位资源情况。||展示规则：机柜详情将“柜内资产”页签固定在首位，并作为进入机柜详情后的默认页签；页面展示设备明细、U位占用、预占U位及剩余可分配容量。||联动规则：设备数量、U位数据与机柜空间视图保持一致；从详情返回时恢复原空间节点、卡片或列表展示方式及查询条件。||范围限制：仅调整机柜详情页签，IT设备、场地设施和备件详情页签顺序不受影响。||异常判断：机柜内无设备时仍保留页签和容量信息，并展示设备列表空态。" data-demand-title-v15="柜内资产页签名称" data-demand-text-v15="需求来源 V3R5-4112。||柜内资产页签仅在机柜台账详情展示。操作记录中的关系变更字段显示柜内资产关系。"'
                       : tab.id === "position" && detail.viewId === VIEW_IDS.STATION_FACILITY
                         ? ' data-demand-version="v1.2" data-demand-req-id="V3R5-4427" data-demand-title="场地设施及备件位置信息展示" data-demand-text="需求来源：V3R5-4427。||交互目的：场地设施及备件详情位置信息页签不展示机柜/U位图，改为展示所属空间、当前设备和同空间设备。||展示规则：位置路径展示到园区、楼栋、楼层、房间/区域；同空间设备支持搜索并可点击名称查看详情。||状态限制：仅作用于场地设施及备件详情，机柜和IT设备仍按各自位置模型展示。"'
                       : tab.id === "relation"
                         ? ' data-demand-title="关系拓扑页签" data-demand-text="交互目的：进入资产详情中的主从关系拓扑视图。||点击后行为：切换到关系拓扑页签，展示主设备指向从设备的关系箭头；无主从关系时展示空态。||测试关注：验证主设备、从设备、无关系三种场景的页签切换和拓扑展示。||异常判断：当前资产无主从关系、关联设备已删除、关系方向异常或关系数据重复时，应展示空态或异常提示，不渲染错误拓扑。||状态限制：无主从关系时展示空态。"'
                         : tab.id === "history"
-                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||【重点规则】同一次业务操作涉及的属性、位置和关系变化必须合并为一条履历，不得拆分为多条重复记录。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；流程工单来源展示具体业务入口名称，如“IT设备上架”；初始化来源展示对应菜单名称，如“待初始化IT设备”或“待初始化场地设施”；每条记录展示操作时间、操作类型、来源、操作人、关联工单及字段新旧值，不展示执行人和操作结果字段。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：资产详情仅展示已成功生效且实际改变资产数据的事件；失败或未生效记录统一在全局操作记录中查看。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
+                          ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||【重点规则】同一次业务操作涉及的属性、位置和关系变化必须合并为一条履历，不得拆分为多条重复记录。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；流程工单来源展示具体业务入口名称，如“IT设备上架”；初始化来源展示对应菜单名称，如“待初始化IT设备”或“待初始化场地设施”；每条记录展示操作时间、操作类型、来源、操作人、关联工单及字段新旧值，不展示执行人和操作结果字段。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：资产详情展示已生效且实际改变资产数据的事件。全局操作记录使用相同的已生效口径和字段变更样式。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
                           : tab.id === "workOrders"
                             ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产关联工单" data-demand-text="需求来源：V3R5-4112。||交互目的：集中查看事件、问题、变更等工单与当前资产的关联关系，补充资产操作记录的业务上下文。||展示规则：列表展示工单类型、操作人、操作时间、工单标题和工单编号；工单编号和查看按钮均可进入对应工单。||数据口径：仅展示明确关联当前资产的工单，不把工单处理过程重复写入资产操作记录。||异常判断：关联工单已删除、无权限或数据缺失时给出明确提示；无关联数据时展示空态。"'
                             : "";
@@ -39564,6 +39515,14 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             `;
           }
 
+          renderAssetHistoryChanges(changes) {
+            const displayValue = (value) => escapeHtml(value == null || value === "" ? "-" : value);
+            const rows = (changes || []).map((change) => `
+              <div class="asset-history-change"><strong>${displayValue(change.field)}</strong>：旧值 <em>${displayValue(change.oldValue)}</em>，新值 <em>${displayValue(change.newValue)}</em></div>
+            `).join("");
+            return `<div class="asset-history-change-group">${rows || '<div class="asset-history-change">本次操作无字段值变化</div>'}</div>`;
+          }
+
           renderAssetDetailHistory(detail) {
             const entries = detail.historyEntries || [];
             const filters = detail.historyFilters || { keyword: "", action: "全部", source: "全部", operator: "" };
@@ -39603,9 +39562,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                               <span><strong>操作人</strong>${escapeHtml(entry.operator || "-")}</span>
                               ${entry.orderNo ? `<span><strong>关联单据</strong><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}">${escapeHtml(entry.orderNo)}</button></span>` : ""}
                             </div>
-                            <div class="asset-history-change-group">
-                              ${(entry.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：旧值 <em>${escapeHtml(change.oldValue || "-")}</em>，新值 <em>${escapeHtml(change.newValue || "-")}</em></div>`).join("") || `<div class="asset-history-change">本次操作无字段值变化</div>`}
-                            </div>
+                            ${this.renderAssetHistoryChanges(entry.changes)}
                           </div>
                         </div>
                       `).join("")}
@@ -40009,48 +39966,45 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const savedViews = this.store.ensureAssetOperationSavedViews();
             const activeSavedView = savedViews.find((item) => item.id === filters.activeSavedViewId);
             const maxHistogramValue = Math.max(1, ...data.histogram.map((item) => item.total));
-            const resultClass = (result) => result === "成功" ? "is-success" : result === "未生效" ? "is-failed" : "is-pending";
             const select = (field, options) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${filters[field] === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
             return `
-              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的生命周期动作、字段新旧值、操作结果及关联单据。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：成功、失败及未生效事件均进入全局操作记录；失败或未生效事件不得写入资产详情操作记录。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
+              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的已生效的生命周期动作、字段新旧值及关联单据。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：全局操作记录展示已生效事件，列表、统计、时间分布和导出使用同一口径。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
                 <div class="operation-log-head">
-                  <div><h1>操作记录</h1><p>统一查看 IT设备，场地设施，机柜，备件 生命周期动作、字段新旧值、操作结果和关联单据。</p></div>
-                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源、结果和图表日期筛选后的全部匹配记录，不只导出当前分页。||结果反馈：无匹配数据时阻止导出并提示；生成成功后反馈导出记录数量。||异常判断：文件生成失败或浏览器拒绝下载时，应保留当前筛选条件并显示失败原因。">导出</button></div>
+                  <div><h1>操作记录</h1><p>查看 IT设备、场地设施、机柜和备件已生效的操作、字段变更及关联单据。</p></div>
+                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源和图表日期筛选后的全部已生效记录。时间列使用操作时间。||结果反馈：无匹配数据时阻止导出并提示；生成成功后反馈导出记录数量。||异常判断：文件生成失败或浏览器拒绝下载时，应保留当前筛选条件并显示失败原因。">导出</button></div>
                 </div>
-                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源、操作结果和图表日期筛选；关键字可包含字段名称、旧值或新值。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：系统预置视图不可重命名或删除；自定义视图名称不可为空或重复。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView || activeSavedView.preset ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
+                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源和图表日期筛选。关键字可包含字段名称、旧值或新值。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：预置和自定义视图均可重命名或删除，修改在刷新后保留。名称须填写且保持唯一。删除当前视图后清空选择，保留当前查询条件。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
                 <div class="operation-log-summary">
                   <div class="operation-log-summary-card"><span>当前记录</span><strong>${data.summary.total}</strong></div>
-                  <div class="operation-log-summary-card"><span>成功生效</span><strong>${data.summary.success}</strong></div>
-                  <div class="operation-log-summary-card"><span>未生效</span><strong>${data.summary.failed}</strong></div>
                   <div class="operation-log-summary-card"><span>关联工单记录</span><strong>${data.summary.workOrders}</strong></div>
                 </div>
-                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产、业务动作或字段变化记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口、关联单据、字段名称、旧值和新值。||组合规则：关键字与时间范围、来源、结果及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日全部来源和全部结果。||异常判断：无匹配数据时展示空态，不清空用户输入。">
+                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产、业务动作或字段变化记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口、关联单据、字段名称、旧值和新值。||组合规则：关键字与时间范围、来源及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日和全部来源。||异常判断：无匹配数据时展示空态，不清空用户输入。">
                   <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产、操作、来源单据、字段或新旧值" />
                   ${select("dateRange", ["近7日", "近15日", "近30日", "全部"])}
                   ${select("source", ["全部", "流程工单", "资产台账"])}
-                  ${select("result", ["全部", "成功", "未生效"])}
                   <button class="btn btn-primary" type="button" data-action="asset-operation-search">查询</button>
                   <button class="btn" type="button" data-action="asset-operation-reset">重置</button>
                 </div>
-                <div class="operation-log-histogram" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录时间分布" data-demand-text="需求来源：V3R5-4112。||交互目的：按日期观察操作记录数量及成功、未生效事件分布。||展示规则：柱形高度表示当日记录总量，蓝色表示成功，红色表示未生效。||点击后行为：点击日期柱筛选当日记录，再次点击或点击“清除日期”恢复当前时间范围内全部数据。||联动规则：时间分布随关键字、来源和结果筛选同步更新。">
-                  <div class="operation-log-histogram-head"><span>事件时间分布${filters.selectedDay ? ` · 已筛选 ${escapeHtml(filters.selectedDay)}` : ""}</span><div class="operation-log-histogram-legend"><span><i></i>成功</span><span><i class="is-failed"></i>未生效</span>${filters.selectedDay ? `<button class="operation-link" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(filters.selectedDay)}">清除日期</button>` : ""}</div></div>
+                <div class="operation-log-histogram" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录时间分布" data-demand-text="需求来源：V3R5-4112。||交互目的：按日期查看已生效的操作数量。每根柱形的高度表示当日记录数。||点击后行为：点击日期柱筛选当日记录，再次点击或点击“清除日期”恢复当前时间范围内全部数据。||联动规则：时间分布随关键字、时间范围和来源筛选同步更新。">
+                  <div class="operation-log-histogram-head">
+                    <span>操作时间分布${filters.selectedDay ? ` · 已筛选 ${escapeHtml(filters.selectedDay)}` : ""}</span>
+                    ${filters.selectedDay ? `<button class="operation-link" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(filters.selectedDay)}">清除日期</button>` : ""}
+                  </div>
                   <div class="operation-log-chart">
                     ${data.histogram.length ? data.histogram.map((item) => {
-                      const stackHeight = Math.max(6, Math.round((item.total / maxHistogramValue) * 74));
-                      const successHeight = item.total ? Math.round((item.success / item.total) * 100) : 0;
-                      const failedHeight = Math.max(0, 100 - successHeight);
-                      return `<button class="operation-log-chart-bar ${filters.selectedDay === item.date ? "is-active" : ""}" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(item.date)}" title="${escapeHtml(item.date)}：共${item.total}条，成功${item.success}条，未生效${item.failed}条"><span class="operation-log-chart-stack" style="height:${stackHeight}px"><span class="operation-log-chart-segment is-failed" style="height:${failedHeight}%"></span><span class="operation-log-chart-segment" style="height:${successHeight}%"></span></span><span class="operation-log-chart-label">${escapeHtml(item.date.slice(5))}</span></button>`;
+                      const barHeight = Math.max(6, Math.round((item.total / maxHistogramValue) * 74));
+                      return `<button class="operation-log-chart-bar ${filters.selectedDay === item.date ? "is-active" : ""}" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(item.date)}" title="${escapeHtml(item.date)} 共 ${item.total} 条"><span class="operation-log-chart-column" style="height:${barHeight}px"></span><span class="operation-log-chart-label">${escapeHtml(item.date.slice(5))}</span></button>`;
                     }).join("") : `<div style="grid-column:1/-1;align-self:center;text-align:center;color:#8799ac;font-size:12px;">当前条件下暂无时间分布数据</div>`}
                   </div>
                 </div>
-                <div class="operation-log-table-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录列表与详情" data-demand-text="需求来源：V3R5-4112。||展示规则：列表展示发生时间、操作类型、资产、操作人、具体来源入口、关联单据和操作结果。||详情规则：点击“详情”展开字段名称、旧值、新值及必要说明，不展示内部事件编号和执行人。||联动规则：关联单据支持进入工单详情，“查看资产”进入对应资产详情。||数据口径：全局列表保留成功与未生效记录；资产详情履历仅保留成功生效并实际改变资产数据的记录。||异常判断：资产或工单不存在、无权限时给出明确提示，不中断当前查询。">
+                <div class="operation-log-table-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录列表与详情" data-demand-text="需求来源：V3R5-4112。||展示规则：列表展示操作时间、操作类型、资产、操作人、具体来源入口及关联单据。||详情规则：点击“详情”后在当前行下方展开，沿用资产详情操作记录样式，每个字段单独显示旧值和新值。||联动规则：关联单据支持进入工单详情，“查看资产”进入对应资产详情。||数据口径：全局列表和资产详情均以已生效事件为展示口径。||异常判断：资产或工单不存在、无权限时给出明确提示，不中断当前查询。">
                   <table class="operation-log-table">
-                    <thead><tr><th style="width:150px;">发生时间</th><th style="width:110px;">操作类型</th><th style="width:220px;">资产编号 / 名称</th><th style="width:100px;">操作人</th><th style="width:110px;">来源</th><th style="width:170px;">关联单据</th><th style="width:90px;">结果</th><th style="width:200px;">操作</th></tr></thead>
+                    <thead><tr><th style="width:150px;">操作时间</th><th style="width:110px;">操作类型</th><th style="width:220px;">资产编号 / 名称</th><th style="width:100px;">操作人</th><th style="width:110px;">来源</th><th style="width:170px;">关联单据</th><th style="width:200px;">操作</th></tr></thead>
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><span class="history-result-tag ${resultClass(event.result)}">${escapeHtml(event.result)}</span></td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="8"><div class="operation-log-detail-grid"><div class="operation-log-change-list">${(event.changes || []).map((change) => `<div class="asset-history-change"><strong>${escapeHtml(change.field)}</strong>：<em>${escapeHtml(change.oldValue)}</em> → <em>${escapeHtml(change.newValue)}</em></div>`).join("") || "无字段变更"}</div>${event.note ? `<span style="grid-column:1/-1;"><strong>说明：</strong>${escapeHtml(event.note)}</span>` : ""}</div></td></tr>` : ""}`;
-                      }).join("") : `<tr><td colspan="8" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="7">${this.renderAssetHistoryChanges(event.changes)}${event.note ? `<div class="asset-history-change">${escapeHtml(event.note)}</div>` : ""}</td></tr>` : ""}`;
+                      }).join("") : `<tr><td colspan="7" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
                 </div>
@@ -42819,7 +42773,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                     </div>
                     <div class="design-tree-resize" data-role="design-tree-resize" data-scope="form" aria-label="拖拽调整资产树宽度"></div>
                   </div>
-                  <div class="panel design-field-panel" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="表单字段为详情字段子集" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计不再维护独立字段全集，避免表单字段与详情字段配置不一致。||展示规则：当前可选字段来自详情设计“基本信息”中已启用的字段；详情设计取消字段后，表单设计中对应字段同步移除。||状态限制：只约束表单设计与详情设计基本信息字段，位置信息、履历信息、关系拓扑和柜内资产按详情页签规则独立配置。">
+                  <div class="panel design-field-panel" data-demand-version="v1.4" data-demand-req-id="V3R5-4662" data-demand-title="表单字段为详情字段子集" data-demand-text="需求来源：V3R5-4662。||交互目的：表单设计不再维护独立字段全集，避免表单字段与详情字段配置不一致。||展示规则：当前可选字段来自详情设计“基本信息”中已启用的字段；详情设计取消字段后，表单设计中对应字段同步移除。||状态限制：只约束表单设计与详情设计基本信息字段，位置信息、操作记录、关系拓扑和柜内资产按详情页签规则独立配置。">
                     <div class="field-panel-head">
                       <div>
                         <div class="field-panel-title">显示字段</div>
@@ -51058,7 +51012,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
     dtTabs: { t: "详情页签", d: "展示规则：基本信息、位置信息、履历信息、关联工单正常可用；机柜类型额外提供「柜内资产」页签且排在位置信息前。关系拓扑本期暂不实现，页签置灰并显示「暂不实现」，不可点击。||点击后行为：点击可用页签刷新下方内容区，页签吸顶。" },
     dtBasic: { t: "基本信息字段", d: "展示规则：字段按 资产标识/运行状态/网络信息(仅IT设备)/生命周期 分组展示；字段口径与Web端资产详情设计一致。||异常判断：无值字段显示「—」；到期时间早于预警阈值时追加「即将到期」标识。" },
      dtPosition: { t: "位置信息（按类型区分）", d: "展示规则：IT设备显示位置路径+所在机柜U位局部图（当前资产高亮）；机柜显示位置路径、所属机柜列视图、机柜规格与上架设备数，并高亮当前机柜；场地设施及备件不使用机柜/U位图，改为显示所属空间与同空间设备（与V3R5-4427口径一致）。||点击后行为：机柜列视图中的机柜可点击跳转详情，同空间设备可点击跳转对应资产详情。" },
-    dtHistory: { t: "履历信息", d: "展示规则：与 Web 端操作记录采用同一数据口径，按时间倒序展示操作类型、具体业务入口、操作人、关联单据及字段旧值/新值；不展示执行人和操作结果。||筛选规则：App 端仅支持全部/近7日/近10日/近15日时间范围筛选，不提供组合查询和全局操作记录入口。||合并规则（重点）：同一次业务操作涉及的属性、位置和关系变化合并为一条履历。||数据口径：资产详情仅展示已成功生效并实际改变资产数据的记录；失败或未生效记录在 Web 端全局操作记录中查看。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，时间范围内无记录时展示空态。" },
+    dtHistory: { t: "履历信息", d: "展示规则：与 Web 端操作记录采用同一数据口径，按时间倒序展示操作类型、具体业务入口、操作人、关联单据及字段旧值/新值；不展示执行人和操作结果。||筛选规则：App 端仅支持全部/近7日/近10日/近15日时间范围筛选，不提供组合查询和全局操作记录入口。||合并规则（重点）：同一次业务操作涉及的属性、位置和关系变化合并为一条履历。||数据口径：资产详情仅展示已成功生效并实际改变资产数据的记录；Web 端全局操作记录展示已生效事件。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，时间范围内无记录时展示空态。" },
     dtRelation: { t: "关系拓扑（暂不实现）", d: "版本说明：移动端关系拓扑本期暂不实现。||展示规则：关系拓扑页签置灰并显示「暂不实现」，不可点击，不进入关系拓扑内容区。||后续规划：待关系数据与移动端拓扑交互方案确认后再开放。" },
     dtContains: { t: "柜内资产（机柜）", d: "展示规则：先展示机柜上架视图，按U位呈现已上架设备，再列出设备名称、状态、资产编号、分类与U位区间。||点击后行为：点击机柜上架视图中的设备或设备名称跳转其详情。||异常判断：无上架设备时视图显示空闲U位，列表显示「没有找到匹配的记录」。" },
     scanFrame: { t: "扫码识别", d: "交互目的：扫描资产标签二维码直达资产详情。||交互行为：取景框内扫描线动画表示识别中；识别成功短暂提示后自动跳转资产详情。||异常判断：非本系统资产标签提示「未识别到资产」，扫描线暂停，可重新扫码；资产已删除或无权限时同样走异常提示。||支持范围：识别资产标签配置生成的二维码。" },
