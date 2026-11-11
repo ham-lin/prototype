@@ -9362,11 +9362,14 @@
 
       .asset-location-layout {
         display: grid;
-        grid-template-columns: 96px minmax(0, 1fr);
+        grid-template-columns: 96px max-content;
         gap: 24px;
-        padding: 12px 18px 22px;
+        justify-content: safe center;
+        align-content: safe center;
+        padding: 12px 18px;
         flex: 1;
         min-height: 0;
+        overflow: auto;
       }
 
       /* 位置信息 2D/3D 切换与3D展示（v1.3） */
@@ -10237,7 +10240,6 @@
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
-        padding-top: 4px;
         overflow: visible;
       }
 
@@ -10387,7 +10389,7 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
-        padding-top: 14px;
+        padding-top: 22px;
       }
 
       .rack-index span {
@@ -10552,18 +10554,17 @@
       }
 
       .asset-history-toolbar {
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
       }
 
-      .asset-history-search {
-        width: min(720px, 100%);
-      }
-
       .asset-history-search-row {
         display: grid;
-        grid-template-columns: minmax(190px, 1.4fr) minmax(130px, .8fr) minmax(130px, .8fr) minmax(130px, .8fr);
+        flex: 0 1 852px;
+        min-width: 0;
+        grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, .8fr)) auto;
+        align-items: center;
         gap: 6px;
       }
 
@@ -10580,12 +10581,11 @@
       .asset-history-filter-group {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
         gap: 6px;
       }
 
-      .asset-history-search-actions {
-        margin-top: 6px;
+      .asset-history-filter-group {
+        flex-wrap: wrap;
       }
 
       .asset-history-global-link {
@@ -10774,23 +10774,6 @@
         height: 34px;
       }
 
-      .operation-log-summary {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(140px, 1fr));
-        gap: 10px;
-        padding: 14px 20px 0;
-      }
-
-      .operation-log-summary-card {
-        padding: 12px 14px;
-        border: 1px solid #dfe8f2;
-        border-radius: 5px;
-        background: #fbfdff;
-      }
-
-      .operation-log-summary-card span { display: block; color: #7a8ea4; font-size: 12px; }
-      .operation-log-summary-card strong { display: block; margin-top: 5px; font-size: 22px; color: #1d3854; }
-
       .operation-log-filters {
         display: grid;
         grid-template-columns: minmax(240px, 1.8fr) repeat(2, minmax(120px, 1fr)) auto auto;
@@ -10933,8 +10916,12 @@
       .operation-log-pagination button:disabled { color: #b5c0cc; cursor: not-allowed; }
 
       @media (max-width: 1500px) {
-        .asset-history-search-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
         .operation-log-filters { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+      }
+
+      @media (max-width: 800px) {
+        .asset-history-search-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .asset-history-search-actions { grid-column: 1 / -1; }
       }
 
       .asset-topology-wrap {
@@ -12817,7 +12804,7 @@
         background: #f3f5f9;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: safe center;
         padding: 18px;
       }
 
@@ -13007,10 +12994,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         gap: 10px;
         color: #7e95b0;
         background: #fafcff;
+      }
+
+      .upload-box > span {
+        margin-bottom: 0;
       }
 
       .drawer-backdrop {
@@ -21090,6 +21081,128 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
         }
 
         const IT_ASSET_WORKFLOW_VIEW_IDS = new Set(Object.keys(IT_ASSET_WORKFLOW_CONFIG));
+        const ASSET_RELATED_WORKFLOW_ACTIONS = new Set(["入库", "上架", "变动", "下架", "迁出"]);
+        const IT_ASSET_LIFECYCLE_EXAMPLES = {
+          [VIEW_IDS.IT_FACILITY]: {
+            "IT-001": {
+              orderSequence: "09001",
+              warehouse: "2号楼>B1层>资产库",
+              rackPosition: "1号楼>2层>弱电间>弱电机柜-01",
+              steps: [
+                { action: "初始化", time: "2026-07-09 09:20:20", location: "1号楼>2层>弱电间", status: "空闲" },
+                { action: "上架", time: "2026-07-11 11:00:20", mounted: true, startU: "16", status: "在用", viaWorkflow: true },
+                { action: "变动", time: "2026-07-13 15:00:20", mounted: true, startU: "18", status: "在用" }
+              ]
+            }
+          },
+          [VIEW_IDS.RETIRED_ASSET]: {
+            "RT-001": {
+              orderSequence: "09002",
+              warehouse: "2号楼>B1层>资产库",
+              rackPosition: "1号楼>1层>中心机房>机柜_ES-NW31-R-01-2",
+              steps: [
+                { action: "入库", time: "2026-07-04 09:15:00", status: "空闲", viaWorkflow: true },
+                { action: "上架", time: "2026-07-06 14:30:00", mounted: true, startU: "12", status: "在用", viaWorkflow: true },
+                { action: "变动", time: "2026-07-08 11:20:00", mounted: true, startU: "20", status: "在用", viaWorkflow: true },
+                { action: "下架", time: "2026-07-11 16:05:00", status: "空闲", viaWorkflow: true },
+                { action: "迁出", time: "2026-07-14 13:00:20", location: "", status: "迁出", viaWorkflow: true }
+              ]
+            }
+          }
+        };
+        const ASSET_DIRECT_HISTORY_EXAMPLES = {
+          [VIEW_IDS.IT_FACILITY]: {
+            "IT-002": [
+              ["编辑", ["额定功率", "1.5", "2"]],
+              ["变动", ["起始U位", "18", "20"]]
+            ],
+            "IT-003": [
+              ["编辑", ["编号", "003-待核对", "003"]],
+              ["变动", ["资产位置", "2号楼>B1层>资产库", "1号楼>3层>配电间"]],
+              ["编辑", ["端口数量", "16", "24"]]
+            ],
+            "IT-005": [
+              ["编辑", ["端口数量", "4", "8"]],
+              ["变动", ["资产位置", "2号楼>5层>运维区", "2号楼>4层>网络机房"]],
+              ["编辑", ["厂商", "Dell", "戴尔"]]
+            ],
+            "IT-009": [
+              ["编辑", ["U高", "1", "2"]],
+              ["变动", ["资产位置", "1号楼>2层>配电间", "1号楼>3层>配电间"], ["起始U位", "14", "16"]],
+              ["编辑", ["名称", "03# 机架式服务器（待核对）", "03# 机架式服务器"]]
+            ],
+            "IT-010": [
+              ["上架", ["资产位置", "2号楼>B1层>资产库", "1号楼>7层>D7机房"], ["柜内资产关系", "无", "机柜_ES-NW32-R-01-2"], ["起始U位", "-", "16"]],
+              ["变动", ["柜内资产关系", "机柜_ES-NW32-R-01-2", "机柜_ES-NW31-R-01-3"], ["起始U位", "16", "18"]],
+              ["编辑", ["端口数量", "16", "24"]]
+            ],
+            "IT-014": [
+              ["编辑", ["名称", "02# 动环采集器-02（临时）", "02# 动环采集器-02"]],
+              ["变动", ["资产位置", "1号楼>2层>弱电间", "1号楼>2层>配电间"]],
+              ["编辑", ["端口数量", "4", "8"]]
+            ],
+            "IT-017": [
+              ["下架", ["资产位置", "2号楼>4层>网络机房", "2号楼>B1层>资产库"], ["资产状态", "在用", "空闲"], ["起始U位", "12", "-"]],
+              ["上架", ["资产位置", "2号楼>B1层>资产库", "2号楼>4层>网络机房"], ["资产状态", "空闲", "在用"], ["起始U位", "-", "14"]],
+              ["编辑", ["额定功率", "5", "6"]]
+            ]
+          },
+          [VIEW_IDS.STATION_FACILITY]: {
+            "ST-001": [
+              ["部署", ["资产位置", "2号楼>B1层>资产库", "1号楼>1层>低压配电室A区"], ["资产状态", "空闲", "在用"]],
+              ["编辑", ["名称", "低压配电柜05", "配电柜_ESE-LPB1-1F-05"]]
+            ],
+            "ST-002": [
+              ["部署", ["资产位置", "2号楼>B1层>资产库", "1号楼>1层>中心机房"], ["资产状态", "空闲", "在用"]],
+              ["编辑", ["名称", "电量仪05", "电量仪_ESE-LPB1-1F-05"]]
+            ],
+            "ST-003": [
+              ["部署", ["资产位置", "2号楼>B1层>资产库", "1号楼>4层>强电井"], ["资产状态", "空闲", "在用"]],
+              ["编辑", ["名称", "PDU-01-3-A", "PDU_ES-NW31-R-01-3-A"]]
+            ],
+            "ST-004": [
+              ["变动", ["资产位置", "2号楼>B1层>资产库", "1号楼>1层>低压配电室B区"]],
+              ["编辑", ["名称", "40A插接箱", "40A三路单相智能插接箱"]]
+            ],
+            "ST-007": [
+              ["部署", ["资产位置", "2号楼>B1层>资产库", "1号楼>1层>低压配电室A区"], ["资产状态", "空闲", "在用"]],
+              ["编辑", ["名称", "PDU-01-2-A", "智能PDU_ES-NW31-R-01-2-A"]]
+            ],
+            "ST-011": [
+              ["变动", ["资产位置", "2号楼>B1层>冷站设备间", "2号楼>B1层>冷站配电室"]],
+              ["编辑", ["名称", "冷站配电柜05-02", "配电柜_ESE-LPB1-1F-05-02"]]
+            ]
+          },
+          [VIEW_IDS.CABINET]: {
+            "CB-001": [
+              ["编辑", ["名称", "中心机房机柜01-2", "机柜_ES-NW31-R-01-2"]],
+              ["变动", ["机柜列", "B列", "A列"]]
+            ],
+            "CB-002": [
+              ["回库", ["资产位置", "1号楼>7层>D7机房", "2号楼>B1层>资产库"], ["资产状态", "在用", "空闲"]],
+              ["部署", ["资产位置", "2号楼>B1层>资产库", "1号楼>7层>D7机房"], ["资产状态", "空闲", "在用"]]
+            ],
+            "CB-003": [
+              ["变动", ["资产位置", "2号楼>5层>运维区", "2号楼>4层>网络机房"]],
+              ["编辑", ["额定功率", "10kW", "12kW"]]
+            ]
+          },
+          [VIEW_IDS.SPARE_PART]: {
+            "SP-003": [
+              ["调拨", ["资产位置", "2号楼>B1层>备件库A区", "2号楼>B1层>备件库C区"]],
+              ["编辑", ["名称", "万兆光模块01", "万兆光模块-备用01"]]
+            ],
+            "SP-004": [
+              ["出库", ["资产位置", "2号楼>B1层>备件库A区", "2号楼>5层>运维区"], ["资产状态", "空闲", "在用"]],
+              ["回库", ["资产位置", "2号楼>5层>运维区", "2号楼>B1层>备件库A区"], ["资产状态", "在用", "空闲"]]
+            ],
+            "SP-005": [
+              ["编辑", ["名称", "散热风扇01", "散热风扇-备用01"]],
+              ["调拨", ["资产位置", "2号楼>B1层>备件库A区", "2号楼>B1层>备件库B区"]]
+            ]
+          }
+        };
+
         const PROCESS_FLOW_GROUPS = Object.freeze([
           Object.freeze({
             id: "it",
@@ -24679,13 +24792,13 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 name: "台账流程动作字段规则说明.md",
                 type: "Markdown 规则说明",
                 path: "../v1.1-主从设备及电子表格替换/03-配置脚本/台账流程动作字段规则说明.md",
-                contentBase64: "IyDlj7DotKbmtYHnqIvliqjkvZzlrZfmrrXpmpDol4/kuI7lj6ror7vop4TliJnor7TmmI4KCiMjIOmAgueUqOiMg+WbtAoK5pys6K+05piO5o+P6L+w6LWE5Lqn5Y+w6LSm5rWB56iL5Yqo5L2c55S15a2Q6KGo5qC85Lit55qE5a2X5q616ZqQ6JeP44CB5Y+q6K+75ZKM56aB55So6KeE5YiZ44CCCgrpgILnlKjlj7DotKbvvJoKCi0gSVTorr7lpIcKLSDlnLrlnLDorr7mlr0KLSDmnLrmn5wKLSDlpIfku7YKCiMjIOWfuuehgOWtl+autQoKfCDlrZfmrrUga2V5IHwg5a2X5q615ZCN56ewIHwKfC0tLXwtLS18CnwgYXNzZXRTdGF0dXMgfCDotYTkuqfnirbmgIEgfAp8IGFzc2V0QXBwcm92YWxTdGF0dXMgfCDotYTkuqfmtYHnqIvnirbmgIEgfAp8IHBvd2VyQXBwcm92YWxTdGF0dXMgfCDkuIrkuIvnlLXmtYHnqIvnirbmgIEgfAp8IGFzc2V0VHlwZSB8IOi1hOS6p+WIhuexuyB8CnwgYXNzZXRMb2NhdGlvbiB8IOi1hOS6p+S9jee9riB8CnwgaGVpZ2h0UlVzIHwgVemrmCB8CgojIyDpgJrnlKjop4TliJkKCjEuIOe8lui+keOAgeWFpeW6k+OAgeWIneWni+WMluaMieS4i+aWueS+i+WkluinhOWImeaJp+ihjOOAggoyLiDlhbbku5bmtLvliqjnu5/kuIDnpoHnlKjlhajpg6jmmL7npLrlrZfmrrXvvIjpmaTigJzliqjkvZzigJ3lrZfmrrXvvIzlpoLkuIrmnrbkuK3nmoTigJzkuIrmnrbkvY3nva7igJ3igJzlvIDlp4tV5L2N4oCd77yJ44CCCjMuIOemgeeUqOWtl+auteS7heeUqOS6juWxleekuu+8jOS4jeWFgeiuuOS/ruaUueOAggoKIyMg57yW6L6R44CB5YWl5bqT44CB5Yid5aeL5YyW6KeE5YiZCgrku4Xku6XkuIvkuInnsbvmtLvliqjljZXni6zlsZXnpLrlrZfmrrXpmpDol4/lkozlj6ror7vop4TliJnvvIzmnKrliJflh7rnmoTmtLvliqjkuI3lho3pgJDpobnlsZXlvIDjgIIKCnwg6YCC55So5Y+w6LSmIHwg5rS75YqoIHwg6ZqQ6JeP5a2X5q61IHwg5Y+q6K+7L+emgeeUqOWtl+autSB8CnwtLS18LS0tfC0tLXwtLS18CnwgSVTorr7lpIfjgIHlnLrlnLDorr7mlr0gfCDliJ3lp4vljJYgfCDotYTkuqfnirbmgIHjgIHotYTkuqfmtYHnqIvnirbmgIHjgIHkuIrkuIvnlLXmtYHnqIvnirbmgIEgfCDotYTkuqfkvY3nva7jgIHotYTkuqfliIbnsbvjgIFV6auYIHwKfCBJVOiuvuWkh+OAgeWcuuWcsOiuvuaWveOAgeacuuafnOOAgeWkh+S7tiB8IOWFpeW6kyB8IOi1hOS6p+eKtuaAgeOAgei1hOS6p+a1geeoi+eKtuaAgeOAgeS4iuS4i+eUtea1geeoi+eKtuaAgeOAgei1hOS6p+S9jee9riB8IOaXoCB8CnwgSVTorr7lpIfjgIHlnLrlnLDorr7mlr3jgIHmnLrmn5zjgIHlpIfku7YgfCDnvJbovpEgfCDml6AgfCDotYTkuqfnirbmgIHjgIHotYTkuqfmtYHnqIvnirbmgIHjgIHkuIrkuIvnlLXmtYHnqIvnirbmgIHjgIHotYTkuqfkvY3nva7jgIHotYTkuqfliIbnsbvjgIFV6auYIHwKCiMjIOWFtuS7lua0u+WKqOe7n+S4gOinhOWImQoK6Zmk57yW6L6R44CB5YWl5bqT44CB5Yid5aeL5YyW5aSW77yM5LiK5p6244CB5LiL5p6244CB5Y+Y5Yqo44CB6L+B5Ye644CB6YOo572y44CB5Zue5bqT44CB5oql5bqf44CB5Ye65bqT44CB6LCD5ouo562J5YW25LuW5rS75Yqo57uf5LiA56aB55So5YWo6YOo5pi+56S65a2X5q6177yI6Zmk4oCc5Yqo5L2c4oCd5a2X5q6177yM5aaC5LiK5p625Lit55qE4oCc5LiK5p625L2N572u4oCd4oCc5byA5aeLVeS9jeKAne+8ie+8jOS7heWFgeiuuOafpeeci+W5tuehruiupOaPkOS6pOOAggo="
+                contentBase64: "IyDlj7DotKbmtYHnqIvliqjkvZzlrZfmrrXpmpDol4/kuI7lj6ror7vop4TliJnor7TmmI4KCiMjIOmAgueUqOiMg+WbtAoK5pys6K+05piO5o+P6L+w6LWE5Lqn5Y+w6LSm5rWB56iL5Yqo5L2c55S15a2Q6KGo5qC85Lit55qE5a2X5q616ZqQ6JeP44CB5Y+q6K+75ZKM56aB55So6KeE5YiZ44CCCgrpgILnlKjlj7DotKbvvJoKCi0gSVTorr7lpIcKLSDlnLrlnLDorr7mlr0KLSDmnLrmn5wKLSDlpIfku7YKCiMjIOWfuuehgOWtl+autQoKfCDlrZfmrrUga2V5IHwg5a2X5q615ZCN56ewIHwKfC0tLXwtLS18CnwgYXNzZXRTdGF0dXMgfCDotYTkuqfnirbmgIEgfAp8IGFzc2V0QXBwcm92YWxTdGF0dXMgfCDotYTkuqfmtYHnqIvnirbmgIEgfAp8IHBvd2VyQXBwcm92YWxTdGF0dXMgfCDkuIrkuIvnlLXmtYHnqIvnirbmgIEgfAp8IGFzc2V0VHlwZSB8IOi1hOS6p+WIhuexuyB8CnwgYXNzZXRMb2NhdGlvbiB8IOi1hOS6p+S9jee9riB8CnwgaGVpZ2h0UlVzIHwgVemrmCB8CgojIyDpgJrnlKjop4TliJkKCjEuIOe8lui+keOAgeWFpeW6k+OAgeWIneWni+WMluaMieS4i+aWueS+i+WkluinhOWImeaJp+ihjOOAggoyLiDlhbbku5bmtLvliqjnu5/kuIDnpoHnlKjlhajpg6jmmL7npLrlrZfmrrXvvIjpmaTigJzliqjkvZzigJ3lrZfmrrXvvIzlpoLkuIrmnrbkuK3nmoTigJzkuIrmnrbkvY3nva7igJ3igJzlvIDlp4tV5L2N4oCd77yJ44CCCjMuIOemgeeUqOWtl+auteS7heeUqOS6juWxleekuu+8jOS4jeWFgeiuuOS/ruaUueOAggoKIyMg57yW6L6R44CB5YWl5bqT44CB5Yid5aeL5YyW6KeE5YiZCgrku4Xku6XkuIvkuInnsbvmtLvliqjljZXni6zlsZXnpLrlrZfmrrXpmpDol4/lkozlj6ror7vop4TliJnvvIzmnKrliJflh7rnmoTmtLvliqjkuI3lho3pgJDpobnlsZXlvIDjgIIKCnwg6YCC55So5Y+w6LSmIHwg5rS75YqoIHwg6ZqQ6JeP5a2X5q61IHwg5Y+q6K+7L+emgeeUqOWtl+autSB8CnwtLS18LS0tfC0tLXwtLS18CnwgSVTorr7lpIfjgIHlnLrlnLDorr7mlr0gfCDliJ3lp4vljJYgfCDotYTkuqfnirbmgIHjgIHotYTkuqfmtYHnqIvnirbmgIHjgIHkuIrkuIvnlLXmtYHnqIvnirbmgIEgfCDotYTkuqfkvY3nva7jgIHotYTkuqfliIbnsbsgfAp8IElU6K6+5aSH44CB5Zy65Zyw6K6+5pa944CB5py65p+c44CB5aSH5Lu2IHwg5YWl5bqTIHwg6LWE5Lqn54q25oCB44CB6LWE5Lqn5rWB56iL54q25oCB44CB5LiK5LiL55S15rWB56iL54q25oCB44CB6LWE5Lqn5L2N572uIHwg5pegIHwKfCBJVOiuvuWkh+OAgeWcuuWcsOiuvuaWveOAgeacuuafnOOAgeWkh+S7tiB8IOe8lui+kSB8IOaXoCB8IOi1hOS6p+eKtuaAgeOAgei1hOS6p+a1geeoi+eKtuaAgeOAgeS4iuS4i+eUtea1geeoi+eKtuaAgeOAgei1hOS6p+S9jee9ruOAgei1hOS6p+WIhuexuyB8CgoqKuWkh+azqCoq44CA57yW6L6R5rS75Yqo5Lit55qE44CMVemrmOOAjeaMiei1hOS6p+eKtuaAgeWIpOaWreOAguOAjOWcqOeUqOOAje+8iOW3suS4iuaetu+8iei1hOS6p+emgeeUqOOAjFXpq5jjgI3nvJbovpHvvIzjgIznqbrpl7LjgI3vvIjmnKrkuIrmnrbvvInotYTkuqflhYHorrjnvJbovpHjgILlhbbku5bnirbmgIHkuIvjgIxV6auY44CN5oyJ5Y+q6K+75aSE55CG44CCCg=="
               },
               {
                 name: "ledger-action-field-rules.json",
                 type: "JSON 配置文件",
                 path: "../v1.1-主从设备及电子表格替换/03-配置脚本/ledger-action-field-rules.json",
-                contentBase64: "ewogICJzY2hlbWFWZXJzaW9uIjogIjEuMS4wIiwKICAibmFtZSI6ICJsZWRnZXJBY3Rpb25GaWVsZFZpc2liaWxpdHlSZWFkb25seVJ1bGVzIiwKICAiZGVzY3JpcHRpb24iOiAi6LWE5Lqn5Y+w6LSm5rWB56iL5Yqo5L2c5a2X5q616ZqQ6JeP44CB5Y+q6K+75LiO56aB55So6KeE5YiZIiwKICAidXBkYXRlZEF0IjogIjIwMjYtMDgtMTAiLAogICJmaWVsZHMiOiB7CiAgICAiYXNzZXRTdGF0dXMiOiAi6LWE5Lqn54q25oCBIiwKICAgICJhc3NldEFwcHJvdmFsU3RhdHVzIjogIui1hOS6p+a1geeoi+eKtuaAgSIsCiAgICAicG93ZXJBcHByb3ZhbFN0YXR1cyI6ICLkuIrkuIvnlLXmtYHnqIvnirbmgIEiLAogICAgImFzc2V0VHlwZSI6ICLotYTkuqfliIbnsbsiLAogICAgImFzc2V0TG9jYXRpb24iOiAi6LWE5Lqn5L2N572uIiwKICAgICJoZWlnaHRSVXMiOiAiVemrmCIKICB9LAogICJmaWVsZEdyb3VwcyI6IHsKICAgICJpbmJvdW5kSGlkZGVuRmllbGRzIjogWwogICAgICAiYXNzZXRTdGF0dXMiLAogICAgICAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsCiAgICAgICJwb3dlckFwcHJvdmFsU3RhdHVzIiwKICAgICAgImFzc2V0TG9jYXRpb24iCiAgICBdLAogICAgImluaXRpYWxpemF0aW9uSGlkZGVuRmllbGRzIjogWwogICAgICAiYXNzZXRTdGF0dXMiLAogICAgICAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsCiAgICAgICJwb3dlckFwcHJvdmFsU3RhdHVzIgogICAgXSwKICAgICJpbml0aWFsaXphdGlvblJlYWRvbmx5RmllbGRzIjogWwogICAgICAiYXNzZXRMb2NhdGlvbiIsCiAgICAgICJhc3NldFR5cGUiLAogICAgICAiaGVpZ2h0UlVzIgogICAgXSwKICAgICJlZGl0UmVhZG9ubHlGaWVsZHMiOiBbCiAgICAgICJhc3NldFN0YXR1cyIsCiAgICAgICJhc3NldEFwcHJvdmFsU3RhdHVzIiwKICAgICAgInBvd2VyQXBwcm92YWxTdGF0dXMiLAogICAgICAiYXNzZXRMb2NhdGlvbiIsCiAgICAgICJhc3NldFR5cGUiLAogICAgICAiaGVpZ2h0UlVzIgogICAgXQogIH0sCiAgInJ1bGVUZW1wbGF0ZXMiOiB7CiAgICAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiOiB7CiAgICAgICJhcHBsaWVzVG8iOiAiYWxsRGlzcGxheWVkRmllbGRzIiwKICAgICAgImRpc2FibGVkIjogdHJ1ZSwKICAgICAgImluY2x1ZGVzQmFzZUZpZWxkcyI6IHRydWUsCiAgICAgICJpbmNsdWRlc0FjdGlvbkZpZWxkcyI6IHRydWUsCiAgICAgICJkZXNjcmlwdGlvbiI6ICLlhbbku5bmtLvliqjnu5/kuIDnpoHnlKjlhajpg6jmmL7npLrlrZfmrrXjgIIiCiAgICB9CiAgfSwKICAicnVsZVJlc29sdXRpb24iOiB7CiAgICAibW9kZSI6ICJleGNlcHRpb25GaXJzdCIsCiAgICAiZXhjZXB0aW9uQWN0aW9uS2V5cyI6IFsKICAgICAgImluaXRpYWxpemUiLAogICAgICAiaW5ib3VuZCIsCiAgICAgICJlZGl0IgogICAgXSwKICAgICJkZWZhdWx0UnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIKICB9LAogICJnbG9iYWxSdWxlcyI6IFsKICAgIHsKICAgICAgInJ1bGUiOiAidXNlRXhjZXB0aW9uUnVsZXMiLAogICAgICAiZGVzY3JpcHRpb24iOiAi57yW6L6R44CB5YWl5bqT44CB5Yid5aeL5YyW5oyJ5a+55bqU5Yqo5L2c6KeE5YiZ5omn6KGM44CCIgogICAgfSwKICAgIHsKICAgICAgInJ1bGUiOiAiZGlzYWJsZUFsbEZpZWxkc0Zvck90aGVyQWN0aW9ucyIsCiAgICAgICJkZXNjcmlwdGlvbiI6ICLlhbbku5bmtLvliqjnu5/kuIDnpoHnlKjlhajpg6jmmL7npLrlrZfmrrXjgIIiCiAgICB9LAogICAgewogICAgICAicnVsZSI6ICJkaXNhYmxlZEZpZWxkc1JlYWRvbmx5IiwKICAgICAgImRlc2NyaXB0aW9uIjogIuemgeeUqOWtl+auteS7heeUqOS6juWxleekuu+8jOS4jeWFgeiuuOS/ruaUueOAgiIKICAgIH0KICBdLAogICJsZWRnZXJSdWxlcyI6IHsKICAgICJpdERldmljZSI6IHsKICAgICAgImxhYmVsIjogIklU6K6+5aSHIiwKICAgICAgImFjdGlvbnMiOiB7CiAgICAgICAgImluaXRpYWxpemUiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5Yid5aeL5YyWIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogWyJhc3NldExvY2F0aW9uIiwgImFzc2V0VHlwZSIsICJoZWlnaHRSVXMiXQogICAgICAgIH0sCiAgICAgICAgImluYm91bmQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5YWl5bqTIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyIsICJhc3NldExvY2F0aW9uIl0sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbXQogICAgICAgIH0sCiAgICAgICAgInNoZWxmIjogeyAibGFiZWwiOiAi5LiK5p62IiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInVuc2hlbGYiOiB7ICJsYWJlbCI6ICLkuIvmnrYiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiY2hhbmdlIjogeyAibGFiZWwiOiAi5Y+Y5YqoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgIm1vdmVPdXQiOiB7ICJsYWJlbCI6ICLov4Hlh7oiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiZWRpdCI6IHsKICAgICAgICAgICJsYWJlbCI6ICLnvJbovpEiLAogICAgICAgICAgImhpZGRlbkZpZWxkcyI6IFtdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiIsICJhc3NldFR5cGUiLCAiaGVpZ2h0UlVzIl0KICAgICAgICB9CiAgICAgIH0KICAgIH0sCiAgICAic2l0ZUZhY2lsaXR5IjogewogICAgICAibGFiZWwiOiAi5Zy65Zyw6K6+5pa9IiwKICAgICAgImFjdGlvbnMiOiB7CiAgICAgICAgImluaXRpYWxpemUiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5Yid5aeL5YyWIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogWyJhc3NldExvY2F0aW9uIiwgImFzc2V0VHlwZSIsICJoZWlnaHRSVXMiXQogICAgICAgIH0sCiAgICAgICAgImluYm91bmQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5YWl5bqTIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyIsICJhc3NldExvY2F0aW9uIl0sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbXQogICAgICAgIH0sCiAgICAgICAgImRlcGxveSI6IHsgImxhYmVsIjogIumDqOe9siIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJyZXR1cm5Ub1dhcmVob3VzZSI6IHsgImxhYmVsIjogIuWbnuW6kyIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJjaGFuZ2UiOiB7ICJsYWJlbCI6ICLlj5jliqgiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAic2NyYXAiOiB7ICJsYWJlbCI6ICLmiqXlup8iLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiZWRpdCI6IHsKICAgICAgICAgICJsYWJlbCI6ICLnvJbovpEiLAogICAgICAgICAgImhpZGRlbkZpZWxkcyI6IFtdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiIsICJhc3NldFR5cGUiLCAiaGVpZ2h0UlVzIl0KICAgICAgICB9CiAgICAgIH0KICAgIH0sCiAgICAiY2FiaW5ldCI6IHsKICAgICAgImxhYmVsIjogIuacuuafnCIsCiAgICAgICJhY3Rpb25zIjogewogICAgICAgICJpbmJvdW5kIjogewogICAgICAgICAgImxhYmVsIjogIuWFpeW6kyIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogW10KICAgICAgICB9LAogICAgICAgICJkZXBsb3kiOiB7ICJsYWJlbCI6ICLpg6jnvbIiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAicmV0dXJuVG9XYXJlaG91c2UiOiB7ICJsYWJlbCI6ICLlm57lupMiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiY2hhbmdlIjogeyAibGFiZWwiOiAi5Y+Y5YqoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInNjcmFwIjogeyAibGFiZWwiOiAi5oql5bqfIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgImVkaXQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi57yW6L6RIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbXSwKICAgICAgICAgICJyZWFkb25seUZpZWxkcyI6IFsiYXNzZXRTdGF0dXMiLCAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsICJwb3dlckFwcHJvdmFsU3RhdHVzIiwgImFzc2V0TG9jYXRpb24iLCAiYXNzZXRUeXBlIiwgImhlaWdodFJVcyJdCiAgICAgICAgfQogICAgICB9CiAgICB9LAogICAgInNwYXJlUGFydCI6IHsKICAgICAgImxhYmVsIjogIuWkh+S7tiIsCiAgICAgICJhY3Rpb25zIjogewogICAgICAgICJpbmJvdW5kIjogewogICAgICAgICAgImxhYmVsIjogIuWFpeW6kyIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogW10KICAgICAgICB9LAogICAgICAgICJvdXRib3VuZCI6IHsgImxhYmVsIjogIuWHuuW6kyIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJ0cmFuc2ZlciI6IHsgImxhYmVsIjogIuiwg+aLqCIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJyZXR1cm5Ub1dhcmVob3VzZSI6IHsgImxhYmVsIjogIuWbnuW6kyIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJzY3JhcCI6IHsgImxhYmVsIjogIuaKpeW6nyIsICJydWxlUmVmIjogImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIiB9LAogICAgICAgICJlZGl0IjogewogICAgICAgICAgImxhYmVsIjogIue8lui+kSIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogW10sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyIsICJhc3NldExvY2F0aW9uIiwgImFzc2V0VHlwZSIsICJoZWlnaHRSVXMiXQogICAgICAgIH0KICAgICAgfQogICAgfQogIH0KfQo="
+                contentBase64: "ewogICJzY2hlbWFWZXJzaW9uIjogIjEuMS4wIiwKICAibmFtZSI6ICJsZWRnZXJBY3Rpb25GaWVsZFZpc2liaWxpdHlSZWFkb25seVJ1bGVzIiwKICAiZGVzY3JpcHRpb24iOiAi6LWE5Lqn5Y+w6LSm5rWB56iL5Yqo5L2c5a2X5q616ZqQ6JeP44CB5Y+q6K+75LiO56aB55So6KeE5YiZIiwKICAidXBkYXRlZEF0IjogIjIwMjYtMTEtMTEiLAogICJmaWVsZHMiOiB7CiAgICAiYXNzZXRTdGF0dXMiOiAi6LWE5Lqn54q25oCBIiwKICAgICJhc3NldEFwcHJvdmFsU3RhdHVzIjogIui1hOS6p+a1geeoi+eKtuaAgSIsCiAgICAicG93ZXJBcHByb3ZhbFN0YXR1cyI6ICLkuIrkuIvnlLXmtYHnqIvnirbmgIEiLAogICAgImFzc2V0VHlwZSI6ICLotYTkuqfliIbnsbsiLAogICAgImFzc2V0TG9jYXRpb24iOiAi6LWE5Lqn5L2N572uIiwKICAgICJoZWlnaHRSVXMiOiAiVemrmCIKICB9LAogICJmaWVsZEdyb3VwcyI6IHsKICAgICJpbmJvdW5kSGlkZGVuRmllbGRzIjogWwogICAgICAiYXNzZXRTdGF0dXMiLAogICAgICAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsCiAgICAgICJwb3dlckFwcHJvdmFsU3RhdHVzIiwKICAgICAgImFzc2V0TG9jYXRpb24iCiAgICBdLAogICAgImluaXRpYWxpemF0aW9uSGlkZGVuRmllbGRzIjogWwogICAgICAiYXNzZXRTdGF0dXMiLAogICAgICAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsCiAgICAgICJwb3dlckFwcHJvdmFsU3RhdHVzIgogICAgXSwKICAgICJpbml0aWFsaXphdGlvblJlYWRvbmx5RmllbGRzIjogWwogICAgICAiYXNzZXRMb2NhdGlvbiIsCiAgICAgICJhc3NldFR5cGUiCiAgICBdLAogICAgImVkaXRSZWFkb25seUZpZWxkcyI6IFsKICAgICAgImFzc2V0U3RhdHVzIiwKICAgICAgImFzc2V0QXBwcm92YWxTdGF0dXMiLAogICAgICAicG93ZXJBcHByb3ZhbFN0YXR1cyIsCiAgICAgICJhc3NldExvY2F0aW9uIiwKICAgICAgImFzc2V0VHlwZSIKICAgIF0KICB9LAogICJjb25kaXRpb25hbEZpZWxkUnVsZXMiOiBbCiAgICB7CiAgICAgICJhY3Rpb25LZXkiOiAiZWRpdCIsCiAgICAgICJmaWVsZEtleSI6ICJoZWlnaHRSVXMiLAogICAgICAic3RhdHVzRmllbGQiOiAiYXNzZXRTdGF0dXMiLAogICAgICAicmVhZG9ubHlCeVN0YXR1cyI6IHsKICAgICAgICAi5Zyo55SoIjogdHJ1ZSwKICAgICAgICAi56m66ZeyIjogZmFsc2UKICAgICAgfSwKICAgICAgImRlZmF1bHRSZWFkb25seSI6IHRydWUKICAgIH0KICBdLAogICJydWxlVGVtcGxhdGVzIjogewogICAgImFsbE90aGVyQWN0aW9uc0Rpc2FibGVkIjogewogICAgICAiYXBwbGllc1RvIjogImFsbERpc3BsYXllZEZpZWxkcyIsCiAgICAgICJkaXNhYmxlZCI6IHRydWUsCiAgICAgICJpbmNsdWRlc0Jhc2VGaWVsZHMiOiB0cnVlLAogICAgICAiaW5jbHVkZXNBY3Rpb25GaWVsZHMiOiB0cnVlLAogICAgICAiZGVzY3JpcHRpb24iOiAi5YW25LuW5rS75Yqo57uf5LiA56aB55So5YWo6YOo5pi+56S65a2X5q6144CCIgogICAgfQogIH0sCiAgInJ1bGVSZXNvbHV0aW9uIjogewogICAgIm1vZGUiOiAiZXhjZXB0aW9uRmlyc3QiLAogICAgImV4Y2VwdGlvbkFjdGlvbktleXMiOiBbCiAgICAgICJpbml0aWFsaXplIiwKICAgICAgImluYm91bmQiLAogICAgICAiZWRpdCIKICAgIF0sCiAgICAiZGVmYXVsdFJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiCiAgfSwKICAiZ2xvYmFsUnVsZXMiOiBbCiAgICB7CiAgICAgICJydWxlIjogInVzZUV4Y2VwdGlvblJ1bGVzIiwKICAgICAgImRlc2NyaXB0aW9uIjogIue8lui+keOAgeWFpeW6k+OAgeWIneWni+WMluaMieWvueW6lOWKqOS9nOinhOWImeaJp+ihjOOAgiIKICAgIH0sCiAgICB7CiAgICAgICJydWxlIjogImRpc2FibGVBbGxGaWVsZHNGb3JPdGhlckFjdGlvbnMiLAogICAgICAiZGVzY3JpcHRpb24iOiAi5YW25LuW5rS75Yqo57uf5LiA56aB55So5YWo6YOo5pi+56S65a2X5q6144CCIgogICAgfSwKICAgIHsKICAgICAgInJ1bGUiOiAiZGlzYWJsZWRGaWVsZHNSZWFkb25seSIsCiAgICAgICJkZXNjcmlwdGlvbiI6ICLnpoHnlKjlrZfmrrXku4XnlKjkuo7lsZXnpLrvvIzkuI3lhYHorrjkv67mlLnjgIIiCiAgICB9CiAgXSwKICAibGVkZ2VyUnVsZXMiOiB7CiAgICAiaXREZXZpY2UiOiB7CiAgICAgICJsYWJlbCI6ICJJVOiuvuWkhyIsCiAgICAgICJhY3Rpb25zIjogewogICAgICAgICJpbml0aWFsaXplIjogewogICAgICAgICAgImxhYmVsIjogIuWIneWni+WMliIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiXSwKICAgICAgICAgICJyZWFkb25seUZpZWxkcyI6IFsiYXNzZXRMb2NhdGlvbiIsICJhc3NldFR5cGUiXQogICAgICAgIH0sCiAgICAgICAgImluYm91bmQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5YWl5bqTIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyIsICJhc3NldExvY2F0aW9uIl0sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbXQogICAgICAgIH0sCiAgICAgICAgInNoZWxmIjogeyAibGFiZWwiOiAi5LiK5p62IiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInVuc2hlbGYiOiB7ICJsYWJlbCI6ICLkuIvmnrYiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiY2hhbmdlIjogeyAibGFiZWwiOiAi5Y+Y5YqoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgIm1vdmVPdXQiOiB7ICJsYWJlbCI6ICLov4Hlh7oiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiZWRpdCI6IHsKICAgICAgICAgICJsYWJlbCI6ICLnvJbovpEiLAogICAgICAgICAgImhpZGRlbkZpZWxkcyI6IFtdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiIsICJhc3NldFR5cGUiXQogICAgICAgIH0KICAgICAgfQogICAgfSwKICAgICJzaXRlRmFjaWxpdHkiOiB7CiAgICAgICJsYWJlbCI6ICLlnLrlnLDorr7mlr0iLAogICAgICAiYWN0aW9ucyI6IHsKICAgICAgICAiaW5pdGlhbGl6ZSI6IHsKICAgICAgICAgICJsYWJlbCI6ICLliJ3lp4vljJYiLAogICAgICAgICAgImhpZGRlbkZpZWxkcyI6IFsiYXNzZXRTdGF0dXMiLCAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsICJwb3dlckFwcHJvdmFsU3RhdHVzIl0sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbImFzc2V0TG9jYXRpb24iLCAiYXNzZXRUeXBlIl0KICAgICAgICB9LAogICAgICAgICJpbmJvdW5kIjogewogICAgICAgICAgImxhYmVsIjogIuWFpeW6kyIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogW10KICAgICAgICB9LAogICAgICAgICJkZXBsb3kiOiB7ICJsYWJlbCI6ICLpg6jnvbIiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAicmV0dXJuVG9XYXJlaG91c2UiOiB7ICJsYWJlbCI6ICLlm57lupMiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiY2hhbmdlIjogeyAibGFiZWwiOiAi5Y+Y5YqoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInNjcmFwIjogeyAibGFiZWwiOiAi5oql5bqfIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgImVkaXQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi57yW6L6RIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbXSwKICAgICAgICAgICJyZWFkb25seUZpZWxkcyI6IFsiYXNzZXRTdGF0dXMiLCAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsICJwb3dlckFwcHJvdmFsU3RhdHVzIiwgImFzc2V0TG9jYXRpb24iLCAiYXNzZXRUeXBlIl0KICAgICAgICB9CiAgICAgIH0KICAgIH0sCiAgICAiY2FiaW5ldCI6IHsKICAgICAgImxhYmVsIjogIuacuuafnCIsCiAgICAgICJhY3Rpb25zIjogewogICAgICAgICJpbmJvdW5kIjogewogICAgICAgICAgImxhYmVsIjogIuWFpeW6kyIsCiAgICAgICAgICAiaGlkZGVuRmllbGRzIjogWyJhc3NldFN0YXR1cyIsICJhc3NldEFwcHJvdmFsU3RhdHVzIiwgInBvd2VyQXBwcm92YWxTdGF0dXMiLCAiYXNzZXRMb2NhdGlvbiJdLAogICAgICAgICAgInJlYWRvbmx5RmllbGRzIjogW10KICAgICAgICB9LAogICAgICAgICJkZXBsb3kiOiB7ICJsYWJlbCI6ICLpg6jnvbIiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAicmV0dXJuVG9XYXJlaG91c2UiOiB7ICJsYWJlbCI6ICLlm57lupMiLCAicnVsZVJlZiI6ICJhbGxPdGhlckFjdGlvbnNEaXNhYmxlZCIgfSwKICAgICAgICAiY2hhbmdlIjogeyAibGFiZWwiOiAi5Y+Y5YqoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInNjcmFwIjogeyAibGFiZWwiOiAi5oql5bqfIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgImVkaXQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi57yW6L6RIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbXSwKICAgICAgICAgICJyZWFkb25seUZpZWxkcyI6IFsiYXNzZXRTdGF0dXMiLCAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsICJwb3dlckFwcHJvdmFsU3RhdHVzIiwgImFzc2V0TG9jYXRpb24iLCAiYXNzZXRUeXBlIl0KICAgICAgICB9CiAgICAgIH0KICAgIH0sCiAgICAic3BhcmVQYXJ0IjogewogICAgICAibGFiZWwiOiAi5aSH5Lu2IiwKICAgICAgImFjdGlvbnMiOiB7CiAgICAgICAgImluYm91bmQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi5YWl5bqTIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbImFzc2V0U3RhdHVzIiwgImFzc2V0QXBwcm92YWxTdGF0dXMiLCAicG93ZXJBcHByb3ZhbFN0YXR1cyIsICJhc3NldExvY2F0aW9uIl0sCiAgICAgICAgICAicmVhZG9ubHlGaWVsZHMiOiBbXQogICAgICAgIH0sCiAgICAgICAgIm91dGJvdW5kIjogeyAibGFiZWwiOiAi5Ye65bqTIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInRyYW5zZmVyIjogeyAibGFiZWwiOiAi6LCD5ouoIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInJldHVyblRvV2FyZWhvdXNlIjogeyAibGFiZWwiOiAi5Zue5bqTIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgInNjcmFwIjogeyAibGFiZWwiOiAi5oql5bqfIiwgInJ1bGVSZWYiOiAiYWxsT3RoZXJBY3Rpb25zRGlzYWJsZWQiIH0sCiAgICAgICAgImVkaXQiOiB7CiAgICAgICAgICAibGFiZWwiOiAi57yW6L6RIiwKICAgICAgICAgICJoaWRkZW5GaWVsZHMiOiBbXSwKICAgICAgICAgICJyZWFkb25seUZpZWxkcyI6IFsiYXNzZXRTdGF0dXMiLCAiYXNzZXRBcHByb3ZhbFN0YXR1cyIsICJwb3dlckFwcHJvdmFsU3RhdHVzIiwgImFzc2V0TG9jYXRpb24iLCAiYXNzZXRUeXBlIl0KICAgICAgICB9CiAgICAgIH0KICAgIH0KICB9Cn0K"
               }
             ],
             status: "设计完成"
@@ -24780,7 +24893,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           "V3R5-4185": { role: "系统管理员", need: "在表单设计和详情设计的资产树中搜索分类或模型", value: "快速定位配置对象，减少逐级展开成本", scenario: "资产分类层级较深、模型数量较多时，需要按名称搜索。", rules: ["搜索命中子节点时保留父级路径并自动展开。", "清空搜索后恢复原有树结构和展开状态。"], boundary: "无匹配结果时保留当前配置，不得清空已选节点或字段。" },
           "V3R5-4117": { role: "运维主管", need: "将已配置的资产概览看板应用到其他组织或空间层级", value: "复用看板配置并保持多层级展示一致", scenario: "多个机房、楼层或区域需要使用相同指标看板时，可批量复用配置。", rules: ["应用前选择目标层级并展示受影响范围。", "只复制目标层级支持的组件和指标配置。"], boundary: "未选择目标、目标无权限或字段不兼容时不得直接覆盖。" },
           "V3R5-4113": { role: "运维主管", need: "从资产概览指标逐级下钻到明细数据", value: "快速定位指标异常对应的资产和位置", scenario: "发现资产数量、状态或利用率异常时，需要查看组成数据。", rules: ["支持从汇总指标进入下一层级或资产列表。", "下钻过程保留当前筛选条件和层级路径。"], boundary: "无下级数据或用户无查看权限时，展示明确空态或权限提示。" },
-          "V3R5-4112": { role: "运维人员", need: "统一查询资产详情与全局操作记录", value: "追溯已生效的资产字段、位置、关系和流程变更", scenario: "定位资产异常或审计变更时，需要按资产、来源单据及字段新旧值快速检索记录。", rules: ["操作记录覆盖资产台账和流程工单中的业务操作。", "柜内资产页签仅在机柜台账详情展示，关系变更字段使用柜内资产关系。", "成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "全局操作记录仅展示已生效事件，列表和导出统一使用操作时间，并支持按资产、操作、来源单据和字段新旧值查询。", "全局详情与资产详情共用字段变更样式。预置和自定义视图均可重命名和删除，修改在刷新后保留。", "流程工单显示具体业务入口名称；记录详情不展示内部事件编号。"], boundary: "缺失的新旧值显示“-”。视图名称须填写且保持唯一。" },
+          "V3R5-4112": { role: "运维人员", need: "统一查询资产详情与全局操作记录", value: "追溯已生效的资产字段、位置、关系和流程变更", scenario: "定位资产异常或审计变更时，需要按资产、操作和来源单据快速检索记录。", rules: ["操作记录覆盖资产台账和流程工单中的业务操作。", "柜内资产页签仅在机柜台账详情展示，关系变更字段使用柜内资产关系。", "成功生效的事件进入资产详情操作记录；同一次业务操作涉及的属性、位置和关系变化合并为一条履历。", "全局操作记录仅展示已生效事件，列表和导出统一使用操作时间，并支持按资产、操作、操作人、来源和关联单据查询。", "全局详情与资产详情共用字段变更样式。预置和自定义视图均可重命名和删除，修改在刷新后保留。", "关联工单展示与当前资产关联的入库、上架、变动、下架和迁出流程单及状态，单号可打开对应流程详情。", "流程工单显示具体业务入口名称；记录详情不展示内部事件编号。"], boundary: "缺失的新旧值显示“-”。视图名称须填写且保持唯一。" },
           "V3R5-4111": { role: "资产管理员", need: "在资产台账中跨页勾选并批量处理资产", value: "无需把所有目标资产集中到同一页即可完成批量操作", scenario: "目标资产分布在多页搜索结果中时，需要持续累积选择。", rules: ["翻页后保留已选资产和累计数量。", "表头全选只影响当前页，不清空其他页选择。"], boundary: "筛选范围变化或资产失效时，应清理不再适用的选择并提示。" },
           "V3R5-4110": { role: "资产管理员", need: "在空间视图中按位置查看资产分布而不展示设备末级节点", value: "减少树节点数量并突出空间层级", scenario: "按园区、楼栋、楼层和房间浏览资产时，需要快速定位空间。", rules: ["空间树只展示空间层级及资产数量。", "设备明细继续在右侧列表或详情区域展示。"], boundary: "资产位置缺失时应归入未分配位置，不得生成异常树节点。" },
           "V3R5-4427": { role: "运维人员", need: "在场地设施及备件详情中查看符合其业务特点的位置信息", value: "避免使用不适用的机柜U位图并快速识别同空间设备", scenario: "查看精密空调、传感器或备件位置时，需要了解所属空间和附近设备。", rules: ["展示空间路径、当前设备和同空间设备。", "同空间设备支持搜索并可进入对应详情。"], boundary: "位置缺失或同空间无其他设备时展示清晰空态。" },
@@ -25941,7 +26054,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               assetStatus: item[4],
               assetCategory: item[3],
               vendor: item[5],
-              model: item[6]
+              model: item[6],
+              ...(index === 0 ? { sourceLedgerViewId: VIEW_IDS.IT_FACILITY, startU: "", uHeight: "2" } : {})
             }));
             return disambiguateNames(rows);
           }
@@ -25966,6 +26080,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           constructor() {
             this.bus = new EventBus();
             this.state = SeedFactory.create();
+            this.seedRelatedAssetWorkflowOrders();
             restoreBrowsingPreference(this.state.ui);
             window.addEventListener("pagehide", () => { writeLastViewPreference(this.state.ui); rememberBrowsingScroll(this.state.ui); });
             window.addEventListener("beforeunload", () => { writeLastViewPreference(this.state.ui); rememberBrowsingScroll(this.state.ui); });
@@ -26989,9 +27104,61 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             return this.getListRows(viewId).find((item) => item.id === rowId) || null;
           }
 
+          getItAssetLifecycleExampleEvents(asset, row, example) {
+            const { rackPosition, warehouse, steps, orderSequence } = example;
+            const snapshots = steps.map((step) => ({
+              assetLocation: step.location ?? (step.mounted ? rackPosition : warehouse),
+              cabinet: step.mounted ? rackPosition.split(">").at(-1) : "",
+              startU: step.startU || "",
+              assetStatus: step.status
+            }));
+            return steps.map((step, index) => {
+              const before = snapshots[index - 1] || {};
+              const after = snapshots[index];
+              const flowViewId = step.viaWorkflow ? this.getProcessFlowActivity(VIEW_IDS.IT_FACILITY, step.action).activity.flowViewId : "";
+              const codePrefix = flowViewId === VIEW_IDS.IT_INBOUND ? "ITRK" : this.getItAssetWorkflowConfig(flowViewId)?.codePrefix;
+              const orderNo = codePrefix ? codePrefix + step.time.slice(0, 10).replace(/-/g, "") + orderSequence : "";
+              const changes = [
+                ["资产位置", before.assetLocation, after.assetLocation],
+                ["所属机柜", before.cabinet, after.cabinet],
+                ["开始U位", before.startU, after.startU],
+                ["资产状态", before.assetStatus, after.assetStatus]
+              ].map(([field, oldValue, newValue]) => ({ field, oldValue: oldValue || "-", newValue: newValue || "-" }))
+                .filter((change) => change.oldValue !== change.newValue);
+              return {
+                ...asset,
+                assetType: "IT设备",
+                id: `EVT-LIFECYCLE-${row.id}-${index + 1}`,
+                action: step.action,
+                time: step.time,
+                operator: "系统管理员",
+                executor: "刘婷",
+                source: flowViewId ? "IT设备" + step.action
+                  : step.action === "初始化" ? LIST_PAGE_META[VIEW_IDS.PENDING_IT_ASSET].title : "资产台账",
+                sourceType: flowViewId ? "流程工单" : "资产台账",
+                flowViewId,
+                orderNo,
+                workflowStatus: flowViewId ? "已完成" : "",
+                workflowAsset: flowViewId ? {
+                  ...row,
+                  assetLocation: step.action === "迁出" ? before.assetLocation : after.assetLocation,
+                  assetStatus: after.assetStatus,
+                  assetSummary: "",
+                  startU: after.startU,
+                  warehouse,
+                  rackPosition,
+                  newLocation: after.assetLocation,
+                  offShelfLocation: warehouse
+                } : null,
+                result: "成功",
+                changes
+              };
+            });
+          }
+
           getAssetHistoryEvents() {
             const viewConfigs = [
-              { viewId: VIEW_IDS.IT_FACILITY, type: "IT设备", source: "流程工单", actions: ["入库", "上架", "变动", "下架", "编辑", "迁出"] },
+              { viewId: VIEW_IDS.IT_FACILITY, type: "IT设备", source: "流程工单", actions: ["入库", "上架", "变动", "下架", "编辑"] },
               { viewId: VIEW_IDS.STATION_FACILITY, type: "场地设施", source: "流程工单", actions: ["入库", "部署", "变动", "回库", "编辑", "报废"] },
               { viewId: VIEW_IDS.CABINET, type: "机柜", source: "资产台账", actions: ["入库", "部署", "变动", "回库", "编辑", "报废"] },
               { viewId: VIEW_IDS.SPARE_PART, type: "备件", source: "资产台账", actions: ["入库", "出库", "调拨", "回库", "编辑", "报废"] },
@@ -27004,11 +27171,22 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               this.getListRows(config.viewId).forEach((row, index) => {
                 const assetCode = String(row.assetCode || row.serialCode || row.id || "-");
                 const assetName = String(row.name || row.assetSummary || assetCode);
+                const asset = { assetType: config.type, assetViewId: config.viewId, assetRowId: row.id, assetCode, assetName };
+                const example = IT_ASSET_LIFECYCLE_EXAMPLES[config.viewId]?.[row.id];
+                if (example) {
+                  events.push(...this.getItAssetLifecycleExampleEvents(asset, row, example));
+                  return;
+                }
+                const directExamples = ASSET_DIRECT_HISTORY_EXAMPLES[config.viewId]?.[row.id] || [];
+                const lastHistoryDay = 14 - index % 12;
                 const relatedCabinet = config.viewId === VIEW_IDS.IT_FACILITY && cabinets.length ? cabinets[index % cabinets.length] : null;
                 const isLifecycleSample = [VIEW_IDS.IT_FACILITY, VIEW_IDS.STATION_FACILITY].includes(config.viewId) && index < 3;
                 const actions = isLifecycleSample
-            ? (config.viewId === VIEW_IDS.IT_FACILITY ? ["初始化", "上架", "变动", "下架", "迁出"] : ["初始化", "部署", "变动", "回库", "报废"])
+                  ? (config.viewId === VIEW_IDS.IT_FACILITY
+                    ? ["初始化", "上架", row.assetStatus === "在用" ? "变动" : "下架"]
+                    : ["初始化", "部署", "变动", "回库", "报废"])
                   : [config.actions[index % config.actions.length]];
+                if (config.viewId === VIEW_IDS.STATION_FACILITY && index === 0) actions.unshift("入库");
                 actions.forEach((action, actionIndex) => {
             const sourceType = action === "初始化" ? "资产台账" : config.source;
                   const workflowEntryPrefix = config.viewId === VIEW_IDS.IT_FACILITY
@@ -27021,7 +27199,15 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                   const source = action === "初始化"
                     ? LIST_PAGE_META[initializationViewId].title
                     : sourceType === "流程工单" ? `${workflowEntryPrefix}${action}` : sourceType;
-                  const result = !isLifecycleSample && (index + actionIndex + viewIndex) % 7 === 0 ? "未生效" : "成功";
+                  const hasCompletedRackExample = action === "上架" && ["IT-002", "IT-003"].includes(row.id);
+                  const hasStationInboundExample = config.viewId === VIEW_IDS.STATION_FACILITY && index === 0 && action === "入库";
+                  const exampleStatus = hasCompletedRackExample || hasStationInboundExample ? "已完成" : "";
+                  const flowViewId = exampleStatus ? this.getProcessFlowActivity(config.viewId, action)?.activity.flowViewId : "";
+                  // 在册资产的直接办理示例不能接在已生效的迁出或报废之后。
+                  const isUnappliedTerminalExample = directExamples.length > 0 && ["迁出", "报废"].includes(action);
+                  const result = flowViewId
+                    ? (exampleStatus === "已完成" ? "成功" : "未生效")
+                    : (isUnappliedTerminalExample || (!isLifecycleSample && (index + actionIndex + viewIndex) % 7 === 0) ? "未生效" : "成功");
             const locationBefore = ["初始化", "入库"].includes(action) ? "-" : ["上架", "部署"].includes(action) ? "2号楼>B1层>资产库" : "A栋>2层>临时区";
             const locationAfter = ["下架", "回库"].includes(action) ? "2号楼>B1层>资产库" : String(row.assetLocation || "资产库");
                   const changes = [
@@ -27035,17 +27221,15 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                   }
                   events.push({
                     id: `EVT-202607-${String(viewIndex + 1).padStart(2, "0")}${String(index + 1).padStart(4, "0")}-${String(actionIndex + 1).padStart(2, "0")}`,
-                    time: `2026-07-${pad(Math.max(1, 14 - (index % 12) - (actions.length - actionIndex - 1)), 2)} ${pad(9 + actionIndex, 2)}:${pad((index * 7 + viewIndex * 3) % 60, 2)}:20`,
+                    time: `2026-07-${pad(Math.max(1, lastHistoryDay - (actions.length - actionIndex - 1)), 2)} ${pad(9 + actionIndex, 2)}:${pad((index * 7 + viewIndex * 3) % 60, 2)}:20`,
                     action,
-                    assetType: config.type,
-                    assetViewId: config.viewId,
-                    assetRowId: row.id,
-                    assetCode,
-                    assetName,
+                    ...asset,
                     operator: index % 2 ? "刘婷" : "系统管理员",
                     executor: index % 2 ? "陈浩" : "刘婷",
                     source,
                     sourceType,
+                    flowViewId,
+                    workflowStatus: flowViewId ? exampleStatus : "",
                     orderNo: sourceType === "流程工单" ? `${config.viewId === VIEW_IDS.STATION_FACILITY ? "SF" : "IT"}${actionPrefixMap[action] || "CZ"}202607${String(index + 1).padStart(6, "0")}` : "",
                     result,
                     relatedViewId: relatedCabinet ? VIEW_IDS.CABINET : "",
@@ -27055,20 +27239,83 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                     note: result === "成功" ? "" : "本次操作未生效，仅保留操作记录和字段变化快照，不写入正式资产履历。"
                   });
                 });
+                directExamples.forEach(([action, ...fields], exampleIndex) => {
+                  // IT-002 的剩余示例沿用原来的记录编号、时间和操作人。
+                  const historyIndex = exampleIndex + (row.id === "IT-002" ? 1 : 0);
+                  const day = Math.min(14, Math.max(8, lastHistoryDay + 1) + historyIndex);
+                  const minute = pad((index * 7 + viewIndex * 3) % 60, 2);
+                  events.push({
+                    id: `EVT-DIRECT-${row.id}-${historyIndex + 1}`,
+                    time: `2026-07-${pad(day, 2)} ${15 + historyIndex}:${minute}:20`,
+                    action,
+                    ...asset,
+                    operator: ["系统管理员", "刘婷", "陈浩"][(index + historyIndex) % 3],
+                    source: "资产台账",
+                    sourceType: "资产台账",
+                    orderNo: "",
+                    result: "成功",
+                    changes: fields.map(([field, oldValue, newValue]) => ({ field, oldValue, newValue }))
+                  });
+                });
               });
             });
             return events.sort((first, second) => String(second.time).localeCompare(String(first.time)));
+          }
+
+          seedRelatedAssetWorkflowOrders() {
+            for (const event of this.getAssetHistoryEvents()) {
+              if (!event.flowViewId) continue;
+              const asset = event.workflowAsset || this.getRowById(event.assetViewId, event.assetRowId);
+              const orders = this.getProcessFlowOrders(event.flowViewId);
+              orders.push({
+                id: event.orderNo,
+                name: event.assetName + event.action + "申请",
+                creator: event.operator,
+                createdAt: event.time,
+                status: event.workflowStatus,
+                executedAt: event.workflowStatus === "已完成" ? event.time : "",
+                approver: "李敏",
+                executor: event.executor,
+                description: "办理 " + event.assetCode + " · " + event.assetName + " 的" + event.action + "。",
+                assets: [{ ...asset, assetRowId: asset.id, status: asset.assetStatus }]
+              });
+            }
           }
 
           getAssetRelatedWorkOrders(viewId, row) {
             const assetName = String(row?.name || row?.assetCode || "当前资产");
             const assetCode = String(row?.assetCode || row?.serialCode || row?.id || "-");
             const typePrefix = viewId === VIEW_IDS.STATION_FACILITY ? "SF" : viewId === VIEW_IDS.CABINET ? "JG" : "IT";
-            return [
+            const related = [
               { type: "事件", operator: "王强", time: "2026-07-13 09:42:18", title: assetName + "运行告警处置", orderNo: "INC2026071300186", summary: "监控告警处理中关联资产 " + assetCode + "，用于辅助定位影响对象。" },
               { type: "变更", operator: "陈浩", time: "2026-07-11 21:10:36", title: typePrefix + "设备维护窗口调整", orderNo: "CHG2026071100042", summary: "实施变更时将该资产纳入影响范围，工单完成不直接替代资产履历。" },
               { type: "问题", operator: "李敏", time: "2026-07-08 15:26:09", title: "同类设备间歇性异常根因分析", orderNo: "PRB2026070800015", summary: "问题调查过程中关联该资产作为分析样本，记录关联事实与工单上下文。" }
             ];
+            const ledgerViewId = viewId === VIEW_IDS.RETIRED_ASSET ? row.sourceLedgerViewId : viewId;
+            const group = PROCESS_FLOW_GROUPS.find((item) => item.ledgerViewId === ledgerViewId);
+            for (const { label, flowViewId } of group?.activities || []) {
+              if (ledgerViewId === VIEW_IDS.STATION_FACILITY ? label !== "入库" : !ASSET_RELATED_WORKFLOW_ACTIONS.has(label)) continue;
+              const seen = new Set();
+              for (const order of this.getProcessFlowOrders(flowViewId)) {
+                if (!order.id || order.status === "草稿" || seen.has(order.id)) continue;
+                const matches = (order.assets || []).some((asset) => {
+                  const rowId = asset.assetRowId || asset.id;
+                  return rowId ? rowId === row.id : Boolean(row.assetCode && asset.assetCode === row.assetCode);
+                });
+                if (!matches) continue;
+                seen.add(order.id);
+                related.push({
+                  type: group.label + label,
+                  operator: order.creator,
+                  time: order.createdAt,
+                  title: order.name,
+                  orderNo: order.id,
+                  status: order.status,
+                  flowViewId
+                });
+              }
+            }
+            return related.sort((first, second) => String(second.time || "").localeCompare(String(first.time || "")));
           }
 
           getAssetOperationLogData() {
@@ -27080,8 +27327,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const baseRows = this.getAssetHistoryEvents().filter((event) => {
               if (event.result !== "成功") return false;
               const day = Number(String(event.time).slice(8, 10)) || 1;
-              const changeValues = (event.changes || []).flatMap((change) => [change.field, change.oldValue, change.newValue]);
-              const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject, event.source, event.note, ...changeValues].some((value) => String(value || "").toLowerCase().includes(keyword));
+              const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject, event.source].some((value) => String(value || "").toLowerCase().includes(keyword));
               return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source);
             });
             const histogramMap = new Map();
@@ -27105,11 +27351,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               totalRows: filteredRows.length,
               page,
               pageSize,
-              pageCount,
-              summary: {
-                total: filteredRows.length,
-                workOrders: filteredRows.filter((item) => (item.sourceType || item.source) === "流程工单" && item.orderNo).length
-              }
+              pageCount
             };
           }
 
@@ -27873,12 +28115,14 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               }
               workflow.draftAssets = rows.map((row, index) => ({
                 ...this.buildItAssetWorkflowAsset(config, index),
+                assetRowId: row.id,
                 name: row.name || "",
                 assetCode: row.assetCode || "",
                 assetType: row.assetCategory || "",
                 assetCategory: row.assetCategory || "",
                 assetLocation: row.assetLocation || "",
                 uHeight: row.uHeight || "",
+                status: row.assetStatus || "",
                 portCount: row.portCount || "",
                 serialCode: row.serialCode || row.serialNumber || "",
                 physicalLabelCode: row.physicalLabelCode || row.tagCode || "",
@@ -29533,7 +29777,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               historyRange,
               historyRanges: ["全部", "近7日", "近10日", "近15日"],
               historyFilters,
-            historyActions: ["全部", "初始化", "入库", "上架", "部署", "变动", "下架", "回库", "编辑", "迁出", "报废"],
+            historyActions: ["全部", "初始化", "入库", "上架", "部署", "变动", "下架", "回库", "编辑", "迁出", "报废", "出库", "调拨"],
               historySources: ["全部", "资产台账", "流程工单"],
               historyEntries,
               relatedWorkOrders,
@@ -30756,6 +31000,24 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             this.emit();
           }
 
+          openRelatedAssetWorkflowOrder(flowViewId, orderId) {
+            if (!this.getProcessFlowOrders(flowViewId).some((order) => order.id === orderId)) {
+              this.pushToast("流程单不存在", "当前流程单可能已删除。", "warning");
+              return;
+            }
+            const isItInbound = flowViewId === VIEW_IDS.IT_INBOUND;
+            const workflow = isItInbound ? this.ensureItInboundState() : this.ensureItAssetWorkflowState(flowViewId);
+            workflow.returnContext = {
+              viewId: this.state.ui.currentView,
+              detailPage: this.state.ui.detailPage
+            };
+            if (isItInbound) {
+              this.openSubmittedItInbound(orderId);
+            } else {
+              this.openSubmittedItAssetWorkflow(flowViewId, orderId);
+            }
+          }
+
           openLedgerActivityProcessOrder(flowViewId, orderId) {
             if (!flowViewId || !orderId) return;
             this.state.ui.ledgerActivityValidationDialog = null;
@@ -30853,11 +31115,13 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             if (workflow && config && (rows.length || cabinetContext)) {
               let draftRows = rows.map((row, index) => ({
                 ...this.buildItAssetWorkflowAsset(config, index),
+                assetRowId: row.id,
                 name: row.name || "",
                 assetCode: row.assetCode || "",
                 assetType: row.assetCategory || "",
                 assetCategory: row.assetCategory || "",
                 assetLocation: row.assetLocation || "",
+                uHeight: row.uHeight || "",
                 status: row.assetStatus || row.assetSummary || "",
                 vendor: row.vendor || "",
                 serialCode: row.serialCode || "",
@@ -31280,6 +31544,20 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               sourceContext: workflow.sourceContext ? { ...workflow.sourceContext } : null,
               assets: (() => {
                 const draftAssets = this.getItAssetWorkflowDraftAssets(viewId).filter((asset) => !asset.__blank).map((asset) => ({ ...asset }));
+                if (viewId === VIEW_IDS.IT_EDIT) {
+                  const sheetRows = this.collectWorkflowSheetFilledRows();
+                  const updates = draftAssets.map((asset, index) => {
+                    const current = asset.assetRowId && this.getRowById(VIEW_IDS.IT_FACILITY, asset.assetRowId);
+                    const status = current ? current.assetStatus : (asset.assetStatus || asset.status);
+                    if (this.isAssetEditHeightReadonly("编辑", "uHeight", status)) return asset;
+                    return { ...asset, uHeight: sheetRows[index]?.uHeight ?? asset.uHeight };
+                  });
+                  if (updates.some((asset, index) => asset.uHeight !== draftAssets[index].uHeight && !/^[1-9]\d*$/.test(asset.uHeight))) {
+                    this.pushToast("请检查U高", "U高必须为正整数。", "warning");
+                    return null;
+                  }
+                  return updates;
+                }
                 if (!this.isAssetCodeAutoAction(config.action)) {
                   if (!draftAssets.some((asset) => asset.__localSheet)) return draftAssets;
                   const edited = new Map(this.collectWorkflowSheetFilledRows().map((row) => [row.assetCode, row]));
@@ -32027,6 +32305,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             ));
           }
 
+          isAssetEditHeightReadonly(action, field, assetStatus) {
+            return action === "编辑" && field === "uHeight" && String(assetStatus || "").trim() !== "空闲";
+          }
+
           getAssetOperationReadonlyColumnKeys(viewId, action, baseColumnKeys, allColumnKeys, allowManualRows = false) {
             const editableDisabledKeys = ["assetStatus", "assetSummary", "assetLocation", "assetCategory"];
             if (allowManualRows && viewId === VIEW_IDS.IT_FACILITY && ["入库", "上架"].includes(action)) {
@@ -32035,7 +32317,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             if (viewId === VIEW_IDS.IT_FACILITY) {
               return ({
                 "上架": baseColumnKeys,
-                "编辑": [...editableDisabledKeys, "uHeight"],
+                "编辑": editableDisabledKeys,
                 "迁出": allColumnKeys,
                 "变动": baseColumnKeys,
                 "下架": baseColumnKeys
@@ -32289,6 +32571,20 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               const codes = finalized.map((row) => row.assetCode).filter((code) => this.getOfficialAssetCode(code));
               this.pushToast("入库提交", codes.length ? ("已按编号规则生成正式编号：" + codes.join("、") + "。预览不占号，本次提交后占用。") : "已提交批量入库作业。", "success");
               return;
+            }
+            if (page.viewId === VIEW_IDS.IT_FACILITY && page.action === "编辑") {
+              const rows = page.selectedRows.length ? page.selectedRows : (page.row ? [page.row] : []);
+              const updates = rows.flatMap((row, index) => {
+                const height = page.sheetRows[index]?.uHeight;
+                if (height == null || String(height).trim() === String(row.uHeight || row.cabinetHeight || 2)
+                  || this.isAssetEditHeightReadonly(page.action, "uHeight", row.assetStatus)) return [];
+                return [{ row, height: String(height).trim() }];
+              });
+              if (updates.some(({ height }) => !/^[1-9]\d*$/.test(height))) {
+                this.pushToast("请检查U高", "U高必须为正整数。", "warning");
+                return;
+              }
+              for (const { row, height } of updates) row.uHeight = height;
             }
             if (page.source === "headerBatch") {
               this.pushToast(page.title + "提交", "已提交批量" + page.title + "作业，原型中保留固定行数，不自动新增行。", "success");
@@ -37073,7 +37369,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             if (!record || !field) {
               return false;
             }
-            if (this.readonlyColumnKeys.has(field)) {
+            if (this.readonlyColumnKeys.has(field) || this.store?.isAssetEditHeightReadonly(this.page.action, field, record.assetStatus)) {
               return false;
             }
             return record.__rowType === "data" || record.__rowType === "blankEditable";
@@ -37241,7 +37537,9 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const editableBlankRows = Boolean(page.editableBlankRows);
             const autoCodeEnabled = this.isAssetCodeAutoAction(page?.action) && this.store?.isAssetCodeRuleEnabled?.(page.viewId, page.action);
             const autoCodeLockedKeys = new Set(autoCodeEnabled ? ["assetCode"] : []);
-            const isReadonlyOperationField = (columnKey) => readonlyColumnKeys.has(columnKey) || autoCodeLockedKeys.has(columnKey);
+            const isReadonlyOperationField = (columnKey, record) => readonlyColumnKeys.has(columnKey)
+              || autoCodeLockedKeys.has(columnKey)
+              || Boolean(record && this.store?.isAssetEditHeightReadonly(page.action, columnKey, record.assetStatus));
             const isAssetCodeHintRow = (record) => {
               const rowType = record?.__rowType;
               return rowType === "data" || rowType === "blankEditable";
@@ -37311,7 +37609,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                   bgColor: "#fff"
                 };
               }
-              if (isReadonlyOperationField(columnKey)) {
+              if (isReadonlyOperationField(columnKey, record)) {
                 return {
                   ...base,
                   textAlign: "left",
@@ -37341,7 +37639,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 if (!isEditableRecordRow(args)) {
                   return undefined;
                 }
-                if (isReadonlyOperationField(columnKey)) {
+                if (isReadonlyOperationField(columnKey, getRecordFromArgs(args))) {
                   return undefined;
                 }
                 if (columnKey === "assetCategory") {
@@ -38550,7 +38848,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                         : tab.id === "history"
                           ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产详情操作记录优化" data-demand-text="需求来源：V3R5-4112。||【重点规则】同一次业务操作涉及的属性、位置和关系变化必须合并为一条履历，不得拆分为多条重复记录。||交互目的：以统一事件模型记录资产全生命周期操作，支持从资产详情追溯成功生效的操作记录。||展示规则：支持按关键字、时间范围、操作类型、来源和操作人筛选；流程工单来源展示具体业务入口名称，如“IT设备上架”；初始化来源展示对应菜单名称，如“待初始化IT设备”或“待初始化场地设施”；每条记录展示操作时间、操作类型、来源、操作人、关联工单及字段新旧值，不展示执行人和操作结果字段。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：资产详情展示已生效且实际改变资产数据的事件。全局操作记录使用相同的已生效口径和字段变更样式。||联动规则：支持从详情进入全局操作记录，并通过关联工单页签查看资产相关流程单据。||异常判断：字段名称、旧值、新值或来源缺失时使用“-”兜底，不得导致时间轴断裂。"'
                           : tab.id === "workOrders"
-                            ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产关联工单" data-demand-text="需求来源：V3R5-4112。||交互目的：集中查看事件、问题、变更等工单与当前资产的关联关系，补充资产操作记录的业务上下文。||展示规则：列表展示工单类型、操作人、操作时间、工单标题和工单编号；工单编号和查看按钮均可进入对应工单。||数据口径：仅展示明确关联当前资产的工单，不把工单处理过程重复写入资产操作记录。||异常判断：关联工单已删除、无权限或数据缺失时给出明确提示；无关联数据时展示空态。"'
+                            ? ' data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="资产关联工单" data-demand-text="需求来源：V3R5-4112。||交互目的：集中查看关联当前资产的事件、问题、变更以及入库、上架、变动、下架和迁出流程单。||列表按提交时间倒序展示，流程单显示具体活动和工单状态。||单据提交后按资产明细建立关联，同一资产下每张单据显示一次。点击工单编号或查看可打开对应流程单，返回时恢复当前资产的关联工单。||已生效的流程通过同一工单编号串联操作记录。||异常判断：关联工单已删除、无权限或数据缺失时给出明确提示；无关联数据时展示空态。"'
                             : "";
                     return `
                     <button class="${tab.id === detail.activeTab ? "is-active" : ""}" data-action="asset-detail-tab" data-value="${escapeHtml(tab.id)}"${demandAttrs}>${escapeHtml(tab.label)}</button>
@@ -38679,7 +38977,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               const value = record[column.key] ?? "";
               const inputId = rowIndex === 0 ? inputIds[column.key] : "";
               const isCodeLocked = autoCodeLockedColumns.has(column.key);
-              const isDisabled = editable && (readonlyColumnKeys.has(column.key) || isCodeLocked);
+              const isDisabled = editable && (readonlyColumnKeys.has(column.key) || isCodeLocked
+                || this.store.isAssetEditHeightReadonly(action, column.key, record.assetStatus));
               const isPreviewCode = column.key === "assetCode" && String(value).includes("预览");
               const isSelectField = column.key === "assetCategory" || column.key === "operationStartU" || locationSelectKeys.has(column.key);
               const codePlaceholder = column.key === "assetCode" && ["入库", "场地入库", "初始化"].includes(action)
@@ -38756,7 +39055,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const order = (inbound.orders || []).find((item) => item.id === inbound.activeId);
             if (!order) return this.renderItInboundList(inbound);
             const decisions = inbound.readonly ? "" : `<button class="btn btn-primary" type="button" data-action="decide-it-inbound" data-decision="agree">同意</button><button class="btn" type="button" data-action="decide-it-inbound" data-decision="reject">驳回</button><button class="btn" type="button" data-action="decide-it-inbound" data-decision="decline">拒绝</button>`;
-            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← 返回列表</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-process-actions">${inbound.readonly ? "" : `<button class="btn" type="button" data-action="save-it-inbound">保存</button>`}${decisions}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">入库单名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>入库资产列表</strong><span style="color:#6e8499;font-size:12px;">共 ${order.assets.length} 条待入库资产</span></div>${this.renderItWorkflowSheet("入库", order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea ${inbound.readonly ? "readonly" : ""} placeholder="请输入意见...">${inbound.readonly ? "审核处理完成。" : ""}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-inbound-tool" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：入库审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-inbound-list">← ${inbound.returnContext?.detailPage?.activeTab === "workOrders" ? "返回关联工单" : "返回列表"}</button><h1 class="inbound-form-heading">IT设备入库</h1><div class="inbound-process-actions">${inbound.readonly ? "" : `<button class="btn" type="button" data-action="save-it-inbound">保存</button>`}${decisions}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">入库单号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">入库单名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>入库资产列表</strong><span style="color:#6e8499;font-size:12px;">共 ${order.assets.length} 条待入库资产</span></div>${this.renderItWorkflowSheet("入库", order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea ${inbound.readonly ? "readonly" : ""} placeholder="请输入意见...">${inbound.readonly ? "审核处理完成。" : ""}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-inbound-tool" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：入库审核</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>待办人：${escapeHtml(order.approver)}</span></div><button class="btn btn-light" type="button" data-action="it-inbound-tool" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
           renderAssetInventoryWorkflow(state) {
             const workflow = this.store.ensureAssetInventoryState();
@@ -38907,7 +39206,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const isExecutionNode = order.status === "待执行";
             const currentNode = isExecutionNode ? "执行完成" : order.status === "已完成" ? "流程结束" : config.title + "审核";
             const assignee = isExecutionNode ? order.executor : order.approver;
-            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← 返回列表</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions">${workflow.readonly ? "" : `<button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button>`}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || order.executionResult || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(currentNode)}</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>${order.status === "已完成" ? `完成时间：${escapeHtml(order.executedAt || "-")}` : `待办人：${escapeHtml(assignee)}`}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
+            return `<div class="page-surface inbound-process-page"><div class="inbound-form-header"><button class="inbound-form-back" type="button" data-action="back-it-asset-workflow-list" data-view="${escapeHtml(viewId)}">← ${workflow.returnContext?.detailPage?.activeTab === "workOrders" ? "返回关联工单" : "返回列表"}</button><h1 class="inbound-form-heading">${escapeHtml(config.title)}</h1><div class="inbound-process-actions">${workflow.readonly ? "" : `<button class="btn" type="button" data-action="save-it-asset-workflow" data-view="${escapeHtml(viewId)}">保存</button>`}</div></div><div class="inbound-form-body"><section class="inbound-form-card"><div class="inbound-form-grid"><div class="inbound-form-label">${escapeHtml(config.orderLabel)}号</div><div class="inbound-form-value"><input value="${escapeHtml(order.id)}" readonly /></div><div class="inbound-form-label">创建人</div><div class="inbound-form-value"><input value="${escapeHtml(order.creator)}" readonly /></div><div class="inbound-form-label">创建时间</div><div class="inbound-form-value"><input value="${escapeHtml(order.createdAt)}" readonly /></div><div class="inbound-form-label">审核人</div><div class="inbound-form-value"><input value="${escapeHtml(order.approver)}" readonly /></div><div class="inbound-form-label">执行人</div><div class="inbound-form-value"><input value="${escapeHtml(order.executor)}" readonly /></div><div class="inbound-form-label">状态</div><div class="inbound-form-value"><input value="${escapeHtml(order.status)}" readonly /></div><div class="inbound-form-label">${escapeHtml(config.orderLabel)}名称</div><div class="inbound-form-value is-wide"><input value="${escapeHtml(order.name)}" readonly /></div><div class="inbound-form-label">描述</div><div class="inbound-form-value is-wide"><textarea readonly>${escapeHtml(order.description || "")}</textarea></div></div></section><section class="inbound-section"><div class="inbound-section-head"><strong>${escapeHtml(config.assetSection)}</strong></div>${this.renderItAssetWorkflowAssetTable(config, order.assets, false)}</section><section class="inbound-worklog"><div class="inbound-worklog-title">工作日志</div><label style="display:block;color:#445d75;font-size:12px;margin-bottom:6px;">处理意见</label><textarea placeholder="请输入意见...">${escapeHtml(order.processOpinion || order.executionResult || "")}</textarea><div class="inbound-worklog-foot"><button class="inbound-link-btn" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="选择文件">⌁ 选择文件</button><span>最多可上传5个，单个限制10M以内</span></div><div class="inbound-flow-panel"><div class="inbound-flow-step is-current"><span class="inbound-flow-dot"></span><span>当前节点：${escapeHtml(currentNode)}</span></div><div class="inbound-flow-step"><span class="inbound-flow-dot"></span><span>${order.status === "已完成" ? `完成时间：${escapeHtml(order.executedAt || "-")}` : `待办人：${escapeHtml(assignee)}`}</span></div><button class="btn btn-light" type="button" data-action="it-asset-workflow-tool" data-view="${escapeHtml(viewId)}" data-label="查看流程" style="margin-left:auto;">查看流程</button></div></section></div></div>`;
           }
 
           renderConsumableLedger() {
@@ -39367,6 +39666,9 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
           }
 
           renderAssetDetailLocation(detail) {
+            if (detail.viewId === VIEW_IDS.RETIRED_ASSET && detail.row.sourceLedgerViewId === VIEW_IDS.IT_FACILITY && !detail.row.startU) {
+              return `<div class="asset-tab-panel"><div class="empty-state">设备已迁出，当前无机柜和 U 位。</div></div>`;
+            }
             if ((detail.positionViewMode || "2d") === "3d") {
               return `
                 <div class="asset-tab-panel">
@@ -39529,13 +39831,11 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             return `
               <div class="asset-tab-panel">
                 <div class="asset-history-toolbar">
-                  <div class="asset-history-search">
-                    <div class="asset-history-search-row">
-                      <input type="search" data-role="asset-history-search" data-field="keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索工单号、字段或新旧值" aria-label="搜索履历关键字" />
-                      <select data-role="asset-history-filter" data-field="action" aria-label="操作类型筛选">${detail.historyActions.map((item) => `<option value="${escapeHtml(item)}" ${filters.action === item ? "selected" : ""}>${escapeHtml(item === "全部" ? "全部操作" : item)}</option>`).join("")}</select>
-                      <select data-role="asset-history-filter" data-field="source" aria-label="操作入口筛选">${detail.historySources.map((item) => `<option value="${escapeHtml(item)}" ${filters.source === item ? "selected" : ""}>${escapeHtml(item === "全部" ? "全部入口" : item)}</option>`).join("")}</select>
-                      <input type="search" data-role="asset-history-search" data-field="operator" value="${escapeHtml(filters.operator || "")}" placeholder="操作人" aria-label="操作人筛选" />
-                    </div>
+                  <div class="asset-history-search-row">
+                    <input type="search" data-role="asset-history-search" data-field="keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索工单号、字段或新旧值" aria-label="搜索履历关键字" />
+                    <select data-role="asset-history-filter" data-field="action" aria-label="操作类型筛选">${detail.historyActions.map((item) => `<option value="${escapeHtml(item)}" ${filters.action === item ? "selected" : ""}>${escapeHtml(item === "全部" ? "全部操作" : item)}</option>`).join("")}</select>
+                    <select data-role="asset-history-filter" data-field="source" aria-label="操作入口筛选">${detail.historySources.map((item) => `<option value="${escapeHtml(item)}" ${filters.source === item ? "selected" : ""}>${escapeHtml(item === "全部" ? "全部入口" : item)}</option>`).join("")}</select>
+                    <input type="search" data-role="asset-history-search" data-field="operator" value="${escapeHtml(filters.operator || "")}" placeholder="操作人" aria-label="操作人筛选" />
                     <div class="asset-history-search-actions">
                       <button class="btn btn-primary" type="button" data-action="asset-history-apply">查询</button>
                       <button class="btn" type="button" data-action="asset-history-reset">重置</button>
@@ -39560,7 +39860,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                             </div>
                             <div class="asset-history-context">
                               <span><strong>操作人</strong>${escapeHtml(entry.operator || "-")}</span>
-                              ${entry.orderNo ? `<span><strong>关联单据</strong><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}">${escapeHtml(entry.orderNo)}</button></span>` : ""}
+                              <span><strong>关联单据</strong>${entry.orderNo ? `<button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}"${entry.flowViewId ? ` data-flow-view="${escapeHtml(entry.flowViewId)}"` : ""}>${escapeHtml(entry.orderNo)}</button>` : "-"}</span>
                             </div>
                             ${this.renderAssetHistoryChanges(entry.changes)}
                           </div>
@@ -39582,15 +39882,27 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
 
           renderAssetDetailWorkOrders(detail) {
             const orders = detail.relatedWorkOrders || [];
-            const typeClass = (type) => type === "事件" ? "is-incident" : type === "变更" ? "is-change" : "is-problem";
+            const typeClasses = { "事件": "is-incident", "变更": "is-change", "问题": "is-problem" };
             return `
               <div class="asset-tab-panel">
                 <div class="asset-work-order-panel">
-                  <div class="asset-work-order-summary">展示事件、问题、变更等工单中关联当前资产的记录。</div>
+                  <div class="asset-work-order-summary">查看与当前资产关联的事件、问题、变更及资产流程单。</div>
                   <table class="asset-work-order-table">
-                    <thead><tr><th style="width:90px;">工单类型</th><th style="width:120px;">操作人</th><th style="width:180px;">操作时间</th><th>工单标题</th><th style="width:190px;">工单编号</th><th style="width:80px;">操作</th></tr></thead>
+                    <thead><tr><th style="width:130px;">工单类型</th><th style="width:120px;">操作人</th><th style="width:180px;">操作时间</th><th>工单标题</th><th style="width:190px;">工单编号</th><th style="width:100px;">工单状态</th><th style="width:80px;">操作</th></tr></thead>
                     <tbody>
-                      ${orders.length ? orders.map((order) => `<tr><td><span class="asset-work-order-type ${typeClass(order.type)}">${escapeHtml(order.type)}</span></td><td>${escapeHtml(order.operator)}</td><td>${escapeHtml(order.time)}</td><td title="${escapeHtml(order.title)}">${escapeHtml(order.title)}</td><td><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(order.orderNo)}">${escapeHtml(order.orderNo)}</button></td><td><button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(order.orderNo)}">查看</button></td></tr>`).join("") : `<tr><td colspan="6" style="height:160px;text-align:center;color:#91a3b5;">暂无关联工单</td></tr>`}
+                      ${orders.length ? orders.map((order) => {
+                        const flowAttributes = order.flowViewId ? ` data-flow-view="${escapeHtml(order.flowViewId)}"` : "";
+                        const orderLink = (label) => `<button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(order.orderNo)}"${flowAttributes}>${escapeHtml(label)}</button>`;
+                        return `<tr>
+                          <td><span class="asset-work-order-type ${typeClasses[order.type] || ""}">${escapeHtml(order.type)}</span></td>
+                          <td>${escapeHtml(order.operator || "-")}</td>
+                          <td>${escapeHtml(order.time || "-")}</td>
+                          <td title="${escapeHtml(order.title || "-")}">${escapeHtml(order.title || "-")}</td>
+                          <td>${orderLink(order.orderNo)}</td>
+                          <td>${escapeHtml(order.status || "-")}</td>
+                          <td>${orderLink("查看")}</td>
+                        </tr>`;
+                      }).join("") : `<tr><td colspan="7" style="height:160px;text-align:center;color:#91a3b5;">暂无关联工单</td></tr>`}
                     </tbody>
                   </table>
                 </div>
@@ -39968,18 +40280,14 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const maxHistogramValue = Math.max(1, ...data.histogram.map((item) => item.total));
             const select = (field, options) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${filters[field] === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
             return `
-              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的已生效的生命周期动作、字段新旧值及关联单据。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：全局操作记录展示已生效事件，列表、统计、时间分布和导出使用同一口径。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
+              <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的已生效的生命周期动作、字段新旧值及关联单据。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：全局操作记录展示已生效事件，列表、时间分布和导出使用同一口径。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
                 <div class="operation-log-head">
                   <div><h1>操作记录</h1><p>查看 IT设备、场地设施、机柜和备件已生效的操作、字段变更及关联单据。</p></div>
                   <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源和图表日期筛选后的全部已生效记录。时间列使用操作时间。||结果反馈：无匹配数据时阻止导出并提示；生成成功后反馈导出记录数量。||异常判断：文件生成失败或浏览器拒绝下载时，应保留当前筛选条件并显示失败原因。">导出</button></div>
                 </div>
-                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源和图表日期筛选。关键字可包含字段名称、旧值或新值。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：预置和自定义视图均可重命名或删除，修改在刷新后保留。名称须填写且保持唯一。删除当前视图后清空选择，保留当前查询条件。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
-                <div class="operation-log-summary">
-                  <div class="operation-log-summary-card"><span>当前记录</span><strong>${data.summary.total}</strong></div>
-                  <div class="operation-log-summary-card"><span>关联工单记录</span><strong>${data.summary.workOrders}</strong></div>
-                </div>
-                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产、业务动作或字段变化记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口、关联单据、字段名称、旧值和新值。||组合规则：关键字与时间范围、来源及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日和全部来源。||异常判断：无匹配数据时展示空态，不清空用户输入。">
-                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产、操作、来源单据、字段或新旧值" />
+                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源和图表日期筛选。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：预置和自定义视图均可重命名或删除，修改在刷新后保留。名称须填写且保持唯一。删除当前视图后清空选择，保留当前查询条件。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
+                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产或业务操作的记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口和关联单据。||组合规则：关键字与时间范围、来源及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日和全部来源。||异常判断：无匹配数据时展示空态，不清空用户输入。">
+                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产、操作、操作人、来源或单号" />
                   ${select("dateRange", ["近7日", "近15日", "近30日", "全部"])}
                   ${select("source", ["全部", "流程工单", "资产台账"])}
                   <button class="btn btn-primary" type="button" data-action="asset-operation-search">查询</button>
@@ -40003,7 +40311,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}">${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="7">${this.renderAssetHistoryChanges(event.changes)}${event.note ? `<div class="asset-history-change">${escapeHtml(event.note)}</div>` : ""}</td></tr>` : ""}`;
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}"${event.flowViewId ? ` data-flow-view="${escapeHtml(event.flowViewId)}"` : ""}>${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="7">${this.renderAssetHistoryChanges(event.changes)}${event.note ? `<div class="asset-history-change">${escapeHtml(event.note)}</div>` : ""}</td></tr>` : ""}`;
                       }).join("") : `<tr><td colspan="7" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
@@ -46488,7 +46796,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 return;
               }
               if (action === "operation-submit") {
-                if (this.store.state.ui.operationPage?.localSheetRows) this.captureOperationUploadRows();
+                const operation = this.store.state.ui.operationPage;
+                if (operation?.localSheetRows || (operation?.viewId === VIEW_IDS.IT_FACILITY && operation.action === "编辑")) {
+                  this.captureOperationUploadRows();
+                }
                 this.store.submitOperationPage();
                 return;
               }
@@ -46609,6 +46920,11 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               }
               if (action === "open-work-order") {
                 const no = actionTarget.getAttribute("data-no") || "工单";
+                const flowViewId = actionTarget.getAttribute("data-flow-view");
+                if (flowViewId) {
+                  this.store.openRelatedAssetWorkflowOrder(flowViewId, no);
+                  return;
+                }
                 this.store.pushToast("打开工单详情", "已打开工单“" + no + "”详情。", "info");
                 return;
               }
