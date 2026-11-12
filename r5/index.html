@@ -10605,7 +10605,6 @@
         gap: 12px;
       }
 
-      .asset-history-source-tag,
       .history-result-tag {
         display: inline-flex;
         align-items: center;
@@ -10616,12 +10615,6 @@
         border-radius: 11px;
         font-size: 12px;
         white-space: nowrap;
-      }
-
-      .asset-history-source-tag {
-        border: 1px solid #c9ddf5;
-        background: #f3f8fe;
-        color: #3975b8;
       }
 
       .history-result-tag {
@@ -10775,16 +10768,140 @@
       }
 
       .operation-log-filters {
-        display: grid;
-        grid-template-columns: minmax(240px, 1.8fr) repeat(2, minmax(120px, 1fr)) auto auto;
+        display: flex;
+        align-items: center;
         gap: 8px;
         padding: 14px 20px;
+        overflow-x: auto;
       }
 
       .operation-log-filters input,
-      .operation-log-filters select { min-width: 0; height: 32px; }
+      .operation-log-filters select {
+        box-sizing: border-box;
+        height: 32px;
+      }
+
+      .operation-log-filters > input[type="search"] {
+        flex: 1 1 280px;
+        min-width: 156px;
+      }
+
+      .operation-log-filters > select {
+        flex: 0 0 clamp(106px, 9vw, 148px);
+        width: clamp(106px, 9vw, 148px);
+      }
+
+      .operation-log-filters > .btn {
+        flex: 0 0 auto;
+      }
+
+      .operation-log-date-inputs {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        gap: 2px;
+        height: 32px;
+        padding: 0 3px;
+        border: 1px solid var(--ui-border, #e5e6eb);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ui-secondary, #4e5969);
+        white-space: nowrap;
+      }
+
+      .operation-log-date-inputs:hover {
+        border-color: var(--ui-border-hover, #c9cdd4);
+      }
+
+      .operation-log-date-inputs:focus-within {
+        border-color: var(--ui-brand, #007aff);
+        box-shadow: 0 0 0 1px var(--ui-brand, #007aff);
+      }
+
+      .operation-log-date-inputs input[type="date"] {
+        width: 124px;
+        height: 30px;
+        padding: 0 6px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        font: inherit;
+        font-size: 13px;
+      }
+
+      .operation-log-date-inputs input[type="date"]:focus {
+        outline: none;
+        box-shadow: none;
+      }
+
+      .operation-log-table th.has-operation-log-tip {
+        overflow: visible;
+      }
+
+      .operation-log-table th.has-operation-log-tip:is(:hover, :focus-within) {
+        z-index: 3;
+      }
+
+      .operation-log-heading-tip {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        margin-left: 5px;
+        vertical-align: middle;
+      }
+
+      .operation-log-info {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: var(--ui-brand-light, #e6f0ff);
+        color: var(--ui-brand, #007aff);
+        cursor: help;
+      }
+
+      .operation-log-info svg {
+        display: block;
+        width: 14px;
+        height: 14px;
+      }
+
+      .operation-log-info:hover,
+      .operation-log-info:focus-visible {
+        background: #d7e9ff;
+      }
+
+      .operation-log-tooltip {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: -8px;
+        width: max-content;
+        max-width: 240px;
+        padding: 6px 9px;
+        border-radius: 4px;
+        background: #1d2129;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.5;
+        white-space: normal;
+      }
+
+      .asset-history-context .operation-log-heading-tip:is(:hover, :focus-within) {
+        z-index: 1;
+      }
+
+      .operation-log-heading-tip:hover .operation-log-tooltip,
+      .operation-log-heading-tip:focus-within .operation-log-tooltip {
+        display: block;
+      }
 
       .operation-log-histogram {
+        container-type: inline-size;
         margin: 0 20px 12px;
         padding: 10px 12px 8px;
         border: 1px solid #dfe8f2;
@@ -10804,10 +10921,28 @@
 
       .operation-log-chart {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(34px, 1fr));
+        grid-template-columns: repeat(var(--period-count), minmax(var(--period-min-width, 18px), 1fr));
         align-items: end;
         gap: 6px;
         height: 104px;
+        padding-inline: 8px;
+        overflow: auto hidden;
+      }
+
+      .operation-log-chart.is-week {
+        --period-min-width: 34px;
+      }
+
+      .operation-log-chart.is-month {
+        --period-min-width: 52px;
+      }
+
+      .operation-log-chart-empty {
+        grid-column: 1 / -1;
+        align-self: center;
+        color: #8799ac;
+        text-align: center;
+        font-size: 12px;
       }
 
       .operation-log-chart-bar {
@@ -10829,12 +10964,51 @@
         background: #5b9df5;
       }
 
+      .operation-log-chart-bar.is-empty .operation-log-chart-column {
+        border-bottom: 1px solid #c6d8ee;
+      }
+
       .operation-log-chart-label {
+        align-self: center;
+        min-height: 14px;
         margin-top: 5px;
         color: #7c8fa3;
         font-size: 10px;
+        line-height: 14px;
         text-align: center;
         white-space: nowrap;
+      }
+
+      .operation-log-chart-label.is-secondary {
+        visibility: hidden;
+      }
+
+      @container (min-width: 560px) {
+        .operation-log-chart.is-day:not(.is-dense) .operation-log-chart-label {
+          visibility: visible;
+        }
+      }
+
+      @container (min-width: 920px) {
+        .operation-log-chart.is-hour .operation-log-chart-label {
+          visibility: visible;
+        }
+      }
+
+      @container (min-width: 1160px) {
+        .operation-log-chart.is-day .operation-log-chart-label {
+          visibility: visible;
+        }
+      }
+
+      .operation-log-chart-bar:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: -2px;
+      }
+
+      .operation-log-chart-bar.is-active .operation-log-chart-column {
+        background: var(--primary);
+        border-color: var(--primary);
       }
 
       .operation-log-chart-bar:hover .operation-log-chart-column,
@@ -10915,8 +11089,9 @@
       .operation-log-pagination button.is-active { border-color: var(--primary); background: var(--primary); color: #fff; }
       .operation-log-pagination button:disabled { color: #b5c0cc; cursor: not-allowed; }
 
-      @media (max-width: 1500px) {
-        .operation-log-filters { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+      @media (max-width: 1100px) {
+        .operation-log-filters { gap: 6px; }
+        .operation-log-filters > input[type="search"] { min-width: 136px; }
       }
 
       @media (max-width: 800px) {
@@ -18547,7 +18722,7 @@
         .app-entry-icon, .home-module-icon, .operation-zoom button,
         .asset-board-save-type-icon, .field-item .drag,
         .mobile-work-order-type, .asset-work-order-type,
-        .asset-history-source-tag, .history-result-tag,
+        .history-result-tag,
         .cabinet-power-status-tag, .cabinet-power-warning, .cabinet-occupancy-tag,
         .system-message-status, .maintenance-status, .asset-status-tag, .inbound-status,
         .demand-badge-trigger, .pager-btn, .pager-btn.is-active, .pager-ellipsis,
@@ -21706,9 +21881,66 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
 
         const VIEW_PERSISTENCE_KEY = "xb_asset_prototype_last_view";
         const ASSET_OPERATION_SAVED_VIEWS_KEY = "xb_asset_operation_saved_views";
+        const ASSET_OPERATION_CREATOR_TIP = "如果通过流程创建的，这里记录的是创建人。";
         const EXPORT_TASKS_STORAGE_KEY = "xb_asset_export_tasks_v1";
         const EXPORT_TASKS_CHANNEL_NAME = "xb_asset_export_progress";
         const EXPORT_TASK_RETENTION_MS = 24 * 60 * 60 * 1000;
+
+        const ASSET_OPERATION_DAY_MS = 86400000;
+        const ASSET_OPERATION_GRANULARITY_LABELS = { hour: "按小时", day: "按天", week: "按周", month: "按月" };
+
+        function getAssetOperationPresetBounds(dateRange, latestDay) {
+          const days = { "近7日": 7, "近15日": 15, "近30日": 30 }[dateRange] || 30;
+          const firstDay = new Date(Date.parse(latestDay + "T00:00:00Z") - (days - 1) * ASSET_OPERATION_DAY_MS);
+          return { dateStart: firstDay.toISOString().slice(0, 10), dateEnd: latestDay };
+        }
+
+        function getAssetOperationTimestamp(event) {
+          // 记录保存的是页面所用的本地时间，统一按同一套日历边界比较。
+          return Date.parse(String(event.time || "").slice(0, 19).replace(" ", "T") + "Z");
+        }
+
+        function buildAssetOperationHistogram(dateStart, dateEnd, rows) {
+          const first = Date.parse(dateStart + "T00:00:00Z");
+          const last = Date.parse(dateEnd + "T00:00:00Z");
+          if (!Number.isFinite(first) || !Number.isFinite(last) || first > last) {
+            return { periods: [], granularity: "" };
+          }
+          const days = (last - first) / ASSET_OPERATION_DAY_MS + 1;
+          const granularity = days === 1 ? "hour" : days <= 31 ? "day" : days <= 90 ? "week" : "month";
+          const limit = last + ASSET_OPERATION_DAY_MS;
+          const times = rows.map(getAssetOperationTimestamp).filter(Number.isFinite).sort((a, b) => a - b);
+          const periods = [];
+          let rowIndex = 0;
+          for (let start = first; start < limit;) {
+            const next = new Date(start);
+            if (granularity === "hour") {
+              next.setUTCHours(next.getUTCHours() + 1);
+            } else if (granularity === "day") {
+              next.setUTCDate(next.getUTCDate() + 1);
+            } else if (granularity === "week") {
+              next.setUTCDate(next.getUTCDate() + 7 - ((next.getUTCDay() + 6) % 7));
+            } else {
+              next.setUTCMonth(next.getUTCMonth() + 1, 1);
+            }
+            const end = Math.min(next.getTime(), limit);
+            const isoStart = new Date(start).toISOString();
+            const startDay = isoStart.slice(0, 10);
+            const endDay = new Date(end - 1).toISOString().slice(0, 10);
+            let label = granularity === "month" ? startDay.slice(0, 7) : startDay.slice(5);
+            let caption = startDay === endDay ? startDay : `${startDay} 至 ${endDay}`;
+            if (granularity === "hour") {
+              label = isoStart.slice(11, 16);
+              const endHour = end === limit ? "24:00" : next.toISOString().slice(11, 16);
+              caption = `${startDay} ${label}–${endHour}`;
+            }
+            const firstRow = rowIndex;
+            while (rowIndex < times.length && times[rowIndex] < end) rowIndex += 1;
+            periods.push({ id: String(start), start, end, label, caption, total: rowIndex - firstRow });
+            start = end;
+          }
+          return { periods, granularity };
+        }
 
         function readAssetOperationSavedViews() {
           const defaultViews = [
@@ -21733,7 +21965,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               filters: {
                 keyword: filters.keyword || "",
                 dateRange: filters.dateRange || "近30日",
+                dateStart: filters.dateStart || "",
+                dateEnd: filters.dateEnd || "",
                 source: filters.source === "空间视图" ? "全部" : (filters.source || "全部"),
+                selectedPeriod: filters.selectedPeriod || "",
                 selectedDay: filters.selectedDay || ""
               }
             }));
@@ -25577,7 +25812,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 assetOperationLog: {
                   keyword: "",
                   dateRange: "近30日",
+                  dateStart: "",
+                  dateEnd: "",
                   source: "全部",
+                  selectedPeriod: "",
                   selectedDay: "",
                   page: 1,
                   pageSize: 20,
@@ -27318,29 +27556,53 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             return related.sort((first, second) => String(second.time || "").localeCompare(String(first.time || "")));
           }
 
+          getEffectiveAssetHistoryEvents() {
+            const ordersByView = new Map();
+            return this.getAssetHistoryEvents().filter((event) => event.result === "成功").map((event) => {
+              if (!event.flowViewId || !event.orderNo) return event;
+              if (!ordersByView.has(event.flowViewId)) {
+                ordersByView.set(event.flowViewId, new Map(this.getProcessFlowOrders(event.flowViewId).map((order) => [order.id, order])));
+              }
+              const order = ordersByView.get(event.flowViewId).get(event.orderNo);
+              return order ? { ...event, time: order.executedAt || event.time, operator: order.creator || event.operator } : event;
+            }).sort((first, second) => String(second.time).localeCompare(String(first.time)));
+          }
+
           getAssetOperationLogData() {
             const filters = this.state.ui.assetOperationLog || {};
             if (filters.source === "空间视图") filters.source = "全部";
             const keyword = String(filters.keyword || "").trim().toLowerCase();
-            const maxDays = filters.dateRange === "近7日" ? 7 : filters.dateRange === "近15日" ? 15 : filters.dateRange === "全部" ? 999 : 30;
-            const cutoffDay = 14 - maxDays + 1;
-            const baseRows = this.getAssetHistoryEvents().filter((event) => {
-              if (event.result !== "成功") return false;
-              const day = Number(String(event.time).slice(8, 10)) || 1;
+            const events = this.getEffectiveAssetHistoryEvents();
+            const latestDay = events[0]?.time.slice(0, 10) || new Date().toISOString().slice(0, 10);
+            const earliestDay = events[events.length - 1]?.time.slice(0, 10);
+            let dateBounds = getAssetOperationPresetBounds(filters.dateRange, latestDay);
+            if (filters.dateRange === "全部") {
+              dateBounds = earliestDay ? { dateStart: earliestDay, dateEnd: latestDay } : {};
+            } else if (filters.dateRange === "自定义" && filters.dateStart && filters.dateEnd) {
+              dateBounds = { dateStart: filters.dateStart, dateEnd: filters.dateEnd };
+            }
+            const { dateStart, dateEnd } = dateBounds;
+            const baseRows = events.filter((event) => {
+              const day = String(event.time).slice(0, 10);
+              const matchesDate = (!dateStart || day >= dateStart) && (!dateEnd || day <= dateEnd);
               const matchesKeyword = !keyword || [event.assetCode, event.assetName, event.action, event.operator, event.orderNo, event.relatedObject, event.source].some((value) => String(value || "").toLowerCase().includes(keyword));
-              return matchesKeyword && (maxDays >= 999 || day >= cutoffDay) && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source);
+              return matchesDate && matchesKeyword && (!filters.source || filters.source === "全部" || (event.sourceType || event.source) === filters.source);
             });
-            const histogramMap = new Map();
-            baseRows.forEach((event) => {
-              const date = String(event.time || "").slice(0, 10) || "未知";
-              const bucket = histogramMap.get(date) || { date, total: 0 };
-              bucket.total += 1;
-              histogramMap.set(date, bucket);
-            });
-            const histogram = [...histogramMap.values()].sort((first, second) => first.date.localeCompare(second.date));
-            const filteredRows = filters.selectedDay
-              ? baseRows.filter((event) => String(event.time || "").startsWith(filters.selectedDay))
-              : baseRows;
+            const { periods: histogram, granularity } = buildAssetOperationHistogram(dateStart, dateEnd, baseRows);
+            let selectedPeriod = histogram.find((period) => period.id === filters.selectedPeriod);
+            if (!selectedPeriod && filters.selectedDay) {
+              // 兼容旧保存视图的按日筛选，即使当前横轴已按周或月展示。
+              const day = filters.selectedDay;
+              const start = Date.parse(day + "T00:00:00Z");
+              if (Number.isFinite(start) && day >= dateStart && day <= dateEnd) {
+                selectedPeriod = histogram.find((period) => period.start === start && period.end === start + ASSET_OPERATION_DAY_MS)
+                  || { start, end: start + ASSET_OPERATION_DAY_MS, caption: day };
+              }
+            }
+            const filteredRows = selectedPeriod ? baseRows.filter((event) => {
+              const time = getAssetOperationTimestamp(event);
+              return time >= selectedPeriod.start && time < selectedPeriod.end;
+            }) : baseRows;
             const pageSize = Math.max(1, Number(filters.pageSize) || 20);
             const pageCount = Math.max(1, Math.ceil(filteredRows.length / pageSize));
             const page = Math.min(pageCount, Math.max(1, Number(filters.page) || 1));
@@ -27348,6 +27610,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               rows: filteredRows.slice((page - 1) * pageSize, page * pageSize),
               allRows: filteredRows,
               histogram,
+              granularity,
+              selectedPeriod,
+              dateBounds,
+              latestDay,
               totalRows: filteredRows.length,
               page,
               pageSize,
@@ -28608,22 +28874,36 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             this.state.ui.operationPage = null;
             const filters = this.state.ui.assetOperationLog || {};
             filters.keyword = assetKeyword || filters.keyword || "";
+            filters.queryDraft = null;
             filters.expandedEventId = "";
             this.state.ui.assetOperationLog = filters;
             this.emit();
           }
 
           setAssetOperationLogFilter(field, value) {
-            if (!["keyword", "dateRange", "source"].includes(field)) {
-              return;
+            const filters = this.state.ui.assetOperationLog;
+            if (field === "dateRange") {
+              const draft = filters.queryDraft ||= {};
+              const previousRange = draft.dateRange ?? filters.dateRange;
+              if (value === "自定义" && previousRange !== "自定义") {
+                const { dateBounds, latestDay } = this.getAssetOperationLogData();
+                Object.assign(draft, filters.dateRange === "自定义"
+                  ? dateBounds : getAssetOperationPresetBounds(previousRange, latestDay));
+              }
+              draft.dateRange = value;
+            } else if (field === "source") {
+              Object.assign(filters, { source: value || "全部", page: 1, expandedEventId: "", activeSavedViewId: "" });
             }
-            const filters = this.state.ui.assetOperationLog || {};
-            filters[field] = value || (field === "keyword" ? "" : "全部");
-            if (field === "dateRange") filters.selectedDay = "";
-            filters.page = 1;
-            filters.expandedEventId = "";
-            filters.activeSavedViewId = "";
-            this.state.ui.assetOperationLog = filters;
+            this.emit();
+          }
+
+          queryAssetOperationLog(keyword, dateRange, dateStart = "", dateEnd = "") {
+            const filters = this.state.ui.assetOperationLog;
+            if (dateRange !== filters.dateRange || dateStart !== filters.dateStart || dateEnd !== filters.dateEnd) {
+              filters.selectedPeriod = "";
+              filters.selectedDay = "";
+            }
+            Object.assign(filters, { keyword, dateRange, dateStart, dateEnd, queryDraft: null, page: 1, expandedEventId: "", activeSavedViewId: "" });
             this.emit();
           }
 
@@ -28637,7 +28917,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
 
           resetAssetOperationLogFilters() {
             const current = this.state.ui.assetOperationLog || {};
-            this.state.ui.assetOperationLog = { keyword: "", dateRange: "近30日", source: "全部", selectedDay: "", page: 1, pageSize: 20, expandedEventId: "", activeSavedViewId: "", savedViews: current.savedViews };
+            this.state.ui.assetOperationLog = { keyword: "", dateRange: "近30日", dateStart: "", dateEnd: "", source: "全部", selectedPeriod: "", selectedDay: "", page: 1, pageSize: 20, expandedEventId: "", activeSavedViewId: "", savedViews: current.savedViews };
             this.emit();
           }
 
@@ -28683,6 +28963,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               this.pushToast("名称已存在", `“${name}”已被使用，请更换名称。`, "warning");
               return;
             }
+            const { dateBounds, selectedPeriod } = this.getAssetOperationLogData();
+            const { dateStart = "", dateEnd = "" } = filters.dateRange === "自定义" ? dateBounds : {};
             const view = {
               id: "custom-" + Date.now(),
               name,
@@ -28690,7 +28972,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               filters: {
                 keyword: filters.keyword || "",
                 dateRange: filters.dateRange || "近30日",
+                dateStart,
+                dateEnd,
                 source: filters.source || "全部",
+                selectedPeriod: filters.selectedDay ? "" : (selectedPeriod?.id || ""),
                 selectedDay: filters.selectedDay || ""
               }
             };
@@ -28731,7 +29016,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const filters = this.state.ui.assetOperationLog || {};
             const view = this.ensureAssetOperationSavedViews().find((item) => item.id === viewId);
             if (!view) return;
-            Object.assign(filters, view.filters, { activeSavedViewId: view.id, page: 1, expandedEventId: "" });
+            Object.assign(filters, view.filters, { activeSavedViewId: view.id, page: 1, expandedEventId: "", queryDraft: null });
             this.emit();
           }
 
@@ -28750,9 +29035,10 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             this.emit();
           }
 
-          toggleAssetOperationHistogramDay(day) {
-            const filters = this.state.ui.assetOperationLog || {};
-            filters.selectedDay = filters.selectedDay === day ? "" : day;
+          selectAssetOperationHistogramPeriod(periodId = "") {
+            const filters = this.state.ui.assetOperationLog;
+            filters.selectedPeriod = periodId;
+            filters.selectedDay = "";
             filters.page = 1;
             filters.expandedEventId = "";
             filters.activeSavedViewId = "";
@@ -28765,30 +29051,108 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               this.pushToast("无法导出", "当前筛选条件下没有可导出的操作记录。", "warning");
               return;
             }
-            const header = ["操作时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "来源", "关联单据"];
-            const workbookRows = [header, ...rows.map((event) => [event.time, event.action, event.assetCode, event.assetName, event.assetType, event.operator, event.source, event.orderNo])];
-            try {
-              this.downloadXlsxRows(workbookRows, "资产操作记录_" + new Date().toISOString().slice(0, 10) + ".xlsx", "操作记录");
-              this.pushToast("导出成功", `已按当前筛选条件导出 ${rows.length} 条操作记录。`, "success");
-            } catch (error) {
-              this.pushToast("导出失败", error?.message || "Excel 导出组件不可用，请稍后重试。", "warning");
-            }
+            const header = ["操作时间", "操作类型", "资产编号", "资产名称", "资产类型", "操作人", "关联单据", "变更明细"];
+            const displayValue = (value) => value == null || value === "" ? "-" : String(value);
+            const workbookRows = [header, ...rows.map((event) => {
+              const details = (event.changes || []).map(({ field, oldValue, newValue }) =>
+                `${displayValue(field)}：旧值 ${displayValue(oldValue)}，新值 ${displayValue(newValue)}`
+              ).join("\n");
+              return [
+                event.time, event.action, event.assetCode, event.assetName, event.assetType,
+                event.operator, event.orderNo, details || "本次操作无字段值变化"
+              ];
+            })];
+            this.startAssetExportTask({
+              fileName: "资产操作记录_" + new Date().toISOString().slice(0, 10) + ".xlsx",
+              workbookRows,
+              formatOperationLog: true,
+              summary: `共 ${rows.length} 条操作记录`,
+              rowCount: rows.length
+            });
           }
 
-          createXlsxBlob(rows, sheetName = "导出数据") {
+          formatAssetOperationWorkbook(buffer) {
+            // SheetJS writes the cells and ranges. Apply presentation styles to this export only.
+            const zip = window.XLSX.CFB;
+            const archive = zip.read(new Uint8Array(buffer), { type: "array" });
+            const sheet = zip.find(archive, "/xl/worksheets/sheet1.xml");
+            const styles = zip.find(archive, "/xl/styles.xml");
+            const encoder = new TextEncoder();
+            const document = new DOMParser().parseFromString(new TextDecoder().decode(sheet.content), "application/xml");
+            const sheetView = document.getElementsByTagName("sheetView")[0];
+            const pane = document.createElementNS(document.documentElement.namespaceURI, "pane");
+            pane.setAttribute("ySplit", "1");
+            pane.setAttribute("topLeftCell", "A2");
+            pane.setAttribute("activePane", "bottomLeft");
+            pane.setAttribute("state", "frozen");
+            sheetView.prepend(pane);
+            for (const row of document.getElementsByTagName("row")) {
+              const rowNumber = Number(row.getAttribute("r"));
+              const style = rowNumber === 1 ? "1" : rowNumber % 2 === 0 ? "2" : "0";
+              for (const cell of row.children) cell.setAttribute("s", style);
+            }
+            sheet.content = encoder.encode(new XMLSerializer().serializeToString(document));
+            sheet.size = sheet.content.length;
+            styles.content = encoder.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+              <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+                <fonts count="2">
+                  <font><sz val="11"/><color rgb="FF1D2129"/><name val="Microsoft YaHei"/></font>
+                  <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Microsoft YaHei"/></font>
+                </fonts>
+                <fills count="4">
+                  <fill><patternFill patternType="none"/></fill>
+                  <fill><patternFill patternType="gray125"/></fill>
+                  <fill><patternFill patternType="solid"><fgColor rgb="FF165DAD"/><bgColor indexed="64"/></patternFill></fill>
+                  <fill><patternFill patternType="solid"><fgColor rgb="FFF2F6FC"/><bgColor indexed="64"/></patternFill></fill>
+                </fills>
+                <borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>
+                <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+                <cellXfs count="3">
+                  <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>
+                  <xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf>
+                  <xf numFmtId="0" fontId="0" fillId="3" borderId="0" xfId="0" applyFill="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>
+                </cellXfs>
+                <cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
+              </styleSheet>`);
+            styles.size = styles.content.length;
+            return new Uint8Array(zip.write(archive, { type: "array", fileType: "zip", compression: true }));
+          }
+
+          createXlsxBlob(rows, sheetName = "导出数据", formatOperationLog = false) {
             if (!window.XLSX?.utils || typeof window.XLSX.write !== "function") {
               throw new Error("Excel 导出组件加载失败，请检查网络后重试。");
             }
             const safeSheetName = String(sheetName || "导出数据").replace(/[\\/?*\[\]:]/g, "_").slice(0, 31) || "导出数据";
             const worksheet = window.XLSX.utils.aoa_to_sheet(Array.isArray(rows) ? rows : []);
+            if (formatOperationLog) {
+              const measureLines = (value) => String(value ?? "").split(/\r\n?|\n/).map((line) =>
+                Array.from(line).reduce((length, char) => length + (char.charCodeAt(0) > 127 ? 2 : 1), 0)
+              );
+              const widths = [25, 14, 28, 38, 18, 16, 27, 46];
+              const measuredRows = rows.map((row) => row.map(measureLines));
+              for (const row of measuredRows) {
+                row.forEach((lineLengths, column) => {
+                  widths[column] = Math.min(58, Math.max(widths[column], ...lineLengths.map((length) => length + 5)));
+                });
+              }
+              worksheet["!cols"] = widths.map((wch) => ({ wch }));
+              worksheet["!rows"] = measuredRows.map((row, index) => {
+                if (index === 0) return { hpt: 27 };
+                const cellLineCounts = row.map((lengths, column) => lengths.reduce(
+                  (count, length) => count + Math.max(1, Math.ceil(length / (widths[column] - 4))), 0
+                ));
+                return { hpt: 16 * Math.max(1, ...cellLineCounts) + 4 };
+              });
+              worksheet["!autofilter"] = { ref: worksheet["!ref"] };
+            }
             const workbook = window.XLSX.utils.book_new();
             window.XLSX.utils.book_append_sheet(workbook, worksheet, safeSheetName);
-            const buffer = window.XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-            return new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+            const buffer = window.XLSX.write(workbook, { bookType: "xlsx", type: "array", cellStyles: formatOperationLog });
+            return new Blob([formatOperationLog ? this.formatAssetOperationWorkbook(buffer) : buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
           }
 
-          downloadXlsxRows(rows, fileName, sheetName = "导出数据") {
-            const blob = this.createXlsxBlob(rows, sheetName);
+          downloadXlsxRows(rows, fileName, sheetName = "导出数据", formatOperationLog = false) {
+            const blob = this.createXlsxBlob(rows, sheetName, formatOperationLog);
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
@@ -29709,7 +30073,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const historyOperator = String(historyFilters.operator || "").trim().toLowerCase();
             const historyRangeDays = historyRange === "近7日" ? 7 : historyRange === "近10日" ? 10 : historyRange === "近15日" ? 15 : 999;
             const historyCutoffDay = 14 - historyRangeDays + 1;
-            const historyEntries = this.getAssetHistoryEvents().filter((event) => {
+            const historyEntries = this.getEffectiveAssetHistoryEvents().filter((event) => {
               const matchesAsset = event.assetViewId === detailPage.viewId && event.assetRowId === row.id;
               const matchesRelatedCabinet = detailPage.viewId === VIEW_IDS.CABINET && event.relatedViewId === VIEW_IDS.CABINET && event.relatedRowId === row.id;
               const eventDay = Number(String(event.time).slice(8, 10)) || 1;
@@ -29717,7 +30081,6 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 .concat((event.changes || []).flatMap((change) => [change.field, change.oldValue, change.newValue]))
                 .some((value) => String(value || "").toLowerCase().includes(historyKeyword));
               return (matchesAsset || matchesRelatedCabinet)
-                && event.result === "成功"
                 && matchesKeyword
                 && (!historyFilters.action || historyFilters.action === "全部" || event.action === historyFilters.action)
                 && (!historyFilters.source || historyFilters.source === "全部" || (event.sourceType || event.source) === historyFilters.source)
@@ -29996,11 +30359,14 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             manager.tasks.push({
               id: taskId,
               title: payload.fileName || "导出文件",
-              subtitle: mode === "selected" ? "正在生成选中资产文件" : mode === "failure" ? "正在生成文件（异常演示）" : "正在生成全部资产文件",
+              subtitle: payload.formatOperationLog ? "正在生成操作记录文件"
+                : mode === "selected" ? "正在生成选中资产文件"
+                : mode === "failure" ? "正在生成文件（异常演示）" : "正在生成全部资产文件",
               status: "running",
               percent: 8,
               fileName: payload.fileName,
               workbookRows: payload.workbookRows,
+              formatOperationLog: payload.formatOperationLog === true,
               summary: payload.summary,
               rowCount: payload.rowCount,
               createdAt: now,
@@ -30115,7 +30481,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             }
             if (ratio >= 1) {
               task.percent = 100;
-              task.subtitle = "文件生成成功";
+              task.subtitle = task.formatOperationLog ? "文件生成成功 · " + task.summary : "文件生成成功";
               task.status = "done";
               task.finishedAt = now;
               task.updatedAt = now;
@@ -30123,7 +30489,7 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             }
             if (ratio < 0.25) {
               task.percent = Math.round(8 + ratio / 0.25 * 20);
-              task.subtitle = "正在读取台账数据...";
+              task.subtitle = task.formatOperationLog ? "正在读取操作记录..." : "正在读取台账数据...";
             } else if (ratio < 0.55) {
               task.percent = Math.round(28 + (ratio - 0.25) / 0.3 * 28);
               task.subtitle = "正在生成 xlsx 文件...";
@@ -30285,15 +30651,8 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               return;
             }
             try {
-              const blob = this.createXlsxBlob(payload.workbookRows, "资产台账");
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement("a");
-              link.href = url;
-              link.download = payload.fileName;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              setTimeout(() => URL.revokeObjectURL(url), 0);
+              const sheetName = payload.formatOperationLog ? "操作记录" : "资产台账";
+              this.downloadXlsxRows(payload.workbookRows, payload.fileName, sheetName, payload.formatOperationLog);
               this.pushToast("下载完成", "已下载 " + payload.fileName + "（" + payload.summary + "）", "success");
             } catch (error) {
               this.pushToast("导出失败", error?.message || "浏览器拒绝了文件下载请求。", "warning");
@@ -39817,6 +40176,11 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             `;
           }
 
+          renderAssetOperationTip(key, message) {
+            const id = escapeHtml("operation-log-tip-" + key);
+            return `<span class="operation-log-heading-tip"><button class="operation-log-info" type="button" aria-label="字段取值说明" aria-describedby="${id}"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.35"/><path d="M8 7.5v3.4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/><circle cx="8" cy="5.2" r=".8" fill="currentColor"/></svg></button><span class="operation-log-tooltip" role="tooltip" id="${id}">${escapeHtml(message)}</span></span>`;
+          }
+
           renderAssetHistoryChanges(changes) {
             const displayValue = (value) => escapeHtml(value == null || value === "" ? "-" : value);
             const rows = (changes || []).map((change) => `
@@ -39856,10 +40220,9 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                           <div class="asset-history-card">
                             <div class="asset-history-card-head">
                               <div class="asset-history-action-title">操作类型：${escapeHtml(entry.action)}</div>
-                              <span class="asset-history-source-tag">${escapeHtml(entry.source || "-")}</span>
                             </div>
                             <div class="asset-history-context">
-                              <span><strong>操作人</strong>${escapeHtml(entry.operator || "-")}</span>
+                              <span><strong>操作人${this.renderAssetOperationTip("history-operator-" + entry.id, ASSET_OPERATION_CREATOR_TIP)}</strong>${escapeHtml(entry.operator || "-")}</span>
                               <span><strong>关联单据</strong>${entry.orderNo ? `<button class="asset-history-work-order-link" type="button" data-action="open-work-order" data-no="${escapeHtml(entry.orderNo)}"${entry.flowViewId ? ` data-flow-view="${escapeHtml(entry.flowViewId)}"` : ""}>${escapeHtml(entry.orderNo)}</button>` : "-"}</span>
                             </div>
                             ${this.renderAssetHistoryChanges(entry.changes)}
@@ -40277,42 +40640,63 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
             const data = this.store.getAssetOperationLogData();
             const savedViews = this.store.ensureAssetOperationSavedViews();
             const activeSavedView = savedViews.find((item) => item.id === filters.activeSavedViewId);
-            const maxHistogramValue = Math.max(1, ...data.histogram.map((item) => item.total));
-            const select = (field, options) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${filters[field] === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
+            const dateRange = filters.queryDraft?.dateRange ?? filters.dateRange;
+            const maxHistogramValue = data.histogram.reduce((max, period) => Math.max(max, period.total), 1);
+            const denseDays = data.granularity === "day" && data.histogram.length > 15;
+            const labelInterval = data.granularity === "hour" ? 4
+              : denseDays ? 5
+              : data.granularity === "day" && data.histogram.length > 7 ? 2 : 1;
+            const select = (field, options, label) => `<select data-role="asset-operation-filter" data-field="${escapeHtml(field)}" aria-label="${escapeHtml(label)}">${options.map((item) => `<option value="${escapeHtml(item)}" ${(field === "dateRange" ? dateRange : filters[field]) === item ? "selected" : ""}>${escapeHtml(item)}</option>`).join("")}</select>`;
             return `
               <div class="page-surface operation-log-page" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="全局操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：统一查看 IT设备、场地设施、机柜和备件的已生效的生命周期动作、字段新旧值及关联单据。||记录范围为资产台账与流程工单中的业务操作。关系变更统一使用柜内资产关系。||数据口径：全局操作记录展示已生效事件，列表、时间分布和导出使用同一口径。||记录规则：一条操作记录对应一个资产事件，同一次业务操作涉及的属性、位置和关系变化按统一事件口径记录。||字段规则：页面不展示执行人和内部事件编号；字段值缺失时使用“-”兜底。||权限限制：仅展示当前用户有权限查看的资产及关联单据。">
                 <div class="operation-log-head">
                   <div><h1>操作记录</h1><p>查看 IT设备、场地设施、机柜和备件已生效的操作、字段变更及关联单据。</p></div>
-                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源和图表日期筛选后的全部已生效记录。时间列使用操作时间。||结果反馈：无匹配数据时阻止导出并提示；生成成功后反馈导出记录数量。||异常判断：文件生成失败或浏览器拒绝下载时，应保留当前筛选条件并显示失败原因。">导出</button></div>
+                  <div class="operation-log-head-actions"><button class="btn" type="button" data-action="save-asset-operation-view">保存视图</button><button class="btn btn-primary" type="button" data-action="export-asset-operation-log" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="导出操作记录" data-demand-text="需求来源：V3R5-4112。||交互目的：按当前查询条件导出操作记录，便于离线审计和问题分析。||导出范围：导出当前关键字、时间、来源和图表时段筛选后的全部已生效记录。时间列使用操作时间。变更明细列逐行展示字段名称、旧值和新值。||点击后行为：按点击时的筛选结果创建导出任务，在进度管理器中查看进度，任务完成后显示记录数量并提供下载。||异常判断：无匹配数据时提示且不创建任务；下载失败时保留任务及当前筛选条件，并显示原因。">导出</button></div>
                 </div>
-                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源和图表日期筛选。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：预置和自定义视图均可重命名或删除，修改在刷新后保留。名称须填写且保持唯一。删除当前视图后清空选择，保留当前查询条件。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>删除视图</button>${activeSavedView ? `<span>当前：${escapeHtml(activeSavedView.name)}</span>` : ""}</div>
-                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产或业务操作的记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口和关联单据。||组合规则：关键字与时间范围、来源及图表日期条件同时生效。||点击后行为：查询后回到第一页并收起已展开详情；重置恢复近30日和全部来源。||异常判断：无匹配数据时展示空态，不清空用户输入。">
-                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.keyword || "")}" placeholder="搜索资产、操作、操作人、来源或单号" />
-                  ${select("dateRange", ["近7日", "近15日", "近30日", "全部"])}
-                  ${select("source", ["全部", "流程工单", "资产台账"])}
+                <div class="operation-log-saved-views" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="保存查询视图" data-demand-text="需求来源：V3R5-4112。||交互目的：保存常用查询条件，减少重复设置筛选项。||保存内容：记录关键字、时间范围、来源和图表时段筛选。||点击后行为：选择视图后立即恢复对应条件并重新查询。||状态限制：预置和自定义视图均可重命名或删除，修改在刷新后保留。名称须填写且保持唯一。删除当前视图后清空选择，保留当前查询条件。"><span>保存视图</span><select data-role="asset-operation-saved-view"><option value="">请选择保存视图</option>${savedViews.map((item) => `<option value="${escapeHtml(item.id)}" ${filters.activeSavedViewId === item.id ? "selected" : ""}>${escapeHtml(item.name)}${item.preset ? " · 预置" : ""}</option>`).join("")}</select><button class="btn" type="button" data-action="rename-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>重命名</button><button class="btn" type="button" data-action="remove-asset-operation-view" ${!activeSavedView ? "disabled" : ""}>删除视图</button></div>
+                <div class="operation-log-filters" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录组合查询" data-demand-text="需求来源：V3R5-4112。||交互目的：快速定位指定资产或业务操作的记录。||关键字范围：支持匹配资产编号、资产名称、操作类型、操作人、来源入口和关联单据。||组合规则：时间支持快捷范围和自定义起止日期，切换到自定义时预填当前快捷范围，全部范围按近30日预填，包含起止当天，与关键字、来源及图表时段条件组合。||点击后行为：点击查询应用时间范围，范围改变时清除旧时段筛选，回到第一页并收起已展开详情；重置恢复近30日和全部来源。||异常判断：无匹配数据时展示空态，不清空用户输入。">
+                  <input type="search" data-role="asset-operation-keyword" value="${escapeHtml(filters.queryDraft?.keyword ?? filters.keyword ?? "")}" placeholder="搜索资产、操作、操作人、来源或单号" />
+                  ${select("dateRange", ["近7日", "近15日", "近30日", "全部", "自定义"], "时间范围")}
+                  ${dateRange === "自定义" ? `
+                    <div class="operation-log-date-inputs" role="group" aria-label="自定义时间范围">
+                      <input type="date" aria-label="开始日期" data-role="asset-operation-date-start" max="9999-12-31" value="${escapeHtml(filters.queryDraft?.dateStart ?? data.dateBounds.dateStart ?? "")}" />
+                      <span aria-hidden="true">至</span>
+                      <input type="date" aria-label="结束日期" data-role="asset-operation-date-end" max="9999-12-31" value="${escapeHtml(filters.queryDraft?.dateEnd ?? data.dateBounds.dateEnd ?? "")}" />
+                    </div>
+                  ` : ""}
+                  ${select("source", ["全部", "流程工单", "资产台账"], "来源")}
                   <button class="btn btn-primary" type="button" data-action="asset-operation-search">查询</button>
                   <button class="btn" type="button" data-action="asset-operation-reset">重置</button>
                 </div>
-                <div class="operation-log-histogram" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录时间分布" data-demand-text="需求来源：V3R5-4112。||交互目的：按日期查看已生效的操作数量。每根柱形的高度表示当日记录数。||点击后行为：点击日期柱筛选当日记录，再次点击或点击“清除日期”恢复当前时间范围内全部数据。||联动规则：时间分布随关键字、时间范围和来源筛选同步更新。">
+                <div class="operation-log-histogram" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录时间分布" data-demand-text="需求来源：V3R5-4112。||交互目的：查看所查范围内各时段的已生效操作数量。||展示规则：1 天按小时、2–31 天按天、32–90 天按自然周、91 天及以上按自然月。周以周一为起点，首尾按实际查询边界截取，零记录的时段保留。||点击后行为：点击柱子仅筛选下方列表，再次点击或点击“清除时段”恢复。||联动规则：时间分布随已应用的关键字、时间范围和来源更新；悬停查看实际时段和记录数。">
                   <div class="operation-log-histogram-head">
-                    <span>操作时间分布${filters.selectedDay ? ` · 已筛选 ${escapeHtml(filters.selectedDay)}` : ""}</span>
-                    ${filters.selectedDay ? `<button class="operation-link" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(filters.selectedDay)}">清除日期</button>` : ""}
+                    <span>操作时间分布${data.granularity ? ` · ${ASSET_OPERATION_GRANULARITY_LABELS[data.granularity]}` : ""}${data.selectedPeriod ? ` · 已筛选 ${escapeHtml(data.selectedPeriod.caption)}` : ""}</span>
+                    ${data.selectedPeriod ? '<button class="operation-link" type="button" data-action="asset-operation-histogram-period">清除时段</button>' : ""}
                   </div>
-                  <div class="operation-log-chart">
-                    ${data.histogram.length ? data.histogram.map((item) => {
-                      const barHeight = Math.max(6, Math.round((item.total / maxHistogramValue) * 74));
-                      return `<button class="operation-log-chart-bar ${filters.selectedDay === item.date ? "is-active" : ""}" type="button" data-action="asset-operation-histogram-day" data-day="${escapeHtml(item.date)}" title="${escapeHtml(item.date)} 共 ${item.total} 条"><span class="operation-log-chart-column" style="height:${barHeight}px"></span><span class="operation-log-chart-label">${escapeHtml(item.date.slice(5))}</span></button>`;
-                    }).join("") : `<div style="grid-column:1/-1;align-self:center;text-align:center;color:#8799ac;font-size:12px;">当前条件下暂无时间分布数据</div>`}
+                  <div class="operation-log-chart is-${data.granularity}${denseDays ? " is-dense" : ""}" style="--period-count:${Math.max(1, data.histogram.length)}">
+                    ${data.histogram.length ? data.histogram.map((item, index) => {
+                      const barHeight = item.total ? Math.max(1, Math.round((item.total / maxHistogramValue) * 74)) : 0;
+                      const active = data.selectedPeriod?.id === item.id;
+                      const last = data.histogram.length - 1;
+                      const showLabel = index === 0 || index === last || (index % labelInterval === 0 && last - index >= labelInterval);
+                      const summary = escapeHtml(`${item.caption}，共 ${item.total} 条`);
+                      return `
+                        <button class="operation-log-chart-bar${active ? " is-active" : ""}${item.total ? "" : " is-empty"}" type="button" data-action="asset-operation-histogram-period" data-period="${item.id}" aria-label="${summary}" aria-pressed="${active}" title="${summary}">
+                          <span class="operation-log-chart-column" style="height:${barHeight}px"></span>
+                          <span class="operation-log-chart-label${showLabel ? "" : " is-secondary"}" aria-hidden="true">${escapeHtml(item.label)}</span>
+                        </button>
+                      `;
+                    }).join("") : '<div class="operation-log-chart-empty">当前条件下暂无时间分布数据</div>'}
                   </div>
                 </div>
-                <div class="operation-log-table-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录列表与详情" data-demand-text="需求来源：V3R5-4112。||展示规则：列表展示操作时间、操作类型、资产、操作人、具体来源入口及关联单据。||详情规则：点击“详情”后在当前行下方展开，沿用资产详情操作记录样式，每个字段单独显示旧值和新值。||联动规则：关联单据支持进入工单详情，“查看资产”进入对应资产详情。||数据口径：全局列表和资产详情均以已生效事件为展示口径。||异常判断：资产或工单不存在、无权限时给出明确提示，不中断当前查询。">
+                <div class="operation-log-table-wrap" data-demand-version="v1.3" data-demand-req-id="V3R5-4112" data-demand-title="操作记录列表与详情" data-demand-text="需求来源：V3R5-4112。||展示规则：列表展示操作时间、操作类型、资产、操作人及关联单据。流程记录的操作人取创建人，操作时间取最终数据生效时间。||详情规则：点击“详情”后在当前行下方展开，沿用资产详情操作记录样式，每个字段单独显示旧值和新值。||联动规则：关联单据支持进入工单详情，“查看资产”进入对应资产详情。||数据口径：全局列表和资产详情均以已生效事件为展示口径。||异常判断：资产或工单不存在、无权限时给出明确提示，不中断当前查询。">
                   <table class="operation-log-table">
-                    <thead><tr><th style="width:150px;">操作时间</th><th style="width:110px;">操作类型</th><th style="width:220px;">资产编号 / 名称</th><th style="width:100px;">操作人</th><th style="width:110px;">来源</th><th style="width:170px;">关联单据</th><th style="width:200px;">操作</th></tr></thead>
+                    <thead><tr><th class="has-operation-log-tip" style="width:150px;">操作时间${this.renderAssetOperationTip("time", "此处记录的是最终数据生效时间")}</th><th style="width:110px;">操作类型</th><th style="width:220px;">资产编号 / 名称</th><th class="has-operation-log-tip" style="width:100px;">操作人${this.renderAssetOperationTip("operator", ASSET_OPERATION_CREATOR_TIP)}</th><th style="width:170px;">关联单据</th><th style="width:200px;">操作</th></tr></thead>
                     <tbody>
                       ${data.rows.length ? data.rows.map((event) => {
                         const expanded = filters.expandedEventId === event.id;
-                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${escapeHtml(event.source)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}"${event.flowViewId ? ` data-flow-view="${escapeHtml(event.flowViewId)}"` : ""}>${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="7">${this.renderAssetHistoryChanges(event.changes)}${event.note ? `<div class="asset-history-change">${escapeHtml(event.note)}</div>` : ""}</td></tr>` : ""}`;
-                      }).join("") : `<tr><td colspan="7" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
+                        return `<tr><td>${escapeHtml(event.time)}</td><td>${escapeHtml(event.action)}</td><td title="${escapeHtml(event.assetCode + " / " + event.assetName)}">${escapeHtml(event.assetCode)} / ${escapeHtml(event.assetName)}</td><td>${escapeHtml(event.operator)}</td><td>${event.orderNo ? `<button class="operation-link" type="button" data-action="open-work-order" data-no="${escapeHtml(event.orderNo)}"${event.flowViewId ? ` data-flow-view="${escapeHtml(event.flowViewId)}"` : ""}>${escapeHtml(event.orderNo)}</button>` : "-"}</td><td><button class="operation-link" type="button" data-action="asset-operation-expand" data-id="${escapeHtml(event.id)}">${expanded ? "收起" : "详情"}</button><button class="operation-link" type="button" data-action="asset-operation-open-asset" data-id="${escapeHtml(event.id)}">查看资产</button></td></tr>${expanded ? `<tr class="operation-log-detail-row"><td colspan="6">${this.renderAssetHistoryChanges(event.changes)}${event.note ? `<div class="asset-history-change">${escapeHtml(event.note)}</div>` : ""}</td></tr>` : ""}`;
+                      }).join("") : `<tr><td colspan="6" style="height:220px;text-align:center;color:#8799ac;">没有找到匹配的操作记录</td></tr>`}
                     </tbody>
                   </table>
                 </div>
@@ -46867,7 +47251,15 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
               }
               if (action === "asset-operation-search") {
                 const input = document.querySelector('[data-role="asset-operation-keyword"]');
-                this.store.setAssetOperationLogFilter("keyword", input instanceof HTMLInputElement ? input.value : "");
+                const range = document.querySelector('[data-role="asset-operation-filter"][data-field="dateRange"]');
+                const start = document.querySelector('[data-role="asset-operation-date-start"]');
+                const end = document.querySelector('[data-role="asset-operation-date-end"]');
+                if (start && end) {
+                  start.setCustomValidity(start.value ? "" : "请选择开始日期。");
+                  end.setCustomValidity(!end.value ? "请选择结束日期。" : end.value < start.value ? "结束日期不能早于开始日期。" : "");
+                  if (!start.reportValidity() || !end.reportValidity()) return;
+                }
+                this.store.queryAssetOperationLog(input?.value || "", range.value, start?.value, end?.value);
                 return;
               }
               if (action === "asset-operation-reset") {
@@ -46902,8 +47294,9 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 this.store.exportAssetOperationLog();
                 return;
               }
-              if (action === "asset-operation-histogram-day") {
-                this.store.toggleAssetOperationHistogramDay(actionTarget.getAttribute("data-day"));
+              if (action === "asset-operation-histogram-period") {
+                const periodId = actionTarget.getAttribute("aria-pressed") === "true" ? "" : actionTarget.dataset.period;
+                this.store.selectAssetOperationHistogramPeriod(periodId);
                 return;
               }
               if (action === "asset-operation-page") {
@@ -47521,6 +47914,17 @@ if(['category','quick','reset','display'].includes(a))state.topoReset=true;if(a=
                 return;
               }
               const role = target.getAttribute("data-role");
+              const operationField = {
+                "asset-operation-keyword": "keyword",
+                "asset-operation-date-start": "dateStart",
+                "asset-operation-date-end": "dateEnd"
+              }[role];
+              if (operationField) {
+                const filters = this.store.state.ui.assetOperationLog;
+                (filters.queryDraft ||= {})[operationField] = target.value;
+                target.setCustomValidity("");
+                return;
+              }
               if (role === "retire-people-search") {
                 if (event.isComposing || target.dataset.composing === "true") return;
                 this.store.setRetirePeopleKeyword(target.value, false);
